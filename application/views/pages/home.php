@@ -19,7 +19,13 @@
     <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,100,300,700' rel='stylesheet' type='text/css'>
+<<<<<<< HEAD
 
+=======
+    <!-- JQuery -->
+    <script src="<?php echo base_url() ?>assets/vendor/jquery/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+>>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
     <!-- Custom styles for this template -->
     <link href="<?php echo base_url(); ?>assets/css/home.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/aos/aos.css" rel="stylesheet">
@@ -128,6 +134,7 @@
         <div class="section-header text-center">
           <h2 class="title text-uppercase" data-aos="fade-down" data-aos-duration="2000"><i class="fas fa-coins mr-3"></i>Loans Offered</h2>
         </div>
+<<<<<<< HEAD
       <div class="row">
         <div class="col-sm-12 col-md-6 col-lg-4">
           <div class="service reg-loan" data-aos="zoom-in" data-aos-duration="2000">
@@ -188,6 +195,47 @@
   </div>
 
 
+=======
+      <div class="row" id="returnLoans" data-aos="zoom-in" data-aos-duration="1500"></div>
+    </div>
+  </div>
+
+        <!--Ajax  -->
+        <script type="text/JavaScript">
+          $(function() {
+            get_loans();
+
+            function get_loans() { 
+              $.ajax({ 
+                type    : 'ajax', 
+                url     : '<?php echo base_url() ?>home/get_loans', 
+                async   : false, 
+                dataType: 'json', 
+                success: function(data) { 
+                  var column = ''; 
+                  var i; 
+                  for(i = 0; i < data.length; i++) { 
+                    column += '<div class="col-sm-12 col-md-6 col-lg-4 mx-auto">' + 
+                                '<div class="service">' +
+                                  '<h3>' + data[i].loan_name + '</h3>' +
+                                  '<hr>'+
+                                    '<p class="text">Max. Loan Amount' + data[i].loan_max_amt + '</p>' +
+                                    '<p class="text">Interest Rate ' + data[i].loan_interest + '</p>' +
+                                    '<p class="text">Max. Loan Term: ' + data[i].loan_max_term + '</p>' + 
+                                '</div>' +
+                              '</div>';
+                  }
+                  $('#returnLoans').html(column); 
+                }, 
+                  error: function() { 
+                    $('#returnToColumn').html('<p class="alert alert-danger alert-dismissable fade show text-center" role="alert">Could not get data from the database!</p>').fadeIn('slow');
+                  }
+              });
+            }
+          });
+          
+        </script>
+>>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
     <!-- Team -->
     <section id="team">
       <div class="container">
@@ -281,8 +329,14 @@
       </div>
     </section>
 
+<<<<<<< HEAD
     <!-- Logo -->
     <section class="py-5">
+=======
+     
+    <!-- Logo -->
+    <!-- <section class="py-5">
+>>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
       <div class="container">
         <div class="row">
           <div class="col-md-6 col-sm-12">
@@ -293,7 +347,11 @@
           </div>
         </div>
       </div>
+<<<<<<< HEAD
     </section>
+=======
+    </section>  -->
+>>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
 
     <!-- Contact -->
     <section id="contact">
@@ -309,6 +367,7 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="form-group">
+<<<<<<< HEAD
                     <input class="form-control" id="name" type="text" placeholder="Your Name *" required="required" data-validation-required-message="Please enter your name.">
                     <p class="help-block text-danger"></p>
                   </div>
@@ -318,12 +377,27 @@
                   </div>
                   <div class="form-group">
                     <input class="form-control" id="phone" type="tel" placeholder="Your Phone *" required="required" data-validation-required-message="Please enter your phone number.">
+=======
+                    <input class="form-control" id="name" type="text" placeholder="Name" required="required" data-validation-required-message="Please enter your name.">
+                    <p class="help-block text-danger"></p>
+                  </div>
+                  <div class="form-group">
+                    <input class="form-control" id="email" type="email" placeholder="Email" required="required" data-validation-required-message="Please enter your email address.">
+                    <p class="help-block text-danger"></p>
+                  </div>
+                  <div class="form-group">
+                    <input class="form-control" id="phone" type="tel" placeholder="Phone" required="required" data-validation-required-message="Please enter your phone number.">
+>>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
                     <p class="help-block text-danger"></p>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
+<<<<<<< HEAD
                     <textarea class="form-control" id="message" placeholder="Your Message *" required="required" data-validation-required-message="Please enter a message."></textarea>
+=======
+                    <textarea class="form-control" id="message" placeholder="Text" required="required" data-validation-required-message="Please enter a message."></textarea>
+>>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
                     <p class="help-block text-danger"></p>
                   </div>
                 </div>
@@ -341,6 +415,7 @@
 
     <!-- Footer -->
     <footer>
+<<<<<<< HEAD
       <div class="container">
         <div class="row">
           <div class="col-md-6">
@@ -367,6 +442,9 @@
           </div>
         </div>
       </div>
+=======
+            <span class="copyright mx-auto">Copyright &copy; StartBootstrap.com</span>
+>>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
     </footer>
 
     <!-- EDIT POST MODAL -->

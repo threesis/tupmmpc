@@ -14,17 +14,30 @@
 			}
 		}
 
+<<<<<<< HEAD
 		public function getPendingLoans() {
 			$result = $this->creditofficer_model->getPendingLoans();
 			echo json_encode($result);
 		}
 
 		public function getApprovedLoans() {
+=======
+		public function getPendingLoans(){
+			$result = $this->creditofficer_model->getPendingLoans();
+			echo json_encode($result); 
+		}
+
+		public function getApprovedLoans(){
+>>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
 			$result = $this->creditofficer_model->getApprovedLoans();
 			echo json_encode($result);
 		}
 
+<<<<<<< HEAD
 		public function getDisapprovedLoans() {
+=======
+		public function getDisapprovedLoans(){
+>>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
 			$result = $this->creditofficer_model->getDisapprovedLoans();
 			echo json_encode($result);
 		}
