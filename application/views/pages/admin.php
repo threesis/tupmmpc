@@ -157,7 +157,7 @@
 
                                 <div class="col-md-7 pl-4">
                                   <div class="row" style="font-size: 2vw"><span class="pl-2 h1">200</span></div>
-                                  <div class="row text-center" style="font-size: 2vw"><span class="h4">Members</span></div>
+                                  <div class="row text-center" style="font-size: 2vw"><span class="h4">All Members</span></div>
                                 </div>
                               </div>
                             </div>
@@ -173,8 +173,8 @@
                                 </div>
 
                                 <div class="col-md-7 pl-4">
-                                  <div class="row" style="font-size: 2vw"><span class="pl-2 h1">200</span></div>
-                                  <div class="row text-center" style="font-size: 2vw"><span class="h4">Approved</span></div>
+                                  <div class="row" style="font-size: 2vw"><span class="pl-2 h1">201</span></div>
+                                  <div class="row text-center" style="font-size: 2vw"><span class="h4">Approved Loans</span></div>
                                 </div>
                               </div>
                             </div>
@@ -190,8 +190,8 @@
                                 </div>
 
                                 <div class="col-md-7 pl-4">
-                                  <div class="row" style="font-size: 2vw"><span class="pl-2 h1">200</span></div>
-                                  <div class="row text-center" style="font-size: 2vw"><span class="h4">Disapproved</span></div>
+                                  <div class="row" style="font-size: 2vw"><span class="pl-2 h1">220</span></div>
+                                  <div class="row text-center" style="font-size: 2vw"><span class="h4">Disapproved Loans</span></div>
                                 </div>
                               </div>
                             </div>
