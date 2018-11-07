@@ -1,0 +1,191 @@
+html, body {
+  background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+  height: 100%;
+  overflow: auto;
+  /* background-image: url(../img/tupbg.jpg); */
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  font-family: 'Rambla', 'sans-serif';
+}
+
+/* Navbar */
+.navbar-color {
+  color: white;
+  background-color: #00680a;
+}
+
+.navbar-brand img {
+  width: 55px;
+  margin: -10px 5px -8px 0;
+  height: auto;
+}
+
+.navbar-brand {
+  font-size: 21px;
+  letter-spacing: 1px;
+}
+
+.nav-item {
+  font-size: 11px;
+  letter-spacing: 1.2px;
+}
+
+.dropdown-menu {
+  font-size: 13px;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  color: #fff;
+  text-decoration: none;
+  background-color: #28a745;
+}
+/* /Navbar */
+
+.wrapper {
+  margin-top: 5rem;
+}
+
+.card-body-mh {
+  min-height: 50vh;
+  max-height: 65vh;
+  overflow-y: auto;
+}
+
+.card-body small {
+  font-size: 90%;
+}
+
+/* Profile Interface */
+.card-sidebar-mh {
+  height: 60vh;
+}
+
+.card-text .admin-name {
+  margin-top: 30px;
+  font-size: 17px;
+}
+
+.card-text .position-text {
+  margin-top: -8px;
+  font-size: 15px;
+}
+
+.card-title {
+  margin-bottom: -90px;
+}
+
+.rounded-circle {
+  width: 105px;
+  height: auto;
+}
+
+.img-thumbnail {
+  padding: 3px;
+}
+
+.card .profile-menu {
+  padding: 0 15px;
+  font-size: 15px;
+}
+
+.profile-menu .list-group-item {
+  padding: 8px;
+}
+
+.card-text .admin-name {
+  margin-top: 30px;
+  font-size: 17px;
+}
+
+.card-text .position-text {
+  margin-top: -8px;
+  font-size: 15px;
+}
+
+.list-group-item.active {
+  z-index: 2;
+  color: #fff;
+  background-color: #00680a;
+  border-color: #00680a;
+}
+/** /Profile Interface **/
+
+
+/** Edit Position Module **/
+.module-position-list {
+  width: 20%;
+}
+
+
+/** Make Post Interface **/
+.h-post {
+  height: 31% !important;
+}
+
+.card-title .form-group {
+  position: relative;
+}
+
+.card-title textarea {
+  border: none;
+  overflow: auto;
+  font-size: 15px;
+  padding: 1.2rem 1rem 0 4rem;
+  resize: none;
+
+}
+
+.form-group .rounded-circle {
+  position: absolute;
+  width: 45px;
+  height: auto;
+}
+
+.card-title .img-thumbnail {
+	padding: 0.12rem;
+}
+/** /Announcement Interface **/
+
+
+
+/** Statistics Interface **/
+.h-stats {
+  height: 50% !important;
+}
+/** /Statistics Interface **/
+
+
+
+/** Scrollbar style **/
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: lightgray; 
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: gray; 
+}
+
+/* Media queries */
+@media (max-width: 1200px) {
+  body {
+    overflow-y: scroll;
+  }
+}
+
+@media (max-width: 992px) {
+  #admin-loans .col-md-12 {
+    margin-bottom: 30px;
+  }
+}
+
+
