@@ -616,21 +616,15 @@ section#contact .section-heading {
 }
 
 section#contact .form-group {
-<<<<<<< HEAD
   margin-bottom: 15px;
-=======
   margin-bottom: 35px;
->>>>>>> e1848fb6636284cf30f016583a12e7d301ac93b7
 }
 
 section#contact .form-group input,
 section#contact .form-group textarea {
-<<<<<<< HEAD
   width: 60%;
   padding: 5px;
-=======
   padding: 10px;
->>>>>>> e1848fb6636284cf30f016583a12e7d301ac93b7
 }
 
 section#contact .form-group input.form-control {
@@ -638,11 +632,8 @@ section#contact .form-group input.form-control {
 }
 
 section#contact .form-group textarea.form-control {
-<<<<<<< HEAD
   height: 235px;
-=======
   height: 248px;
->>>>>>> e1848fb6636284cf30f016583a12e7d301ac93b7
 }
 
 section#contact .form-control:focus {
