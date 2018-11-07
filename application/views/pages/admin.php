@@ -307,7 +307,7 @@
                             </form>
                             <div class="modal-footer">
                               <button type="submit" id="saveLoan" class="btn btn-primary">Apply</button>
-                              <button type="button" id="closeLoan" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="button" id="closeLoan" class="btn btn-secondary" data-dismiss="modal">CloseMIGS</button>
                             </div>
                           </div>
                         </div>
