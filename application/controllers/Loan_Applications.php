@@ -10,10 +10,19 @@ class Loan_Applications extends CI_Controller
 
 	public function check()
 	{	
-		$id = $this->session->userdata('id');
-		die($id);
+		$result = $this->loan_application_model->check();
+		echo json_encode($result);
+	}
 
-		$result = $this->loan_application_model->verify($id);
+	public function new_user_applicant()
+	{
+		$result = $this->loan_application_model->new_user_applicant();
+		echo json_encode($result);
+	}
+
+	public function old_user_applicant() 
+	{
+		$result = $this->loan_application_model->old_user_applicant();
 		echo json_encode($result);
 	}
 }

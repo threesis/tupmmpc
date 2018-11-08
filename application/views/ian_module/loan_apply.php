@@ -12,10 +12,8 @@
 
 <?php echo form_open('ian_branch/loan_apply'); ?>
 
-<div class="form-group">
-  <select class="custom-select" name="loanapp-type" id="loanapp-type" required>
-	<option value="" disabled selected hidden>Select Loan Type..</option>
-  </select>
+<div class="form-group" id="loanapp-type">
+	<!-- ajax insert of loan type -->
 </div>
 
 <div class="form-group">
@@ -66,13 +64,62 @@
 		checkmember();
 
 		function checkmember() {
+
+			var user_id = <?php echo $this->session->userdata['id']; ?>;
+			var user_name = <?php echo $this->session->userdata['name']; ?>
+
+			// first user_id is a variable for model to acces
+			// second user_id is the value to be passed on to that model
 			$.ajax({
 				type: 'ajax',
 				url: '<?php echo base_url(); ?>loan_applications/check',
+				data: {user_id: user_id, user_name: user_name}
 				async: false,
 				dataType: 'json',
 				success: function(data) {
-					alert(data); 
+					// check if 0 loan applications table has no record of user loan  if 1 table has record already
+					if (data = '0') {
+						// set loan to regular for first application of loan
+						$.ajax({
+							type: 'ajax',
+							url: '<?php echo base_url(); ?>loan_applications/new_user_applicant',
+							async: false,
+							dataType: 'json',
+							success: function(result) {
+								var loan_type = '<input type="text" class="form-control" name="' + result.loan_name  + '" value="' + result.loan_name + '" disabled>'; 
+
+								$('#loanapp-type').html(loan_type);	
+							}
+							error: function() {
+	                          alert('Error wrong synatx!');
+	                        }
+						});
+						
+
+					} else if (data = '1') {
+						$.ajax({
+							type: 'ajax',
+							url: '<?php echo base_url(); ?>loan_applications/old_user_applicant',
+							async: false,
+							dataType: 'json',
+							success: function(result) {
+								var loan_type =  '';
+								var i;
+
+								for (i=0; i < result.length; i++ ) {
+									loan_type += '<option>'+ result[i].loan_name +'</option>';
+								}
+
+								var all_loans = '<select class="custom-select" id="loan-selector" required><option value="" disabled selected hidden>Select Loan Term..</option></select>'
+
+								$('#loan-selector').html(loan_type);
+								$('#loanapp-type').html(all_loans);	
+							}
+							error: function() {
+	                          alert('Error wrong synatx!');
+	                        }
+						});
+					}
 				} 
 
 
