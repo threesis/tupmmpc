@@ -58,10 +58,12 @@
 				if($user_info[0]['position'] == 'Member') {
 					// Create session
 					$session_data = array(
+						'id' => $user_info[0]['id'],
 						'position' => $user_info[0]['position'],
 						'name' => $user_info[0]['name'],
 						'username' => $username,
 						'signed_in' => true
+
 					);
 					// Set user session
 					$this->session->set_userdata($session_data);

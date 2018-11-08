@@ -1,10 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-<<<<<<< HEAD
+
 $route['apply'] = 'loan_applications/apply';
-=======
->>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
 $route['signin'] = 'users/signin';
 $route['signup'] = 'users/signup';
 $route['admin'] = 'administrators/admin';

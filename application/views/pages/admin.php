@@ -157,11 +157,7 @@
 
                                 <div class="col-md-7 pl-4">
                                   <div class="row" style="font-size: 2vw"><span class="pl-2 h1">200</span></div>
-<<<<<<< HEAD
-                                  <div class="row text-center" style="font-size: 2vw"><span class="h4">Members</span></div>
-=======
                                   <div class="row text-center" style="font-size: 2vw"><span class="h4">All Members</span></div>
->>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
                                 </div>
                               </div>
                             </div>
@@ -177,13 +173,8 @@
                                 </div>
 
                                 <div class="col-md-7 pl-4">
-<<<<<<< HEAD
-                                  <div class="row" style="font-size: 2vw"><span class="pl-2 h1">200</span></div>
-                                  <div class="row text-center" style="font-size: 2vw"><span class="h4">Approved</span></div>
-=======
                                   <div class="row" style="font-size: 2vw"><span class="pl-2 h1">201</span></div>
                                   <div class="row text-center" style="font-size: 2vw"><span class="h4">Approved Loans</span></div>
->>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
                                 </div>
                               </div>
                             </div>
@@ -199,13 +190,8 @@
                                 </div>
 
                                 <div class="col-md-7 pl-4">
-<<<<<<< HEAD
-                                  <div class="row" style="font-size: 2vw"><span class="pl-2 h1">200</span></div>
-                                  <div class="row text-center" style="font-size: 2vw"><span class="h4">Disapproved</span></div>
-=======
                                   <div class="row" style="font-size: 2vw"><span class="pl-2 h1">220</span></div>
                                   <div class="row text-center" style="font-size: 2vw"><span class="h4">Disapproved Loans</span></div>
->>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
                                 </div>
                               </div>
                             </div>
@@ -251,11 +237,7 @@
                         <div class="modal-dialog modal-dialog-centered" role="document">
                           <div class="modal-content">
                             <div class="modal-header">
-<<<<<<< HEAD
                               <h5 class="modal-title"></h5>
-=======
-                              <h5 class="modal-title">Add Loan</h5>
->>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
                             </div>
                             <form id="addLoanForm">
                               <input type="hidden" name="loan_id" value="0">
@@ -263,20 +245,8 @@
                                 <div class="form-row justify-content-center">
                                   <div class="form-group col-md-10 mb-2">
                                     <label for="name" class="custom-sm">Loan Type</label>
-<<<<<<< HEAD
-                                    <select class="custom-select custom-small-text" id="name" name="loan_name">
-                                      <option selected hidden>Select Loan Type..</option>
-                                      <option>Regular Loan</option>
-                                      <option>Multi-Purpose Loan</option>
-                                      <option>Appliance Loan</option>
-                                      <option>Balik-Eskwela Loan</option>
-                                      <option>Calamity/Emergency Loan</option>
-                                      <option>Birthday Loan</option>
-                                    </select>
-=======
                                     <input type="loan_type" class="form-control" id="name" name="loan_name">
                                     </input>
->>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
                                     <div class="invalid-feedback" id="invalidName"></div>
                                   </div>
                                   <div class="form-group col-md-10 mb-2">
@@ -290,10 +260,7 @@
                                       <option>Php 25,000.00</option>
                                       <option>Php 50,000.00</option>
                                       <option>Php 100,000.00</option>
-<<<<<<< HEAD
-=======
                                       <option>Php 150,000.00</option>
->>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
                                       <option>Php 200,000.00</option>
                                       <option>Php 300,000.00</option>
                                       <option>Php 400,000.00</option>
@@ -323,11 +290,8 @@
                                     <select class="custom-select custom-small-text" id="interest" name="loan_interest">
                                       <option selected hidden>Select Loan Interest..</option>
                                       <option>0%</option>
-<<<<<<< HEAD
                                       <option>0.5%</option>
-=======
                                       <option>0.75%</option>
->>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
                                       <option>1%</option>
                                       <option>2%</option>
                                       <option>3%</option>
@@ -350,11 +314,6 @@
                         </div>
                       </div>
 
-
-<<<<<<< HEAD
-=======
-
->>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
                       <!-- Ajax on add loan button modal -->
                       <script type="text/javascript"> 
                         $(function() { // document.ready jquery function
@@ -369,11 +328,8 @@
                             $('#addLoanModal').find('.modal-title').text('Add Loan');
                             $('#addLoanForm').attr('action', '<?php echo base_url() ?>administrators/add_loan');
                           });
-<<<<<<< HEAD
-=======
 
                           //Save Loan Function
->>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
                           $('#saveLoan').click(function() {
                             var url = $('#addLoanForm').attr('action');
                             var data = $('#addLoanForm').serialize();
@@ -467,11 +423,7 @@
                             $('#addLoanModal').modal('show');
                             $('#addLoanModal').find('.modal-title').text('Edit Loan');
                             $('#addLoanModal').find('.btn-primary').text('Save changes');
-<<<<<<< HEAD
                             $('#addLoanForm').attr('action', '<?php echo base_url() ?>administrators/update_loan');
-=======
-                            $('#addLoanForm').attr('action', '<?php echo base_url() ?>administrators/update _loan');
->>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
                             $.ajax({
                               type    : 'ajax',
                               method  : 'get',
@@ -480,7 +432,7 @@
                               async   : false,
                               dataType: 'json',
                               success : function(data) {
-                                $('select[name=loan_name]').val(data.loan_name).prop('disabled', true);
+                                $('input[name=loan_name]').val(data.loan_name).prop('disabled', true);
                                 $('select[name=loan_max_amt]').val(data.loan_max_amt);
                                 $('select[name=loan_max_term]').val(data.loan_max_term);
                                 $('select[name=loan_interest]').val(data.loan_interest);
@@ -527,11 +479,7 @@
                               type    : 'ajax', 
                               url     : '<?php echo base_url() ?>administrators/get_loans', 
                               async   : false, 
-<<<<<<< HEAD
                               dataType: 'json',
-=======
-                              dataType: 'json', 
->>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
                               success: function(data) { 
                                 var column = ''; 
                                 var i; 
@@ -548,11 +496,7 @@
                                                   '<button href="javascript:;" class="btn btn-danger btn-sm float-right" id="deleteLoan" data="' + data[i].id + '"><i class="fas fa-trash mr-2"></i>Delete</button>' +
                                                   '<button href="javascript:;" class="btn btn-success btn-sm float-right mr-1" id="editLoan" data="' + data[i].id + '"><i class="fas fa-cog mr-2"></i>Edit</button>' + 
                                                 '</div>' + 
-<<<<<<< HEAD
-                                              '</div>' + 
-=======
                                               '</div>'  + 
->>>>>>> fefb475a82ae0dbf4e27631a1c8d08464f3c140a
                                             '</div>';
                                 }
                                 $('#returnColumn').html(column); 

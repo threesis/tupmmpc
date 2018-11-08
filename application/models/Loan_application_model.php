@@ -8,10 +8,14 @@
  		$this->load->database();
  	}
 
- 	public function verify() 
- 	{
- 		$this->input->post('');
- 		$this->db->order_by('name', 'DESC');
+ 	public function verify($id) 
+ 	{	
+
+ 		$this->db->order_by('id', 'DESC');
+ 		$this->db->where('id', $id);
+
+ 		
+
  	}
 
  	public function insert() 
