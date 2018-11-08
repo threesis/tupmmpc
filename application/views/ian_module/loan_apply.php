@@ -64,16 +64,14 @@
 		checkmember();
 
 		function checkmember() {
-
-			var user_id = <?php echo $this->session->userdata['id']; ?>;
-			var user_name = <?php echo $this->session->userdata['name']; ?>
+			var user_name = <?php echo $this->session->userdata['name']; ?>;
 
 			// first user_id is a variable for model to acces
 			// second user_id is the value to be passed on to that model
 			$.ajax({
 				type: 'ajax',
 				url: '<?php echo base_url(); ?>loan_applications/check',
-				data: {user_id: user_id, user_name: user_name}
+				data: {user_name: user_name}
 				async: false,
 				dataType: 'json',
 				success: function(data) {

@@ -10,12 +10,12 @@
 
  	public function check() 
  	{	
- 		$user_id = $this->input->get('user_id');
  		$user_name = $this->input->get('user_name');
 
- 		$this->db->get('loan_applications');
+ 		$this->db->where('name', $user_name);
+	 	$query = $this->db->get('loan_applications');
 
- 		if (($this->db->where('id', $user_id) == 0) && ($this->db->where('name', $user_name) == 0)) {
+ 		if ($query->num_rows == 0) {
  			$result = '0';
  			return $result;
  		} else {
