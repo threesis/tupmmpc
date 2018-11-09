@@ -54,8 +54,25 @@
 
  	}
 
+ 	public function getLoanTerms() 
+ 	{
+ 		$loan_name = $this->input->get('loan_name');
+
+ 		$this->db->order_by('date_created', 'DESC');
+ 		$this->db->where('loan_name', $loan_name);
+ 		$data = $this->db->get('loan_types');
+
+ 		if ($data->num_rows() > 1) {
+ 			return $data->first_row();
+ 		} else if ( $data->num_rows() == 1 ){
+ 			return $data;
+ 		} else {
+ 			return false;
+ 		}	
+ 	}
+
  	public function insert() 
  	{
-
+ 		$this->form_validation->set_rules('loan-selector', 'Loan Type', 'required');
  	}
  }

@@ -10,6 +10,8 @@
 
 <div class="container p-5">
 
+<?php echo validation_errors()?>
+
 <?php echo form_open('ian_branch/loan_apply'); ?>
 
 <div class="form-group" id="loanapp-type">
@@ -84,12 +86,22 @@
 							async: false,
 							dataType: 'json',
 							success: function(result) {
+								var loan_terms = '';
+								var i;
+
 								var loan_type = '<input type="text" class="form-control" name="' + result.loan_name  + '" value="' + result.loan_name + '" disabled>'; 
 
+								var terms = result.loan_max_term;
+
+								for (i = 1; i <= terms; i++) {
+									loan_terms += '<option value="' + i + '">' + i + '</option>';
+								}
+
 								$('#loanapp-type').html(loan_type);	
+								$('#loanapp-term').html(loan_terms);
 							}
 							error: function() {
-	                          alert('Error wrong synatx!');
+	                          alert('Error wrong synatx on new_user_applicant!');
 	                        }
 						});
 						
@@ -103,18 +115,50 @@
 							success: function(result) {
 								var loan_type =  '';
 								var i;
+								var type;
 
 								for (i=0; i < result.length; i++ ) {
-									loan_type += '<option>'+ result[i].loan_name +'</option>';
+									loan_type += '<option value="' + result[i].loan_name + '" >'+ result[i].loan_name +'</option>';
 								}
 
-								var all_loans = '<select class="custom-select" id="loan-selector" required><option value="" disabled selected hidden>Select Loan Term..</option></select>'
+								var all_loans = '<select class="custom-select" id="loan-selector" name="loan-selector" required><option value="" disabled selected hidden>Select Loan Term..</option></select>'
 
 								$('#loan-selector').html(loan_type);
 								$('#loanapp-type').html(all_loans);	
+
+
+								//loan terms selection
+								$('#loan-selector option').click( function() {
+									type = $(this).attr('value');
+								});
+
+								if (result.loan_name == type) {
+									$.ajax({
+										type: 'ajax',
+										url: '<?php echo base_url(); ?>loan_applications/getLoanTerms',
+										data: {loan_name: type},
+										async: false,
+										dataType: 'json',
+										success: function(result) {
+											var terms = '';
+											var i;
+
+											for (var i = 1; i <= result.loan_max_term; i++) {
+												terms += '<option value="' + i + '">' + i + '</option>';
+											}
+
+											$('#loanapp-term').html(terms);
+										} 
+										error: function() {
+											alert('Error wrong synatx on getLoanTerms!');
+										}
+									});
+								}
+
+
 							}
 							error: function() {
-	                          alert('Error wrong synatx!');
+	                          alert('Error wrong synatx on old_user_applicant!');
 	                        }
 						});
 					}
@@ -122,10 +166,6 @@
 
 
 			});
-		}
-
-		function applyloan() {
-			var 
 		}
          
 	});

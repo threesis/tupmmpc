@@ -25,4 +25,10 @@ class Loan_Applications extends CI_Controller
 		$result = $this->loan_application_model->old_user_applicant();
 		echo json_encode($result);
 	}
+
+	public function getLoanTerms()
+	{
+		$result = $this->loan_application_model->getLoanTerms();
+		echo json_encode($result);
+	}
 }
