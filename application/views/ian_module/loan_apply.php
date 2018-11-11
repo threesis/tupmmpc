@@ -4,7 +4,7 @@
 	<title>Apply for Loan</title>
 
 	<link rel="stylesheet" type="text/css" href="https://bootswatch.com/4/flatly/bootstrap.min.css">
-	<script  src="https://code.jquery.com/jquery-3.3.1.js"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 </head>
 <body>
 
@@ -59,6 +59,12 @@
 </div>
 <?php form_close()?>
 
+<div class="container border border-primary mt-4 p-5">
+	<ul class="list-group" id="membersList">
+		<!-- members list will be inserted here -->
+	</ul>
+</div>
+
 </div>
 
 <script type="text/javascript">
@@ -66,14 +72,14 @@
 		checkmember();
 
 		function checkmember() {
-			var user_name = <?php echo $this->session->userdata['name']; ?>;
+			var user_name = '<?php echo $this->session->userdata['name']; ?>';
 
 			// first user_id is a variable for model to acces
 			// second user_id is the value to be passed on to that model
 			$.ajax({
 				type: 'ajax',
 				url: '<?php echo base_url(); ?>loan_applications/check',
-				data: {user_name: user_name}
+				data: {user_name: user_name},
 				async: false,
 				dataType: 'json',
 				success: function(data) {
@@ -99,7 +105,7 @@
 
 								$('#loanapp-type').html(loan_type);	
 								$('#loanapp-term').html(loan_terms);
-							}
+							},
 							error: function() {
 	                          alert('Error wrong synatx on new_user_applicant!');
 	                        }
@@ -148,7 +154,7 @@
 											}
 
 											$('#loanapp-term').html(terms);
-										} 
+										}, 
 										error: function() {
 											alert('Error wrong synatx on getLoanTerms!');
 										}
@@ -156,7 +162,7 @@
 								}
 
 
-							}
+							},
 							error: function() {
 	                          alert('Error wrong synatx on old_user_applicant!');
 	                        }
@@ -167,7 +173,48 @@
 
 			});
 		}
-         
+        
+        $('#co-maker1').keyup(function() {
+        	var key_val = $(this).val();
+
+        	if (key_val != '') {
+        		searchMember(key_val);
+        	} else {
+        		searchMember();
+        	}
+        });
+
+        function searchMember(input) {
+        	$.ajax({
+        		type: 'ajax',
+        		method: 'post',
+        		url: '<?php echo base_url();?>/loan_applications/searchMember',
+        		data: {key_typed : input},
+        		async: false,
+        		dataType: 'json',
+        		success: function(data) {
+        			var member_list = '';
+        			var i;
+
+        			if (data.length > 0 ) {
+	        			for (i=0; i < data.length; i++) {
+	        				member_list += '<li class="list-group-item">'+'<h5 class="member-name">' + data[i].name + '</h5>' +
+	        						'<p class="text-muted"><small>' + data[i].position + '</small></p>'+'</li>';
+	        			}
+
+	        			$('#membersList').html(member_list);
+        			} else {
+        				member_list += '<h4 class="text-center mt-5"><strong class="text-danger">' + '"' + input + '"' + ' </strong>not found!</h4>';
+        			}
+
+        			$('#membersList').html(member_list);
+        		}, 
+        		error: function() {
+        			alert('Error wrong syntax on searchMember!');
+        		}
+        	});
+        }
+
 	});
 </script>
 

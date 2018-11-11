@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 
-$route['apply'] = 'loan_applications/apply';
+$route['loan_application'] = 'loan_applications/apply';
 $route['signin'] = 'users/signin';
 $route['signup'] = 'users/signup';
 $route['admin'] = 'administrators/admin';

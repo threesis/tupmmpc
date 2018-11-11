@@ -31,4 +31,10 @@ class Loan_Applications extends CI_Controller
 		$result = $this->loan_application_model->getLoanTerms();
 		echo json_encode($result);
 	}
+
+	public function searchMember()
+	{
+		$result = $this->loan_application_model->searchMember();
+		echo json_encode($result);
+	}
 }

@@ -32,10 +32,8 @@
  		$this->db->where('loan_name', $loan_type);
  		$data = $this->db->get('loan_types');
 
- 		if ($data->num_rows() > 1) {
+ 		if ($data->num_rows() >= 1) {
  			return $data->first_row();
- 		} else if ( $data->num_rows() == 1 ){
- 			return $data;
  		} else {
  			return false;
  		}
@@ -62,13 +60,26 @@
  		$this->db->where('loan_name', $loan_name);
  		$data = $this->db->get('loan_types');
 
- 		if ($data->num_rows() > 1) {
+ 		if ($data->num_rows() >= 1) {
  			return $data->first_row();
- 		} else if ( $data->num_rows() == 1 ){
- 			return $data;
  		} else {
  			return false;
  		}	
+ 	}
+
+ 	public function searchMember() 
+ 	{
+ 		$key_typed = $this->input->post('key_typed');
+ 		
+ 		
+ 		if($key_typed != '') {
+ 			$this->db->like('name', $key_typed);
+ 		}
+
+ 		$this->db->order_by('name', 'ASC');
+ 		$result = $this->db->get('members');
+
+ 		return $result->result();
  	}
 
  	public function insert() 
