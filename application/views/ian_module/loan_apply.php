@@ -184,6 +184,36 @@
         	}
         });
 
+        $('#co-maker2').keyup(function() {
+        	var key_val = $(this).val();
+
+        	if (key_val != '') {
+        		searchMember(key_val);
+        	} else {
+        		searchMember();
+        	}
+        });
+
+        $('#co-maker3').keyup(function() {
+        	var key_val = $(this).val();
+
+        	if (key_val != '') {
+        		searchMember(key_val);
+        	} else {
+        		searchMember();
+        	}
+        });
+
+        $('#co-maker4').keyup(function() {
+        	var key_val = $(this).val();
+
+        	if (key_val != '') {
+        		searchMember(key_val);
+        	} else {
+        		searchMember();
+        	}
+        });
+
         function searchMember(input) {
         	$.ajax({
         		type: 'ajax',
