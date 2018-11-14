@@ -10,4 +10,9 @@
 			$result = $this->home_model->get_all_loan_types();
 			echo json_encode($result);
 		}
+
+		public function getWebsiteInfos() {
+			$result = $this->home_model->get_all_web_infos();
+			echo json_encode($result);
+		}
 	}

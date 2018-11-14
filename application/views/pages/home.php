@@ -73,7 +73,9 @@
               <a class="dropdown-item" data-toggle="modal" data-target="#openEditPost" class="list-group-item list-group-item-action">Edit Post</a>
               <a class="dropdown-item" data-toggle="modal" data-target="#openDeletePost" class="list-group-item list-group-item-action">Delete Post</a>
             </div>
-            <div class="intro-heading text-uppercase">Technological University of the Philippines Manila Multi-Purpose Cooperative</div>
+            <div class="row" id="">
+            <div class="intro-heading text-uppercase" id="returnTitle"></div>
+          </div>
           </div>
         </div>
       </div>
@@ -138,6 +140,7 @@
         <script type="text/JavaScript">
           $(function() {
             get_loans();
+            getWebsiteInfos();
 
             function get_loans() { 
               $.ajax({ 
@@ -162,10 +165,42 @@
                   $('#returnLoans').html(column); 
                 }, 
                   error: function() { 
-                    $('#returnToColumn').html('<p class="alert alert-danger alert-dismissable fade show text-center" role="alert">Could not get data from the database!</p>').fadeIn('slow');
+                    $('#returnLoans').html('<p class="alert alert-danger alert-dismissable fade show text-center" role="alert">Could not get data from the database!</p>').fadeIn('slow');
                   }
               });
             }
+
+          function getWebsiteInfos(){
+
+            $.ajax({
+              type : 'ajax',
+              url  : '<?php echo base_url() ?>home/getWebsiteInfos',
+              async : false,
+              dataType : 'json',
+              success: function(data) {
+                var title = data[0].title;
+                var address = data[0].address;
+                var telephone = data[0].telephone_no;
+                var cellphone = data[0].cellphone_no;
+                var website = data[0].web_link;
+                var fb = data[0].fb_account;
+                var twitter = data[0].twitter_account;
+                var email = data[0].email;
+
+                $('#returnTitle').html(title);
+                $('#returnAddress').html(address);
+                $('#returnTelephone').html(telephone);
+                $('#returnCellphone').html(cellphone);
+                $('#returnWebsite').html(website);
+                $('#returnFb').html(fb);
+                $('#returnTwitter').html(twitter);
+                $('#returnEmail').html(email);
+              }, 
+                error: function() {
+                  $('#returnWebsiteInfos').html('<p class="alert alert-danger alert-dismissable fade show text-center" role="alert">Could not get data from the database!</p>').fadeIn('slow');
+                }
+            });
+          }
           });
           
         </script>
@@ -178,7 +213,7 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-3">
+          <div class="col-lg-3 col-xs-12">
             <div class="team-member" data-aos="zoom-in-down" data-aos-duration="2000">
               <img class="mx-auto rounded-circle" src="<?php echo base_url() ?>assets/img/team/may.jpg" alt="">
               <h4>Adora Pili</h4>
@@ -197,7 +232,7 @@
               </ul>
             </div>
           </div>
-          <div class="col-sm-3">
+          <div class="col-lg-3 col-xs-12">
             <div class="team-member" data-aos="zoom-in-down" data-aos-duration="2000">
               <img class="mx-auto rounded-circle" src="<?php echo base_url() ?>assets/img/team/may.jpg" alt="">
               <h4>Joy Vizco</h4>
@@ -216,7 +251,7 @@
               </ul>
             </div>
           </div>
-          <div class="col-sm-3">
+          <div class="col-lg-3 col-xs-12">
             <div class="team-member" data-aos="zoom-in-down" data-aos-duration="2000">
               <img class="mx-auto rounded-circle" src="<?php echo base_url() ?>assets/img/team/may.jpg" alt="">
               <h4>Gema Gema</h4>
@@ -235,8 +270,8 @@
               </ul>
             </div>
           </div>
-          <div class="col-sm-3">
-            <div class="team-member" data-aos="zoom-in-down" data-aos-duration="2000">
+          <div class="col-lg-3 col-xs-12">
+            <div class="team-member" data-aos="zoom-in-down" data-aos-duration="3000">
               <img class="mx-auto rounded-circle" src="<?php echo base_url() ?>assets/img/team/may.jpg" alt="">
               <h4>May Garcia</h4>
               <p class="text-muted">Treasurer</p>
@@ -286,13 +321,37 @@
     <section id="contact">
       <div class="container">
         <div class="row">
-          <div class="col-md-12 col-lg-12 text-center">
-            <h2 class="section-heading text-uppercase">Contact Us</h2>
+          <div class="col-sm-12 col-md-12 col-lg-6 float-left" >
+          <h2 class="section-heading">contact us</h2>
+            <h5 class="section-subheading">lorem ipsum dol hdadba kahbfsmfnafsdsdsdsds dsdsdsdgdgdgdgdd</h5>
+            <div class="contact-info my-5">
+            <p class="contact-details" id="returnAddress"><i class="fas fa-map-marker-alt"></i></p>
+            <p class="contact-details" id="returnTelephone"><i class="fas fa-phone"></i></p>
+            <p class="contact-details" id="returnCellphone"><i class="fas fa-mobile-alt"></i></p>
+            <p class="contact-details" id="returnWebsite"><i class="fas fa-globe"></i></p>
+            </div>
+            <ul class="list-inline social-buttons">
+              <li class="list-inline-item text-center">
+                <a href="">
+                  <i class="fab fa-twitter"></i>
+                </a>
+              </li>
+              <li class="list-inline-item text-center">
+                <a href="">
+                  <i class="fab fa-facebook-f"></i>
+                </a>
+              </li>
+              <li class="list-inline-item text-center">
+                <a href="">
+                  <i class="fab fa-google"></i>
+                </a>
+              </li> 
+            </ul>    
           </div>
-        <div class="row">
-          <div class="col-lg-12">
+          <div class="col-sm-12 col-md-12 col-lg-6">
             <form id="contactForm" name="sentMessage" novalidate="novalidate">
               <div class="row">
+                <div class="col-md-6">
                   <div class="form-group">
                     <input class="form-control" id="name" type="text" placeholder="Your Name *" required="required" data-validation-required-message="Please enter your name.">
                     <p class="help-block text-danger"></p>
@@ -309,24 +368,24 @@
                     <textarea class="form-control" id="message" placeholder="Your Message *" required="required" data-validation-required-message="Please enter a message."></textarea>
                     <input class="form-control" id="email" type="email" placeholder="Email" required="required" data-validation-required-message="Please enter your email address.">
                     <p class="help-block text-danger"></p>
+                  </div>
+                  <div class="form-group">
                     <input class="form-control" id="phone" type="tel" placeholder="Phone" required="required" data-validation-required-message="Please enter your phone number.">
                     <p class="help-block text-danger"></p>
-                    <textarea class="form-control" id="message" placeholder="Text" required="required" data-validation-required-message="Please enter a message."></textarea>
-                    <p class="help-block text-danger"></p>
-                  <div class="clearfix"></div>
-                  <div class="col-lg-12 text-center">
-                    <div id="success"></div>
-                      <button id="sendMessageButton" class="btn btn-primary btn-l text-uppercase" type="submit">Send Message</button>
                   </div>
+                  <div class="form-group">
+                    <textarea class="form-control" id="message" placeholder="Message" required="required" data-validation-required-message="Please enter a message."></textarea>
+                    <p class="help-block text-danger"></p>
+                  </div>
+                  <button id="sendMessageButton" class="btn btn-primary mx-auto" type="submit">Submit</button>
                 </div>
               </div>
             </form>
           </div>
         </div>
-      </div>
     </section>
 
-    <!-- Footer -->
+    <!-- Footer
     <footer>
       <div class="container">
         <div class="row">
@@ -355,6 +414,7 @@
         </div>
       </div>
     </footer>
+     -->
 
     <!-- EDIT POST MODAL -->
     <div class="modal fade" id="openEditPost" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
