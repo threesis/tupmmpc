@@ -28,14 +28,14 @@
 			}
 		}
 
-		public function getDisapprovedLoans() {
-			$this->db->where('status', 'Disapproved');
+		public function getDisapprovedLoans(){
+			$this->db->where('status', 'Disapproved'); 
 			$this->db->order_by('created_date', 'DESC');
 			$query = $this->db->get('loan_applications');
 
 			if($query->num_rows() > 0) {
 				return $query->result();
-			} else {
+			} else { 
 				return false;
 			}
 		}

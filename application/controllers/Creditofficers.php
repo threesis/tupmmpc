@@ -19,7 +19,12 @@
 			echo json_encode($result);
 		}
 
-		public function getApprovedLoans() {
+		public function getPendingLoans(){
+			$result = $this->creditofficer_model->getPendingLoans();
+			echo json_encode($result); 
+		}
+
+		public function getApprovedLoans(){
 			$result = $this->creditofficer_model->getApprovedLoans();
 			echo json_encode($result);
 		}

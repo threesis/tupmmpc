@@ -606,7 +606,11 @@ header.masthead .intro-text .intro-heading {
 
 section#contact {
   background-color: #212529;
+<<<<<<< HEAD
   background-image: url("../img/map-image.png");
+=======
+  background-image: url("../img/map-image - Copy.png");
+>>>>>>> 579f9f746e347f257ea139c41b65ca357b86af65
   background-repeat: no-repeat;
   background-position: center;
 }
@@ -616,12 +620,20 @@ section#contact .section-heading {
 }
 
 section#contact .form-group {
+<<<<<<< HEAD
   margin-bottom: 25px;
+=======
+  margin-bottom: 35px;
+>>>>>>> 579f9f746e347f257ea139c41b65ca357b86af65
 }
 
 section#contact .form-group input,
 section#contact .form-group textarea {
+<<<<<<< HEAD
   padding: 20px;
+=======
+  padding: 10px;
+>>>>>>> 579f9f746e347f257ea139c41b65ca357b86af65
 }
 
 section#contact .form-group input.form-control {
@@ -633,12 +645,17 @@ section#contact .form-group textarea.form-control {
 }
 
 section#contact .form-control:focus {
+<<<<<<< HEAD
   border-color: #fed136;
+=======
+  border-color: green;
+>>>>>>> 579f9f746e347f257ea139c41b65ca357b86af65
   -webkit-box-shadow: none;
   box-shadow: none;
 }
 
 section#contact ::-webkit-input-placeholder {
+<<<<<<< HEAD
   font-weight: 700;
   color: #ced4da;
   font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
@@ -664,6 +681,33 @@ section#contact :-ms-input-placeholder {
 
 footer {
   padding: 25px 0;
+=======
+  font-weight: 400;
+  color: #ced4da;
+  font-family: 'Century Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+section#contact :-moz-placeholder {
+  font-weight: 400;
+  color: #ced4da;
+  font-family: 'Century Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+section#contact ::-moz-placeholder {
+  font-weight: 400;
+  color: #ced4da;
+  font-family: 'Century Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+section#contact :-ms-input-placeholder {
+  font-weight: 400;
+  color: #ced4da;
+  font-family: 'Century Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+footer {
+  padding: 10px 0;
+>>>>>>> 579f9f746e347f257ea139c41b65ca357b86af65
   text-align: center;
 }
 
@@ -838,4 +882,8 @@ ul.social-buttons li a {
 
 ul.social-buttons li a:active, ul.social-buttons li a:focus, ul.social-buttons li a:hover {
   background-color: #00680a;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 579f9f746e347f257ea139c41b65ca357b86af65

@@ -19,7 +19,9 @@
     <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
     <link href='https://fonts.googleapis.com/css?family=Oswald:400,100,300,700' rel='stylesheet' type='text/css'>
-
+    <!-- JQuery -->
+    <script src="<?php echo base_url() ?>assets/vendor/jquery/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- Custom styles for this template -->
     <link href="<?php echo base_url(); ?>assets/css/home.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/aos/aos.css" rel="stylesheet">
@@ -128,66 +130,45 @@
         <div class="section-header text-center">
           <h2 class="title text-uppercase" data-aos="fade-down" data-aos-duration="2000"><i class="fas fa-coins mr-3"></i>Loans Offered</h2>
         </div>
-      <div class="row">
-        <div class="col-sm-12 col-md-6 col-lg-4">
-          <div class="service reg-loan" data-aos="zoom-in" data-aos-duration="2000">
-            <h3>Regular Loan</h3>
-            <hr>
-            <p class="text">Max. Loan Amount: 150,000.00</p> 
-            <p class="text">Interest Rate: 0.75%</p>
-            <p class="text">Max. Loan Term: 3 years or 36 months</p>
-          </div>
-        </div>
-        <div class="col-sm-12 col-md-6 col-lg-4" data-aos="zoom-in"data-aos-duration="2000">
-          <div class="service">
-            <h3>Calamity Loan</h3>
-            <hr>
-            <p class="text">Max. Loan Amount: 20,000.00</p>
-            <p class="text">Interest Rate: 0.75%</p>
-            <p class="text">Max. Loan Term: 2 years or 24 months</p>
-          </div>
-        </div>
-        <div class="col-sm-12 col-md-6 col-lg-4" data-aos="zoom-in" data-aos-duration="2000">
-          <div class="service">
-            <h3>Balik-Eskwela Loan</h3>
-            <hr>
-            <p class="text">Max. Loan Amount: 50,000.00</p>
-            <p class="text">Interest Rate: 0.75%</p>
-            <p class="text">Max. Loan Term: 2 years or 24 months</p>
-          </div>
-        </div>
-        <div class="col-sm-12 col-md-6 col-lg-4" data-aos="zoom-in" data-aos-duration="2000">
-          <div class="service">
-            <h3>Multi-Purpose Loan</h3>
-            <hr>
-            <p class="text">Max. Loan Amount: 150,000.00</p>
-            <p class="text">Interest Rate: 0.75%</p>
-            <p class="text">Max. Loan Term: 3 years or 36 months</p>
-          </div>
-        </div>
-        <div class="col-sm-12 col-md-6 col-lg-4" data-aos="zoom-in" data-aos-duration="2000">
-          <div class="service">
-            <h3>Birthday Loan</h3>
-            <hr>            
-            <p class="text">Max. Loan Amount: 20,000.00</p>
-            <p class="text">Interest Rate: 0.75%</p>
-            <p class="text">Max. Loan Term: 2 years or 24 months</p>
-          </div>
-        </div>
-        <div class="col-sm-12 col-md-6 col-lg-4" data-aos="zoom-in" data-aos-duration="2000">
-          <div class="service">
-            <h3>Appliance Loan</h3>
-            <hr>
-            <p class="text">Max. Loan Amount: 150,000.00</p>
-            <p class="text">Interest Rate: 0.75%</p>
-            <p class="text">Max. Loan Term: 3 years or 36 months</p>
-          </div>
-        </div>
-      </div>
+      <div class="row" id="returnLoans" data-aos="zoom-in" data-aos-duration="1500"></div>
     </div>
   </div>
 
+        <!--Ajax  -->
+        <script type="text/JavaScript">
+          $(function() {
+            get_loans();
 
+            function get_loans() { 
+              $.ajax({ 
+                type    : 'ajax', 
+                url     : '<?php echo base_url() ?>home/get_loans', 
+                async   : false, 
+                dataType: 'json', 
+                success: function(data) { 
+                  var column = ''; 
+                  var i; 
+                  for(i = 0; i < data.length; i++) { 
+                    column += '<div class="col-sm-12 col-md-6 col-lg-4 mx-auto">' + 
+                                '<div class="service">' +
+                                  '<h3>' + data[i].loan_name + '</h3>' +
+                                  '<hr>'+
+                                    '<p class="text">Max. Loan Amount' + data[i].loan_max_amt + '</p>' +
+                                    '<p class="text">Interest Rate ' + data[i].loan_interest + '</p>' +
+                                    '<p class="text">Max. Loan Term: ' + data[i].loan_max_term + '</p>' + 
+                                '</div>' +
+                              '</div>';
+                  }
+                  $('#returnLoans').html(column); 
+                }, 
+                  error: function() { 
+                    $('#returnToColumn').html('<p class="alert alert-danger alert-dismissable fade show text-center" role="alert">Could not get data from the database!</p>').fadeIn('slow');
+                  }
+              });
+            }
+          });
+          
+        </script>
     <!-- Team -->
     <section id="team">
       <div class="container">
@@ -280,9 +261,12 @@
         </div>
       </div>
     </section>
-
     <!-- Logo -->
     <section class="py-5">
+     
+    <!-- Logo -->
+    <!-- <section class="py-5">
+>>>>>>> 579f9f746e347f257ea139c41b65ca357b86af65
       <div class="container">
         <div class="row">
           <div class="col-md-6 col-sm-12">
@@ -293,7 +277,10 @@
           </div>
         </div>
       </div>
+<<<<<<< HEAD
     </section>
+=======
+    </section>  -->
 
     <!-- Contact -->
     <section id="contact">
@@ -318,12 +305,11 @@
                   </div>
                   <div class="form-group">
                     <input class="form-control" id="phone" type="tel" placeholder="Your Phone *" required="required" data-validation-required-message="Please enter your phone number.">
-                    <p class="help-block text-danger"></p>
-                  </div>
                 </div>
                 <div class="col-md-6">
                   <div class="form-group">
                     <textarea class="form-control" id="message" placeholder="Your Message *" required="required" data-validation-required-message="Please enter a message."></textarea>
+                    <textarea class="form-control" id="message" placeholder="Text" required="required" data-validation-required-message="Please enter a message."></textarea>
                     <p class="help-block text-danger"></p>
                   </div>
                 </div>
@@ -344,7 +330,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-6">
-            <span class="copyright float-right">Copyright &copy; TUPMMPC 2018</span>
+            <span class="copyright mx-auto">Copyright &copy; StartBootstrap.com</span>
           </div>
           <div class="col-md-6 float-left">
             <ul class="list-inline social-buttons">

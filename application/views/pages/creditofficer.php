@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
+=======
+  <!DOCTYPE html>
+>>>>>>> 579f9f746e347f257ea139c41b65ca357b86af65
 <html lang="en">
 
   <head>
@@ -148,6 +152,7 @@
               <div class="tab-content card-body card-body-mh">
                 <div class="tab-pane list-group active" id="pending_loans">
                   <div id="returnPendingLoan"></div>
+<<<<<<< HEAD
 
                   <!-- PENDING Loan Application Form Check Modal -->
                   <div class="modal fade" id="openLoanAppForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -171,10 +176,13 @@
                       </div>
                     </div>
                   </div>
+=======
+>>>>>>> 579f9f746e347f257ea139c41b65ca357b86af65
                 </div>
 
                 <div class="tab-pane list-group" id="approved_loans">
                   <div id="returnApprovedLoans"></div>
+<<<<<<< HEAD
 
                   <!-- APPROVED Loan Application Form Check Modal -->
                   <div class="modal fade" id="openLoanAppForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -198,10 +206,13 @@
                       </div>
                     </div>
                   </div>
+=======
+>>>>>>> 579f9f746e347f257ea139c41b65ca357b86af65
                 </div>
 
                 <div class="tab-pane list-group" id="disapproved_loans">
                   <div id="returnDisapprovedLoans"></div>
+<<<<<<< HEAD
                 
                   <!-- DISAPPROVED Loan Application Form Check Modal -->
                   <div class="modal fade" id="openLoanAppForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -225,15 +236,22 @@
                       </div>
                     </div>
                   </div>
+=======
+>>>>>>> 579f9f746e347f257ea139c41b65ca357b86af65
                 </div>
 
                 <!-- get pending loans ajax -->
                   <script type="text/javascript">
                     $(function() {
+<<<<<<< HEAD
+=======
+                      
+>>>>>>> 579f9f746e347f257ea139c41b65ca357b86af65
                       getPendingLoans();
                       getApprovedLoans();
                       getDisapprovedLoans();
 
+<<<<<<< HEAD
                       function getPendingLoans() {
                         $.ajax({
                           type:     'ajax',
@@ -295,6 +313,99 @@
                       }
 
                     });
+=======
+                      function getPendingLoans(){
+                        $.ajax({
+                          type: 'ajax',
+                          url: '<?php echo base_url() ?>creditofficers/getPendingloans',
+                          async: false,
+                          dataType: 'json',
+                          success: function(data) { 
+                            var row = '';
+                            var i; 
+                            for(i = 0; i < data.length; i++){
+                              row += '<a href="javascript:;"  class="list-group-item list-group-item-action" id="openLoanApp"><img src="assets/img/team/2.jpg" class="rounded-circle mr-3"><small>' + data[i].name + ' </small><span class="badge badge-dark p-2 w-15 float-right">' + data[i].loan_type + '</span><small><span class=" badge badge-primary p-2 mr-2 w-15 float-right">' + data[i].created_date + '</span></small></a>';                            
+                          } 
+                          $('#returnPendingLoan').html(row); 
+                            }, 
+                            error: function(){
+                              alert('ERROR!');
+                            }
+                        });
+                    }
+
+                    function getApprovedLoans(){
+                      $.ajax({
+                        type: 'ajax',
+                        url: '<?php echo base_url() ?>creditofficers/getApprovedLoans',
+                        async: false,
+                        dataType: 'json',
+                        success: function(data){
+                          var row = ''; 
+                          var i; 
+                          for(i=0; i < data.length; i++){
+                            row += '<a href="#" data-toggle="modal" data-target="#openLoanAppForm" class="list-group-item list-group-item-action"><img src="assets/img/team/2.jpg" class="rounded-circle mr-3"><small>' + data[i].name + ' </small><span class="badge badge-dark p-2 w-15 float-right">' + data[i].loan_type + '</span><small><span class=" badge badge-primary p-2 mr-2 w-15 float-right">' + data[i].created_date + '</span></small></a>';
+                          }
+                          $('#returnApprovedLoans').html(row);
+                        }, 
+                          error: function(){
+                            alert('ERROR');
+                          }
+                      });
+                    }
+
+                    function getDisapprovedLoans(){
+                      $.ajax({
+                        type: 'ajax',
+                        url: '<?php echo base_url() ?>creditofficers/getDisapprovedLoans',
+                        async: false,
+                        dataType: 'json',
+                        success: function(data){
+                          var row = '';
+                          var i; 
+                          for(i=0; i < data.length; i++){
+                            row += '<a href="#" data-toggle="modal" data-target="#openLoanAppForm" class="list-group-item list-group-item-action"><img src="assets/img/team/2.jpg" class="rounded-circle mr-3"><small>' + data[i].name + ' </small><span class="badge badge-dark p-2 w-15 float-right">' + data[i].loan_type + '</span><small><span class=" badge badge-primary p-2 mr-2 w-15 float-right">' + data[i].created_date + '</span></small></a>';
+                          }
+                          $('#returnDisapprovedLoans').html(row);
+                        }, 
+                        error: function(){
+                          alert('ERROR');
+                        }
+                      });
+                    }
+
+                  });
+                    // OPEN LOAN APP (PENDING)
+                    $('#returnPendingLoan').on('click', '#openLoanApp', function() {
+                            var id = $(this).attr('data');
+                            $('#openLoanAppForm').modal('show');
+                            $('#openLoanAppForm').find('.modal-title').text('Loan Application');
+                            $('#openLoanAppForm').find('.btn-primary').text('Approve');
+                            $('#openLoanAppForm').attr('action', '<?php echo base_url() ?>creditofficers/openLoanApp');
+                              $('#confirmModal').click(function(){
+                                $('#confirmationModal').modal('show');
+                                  $.ajax({
+                                    type    : 'ajax',
+                                    method  : 'get',
+                                    url     : '<?php echo base_url() ?>administrators/edit_loan',
+                                    data    : {id:id},
+                                    async   : false,
+                                    dataType: 'json',
+                                    success : function(data) {
+                                      $('select[name=loan_name]').val(data.loan_name).prop('disabled', true);
+                                      $('select[name=loan_max_amt]').val(data.loan_max_amt);
+                                      $('select[name=loan_max_term]').val(data.loan_max_term);
+                                      $('select[name=loan_interest]').val(data.loan_interest);
+                                      $('input[name=loan_id').val(data.id);
+                                      $('#addLoanModal').find('.modal-title').text('Edit Loan (' + data.loan_name + ')');
+                                    },
+                                    error: function() {
+                                      alert('Error!');
+                                    }
+                                  });
+                                });
+                              });
+>>>>>>> 579f9f746e347f257ea139c41b65ca357b86af65
                   </script>
               </div>
             </div>
@@ -305,6 +416,48 @@
   </div>
 </div>
 
+<<<<<<< HEAD
+=======
+     <!-- Loan Application Form Check Modal -->
+    <div class="modal fade" id="openLoanAppForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"><img src="assets/img/team/2.jpg" class="rounded-circle"><strong class="ml-3">NAME<span class="ml-3 mr-3">-</span>LOAN TYPE</strong></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
+          </div>
+          <div class="modal-footer">
+            <div class="mx-auto">
+              <button type="button" class="btn btn-primary" data-dismiss="modal" id="confirmModal"><i class="fas fa-check mr-1"></i> Approve</button>
+              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#disapprovedLoanNote"><i class="fas fa-times mr-1"></i> Disapprove</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Confirmation Modal  -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="modal-title"><h5>Confirmation</h5></div>
+              <div class="modal-body"><p>Are you sure you want to approve the loan?</p></div>
+          </div>
+              <div class="modal-footer mx-auto">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Yes</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+              </div>
+        </div>
+      </div>
+    </div>
+
+>>>>>>> 579f9f746e347f257ea139c41b65ca357b86af65
 
     <!-- Disapprove Modal -->
     <div class="modal fade" id="disapprovedLoanNote" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

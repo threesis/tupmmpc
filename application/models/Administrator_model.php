@@ -159,5 +159,9 @@
 				return false;
 			}
 		}
+
+		public function testing() {
+			
+		}
 		
 	}
