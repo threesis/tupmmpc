@@ -159,5 +159,10 @@
 				return false;
 			}
 		}
+
+		public function testing() {
+			$query = $this->db->select('*')->from('member_roles')->join('members', 'members.id = member_roles.user_id')->get();
+				return $query->result();
+		}
 		
 	}

@@ -2,7 +2,6 @@
 <html lang="en">
 
   <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/logo.png"/>
@@ -24,6 +23,8 @@
     <link href="<?php echo base_url() ?>assets/css/admin.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
   </head>
+
+  
 
   <body id="page-top">
     <!-- Navigation Bar -->
@@ -54,46 +55,20 @@
       </div>
     </nav>
 
-    <!-- Set/Edit Position Module -->
-    <div class="modal fade" id="editModulesModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Edit user modules</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="list-group module-position-list">
-              <a href="#" class="list-group-item list-group-item-action active">Dapibus ac facilisis in</a>
-              <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-              <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-              <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-              <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-              <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-              <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary">Apply</button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
 
     <div class="wrapper">
       <div class="container">
         <div class="msg">
-        <?php if($this->session->flashdata('user_signedin')): ?>
-          <?php echo '<p class="alert alert-success alert-dismissable fade show text-center" role="alert">
+          <?php if($this->session->flashdata('user_signedin')): ?>
+            <?php echo '<p class="alert alert-success alert-dismissable fade show text-center" id="loginWelcomeMsg" role="alert">
                       <button type="button" class="close float-right" data-dismiss="alert" aria-label="Close">
                       <span aria-hidden="true">&times;</span></button>'.$this->session->flashdata('user_signedin').
                       $this->session->userdata('username').'!'.'</p>';
-          ?>
-        <?php endif; ?>
+            ?>
+            <script type="text/javascript">
+              $('#loginWelcomeMsg').fadeIn().delay(2500).fadeOut('slow');
+            </script>
+          <?php endif; ?>
         </div>
         <div class="row">
         <!-- Profile -->
@@ -111,30 +86,27 @@
               </div>
               <div class="list-group profile-menu my-3" id="list-tab" role="tablist">
                 <a class="list-group-item list-group-item-action active" id="home-list" data-toggle="list" href="#admin-home" role="tab" aria-controls="home"><i class="fas fa-home mr-2"></i> Home</a>
-                <script type="text/javascript">
-                  $(document).ready(function() {
-                    $('#home-list').click(function(){
-                      $('#admin-home2').show();
-                    });
-                    $('#loans-list').click(function(){
-                      $('#admin-home2').hide();
-                    });
-                    $('#members-list').click(function(){
-                      $('#admin-home2').hide();
-                    });
-                    $('#transactions-list').click(function(){
-                      $('#admin-home2').hide();
-                    });
-                    $('#records-list').click(function(){
-                      $('#admin-home2').hide();
-                    });
-                  });
-                </script>
                 <a class="list-group-item list-group-item-action" id="loans-list" data-toggle="list" href="#admin-loans" role="tab" aria-controls="settings"><i class="fas fa-credit-card mr-2"></i> Loans</a>
                 <a class="list-group-item list-group-item-action" id="members-list" data-toggle="list" href="#admin-members" role="tab" aria-controls="messages"><i class="fas fa-users mr-2"></i> Members</a>
                 <a class="list-group-item list-group-item-action" id="transactions-list" data-toggle="list" href="#admin-transactions" role="tab" aria-controls="messages"><i class="fas fa-paperclip mr-2"></i> View Transactions</a>
                 <a class="list-group-item list-group-item-action" id="records-list" data-toggle="list" href="#admin-records" role="tab" aria-controls="messages"><i class="fas fa-folder-open mr-2"></i> View Records</a>
               </div>
+              <script type="text/javascript">
+                <?php if($this->session->userdata('position') == '2'): ?>
+                  $.ajax({
+                    type: 'ajax',
+                    url: '<?php echo base_url() ?>administrators/testing',
+                    async: false,
+                    dataType: 'json',
+                    success: function(data) {
+                      alert(data[0].username);
+                    },
+                    error: function() {
+                      alert('bobo');
+                    }
+                  });
+                <?php endif; ?>
+              </script>
             </div>
           </div>
 
@@ -237,7 +209,7 @@
                         <div class="modal-dialog modal-dialog-centered" role="document">
                           <div class="modal-content">
                             <div class="modal-header">
-                              <h5 class="modal-title">Add Loan</h5>
+                              <h5 class="modal-title"></h5>
                             </div>
                             <form id="addLoanForm">
                               <input type="hidden" name="loan_id" value="0">
@@ -246,7 +218,6 @@
                                   <div class="form-group col-md-10 mb-2">
                                     <label for="name" class="custom-sm">Loan Type</label>
                                     <input type="loan_type" class="form-control" id="name" name="loan_name">
-                                    </input>
                                     <div class="invalid-feedback" id="invalidName"></div>
                                   </div>
                                   <div class="form-group col-md-10 mb-2">
@@ -290,6 +261,7 @@
                                     <select class="custom-select custom-small-text" id="interest" name="loan_interest">
                                       <option selected hidden>Select Loan Interest..</option>
                                       <option>0%</option>
+                                      <option>0.5%</option>
                                       <option>0.75%</option>
                                       <option>1%</option>
                                       <option>2%</option>
@@ -312,7 +284,6 @@
                           </div>
                         </div>
                       </div>
-
 
 
                       <!-- Ajax on add loan button modal -->
@@ -424,7 +395,7 @@
                             $('#addLoanModal').modal('show');
                             $('#addLoanModal').find('.modal-title').text('Edit Loan');
                             $('#addLoanModal').find('.btn-primary').text('Save changes');
-                            $('#addLoanForm').attr('action', '<?php echo base_url() ?>administrators/update _loan');
+                            $('#addLoanForm').attr('action', '<?php echo base_url() ?>administrators/update_loan');
                             $.ajax({
                               type    : 'ajax',
                               method  : 'get',
@@ -433,7 +404,7 @@
                               async   : false,
                               dataType: 'json',
                               success : function(data) {
-                                $('select[name=loan_name]').val(data.loan_name).prop('disabled', true);
+                                $('input[name=loan_name]').val(data.loan_name).prop('disabled', true);
                                 $('select[name=loan_max_amt]').val(data.loan_max_amt);
                                 $('select[name=loan_max_term]').val(data.loan_max_term);
                                 $('select[name=loan_interest]').val(data.loan_interest);
@@ -480,8 +451,8 @@
                               type    : 'ajax', 
                               url     : '<?php echo base_url() ?>administrators/get_loans', 
                               async   : false, 
-                              dataType: 'json', 
-                              success: function(data) { 
+                              dataType: 'json',
+                              success: function(data) {
                                 var column = ''; 
                                 var i; 
                                 for(i = 0; i < data.length; i++) { 
@@ -497,7 +468,7 @@
                                                   '<button href="javascript:;" class="btn btn-danger btn-sm float-right" id="deleteLoan" data="' + data[i].id + '"><i class="fas fa-trash mr-2"></i>Delete</button>' +
                                                   '<button href="javascript:;" class="btn btn-success btn-sm float-right mr-1" id="editLoan" data="' + data[i].id + '"><i class="fas fa-cog mr-2"></i>Edit</button>' + 
                                                 '</div>' + 
-                                              '</div>'  + 
+                                              '</div>' + 
                                             '</div>';
                                 }
                                 $('#returnColumn').html(column); 
@@ -902,14 +873,6 @@
                     // Search members 
                     function search_user(query) {
                       var sort = $('#sort').val();
-                      var sort1 = '';
-                      if(sort == 'Date') {
-                        sort1 = 'register_date';
-                      } else if(sort == 'Position') {
-                        sort1 = 'position';
-                      } else {
-                        sort1 = 'college';
-                      }
                       $.ajax({
                         type    : 'ajax',
                         method  : 'post',

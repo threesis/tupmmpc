@@ -716,6 +716,7 @@ header.masthead .intro-text .intro-heading {
 
 #team{
   background-image: url('../img/Clouds.jpg');
+  background-size: cover;
 }
 .team-member {
   margin-bottom: 25px;
