@@ -24,7 +24,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
   </head>
 
-  
+  <?php $position = $this->session->userdata('position') ?>
+  <?php if($position == '1') {
+    $position = 'Administrator';
+  } elseif($position == '2') {
+    $position = 'Member';
+  } elseif($position == '3') {
+    $position = 'Credit Officer';
+  } else {
+    $position = 'Treasurer';
+  } ?>
 
   <body id="page-top">
     <!-- Navigation Bar -->
@@ -81,7 +90,7 @@
               </div>
               <div class="card-text">
                 <h6 class="admin-name text-center"><?php echo $this->session->userdata('name') ?></h6>
-                <h6 class="position-text text-center text-muted"><?php echo $this->session->userdata('position') ?></h6>
+                <h6 class="position-text text-center text-muted"><?php echo $position ?></h6>
                 <p class="text-center m-3"><small>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</small></p>
               </div>
               <div class="list-group profile-menu my-3" id="list-tab" role="tablist">
@@ -92,14 +101,20 @@
                 <a class="list-group-item list-group-item-action" id="records-list" data-toggle="list" href="#admin-records" role="tab" aria-controls="messages"><i class="fas fa-folder-open mr-2"></i> View Records</a>
               </div>
               <script type="text/javascript">
-                <?php if($this->session->userdata('position') == '2'): ?>
+                <?php $pos = $this->session->userdata('position') ?>
+                <?php if($pos == '1'): ?>
+                  var pos = 1;
                   $.ajax({
                     type: 'ajax',
+                    method: 'get',
                     url: '<?php echo base_url() ?>administrators/testing',
+                    data: {id:pos},
                     async: false,
                     dataType: 'json',
                     success: function(data) {
-                      alert(data[0].username);
+                      for(var i = 0; i < data.length; i++) {
+                        $('#'+data[i].perm_desc).hide();
+                      }
                     },
                     error: function() {
                       alert('bobo');
@@ -670,7 +685,7 @@
                 <!-- Ajax -->
                 <script type="text/javascript"> 
                   $(function() {
-                    sort_member_position();
+                    sort_member_date();
                     getMember_latest_date();
 
                     // Add member
@@ -889,7 +904,7 @@
                                       '<img src="assets/img/team/ian.jpg" class="rounded-circle member-icon">' +
                                       '<button href="javascript:;" class="btn btn-info btn-sm float-right my-2" id="viewProfileBtn" user-id="' + data[i].id + '" user-name="' + data[i].name + '" user-position ="' + data[i].position + '" user-college="' + data[i].college + '" user-address="' + data[i].address + '">View Profile</button>' +
                                       '<h5 class="member-name">' + data[i].name + '</h5>' +
-                                      '<p class="text-muted"><small>' + data[i].position + '</small></p>' +
+                                      '<p class="text-muted"><small>' + data[i].college + '</small></p>' +
                                       '</li>';
                           }
                           $('#returnRow').html(row);
@@ -909,58 +924,6 @@
                       $.ajax({ 
                         type    : 'ajax',
                         url     : '<?php echo base_url() ?>administrators/sort_member_date',
-                        async   : false,
-                        dataType: 'json',
-                        success: function(data) {
-                          var column = ''; 
-                          var i; 
-                          for(i = 0; i < data.length; i++) {
-                            column += '<li class="list-group-item">' +
-                                      '<img src="assets/img/team/ian.jpg" class="rounded-circle member-icon">' +
-                                      '<button href="javascript:;" class="btn btn-info btn-sm float-right my-2" id="viewProfileBtn" user-id="' + data[i].id + '" user-name="' + data[i].name + '" user-position ="' + data[i].position + '" user-college="' + data[i].college + '" user-address="' + data[i].address + '">View Profile</button>' +
-                                      '<h5 class="member-name">' + data[i].name + '</h5>' +
-                                      '<p class="text-muted"><small>' + data[i].name + '</small></p>' +
-                                      '</li>';
-                          }
-                          $('#returnRow').html(column);
-                        }, 
-                          error: function() {
-                            $('#alert-msg').html('<p class="alert alert-danger alert-dismissable fade show text-center" role="alert">Could not get data from the database!</p>').fadeIn('slow');
-                          }
-                      });
-                    }
-
-                    // Sort members by date
-                    function sort_member_position() { 
-                      $.ajax({ 
-                        type    : 'ajax',
-                        url     : '<?php echo base_url() ?>administrators/sort_member_position',
-                        async   : false,
-                        dataType: 'json',
-                        success: function(data) {
-                          var column = ''; 
-                          var i; 
-                          for(i = 0; i < data.length; i++) {
-                            column += '<li class="list-group-item">' +
-                                      '<img src="assets/img/team/ian.jpg" class="rounded-circle member-icon">' +
-                                      '<button href="javascript:;" class="btn btn-info btn-sm float-right my-2" id="viewProfileBtn" user-id="' + data[i].id + '" user-name="' + data[i].name + '" user-position ="' + data[i].position + '" user-college="' + data[i].college + '" user-address="' + data[i].address + '">View Profile</button>' +
-                                      '<h5 class="member-name">' + data[i].name + '</h5>' +
-                                      '<p class="text-muted"><small>' + data[i].position + '</small></p>' +
-                                      '</li>';
-                          }
-                          $('#returnRow').html(column);
-                        }, 
-                          error: function() {
-                            $('#alert-msg').html('<p class="alert alert-danger alert-dismissable fade show text-center" role="alert">Could not get data from the database!</p>').fadeIn('slow');
-                          }
-                      });
-                    }
-
-                    // Sort members by date
-                    function sort_member_college() { 
-                      $.ajax({ 
-                        type    : 'ajax',
-                        url     : '<?php echo base_url() ?>administrators/sort_member_college',
                         async   : false,
                         dataType: 'json',
                         success: function(data) {

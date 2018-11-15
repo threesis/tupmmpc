@@ -55,6 +55,7 @@
 						'position' => $user_info[0]['position'],
 						'name' => $user_info[0]['name'],
 						'username' => $username,
+						'id' => $user_info[0]['id'],
 						'signed_in' => true
 					);
 					// Set user session
