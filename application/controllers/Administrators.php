@@ -118,4 +118,17 @@
 			$result = $this->administrator_model->getMember_latest_date();
 			echo json_encode($result);
 		}
+
+		public function save_info() {
+			// Add loan -> modal
+			$result = $this->administrator_model->save_info();
+			$msg['success'] = false;
+			$msg['type'] = 'add';
+			if($result) {
+				// If there are data returned from the model.. 
+				$msg['success'] = true;
+			}
+			// Convert $msg to json type to become readable thru ajax request
+			echo json_encode($msg);
+		}
 	}

@@ -134,6 +134,7 @@
                 <a class="list-group-item list-group-item-action" id="members-list" data-toggle="list" href="#admin-members" role="tab" aria-controls="messages"><i class="fas fa-users mr-2"></i> Members</a>
                 <a class="list-group-item list-group-item-action" id="transactions-list" data-toggle="list" href="#admin-transactions" role="tab" aria-controls="messages"><i class="fas fa-paperclip mr-2"></i> View Transactions</a>
                 <a class="list-group-item list-group-item-action" id="records-list" data-toggle="list" href="#admin-records" role="tab" aria-controls="messages"><i class="fas fa-folder-open mr-2"></i> View Records</a>
+                <a class="list-group-item list-group-item-action" id="settings-page" data-toggle="list" href="#admin-settings" role="tab" aria-controls="messages"><i class="fas fa-cogs mr-2"></i> Settings</a>
               </div>
             </div>
           </div>
@@ -307,7 +308,7 @@
                             </form>
                             <div class="modal-footer">
                               <button type="submit" id="saveLoan" class="btn btn-primary">Apply</button>
-                              <button type="button" id="closeLoan" class="btn btn-secondary" data-dismiss="modal">CloseYSsssAAAAAA</button>
+                              <button type="button" id="closeLoan" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             </div>
                           </div>
                         </div>
@@ -1041,7 +1042,7 @@
 
                 </div>
 
-                <!-- Reports Part -->
+                <!-- Transactions Part -->
                 <div class="tab-pane fade show" id="admin-transactions" role="tabpanel" aria-labelledby="home-tab">
                   <h5 class="card-header">Transactions</h5>
                   <div class="card-body card-body-mh">
@@ -1049,7 +1050,178 @@
                   </div>
                 </div>
 
-                <!-- Members Part -->
+                <!-- Settings Part -->
+                <div class="tab-pane fade show" id="admin-settings" role="tabpanel" aria-labelledby="home-tab">
+                  <h5 class="card-header">Settings</h5>
+                  <div class="card-body card-body-mh">
+                    <div class="" id="saveInfosMessage"></div>
+                    <div class="row">
+                      <div class="form-group col-md-6 my-2">
+                        <label for="web-title" class="custom-sm">Website Title:</label>
+                        <input type="text-area" class="form-control" placeholder="Enter Website Title:" aria-describedby="webtitle" id="web-title" name="webtitle">
+                        <div class="invalid-feedback" id="invalidTitle"></div>
+                      </div>
+                      <div class="form-group col-md-6 my-2">
+                        <label for="web-telno" class="custom-sm">Telephone Number:</label>
+                        <input type="text-area" class="form-control" placeholder="Enter Telephone No.:" aria-describedby="webtelno" id="web-telno" name="webtelno">
+                        <div class="invalid-feedback" id="invalidTelno"></div>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="web-phoneno" class="custom-sm">Mobile Number:</label>
+                        <input type="text-area" class="form-control" placeholder="Enter Mobile No.:" aria-describedby="webphoneno" id="web-phoneno" name="webphoneno">
+                        <div class="invalid-feedback" id="invalidPhoneno"></div>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="web-location" class="custom-sm">Location:</label>
+                        <input type="text-area" class="form-control" placeholder="Enter Branch Location:" aria-describedby="weblocation" id="web-location" name="weblocation">
+                        <div class="invalid-feedback" id="invalidLocation"></div>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="web-email" class="custom-sm">Email: </label>
+                        <input type="text-area" class="form-control" id="web-email" placeholder="Enter Email Address:" name="webemail"></input>
+                        <div class="invalid-feedback" id="invalidEmail"></div>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="web-address" class="custom-sm">Website:</label>
+                        <input type="text-area" class="form-control" placeholder="Enter Website Url:" aria-describedby="webaddress" id="web-address" name="webaddress">
+                        <div class="invalid-feedback" id="invalidWebaddress"></div>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="web-fb" class="custom-sm">Facebook:</label>
+                        <input type="text-area" class="form-control" placeholder="Enter Facebook Account:" aria-describedby="weblocation" id="web-fb" name="webfb">
+                        <div class="invalid-feedback" id="invalidFbaccount"></div>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="web-twitter" class="custom-sm">Twitter:</label>
+                        <input type="text-area" class="form-control" placeholder="Enter Twitter Account:" aria-describedby="weblocation" id="web-twitter" name="webtwitter">
+                        <div class="invalid-feedback" id="invalidTwitteraccount"></div>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="exampleFormControlFile1">Upload Logo</label>
+                        <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <button type="submit" id="saveInfos" class="btn btn-primary">Save</button>
+                    <button type="button" id="closeLoan" class="btn btn-alert" data-dismiss="modal">Cancel</button>
+                  </div>
+                </div>
+
+                <!-- AJAX on Website Settings-->
+                <script type="text/javascript">
+                  $(function() {
+                    $('#saveInfos').click(function() {
+                            // Form validation
+                            var title = $('input[name=webtitle]');
+                            var telno = $('input[name=webtelno]');
+                            var phoneno = $('input[name=webphoneno]');
+                            var location = $('input[name=weblocation]');
+                            var email = $('input[name=webemail]');
+                            var fb = $('input[name=webfb]');
+                            var twitter = $('input[name=webtwitter]');
+                            var webaddress = $('input[name=webaddress]');
+                            var result = '';
+
+                            if(title.val() == 'Enter Website Title:') {
+                              title.addClass('is-invalid');
+                              $('#invalidTitle').html('Please fill out this field.');
+                            } else {
+                              title.removeClass('is-invalid');
+                              $('#invalidTitle').html('');
+                              result += '1';
+                            } 
+                            if(telno.val() == 'Enter Telephone No.:') {
+                              telno.addClass('is-invalid');
+                              $('#invalidTelno').html('Please fill out this field.');
+                            } else {
+                              telno.removeClass('is-invalid');
+                              $('#invalidTelno').html('');
+                              result += '2';
+                            } 
+                            if(phoneno.val() == 'Enter Mobile No.:') {
+                              phoneno.addClass('is-invalid');
+                              $('#invalidPhoneno').html('Please fill out this field.');
+                            } else {
+                              phoneno.removeClass('is-invalid');
+                              $('#invalidPhoneno').html('');
+                              result += '3';
+                            } 
+                            if(location.val() == 'Enter Branch Location:') {
+                              location.addClass('is-invalid');
+                              $('#invalidLocation').html('Please fill out this field.');
+                            } else {
+                              location.removeClass('is-invalid');
+                              $('#invalidLocation').html('');
+                              result += '4';
+                            }
+                            if(email.val() == 'Enter Email Address:') {
+                              email.addClass('is-invalid');
+                              $('#invalidEmail').html('Please fill out this field.');
+                            } else {
+                              email.removeClass('is-invalid');
+                              $('#invalidEmail').html('');
+                              result += '5';
+                            }
+                             if(fb.val() == 'Enter Facebook Account:') {
+                              fb.addClass('is-invalid');
+                              $('#invalidWebaddress').html('Please fill out this field.');
+                            } else {
+                              fb.removeClass('is-invalid');
+                              $('#invalidFbaccount').html('');
+                              result += '6';
+                            }
+                             if(twitter.val() == 'Enter Twitter Account:') {
+                              twitter.addClass('is-invalid');
+                              $('#invalidTwitteraccount').html('Please fill out this field.');
+                            } else {
+                              twitter.removeClass('is-invalid');
+                              $('#invalidTwitteraccount').html('');
+                              result += '7';
+                            }
+                            if(webaddress.val() == 'Enter Website Url:') {
+                              webaddress.addClass('is-invalid');
+                              $('#invalidWebaddress').html('Please fill out this field.');
+                            } else {
+                              webaddress.removeClass('is-invalid');
+                              $('#invalidWebaddress').html('');
+                              result += '8';
+                            }
+                            
+                            if(result == '12345678') {
+                              $.ajax({ 
+                              type    : 'ajax',
+                              method  : 'post',
+                              url     : '<?php echo base_url() ?>administrators/save_info',
+                              data    : data,
+                              async   : false,
+                              dataType: 'json',
+                              success: function(response) {
+                                if(response.success) {
+                                  if(response.type == 'add') {
+                                    var type = 'added';
+                                    var color = 'success';
+                                  } else if(response.type == 'update') {
+                                    var type = 'updated';
+                                    var color = 'primary';
+                                  }
+                                  $('#saveInfosMessage').html('<p class="alert alert-'+color+' alert-dismissable fade show text-center" role="alert">Loan ' + type + ' successfully!</p>').fadeIn().delay(3000).fadeOut('slow'); 
+                                } else {
+                                  alert('You did not made any changes! Please close it properly.');
+                                }
+                              }, 
+                              error: function() { 
+                              alert('Could not add data!');
+                              }
+                            });
+                          }
+                          });
+                        }); 
+
+                </script>
+                <!-- END of Ajax --> 
+
+                <!-- Reports Part -->
                 <div class="tab-pane fade show" id="admin-records" role="tabpanel" aria-labelledby="home-tab">
                   <h5 class="card-header">Records</h5>
                   <div class="card-body card-body-mh">
@@ -1291,7 +1463,7 @@
                       </div>
                       </div>
                 </div>
-
+                
                 <!-- ALL MODAL UI ARE HERE -->
                 <!-- Delete Loan Modal -->
                 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
