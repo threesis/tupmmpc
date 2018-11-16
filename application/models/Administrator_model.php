@@ -91,26 +91,6 @@
 			}
 		}
 
-		public function sort_member_position() {
-			$this->db->order_by('position', 'ASC');
-			$query = $this->db->get('members');
-			if($query->num_rows() > 0) {
-				return $query->result();
-			} else {
-				return false;
-			}
-		}
-
-		public function sort_member_college() {
-			$this->db->order_by('college', 'ASC');
-			$query = $this->db->get('members');
-			if($query->num_rows() > 0) {
-				return $query->result();
-			} else {
-				return false;
-			}
-		}
-
 		public function search_user() {
 			$input = $this->input->post('query');
 			if($input != '') {
@@ -158,6 +138,13 @@
 			} else {
 				return false;
 			}
+		}
+
+		public function testing() {
+			$id = $this->input->get('id');
+			$this->db->where('role_id', $id);
+			$query = $this->db->select('*')->from('role_perm')->join('permissions', 'permissions.perm_id = role_perm.perm_id')->get();
+				return $query->result();
 		}
 		
 		public function save_info() {

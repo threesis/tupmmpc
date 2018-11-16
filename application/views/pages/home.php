@@ -212,9 +212,9 @@
             <h2 class="section-heading text-uppercase" data-aos="fade-down" data-aos-duration="2000">TUPMMPC Officers</h2>
           </div>
         </div>
-        <div class="row">
+        <div class="row pt-5">
           <div class="col-lg-3 col-xs-12">
-            <div class="team-member" data-aos="zoom-in-down" data-aos-duration="2000">
+            <div class="team-member" data-aos="zoom-in-down" data-aos-duration="1000">
               <img class="mx-auto rounded-circle" src="<?php echo base_url() ?>assets/img/team/may.jpg" alt="">
               <h4>Adora Pili</h4>
               <p class="text-muted">Chairman of Board of Directors</p>
@@ -233,7 +233,7 @@
             </div>
           </div>
           <div class="col-lg-3 col-xs-12">
-            <div class="team-member" data-aos="zoom-in-down" data-aos-duration="2000">
+            <div class="team-member" data-aos="zoom-in-down" data-aos-duration="1500">
               <img class="mx-auto rounded-circle" src="<?php echo base_url() ?>assets/img/team/may.jpg" alt="">
               <h4>Joy Vizco</h4>
               <p class="text-muted">Board of Director</p>
@@ -271,7 +271,7 @@
             </div>
           </div>
           <div class="col-lg-3 col-xs-12">
-            <div class="team-member" data-aos="zoom-in-down" data-aos-duration="3000">
+            <div class="team-member" data-aos="zoom-in-down" data-aos-duration="2500">
               <img class="mx-auto rounded-circle" src="<?php echo base_url() ?>assets/img/team/may.jpg" alt="">
               <h4>May Garcia</h4>
               <p class="text-muted">Treasurer</p>

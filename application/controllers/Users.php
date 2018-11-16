@@ -30,14 +30,8 @@
 		public function signin() {
 			// Check login session
 			// If they go to the sign in page while signed in
-			if($this->session->userdata('signed_in') && ($this->session->userdata('position') == 'Administrator')) {
+			if($this->session->userdata('signed_in')) {
 				redirect('admin');
-			} elseif($this->session->userdata('signed_in') && ($this->session->userdata('position') == 'Member')) {
-				redirect('member');
-			} elseif($this->session->userdata('signed_in') && ($this->session->userdata('position') == 'Treasurer')) {
-				redirect('treasurer');
-			} elseif($this->session->userdata('signed_in') && ($this->session->userdata('position') == 'Credit Officer')) {
-				redirect('credit_officer');
 			} else {
 				// Validation
 			$this->form_validation->set_rules('username', 'Username', 'required');
@@ -55,27 +49,13 @@
 				// Login user -> model
 				$user_info = $this->user_model->signin($username, $password);
 
-				if($user_info[0]['position'] == 'Member') {
+				if($user_info) {
 					// Create session
 					$session_data = array(
 						'position' => $user_info[0]['position'],
 						'name' => $user_info[0]['name'],
 						'username' => $username,
-						'signed_in' => true
-					);
-					// Set user session
-					$this->session->set_userdata($session_data);
-					// Message
-					$this->session->set_flashdata('user_signedin', 'Welcome back, ');
-					// Redirect to the admin page
-					redirect('member');
-
-				} else if($user_info[0]['position'] == 'Administrator') {
-					// Create session
-					$session_data = array(
-						'position' => $user_info[0]['position'],
-						'name' => $user_info[0]['name'],
-						'username' => $username,
+						'id' => $user_info[0]['id'],
 						'signed_in' => true
 					);
 					// Set user session
@@ -85,38 +65,7 @@
 					// Redirect to the admin page
 					redirect('admin');
 
-				} else if($user_info[0]['position'] == "Credit Officer") {
-					// Create session
-					$session_data = array(
-						'position' => $user_info[0]['position'],
-						'name' => $user_info[0]['name'],
-						'username' => $username,
-						'signed_in' => true
-					);
-					// Set user session
-					$this->session->set_userdata($session_data);
-					// Message
-					$this->session->set_flashdata('user_signedin', 'Welcome back, ');
-					// Redirect to the admin page
-					redirect('credit_officer');
-
-				} else if($user_info[0]['position'] == 'Treasurer') {
-					// Create session
-					$session_data = array(
-						'position' => $user_info[0]['position'],
-						'name' => $user_info[0]['name'],
-						'username' => $username,
-						'signed_in' => true
-					);
-					// Set user session
-					$this->session->set_userdata($session_data);
-					// Message
-					$this->session->set_flashdata('user_signedin', 'Welcome back, ');
-					// Redirect to the admin page
-					redirect('treasurer');
-
-				}
-				else {
+				} else {
 					// Set message
 					$this->session->set_flashdata('signin_failed', 'Username or Password is invalid!');
 					// Redirect back to the signin page
@@ -125,7 +74,6 @@
 			}
 
 			}
-
 			
 		}
 

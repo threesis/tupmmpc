@@ -7,7 +7,7 @@
 				$this->session->set_flashdata('not_signedin', 'You must sign in to continue!');
 				// Redirect to sign in page
 				redirect('signin');
-			} elseif($this->session->userdata('signed_in') && ($this->session->userdata('position') == 'Administrator')) {
+			} elseif($this->session->userdata('signed_in')) {
 				// Redirect to admin page
 				$this->load->view('pages/admin');
 			} else {
@@ -119,6 +119,7 @@
 			echo json_encode($result);
 		}
 
+<<<<<<< HEAD
 		public function save_info() {
 			// Add loan -> modal
 			$result = $this->administrator_model->save_info();
@@ -130,5 +131,10 @@
 			}
 			// Convert $msg to json type to become readable thru ajax request
 			echo json_encode($msg);
+=======
+		public function testing() {
+			$result = $this->administrator_model->testing();
+			echo json_encode($result);
+>>>>>>> d63d7a81ebb4a2bbd1aad75f251dcea6a9df989a
 		}
 	}
