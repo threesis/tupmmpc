@@ -75,30 +75,32 @@
 
 		//newly added 
 		$('#apply-loan').click(function() {
+			var url = $('#loan_form').attr('action', '<?php echo base_url() ?>loan_applications/loanApply');
 			var info = $('#loan_form').serialize(); 
-			var user_name = '<?php echo $this->session->userdata('name'); ?>';
-			var date_applied = '<?php echo date('M/d/Y H:i:sa'); ?>';
-			var user_id = '<?php echo $this->session->userdata('id'); ?>';
 			var loan_type = $('#loan-type').val();
+
+			info = info + '&id=' + '<?php echo $this->session->userdata('id'); ?>' + '&name=' + '<?php echo $this->session->userdata('name'); ?>' + '&loan_type=' +loan_type ;
+
+			alert(info);
 
 			$.ajax({
 				type: 'ajax',
 				method: 'post',
-				url: '<?php echo base_url(); ?>loan_applications/loanApply',
-				data: info + '&user_id=' + user_id + '&user_name=' + user_name + '&date_applied=' + date_applied + '&loan_type=' +loan_type,
+				url: url,
+				data: info,
 				async: false,
 				dataType: 'json',
-				success: function(data) 
+				success: function(response) 
 				{
-					if (data.success) {
+					if (response.success) {
+					  $('#loan_form')[0].reset();
 					  $('#addMemberMsg').html('<p class="alert alert-success alert-dismissable fade show text-center" role="alert">Loan added successfully!</p>').fadeIn().delay(3000).fadeOut('slow');
                     } else {
                       alert('Error');
                     }
 				}, 
-				error: function() 
+				error: function( ) 
 				{
-					alert(user_id);
 					alert('Error! somethings wrong with your syntax on loan_application_model!');
 				}
 			});

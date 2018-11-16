@@ -88,13 +88,12 @@
  		// change table columns loan_id to int for testing
  		//needs to update for loan_id and attachments  
  		$loanapp_data = array(
- 			'user_id' => $this->input->post('user_id'),
- 			'name' => $this->input->post('user_name'),
- 			'loan_type' => $this->input->post('loan_type'),
+ 			'user_id' => $this->input->post('id'),
+ 			'name' => $this->input->post('name'),
+ 			'loan_type' => $this->input->get('loan_type'),
  			'loan_term' => $this->input->post('loanapp-term'),
  			'loan_amount' => $this->input->post('loan-amount'),
  			'user_attachment' => $this->input->post('user-attachment'),
- 			'date_created' => $this->input->post('date_applied'),
  			'status' => 'Pending',
  			'comaker_1' => $this->input->post('co-maker1'),
  			'comaker_2' => $this->input->post('co-maker2'),
