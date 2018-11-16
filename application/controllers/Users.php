@@ -75,6 +75,7 @@
 				} else if($user_info[0]['position'] == 'Administrator') {
 					// Create session
 					$session_data = array(
+						'id' => $user_info[0]['id'],
 						'position' => $user_info[0]['position'],
 						'name' => $user_info[0]['name'],
 						'username' => $username,
@@ -89,7 +90,8 @@
 
 				} else if($user_info[0]['position'] == "Credit Officer") {
 					// Create session
-					$session_data = array(
+					$session_data = array(	
+						'id' => $user_info[0]['id'],
 						'position' => $user_info[0]['position'],
 						'name' => $user_info[0]['name'],
 						'username' => $username,
@@ -105,6 +107,7 @@
 				} else if($user_info[0]['position'] == 'Treasurer') {
 					// Create session
 					$session_data = array(
+						'id' => $user_info[0]['id'],
 						'position' => $user_info[0]['position'],
 						'name' => $user_info[0]['name'],
 						'username' => $username,

@@ -12,7 +12,9 @@
 
 <?php echo validation_errors()?>
 
-<?php echo form_open('ian_branch/loan_apply'); ?>
+
+<?php $attributes = array('id'=>'loan_form', 'name'=>'loan_form')?>
+<?php echo form_open('loan_applications/loanApply', $attributes); ?>
 
 <div class="form-group" id="loanapp-type">
 	<!-- ajax insert of loan type -->
@@ -32,7 +34,7 @@
 </div>
 
 <div class="custom-file mb-3" id="loanapp-payslip">
-  <input type="file" class="custom-file-input" id="customFile" required>
+  <input type="file" class="custom-file-input" id="customFile" name="user-attachment" required>
   <label class="custom-file-label text-muted" for="customFile">Attach Payslip</label>
 </div>
 
@@ -55,7 +57,7 @@
 </div>
 
 <div class="d-flex justify-content-center">
-<button type="submit" class="btn btn-success ">Submit</button>
+<button type="submit" id="apply-loan" name="apply-loan" class="btn btn-success ">Submit</button>
 </div>
 <?php form_close()?>
 
@@ -70,6 +72,37 @@
 <script type="text/javascript">
 	$(function() {
 		checkmember();
+
+		//newly added 
+		$('#apply-loan').click(function() {
+			var info = $('#loan_form').serialize(); 
+			var user_name = '<?php echo $this->session->userdata('name'); ?>';
+			var date_applied = '<?php echo date('M/d/Y H:i:sa'); ?>';
+			var user_id = '<?php echo $this->session->userdata('id'); ?>';
+			var loan_type = $('#loan-type').val();
+
+			$.ajax({
+				type: 'ajax',
+				method: 'post',
+				url: '<?php echo base_url(); ?>loan_applications/loanApply',
+				data: info + '&user_id=' + user_id + '&user_name=' + user_name + '&date_applied=' + date_applied + '&loan_type=' +loan_type,
+				async: false,
+				dataType: 'json',
+				success: function(data) 
+				{
+					if (data.success) {
+					  $('#addMemberMsg').html('<p class="alert alert-success alert-dismissable fade show text-center" role="alert">Loan added successfully!</p>').fadeIn().delay(3000).fadeOut('slow');
+                    } else {
+                      alert('Error');
+                    }
+				}, 
+				error: function() 
+				{
+					alert(user_id);
+					alert('Error! somethings wrong with your syntax on loan_application_model!');
+				}
+			});
+		});
 
 		function checkmember() {
 			var user_name = '<?php echo $this->session->userdata['name']; ?>';
@@ -95,7 +128,7 @@
 								var loan_terms = '';
 								var i;
 
-								var loan_type = '<input type="text" class="form-control" name="' + result.loan_name  + '" value="' + result.loan_name + '" disabled>'; 
+								var loan_type = '<input type="text" class="form-control" id="loan-type" name="loan-type" value="' + result.loan_name + '" disabled>'; 
 
 								var terms = result.loan_max_term;
 
@@ -127,14 +160,14 @@
 									loan_type += '<option value="' + result[i].loan_name + '" >'+ result[i].loan_name +'</option>';
 								}
 
-								var all_loans = '<select class="custom-select" id="loan-selector" name="loan-selector" required><option value="" disabled selected hidden>Select Loan Term..</option></select>'
+								var all_loans = '<select class="custom-select" id="loan-type" name="loan-type" required><option value="" disabled selected hidden>Select Loan Term..</option></select>'
 
-								$('#loan-selector').html(loan_type);
+								$('#loan-type').html(loan_type);
 								$('#loanapp-type').html(all_loans);	
 
 
 								//loan terms selection
-								$('#loan-selector option').click( function() {
+								$('#loan-type option').click( function() {
 									type = $(this).attr('value');
 								});
 

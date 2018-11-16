@@ -37,4 +37,18 @@ class Loan_Applications extends CI_Controller
 		$result = $this->loan_application_model->searchMember();
 		echo json_encode($result);
 	}
+
+	// newly added
+	public function loanApply() 
+	{
+		$result = $this->loan_application_model->loanApply();
+		$msg['success'] = false; 
+		$msg['type'] = 'add';
+		
+		if($result) {
+			$msg['success'] = true;
+		}
+
+		echo json_encode($msg);
+	}
 }

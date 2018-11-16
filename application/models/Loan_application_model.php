@@ -71,7 +71,6 @@
  	{
  		$key_typed = $this->input->post('key_typed');
  		
- 		
  		if($key_typed != '') {
  			$this->db->like('name', $key_typed);
  		}
@@ -82,8 +81,33 @@
  		return $result->result();
  	}
 
- 	public function insert() 
+
+// newly added
+ 	public function loanApply() 
  	{
- 		$this->form_validation->set_rules('loan-selector', 'Loan Type', 'required');
+ 		// change table columns loan_id to int for testing
+ 		//needs to update for loan_id and attachments  
+ 		$loanapp_data = array(
+ 			'user_id' => $this->input->post('user_id'),
+ 			'name' => $this->input->post('user_name'),
+ 			'loan_type' => $this->input->post('loan_type'),
+ 			'loan_term' => $this->input->post('loanapp-term'),
+ 			'loan_amount' => $this->input->post('loan-amount'),
+ 			'user_attachment' => $this->input->post('user-attachment'),
+ 			'date_created' => $this->input->post('date_applied'),
+ 			'status' => 'Pending',
+ 			'comaker_1' => $this->input->post('co-maker1'),
+ 			'comaker_2' => $this->input->post('co-maker2'),
+ 			'comaker_3' => $this->input->post('co-maker3'),
+ 			'comaker_4' => $this->input->post('co-maker4')
+ 		);
+
+ 		$this->db->insert('loan_applications', $loanapp_data);
+ 		if($this->db->affected_rows() > 0 ) 
+ 		{
+ 			return true;
+ 		} else {
+ 			return false;
+ 		}
  	}
  }
