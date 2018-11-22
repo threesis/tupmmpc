@@ -119,7 +119,6 @@
 			echo json_encode($result);
 		}
 
-<<<<<<< HEAD
 		public function save_info() {
 			// Add loan -> modal
 			$result = $this->administrator_model->save_info();
@@ -131,10 +130,11 @@
 			}
 			// Convert $msg to json type to become readable thru ajax request
 			echo json_encode($msg);
-=======
+		}
+		
 		public function testing() {
 			$result = $this->administrator_model->testing();
 			echo json_encode($result);
->>>>>>> d63d7a81ebb4a2bbd1aad75f251dcea6a9df989a
+
 		}
 	}

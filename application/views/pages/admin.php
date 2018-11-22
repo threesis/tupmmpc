@@ -981,7 +981,7 @@
                   <h5 class="card-header">Settings</h5>
                   <div class="card-body card-body-mh">
                     <div class="" id="saveInfosMessage"></div>
-                    <div class="row">
+                    <div class="row" id="saveInfoForm">
                       <div class="form-group col-md-6 my-2">
                         <label for="web-title" class="custom-sm">Website Title:</label>
                         <input type="text-area" class="form-control" placeholder="Enter Website Title:" aria-describedby="webtitle" id="web-title" name="webtitle">
@@ -1038,6 +1038,9 @@
                 <script type="text/javascript">
                   $(function() {
                     $('#saveInfos').click(function() {
+                            $('#saveInfoForm').attr('action', '<?php echo base_url() ?>administrators/save_info');
+                            var url = $('#saveInfoForm').attr('action');
+                            var data = $('#saveInfoForm').serialize();
                             // Form validation
                             var title = $('input[name=webtitle]');
                             var telno = $('input[name=webtelno]');
@@ -1118,11 +1121,13 @@
                               $.ajax({ 
                               type    : 'ajax',
                               method  : 'post',
-                              url     : '<?php echo base_url() ?>administrators/save_info',
+                              url     : url,
                               data    : data,
                               async   : false,
                               dataType: 'json',
                               success: function(response) {
+                                
+                                alert(data);
                                 if(response.success) {
                                   if(response.type == 'add') {
                                     var type = 'added';
