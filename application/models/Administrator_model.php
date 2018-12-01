@@ -83,27 +83,7 @@
 
 		public function sort_member_date() {
 			$this->db->order_by('name', 'asc');
-			$query = $this->db->get('members');
-			if($query->num_rows() > 0) {
-				return $query->result();
-			} else {
-				return false;
-			}
-		}
-
-		public function sort_member_position() {
-			$this->db->order_by('position', 'ASC');
-			$query = $this->db->get('members');
-			if($query->num_rows() > 0) {
-				return $query->result();
-			} else {
-				return false;
-			}
-		}
-
-		public function sort_member_college() {
-			$this->db->order_by('college', 'ASC');
-			$query = $this->db->get('members');
+			$query = $this->db->from('members')->join('roles', 'roles.role_id = members.position')->get();
 			if($query->num_rows() > 0) {
 				return $query->result();
 			} else {
@@ -158,6 +138,22 @@
 			} else {
 				return false;
 			}
+		}
+
+		public function testing() {
+			$id = $this->input->get('id');
+			$this->db->where('role_id', $id);
+			$query = $this->db->select('*')->from('role_perm')->join('permissions', 'permissions.perm_id = role_perm.perm_id')->get();
+				return $query->result();
+		}
+
+		public function testing1() {
+			$id = $this->input->get('id');
+			$role_id = $this->input->get('role_id');
+			$this->db->where('perm_id', $id);
+			$this->db->where('role_id', $role_id);
+			$query = $this->db->select('*')->from('role_perm')->join('permissions_roles', 'permissions_roles.id = role_perm.perm_role_id')->get();
+				return $query->result();
 		}
 		
 	}

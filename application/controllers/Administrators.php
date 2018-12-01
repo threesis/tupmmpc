@@ -7,7 +7,7 @@
 				$this->session->set_flashdata('not_signedin', 'You must sign in to continue!');
 				// Redirect to sign in page
 				redirect('signin');
-			} elseif($this->session->userdata('signed_in') && ($this->session->userdata('position') == 'Administrator')) {
+			} elseif($this->session->userdata('signed_in')) {
 				// Redirect to admin page
 				$this->load->view('pages/admin');
 			} else {
@@ -116,6 +116,16 @@
 
 		public function getMember_latest_date() {
 			$result = $this->administrator_model->getMember_latest_date();
+			echo json_encode($result);
+		}
+
+		public function testing() {
+			$result = $this->administrator_model->testing();
+			echo json_encode($result);
+		}
+
+		public function testing1() {
+			$result = $this->administrator_model->testing1();
 			echo json_encode($result);
 		}
 	}

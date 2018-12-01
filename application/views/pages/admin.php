@@ -2,7 +2,6 @@
 <html lang="en">
 
   <head>
-
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/logo.png"/>
@@ -54,51 +53,25 @@
       </div>
     </nav>
 
-    <!-- Set/Edit Position Module -->
-    <div class="modal fade" id="editModulesModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Edit user modules</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div class="list-group module-position-list">
-              <a href="#" class="list-group-item list-group-item-action active">Dapibus ac facilisis in</a>
-              <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-              <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-              <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-              <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-              <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-              <a href="#" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary">Apply</button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
 
     <div class="wrapper">
       <div class="container">
         <div class="msg">
-        <?php if($this->session->flashdata('user_signedin')): ?>
-          <?php echo '<p class="alert alert-success alert-dismissable fade show text-center" role="alert">
+          <?php if($this->session->flashdata('user_signedin')): ?>
+            <?php echo '<p class="alert alert-success alert-dismissable fade show text-center" id="loginWelcomeMsg" role="alert">
                       <button type="button" class="close float-right" data-dismiss="alert" aria-label="Close">
                       <span aria-hidden="true">&times;</span></button>'.$this->session->flashdata('user_signedin').
                       $this->session->userdata('username').'!'.'</p>';
-          ?>
-        <?php endif; ?>
+            ?>
+            <script type="text/javascript">
+              $('#loginWelcomeMsg').fadeIn().delay(2500).fadeOut('slow');
+            </script>
+          <?php endif; ?>
         </div>
         <div class="row">
         <!-- Profile -->
           <div class="col-sm-12 col-md-4 col-lg-3 offset-md mb-3">
-            <div class="card">
+            <div class="card" style="box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15)">
               <div class="card-header bg-success p-5">
                 <div class="card-title">
                   <img src="assets/img/team/2.jpg" class="img-thumbnail rounded-circle mx-auto d-block my-3">
@@ -110,41 +83,26 @@
                 <p class="text-center m-3"><small>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</small></p>
               </div>
               <div class="list-group profile-menu my-3" id="list-tab" role="tablist">
-                <a class="list-group-item list-group-item-action active" id="home-list" data-toggle="list" href="#admin-home" role="tab" aria-controls="home"><i class="fas fa-home mr-2"></i> Home</a>
-                <script type="text/javascript">
-                  $(document).ready(function() {
-                    $('#home-list').click(function(){
-                      $('#admin-home2').show();
-                    });
-                    $('#loans-list').click(function(){
-                      $('#admin-home2').hide();
-                    });
-                    $('#members-list').click(function(){
-                      $('#admin-home2').hide();
-                    });
-                    $('#transactions-list').click(function(){
-                      $('#admin-home2').hide();
-                    });
-                    $('#records-list').click(function(){
-                      $('#admin-home2').hide();
-                    });
-                  });
-                </script>
-                <a class="list-group-item list-group-item-action" id="loans-list" data-toggle="list" href="#admin-loans" role="tab" aria-controls="settings"><i class="fas fa-credit-card mr-2"></i> Loans</a>
-                <a class="list-group-item list-group-item-action" id="members-list" data-toggle="list" href="#admin-members" role="tab" aria-controls="messages"><i class="fas fa-users mr-2"></i> Members</a>
-                <a class="list-group-item list-group-item-action" id="transactions-list" data-toggle="list" href="#admin-transactions" role="tab" aria-controls="messages"><i class="fas fa-paperclip mr-2"></i> View Transactions</a>
-                <a class="list-group-item list-group-item-action" id="records-list" data-toggle="list" href="#admin-records" role="tab" aria-controls="messages"><i class="fas fa-folder-open mr-2"></i> View Records</a>
+                <a class="list-group-item list-group-item-action active" id="home-list" data-toggle="list" href="#dashboardTab" role="tab" aria-controls="home"><i class="fas fa-home mr-2"></i> Dashboard</a>
+                <a class="list-group-item list-group-item-action" id="loans-list" data-toggle="list" href="#loansTab" role="tab" aria-controls="settings"><i class="fas fa-credit-card mr-2"></i> Loans</a>
+                <a class="list-group-item list-group-item-action" id="loanrecords-list" data-toggle="list" href="#loanRecordTab" role="tab" aria-controls="settings"><i class="fas fa-poll-h mr-2"></i> Loan Records</a>
+                <a class="list-group-item list-group-item-action" id="loanapps-list" data-toggle="list" href="#loanAppTab" role="tab" aria-controls="settings"><i class="fas fa-poll mr-2"></i> Loan Applications</a>
+                <a class="list-group-item list-group-item-action" id="members-list" data-toggle="list" href="#membersTab" role="tab" aria-controls="messages"><i class="fas fa-users mr-2"></i> Members</a>
+                <a class="list-group-item list-group-item-action" id="transactions-list" data-toggle="list" href="#transactionsTab" role="tab" aria-controls="messages"><i class="fas fa-paperclip mr-2"></i> View Transactions</a>
+                <a class="list-group-item list-group-item-action" id="records-list" data-toggle="list" href="#recordsTab" role="tab" aria-controls="messages"><i class="fas fa-folder-open mr-2"></i> View Records</a>
+                <a class="list-group-item list-group-item-action" id="comakers-list" data-toggle="list" href="#coMakersTab" role="tab" aria-controls="messages"><i class="fas fa-users mr-2"></i> Co-Makers</a>
+                <a class="list-group-item list-group-item-action" id="sharecap-list" data-toggle="list" href="#shareCapTab" role="tab" aria-controls="messages"><i class="fas fa-money-check mr-2"></i> Share Capital Records</a>
               </div>
             </div>
           </div>
 
           <!-- Navigation Body -->
           <div class="col-sm-12 col-md-8 col-lg-9 mb-3">
-            <div class="card">
+            <div class="card" style="box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15)">
               <div class="tab-content">
                 <!-- Home Part -->
-                <div class="tab-pane fade show active" id="admin-home" role="tabpanel" aria-labelledby="home-tab">
-                  <h5 class="card-header">Home</h5>
+                <div class="tab-pane fade show active" id="dashboardTab" role="tabpanel" aria-labelledby="home-tab">
+                  <h5 class="card-header">Dashboard</h5>
                   <div class="card-body card-body-mh-100 p-4">
                       <div class="row mb-3">
                         <div class="col-md-4">
@@ -157,7 +115,7 @@
 
                                 <div class="col-md-7 pl-4">
                                   <div class="row" style="font-size: 2vw"><span class="pl-2 h1">200</span></div>
-                                  <div class="row text-center" style="font-size: 2vw"><span class="h4">Members</span></div>
+                                  <div class="row text-center" style="font-size: 2vw"><span class="h4">All Members</span></div>
                                 </div>
                               </div>
                             </div>
@@ -173,8 +131,8 @@
                                 </div>
 
                                 <div class="col-md-7 pl-4">
-                                  <div class="row" style="font-size: 2vw"><span class="pl-2 h1">200</span></div>
-                                  <div class="row text-center" style="font-size: 2vw"><span class="h4">Approved</span></div>
+                                  <div class="row" style="font-size: 2vw"><span class="pl-2 h1">201</span></div>
+                                  <div class="row text-center" style="font-size: 2vw"><span class="h4">Approved Loans</span></div>
                                 </div>
                               </div>
                             </div>
@@ -190,8 +148,8 @@
                                 </div>
 
                                 <div class="col-md-7 pl-4">
-                                  <div class="row" style="font-size: 2vw"><span class="pl-2 h1">200</span></div>
-                                  <div class="row text-center" style="font-size: 2vw"><span class="h4">Disapproved</span></div>
+                                  <div class="row" style="font-size: 2vw"><span class="pl-2 h1">220</span></div>
+                                  <div class="row text-center" style="font-size: 2vw"><span class="h4">Disapproved Loans</span></div>
                                 </div>
                               </div>
                             </div>
@@ -219,7 +177,7 @@
                     </div>
                 </div>
                 <!-- Loans Part -->
-                <div class="tab-pane fade show" id="admin-loans" role="tabpanel" aria-labelledby="home-tab">
+                <div class="tab-pane fade show" id="loansTab" role="tabpanel" aria-labelledby="home-tab">
                   <h5 class="card-header">Loans</h5>
                     <div class="card-body card-body-mh">
                       <div id="addLoanMsg"></div>
@@ -230,14 +188,14 @@
                     </div>
                     <div class="card-footer">
                       <div id="returnLatestDate"></div>
-                      <button id="addLoan" class="btn btn-primary float-right mb-2"><i class="fas fa-plus mr-2"></i>Add Loan</button>
+                      <button id="add-loan" class="btn btn-primary float-right mb-2"><i class="fas fa-plus mr-2"></i>Add Loan</button>
 
                       <!-- Add Loan Modal -->
                       <div class="modal fade" id="addLoanModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                           <div class="modal-content">
                             <div class="modal-header">
-                              <h5 class="modal-title">Add Loan</h5>
+                              <h5 class="modal-title"></h5>
                             </div>
                             <form id="addLoanForm">
                               <input type="hidden" name="loan_id" value="0">
@@ -246,7 +204,6 @@
                                   <div class="form-group col-md-10 mb-2">
                                     <label for="name" class="custom-sm">Loan Type</label>
                                     <input type="loan_type" class="form-control" id="name" name="loan_name">
-                                    </input>
                                     <div class="invalid-feedback" id="invalidName"></div>
                                   </div>
                                   <div class="form-group col-md-10 mb-2">
@@ -290,6 +247,7 @@
                                     <select class="custom-select custom-small-text" id="interest" name="loan_interest">
                                       <option selected hidden>Select Loan Interest..</option>
                                       <option>0%</option>
+                                      <option>0.5%</option>
                                       <option>0.75%</option>
                                       <option>1%</option>
                                       <option>2%</option>
@@ -307,12 +265,11 @@
                             </form>
                             <div class="modal-footer">
                               <button type="submit" id="saveLoan" class="btn btn-primary">Apply</button>
-                              <button type="button" id="closeLoan" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="button" id="closeLoan" class="btn btn-secondary" data-dismiss="modal">CloseYSsssAAAAAA</button>
                             </div>
                           </div>
                         </div>
                       </div>
-
 
 
                       <!-- Ajax on add loan button modal -->
@@ -322,7 +279,7 @@
                           get_latest_date();
 
                           // Add Loan Function
-                          $('#addLoan').click(function() {
+                          $('#add-loan').click(function() {
                             $('#addLoanModal').modal('show');
                             $('#addLoanForm')[0].reset();
                             $('select[name=loan_name]').prop('disabled', false);
@@ -424,7 +381,7 @@
                             $('#addLoanModal').modal('show');
                             $('#addLoanModal').find('.modal-title').text('Edit Loan');
                             $('#addLoanModal').find('.btn-primary').text('Save changes');
-                            $('#addLoanForm').attr('action', '<?php echo base_url() ?>administrators/update _loan');
+                            $('#addLoanForm').attr('action', '<?php echo base_url() ?>administrators/update_loan');
                             $.ajax({
                               type    : 'ajax',
                               method  : 'get',
@@ -433,7 +390,7 @@
                               async   : false,
                               dataType: 'json',
                               success : function(data) {
-                                $('select[name=loan_name]').val(data.loan_name).prop('disabled', true);
+                                $('input[name=loan_name]').val(data.loan_name).prop('disabled', true);
                                 $('select[name=loan_max_amt]').val(data.loan_max_amt);
                                 $('select[name=loan_max_term]').val(data.loan_max_term);
                                 $('select[name=loan_interest]').val(data.loan_interest);
@@ -480,8 +437,8 @@
                               type    : 'ajax', 
                               url     : '<?php echo base_url() ?>administrators/get_loans', 
                               async   : false, 
-                              dataType: 'json', 
-                              success: function(data) { 
+                              dataType: 'json',
+                              success: function(data) {
                                 var column = ''; 
                                 var i; 
                                 for(i = 0; i < data.length; i++) { 
@@ -497,7 +454,7 @@
                                                   '<button href="javascript:;" class="btn btn-danger btn-sm float-right" id="deleteLoan" data="' + data[i].id + '"><i class="fas fa-trash mr-2"></i>Delete</button>' +
                                                   '<button href="javascript:;" class="btn btn-success btn-sm float-right mr-1" id="editLoan" data="' + data[i].id + '"><i class="fas fa-cog mr-2"></i>Edit</button>' + 
                                                 '</div>' + 
-                                              '</div>'  + 
+                                              '</div>' + 
                                             '</div>';
                                 }
                                 $('#returnColumn').html(column); 
@@ -537,10 +494,309 @@
                     </div>
                   </div>
 
+                <!-- Loan Application part -->
+                <div class="tab-pane fade show" id="loanAppTab" role="tabpanel" aria-labelledby="home-tab">
+                  <div class="card-header">
+                    <span class="h5">Loan Application Form</span>
+                  </div>
+
+                  <div class="card-body card-body-mh">
+                    <div class="loanapp_alerts" id="loanapp_alerts">
+                      <!-- alerts incase of error -->
+                    </div>
+
+                    <form class="p-4" id="loanAppForm">
+                      <div class="form-group">
+                        <input type="text" name="loanapp_username" id="loanapp_username" class="form-control">
+                      </div>
+
+                      <div class="form-group">
+                        <input type="text" name="_loanapp_name" id="loanapp_name" class="form-control">
+                      </div>
+
+                      <div class="form-group">
+                        <input type="text" name="loan_type" id="loan_type" class="form-control" style="display: block" disabled>
+
+                        <select class="custom-select mt-2" name="loan_selector" id="loan_selector" style="display: block">
+                           <!-- ajax insert loan types -->
+                        </select>
+                      </div>
+
+                      <div class="form-group">
+                        <select class="custom-select" name="loan_term" id="loan_term" required>
+                          <!-- ajax insert loan terms-->
+                        </select>
+                      </div>
+
+                      <div class="input-group mb-3" id="loanapp-amount">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text">&#8369;</span>
+                        </div>
+                        <input type="number" class="form-control " name="loan-amount" id="loan-amount" placeholder="0,000,000.00">
+                      </div>
+
+                      <div class="custom-file mb-3" id="loanapp-payslip">
+                        <input type="file" class="custom-file-input" id="customFile" name="user_attachment" required>
+                        <label class="custom-file-label text-muted" for="customFile">Attach Payslip</label>
+                      </div>
+
+                      <div class="form-group">
+                        <input type="text" name="co_maker1" id="co_maker1" class="form-control" style="display: block;" placeholder="Input Co-Maker1 Name">
+                      </div>
+
+                      <div class="form-group">
+                        <input type="text" name="co_maker2" id="co_maker2" class="form-control" style="display: none;" placeholder="Input Co-Maker2 Name">
+                      </div>
+
+                      <div class="form-group">
+                        <input type="text" name="co_maker3" id="co_maker3" class="form-control" style="display: none;" placeholder="Input Co-Maker3 Name">
+                      </div>
+
+                      <div class="form-group">
+                        <input type="text" name="co_maker4" id="co_maker4" class="form-control" style="display: none;" placeholder="Input Co-Maker4 Name">
+                      </div>
+
+                      <hr class="mb-4">
+
+                      <div class="d-flex justify-content-center">
+                        <button type="submit" id="loanapp_submit" class="btn btn-success">Submit</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+                <script type="text/javascript">
+                  $(function () {
+                      Check();
+
+                      $('#loanapp_username').attr('value', '<?php echo $this->session->userdata('username'); ?>').hide();
+                      $('#loanapp_name').attr('value', '<?php echo $this->session->userdata('name'); ?>').hide();
+
+                      var get_username = '';
+                      var get_name =  '';
+                      var loan = '';
+                      var terms = '';
+
+                      // code added start
+                      var loanapp_amt = '';
+                      var max_comakers;
+                      var three_comakers;
+                      var two_comakers;
+                      var one_comakers;
+
+
+                      $('#loan-amount').keyup(function() {
+                        loanapp_amt = $(this).val();
+
+                        // check amount entered
+                        if(loanapp_amt > max_comakers){
+                           var store = '<p class="alert alert-danger alert-dismissable fade show text-center" role="alert"><button type="button" class="close float-right" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Amount Entered exceeded the Loan MAX Amount</p>';
+
+                           $('#loanapp_alerts').html(store);
+                           $('#loanapp_submit').attr('disabled'); 
+                        } else if ((loanapp_amt <= max_comakers) && (loanapp_amt > three_comakers)) {
+                          $('#co_maker1').attr('style', 'display: block', 'required');
+                          $('#co_maker2').attr('style', 'display: block', 'required');
+                          $('#co_maker3').attr('style', 'display: block', 'required');
+                          $('#co_maker4').attr('style', 'display: block', 'required'); 
+                        } else if ((loanapp_amt <= three_comakers) && (loanapp_amt > two_comakers)) {
+                          $('#co_maker1').attr('style', 'display: block', 'required');
+                          $('#co_maker2').attr('style', 'display: block', 'required');
+                          $('#co_maker3').attr('style', 'display: block', 'required');
+                          $('#co_maker4').attr('style', 'display: none', 'value', '');
+                        } else if ((loanapp_amt <= two_comakers) && (loanapp_amt > one_comakers)) {
+                          $('#co_maker1').attr('style', 'display: block', 'required');
+                          $('#co_maker2').attr('style', 'display: block', 'required');
+                          $('#co_maker3').attr('style', 'display: none', 'value', '');
+                          $('#co_maker4').attr('style', 'display: none', 'value', '');
+                        } else if ((loanapp_amt <= one_comakers) && (loanapp_amt > 0)) {
+                          $('#co_maker1').attr('style', 'display: block', 'required');
+                          $('#co_maker2').attr('style', 'display: none', 'value', '');
+                          $('#co_maker3').attr('style', 'display: none', 'value', '');
+                          $('#co_maker4').attr('style', 'display: none', 'value', '');
+                        } else {
+                          var store = '<p class="alert alert-danger alert-dismissable fade show text-center" role="alert"><button type="button" class="close float-right" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Amount Entered is less than zero and cannot be applied</p>';
+
+                           $('#loanapp_alerts').html(store);
+                           $('#loanapp_submit').attr('disabled');
+                        }
+                      });
+                      // code added end
+
+                      // newly code added insert data to db
+                      $('#loanapp_submit').click(function() {
+                        var url = '<?php echo base_url(); ?>loan_applications/insertLoanApp'
+
+                        $.ajax({
+                          type: 'ajax',
+                          method: 'post',
+                          url: url,
+                          data: {
+                            loan_name: get_name,
+                            loan_username: get_username,
+                            loan_type: loan,
+                            loan_term: terms,
+                            loan_amount: loanapp_amt,
+                            user_attachment: user_attachment,
+                            co_maker1: co_maker1,
+                            co_maker2: co_maker2,
+                            co_maker3: co_maker3,
+                            co_maker4: co_maker4
+                          },
+                          async: false,
+                          dataType: 'json',
+                          success: function(response) {
+                            if (response == true) {
+                              $('#loanAppForm')[0].reset();
+                              var store = '<p class="alert alert-success alert-dismissable fade show text-center" role="alert"><button type="button" class="close float-right" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Loan Successfully Sent! Wait for further notifications about your loan</p>';
+
+                              $('#loanapp_alerts').html(store);
+                            } else {
+                              alert('loan app data response is false');
+                            }
+                          }, error: function() {
+                            alert('Error on submitting loan app data');
+                          }
+                        });
+                      });
+
+                      function Check() 
+                      {
+                        var url = '<?php echo base_url(); ?>loan_applications/check';
+  
+                        var get_username = '<?php echo $this->session->userdata('username'); ?>';
+                        var get_name =  '<?php echo $this->session->userdata('name'); ?>';
+                        
+                        $.ajax({
+                          type: 'ajax',
+                          method: 'post',
+                          url: url,
+                          data: {username: get_username, name: get_name},
+                          async: false,
+                          dataType: 'json',
+                          success: function(response) {
+                            if (response == true) {
+                              $('#loan_selector').attr('style', 'display: none');
+
+                              var url = '<?php echo base_url(); ?>loan_applications/newUser';
+
+                              $.ajax({
+                                type: 'ajax',
+                                url: url,
+                                async: false,
+                                dataType: 'json',
+                                success: function(result) {
+                                  $('#loan_type').attr({
+                                    loan_id: result[0].id,
+                                    value: result[0].loan_name,
+                                    placeholder: result[0].loan_name
+                                  });
+
+                                  loan = $('#loan_type').val();
+
+                                  getLoanTerm(loan);
+                                  // added start
+                                  getLoanAmount(loan);
+                                  // added end
+                                }, error: function() {
+                                  alert('New User function returned false');
+                                }
+                              });
+                            } else {
+                              $('#loan_type').attr('style', 'display:none');
+
+                              $('#loan_selector').attr('required');
+                              var url = '<?php echo base_url(); ?>loan_applications/oldUser';
+
+                              $.ajax({
+                                type: 'ajax',
+                                url: url,
+                                async: false,
+                                dataType: 'json',
+                                success: function(result) {
+                                  var loan_type_list = '<option value="" disabled selected hidden>Select Loan Type..</option>';
+                                  var i;
+
+                                  for(i=0; i<result.length; i++ ) {
+                                      loan_type_list += '<option class="loanOptions" loan_id="'+ result[i].id +'" value="'+ result[i].loan_name +'">'+ result[i].loan_name +'</option>'
+                                  }
+
+                                  $('#loan_selector').html(loan_type_list);
+
+                                  $('#loan_selector').change(function() {
+                                    loan = $('#loan_selector').find(':selected').val();
+
+                                    getLoanTerm(loan);
+                                    // added start
+                                    getLoanAmount(loan);
+                                    // added end
+                                  });
+                                }, error: function() {
+                                  alert('Old User function returned false');
+                                }
+                              });
+                            }
+                          }, 
+                          error: function() {
+                            alert('Error on Check function');
+                          }
+                        });
+                      }
+
+                      function getLoanTerm(data) {
+                        terms = '<option value="" disabled selected hidden>Select Loan Type..</option>';
+                        var url = '<?php echo base_url(); ?>loan_applications/getLoanTerm';
+
+                        $.ajax({
+                          type: 'ajax',
+                          method: 'get',
+                          url: url,
+                          data: {loan_name: data},
+                          async: false,
+                          dataType: 'json',
+                          success: function(result) {
+                            var i;
+
+                            for(i=1; i<=result[0].loan_max_term; i++) {
+                              terms += '<option value="'+ i +'">'+ i +' Month/s</option>';
+                            }
+
+                            $('#loan_term').html(terms);
+                          }, error: function() {
+                            alert('Error on Get Term function');
+                          }
+
+                        });
+                      }
+
+                      //newly added start here
+                      function getLoanAmount(data) {
+                        var url = '<?php echo base_url(); ?>loan_applications/getLoanAmount';
+
+                        $.ajax({
+                          type: 'ajax',
+                          method: 'get',
+                          url: url,
+                          data: {loan_name: data},
+                          async: false,
+                          dataType: 'json',
+                          success: function(result) {
+                            max_comakers = result[0].loan_max_amt;
+                            three_comakers = result[0].loan_max_amt/2;
+                            two_comakers = result[0].loan_max_amt/4;
+                            one_comakers = result[0].loan_max_amt/8;
+                          }, error: function() {
+                            alert('Error on Get Loan Amount function');
+                          }
+                        });
+                      } 
+                      // newly added end
+                  });           
+                </script>
 
 
                 <!-- Members Part -->
-                <div class="tab-pane fade show" id="admin-members" role="tabpanel" aria-labelledby="home-tab">
+                <div class="tab-pane fade show" id="membersTab" role="tabpanel" aria-labelledby="home-tab">
                   <h5 class="card-header">Members</h5>
                     <div class="card-body card-body-mh">
                       <!--Search Bar -->
@@ -568,7 +824,7 @@
                     </div>
                     <div class="card-footer">
                       <div id="returnMemberLatestDate"></div>
-                      <button class="btn btn-primary float-right mb-2" id="addMember"><i class="fas fa-plus mr-2"></i>Add New Member</button>
+                      <button class="btn btn-primary float-right mb-2" id="add-member"><i class="fas fa-plus mr-2"></i>Add New Member</button>
                     </div>
 
 
@@ -639,7 +895,13 @@
 
                               <div class="form-group col-md-6">
                                 <label for="position" class="custom-sm">Position:</label>
-                                <input type="text" class="form-control" placeholder="Choose Position" aria-describedby="Position" id="position" name="position">
+                                <select type="text" class="custom-select" id="position" name="position">
+                                  <option selected hidden>Select Role..</option>
+                                  <option value="2">Member</option>
+                                  <option value="4">Treasurer</option>
+                                  <option value="1">Administrator</option>
+                                  <option value="3">Credit Officer</option>
+                                </select>
                                 <div class="invalid-feedback" id="invalidPos"></div>
                               </div>
 
@@ -699,11 +961,11 @@
                 <!-- Ajax -->
                 <script type="text/javascript"> 
                   $(function() {
-                    sort_member_position();
+                    sort_member_date();
                     getMember_latest_date();
 
                     // Add member
-                    $('#addMember').click(function() {
+                    $('#add-member').click(function() {
                       $('#addMemberModal').modal('show');
                       $('#addMemberForm').attr('action', '<?php echo base_url() ?>administrators/add_member');
                     });
@@ -720,7 +982,7 @@
                       var password2 = $('input[name=password2]');
                       var city = $('input[name=city]');
                       var zip = $('input[name=zip]');
-                      var position = $('input[name=position]');
+                      var position = $('select[name=position]');
                       var birthday = $('input[id=birthday]');
                       var college = $('select[name=college]');
                       var result = '';
@@ -793,7 +1055,7 @@
                         $('#invalidZip').html('');
                         result += '8';
                       }
-                      if(position.val() == ''){
+                      if(position.val() == 'Select Role..'){
                         position.addClass('is-invalid');
                         $('#invalidPos').html('Please fill out this field.');
                       } else {
@@ -847,7 +1109,7 @@
 
                       // View profile
                       // Delete Member
-                      $('#returnRow').on('click', '#viewProfileBtn', function() {
+                      $('#returnRow').on('click', '.view-profile-btn', function() {
                         var id = $(this).attr('user-id');
                         var name = $(this).attr('user-name');
                         var email = $(this).attr('user-email');
@@ -902,14 +1164,6 @@
                     // Search members 
                     function search_user(query) {
                       var sort = $('#sort').val();
-                      var sort1 = '';
-                      if(sort == 'Date') {
-                        sort1 = 'register_date';
-                      } else if(sort == 'Position') {
-                        sort1 = 'position';
-                      } else {
-                        sort1 = 'college';
-                      }
                       $.ajax({
                         type    : 'ajax',
                         method  : 'post',
@@ -924,9 +1178,9 @@
                           for(i = 0; i < data.length; i++) {
                             row += '<li class="list-group-item">' +
                                       '<img src="assets/img/team/ian.jpg" class="rounded-circle member-icon">' +
-                                      '<button href="javascript:;" class="btn btn-info btn-sm float-right my-2" id="viewProfileBtn" user-id="' + data[i].id + '" user-name="' + data[i].name + '" user-position ="' + data[i].position + '" user-college="' + data[i].college + '" user-address="' + data[i].address + '">View Profile</button>' +
+                                      '<button href="javascript:;" class="btn btn-info btn-sm float-right my-2 view-profile-btn" user-id="' + data[i].id + '" user-name="' + data[i].name + '" user-position ="' + data[i].position + '" user-college="' + data[i].college + '" user-address="' + data[i].address + '">View Profile</button>' +
                                       '<h5 class="member-name">' + data[i].name + '</h5>' +
-                                      '<p class="text-muted"><small>' + data[i].position + '</small></p>' +
+                                      '<p class="text-muted"><small>' + data[i].college + '</small></p>' +
                                       '</li>';
                           }
                           $('#returnRow').html(row);
@@ -954,59 +1208,7 @@
                           for(i = 0; i < data.length; i++) {
                             column += '<li class="list-group-item">' +
                                       '<img src="assets/img/team/ian.jpg" class="rounded-circle member-icon">' +
-                                      '<button href="javascript:;" class="btn btn-info btn-sm float-right my-2" id="viewProfileBtn" user-id="' + data[i].id + '" user-name="' + data[i].name + '" user-position ="' + data[i].position + '" user-college="' + data[i].college + '" user-address="' + data[i].address + '">View Profile</button>' +
-                                      '<h5 class="member-name">' + data[i].name + '</h5>' +
-                                      '<p class="text-muted"><small>' + data[i].name + '</small></p>' +
-                                      '</li>';
-                          }
-                          $('#returnRow').html(column);
-                        }, 
-                          error: function() {
-                            $('#alert-msg').html('<p class="alert alert-danger alert-dismissable fade show text-center" role="alert">Could not get data from the database!</p>').fadeIn('slow');
-                          }
-                      });
-                    }
-
-                    // Sort members by date
-                    function sort_member_position() { 
-                      $.ajax({ 
-                        type    : 'ajax',
-                        url     : '<?php echo base_url() ?>administrators/sort_member_position',
-                        async   : false,
-                        dataType: 'json',
-                        success: function(data) {
-                          var column = ''; 
-                          var i; 
-                          for(i = 0; i < data.length; i++) {
-                            column += '<li class="list-group-item">' +
-                                      '<img src="assets/img/team/ian.jpg" class="rounded-circle member-icon">' +
-                                      '<button href="javascript:;" class="btn btn-info btn-sm float-right my-2" id="viewProfileBtn" user-id="' + data[i].id + '" user-name="' + data[i].name + '" user-position ="' + data[i].position + '" user-college="' + data[i].college + '" user-address="' + data[i].address + '">View Profile</button>' +
-                                      '<h5 class="member-name">' + data[i].name + '</h5>' +
-                                      '<p class="text-muted"><small>' + data[i].position + '</small></p>' +
-                                      '</li>';
-                          }
-                          $('#returnRow').html(column);
-                        }, 
-                          error: function() {
-                            $('#alert-msg').html('<p class="alert alert-danger alert-dismissable fade show text-center" role="alert">Could not get data from the database!</p>').fadeIn('slow');
-                          }
-                      });
-                    }
-
-                    // Sort members by date
-                    function sort_member_college() { 
-                      $.ajax({ 
-                        type    : 'ajax',
-                        url     : '<?php echo base_url() ?>administrators/sort_member_college',
-                        async   : false,
-                        dataType: 'json',
-                        success: function(data) {
-                          var column = ''; 
-                          var i; 
-                          for(i = 0; i < data.length; i++) {
-                            column += '<li class="list-group-item">' +
-                                      '<img src="assets/img/team/ian.jpg" class="rounded-circle member-icon">' +
-                                      '<button href="javascript:;" class="btn btn-info btn-sm float-right my-2" id="viewProfileBtn" user-id="' + data[i].id + '" user-name="' + data[i].name + '" user-position ="' + data[i].position + '" user-college="' + data[i].college + '" user-address="' + data[i].address + '">View Profile</button>' +
+                                      '<button href="javascript:;" class="btn btn-info btn-sm float-right my-2 view-profile-btn" user-id="' + data[i].id + '" user-name="' + data[i].name + '" user-position ="' + data[i].role_name + '" user-college="' + data[i].college + '" user-address="' + data[i].address + '">View Profile</button>' +
                                       '<h5 class="member-name">' + data[i].name + '</h5>' +
                                       '<p class="text-muted"><small>' + data[i].college + '</small></p>' +
                                       '</li>';
@@ -1042,7 +1244,7 @@
                 </div>
 
                 <!-- Reports Part -->
-                <div class="tab-pane fade show" id="admin-transactions" role="tabpanel" aria-labelledby="home-tab">
+                <div class="tab-pane fade show" id="transactionsTab" role="tabpanel" aria-labelledby="home-tab">
                   <h5 class="card-header">Transactions</h5>
                   <div class="card-body card-body-mh">
                     Content..
@@ -1050,7 +1252,7 @@
                 </div>
 
                 <!-- Members Part -->
-                <div class="tab-pane fade show" id="admin-records" role="tabpanel" aria-labelledby="home-tab">
+                <div class="tab-pane fade show" id="recordsTab" role="tabpanel" aria-labelledby="home-tab">
                   <h5 class="card-header">Records</h5>
                   <div class="card-body card-body-mh">
                         <div class="card text-center">
@@ -1338,6 +1540,48 @@
       </div>
     </div>
 
+    <script type="text/javascript">
+      $(function() {
+      <?php $role = $this->session->userdata('roleID') ?>
+        $.ajax({
+          type    : 'ajax',
+          method  : 'get',
+          url     : '<?php echo base_url() ?>administrators/testing',
+          data    : {id : '<?php echo $role; ?>'},
+          async   : false,
+          dataType: 'json',
+          success: function(data) {
+            var all = [];
+            for(var i = 0; i < data.length; i++) {
+              $('#'+data[i].perm_desc).show();
+
+              $.ajax({
+              type    : 'ajax',
+              method  : 'get',
+              url     : '<?php echo base_url() ?>administrators/testing1',
+              data    : {id : all.push(i), role_id : '<?php echo $role; ?>'},
+              async   : false,
+              dataType: 'json',
+              success: function(data) {
+                for(var i = 0; i < data.length; i++) {
+                  $('#'+data[i].perm_role).show();
+                  $('.'+data[i].perm_role).show();
+                }
+              },
+              error: function() {
+                alert('bobo');
+              }
+            });
+            }
+          },
+          error: function() {
+            alert('bobo');
+          }
+        });
+
+      });
+    </script>
+
     
 
     <!-- Bootstrap core JavaScript -->
@@ -1351,6 +1595,7 @@
 
     <!-- Custom scripts for this template -->
     <script defer src="<?php echo base_url() ?>assets/vendor/fontawesome-free/js/all.js" rel="stylesheet"></script>
+
     
     <script>
     var ctxL = document.getElementById("line-chart").getContext('2d');

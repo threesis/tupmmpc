@@ -63,6 +63,14 @@ html, body {
 }
 
 /* Profile Interface */
+#home-list, #loans-list, #members-list, #transactions-list, #records-list, #add-member, #dashboard, #addLoanBtn {
+  display: none;
+}
+
+.view-profile-btn {
+  display: none;
+}
+
 .card-text .admin-name {
   margin-top: 30px;
   font-size: 17px;

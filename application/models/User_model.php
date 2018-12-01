@@ -22,7 +22,7 @@
 			// Validate
 			$this->db->where('username', $username);
 			$this->db->where('password', $password);
-			$result = $this->db->get('members');
+			$result = $this->db->from('members')->join('roles', 'roles.role_id = members.position')->get();
 
 			if(count($result) == 1) {
 				return $result->result_array();

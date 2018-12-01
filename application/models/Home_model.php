@@ -16,4 +16,13 @@
 			}
 		}
 
+		public function get_all_web_infos() {
+			$query = $this->db->get('website_info');
+			if($query->num_rows() > 0) {
+				return $query->result();
+			} else { 
+				return false;
+			}
+		}
+
 	}
