@@ -646,6 +646,7 @@
                           async: false,
                           dataType: 'json',
                           success: function(response) {
+                            alert(response);
                             if (response == true) {
                               $('#loanAppForm')[0].reset();
                               var store = '<p class="alert alert-success alert-dismissable fade show text-center" role="alert"><button type="button" class="close float-right" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Loan Successfully Sent! Wait for further notifications about your loan</p>';
