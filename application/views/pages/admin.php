@@ -623,44 +623,6 @@
                       });
                       // code added end
 
-                      // newly code added insert data to db
-                      $('#loanapp_submit').click(function() {
-                        var url = '<?php echo base_url(); ?>loan_applications/insertLoanApp'
-
-                        $.ajax({
-                          type: 'ajax',
-                          method: 'post',
-                          url: url,
-                          data: {
-                            loan_name: get_name,
-                            loan_username: get_username,
-                            loan_type: loan,
-                            loan_term: terms,
-                            loan_amount: loanapp_amt,
-                            user_attachment: user_attachment,
-                            co_maker1: co_maker1,
-                            co_maker2: co_maker2,
-                            co_maker3: co_maker3,
-                            co_maker4: co_maker4
-                          },
-                          async: false,
-                          dataType: 'json',
-                          success: function(response) {
-                            alert(response);
-                            if (response == true) {
-                              $('#loanAppForm')[0].reset();
-                              var store = '<p class="alert alert-success alert-dismissable fade show text-center" role="alert"><button type="button" class="close float-right" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Loan Successfully Sent! Wait for further notifications about your loan</p>';
-
-                              $('#loanapp_alerts').html(store);
-                            } else {
-                              alert('loan app data response is false');
-                            }
-                          }, error: function() {
-                            alert('Error on submitting loan app data');
-                          }
-                        });
-                      });
-
                       function Check() 
                       {
                         var url = '<?php echo base_url(); ?>loan_applications/check';
@@ -698,6 +660,7 @@
                                   getLoanTerm(loan);
                                   // added start
                                   getLoanAmount(loan);
+                                  insertLoanData(loan);
                                   // added end
                                 }, error: function() {
                                   alert('New User function returned false');
@@ -730,6 +693,7 @@
                                     getLoanTerm(loan);
                                     // added start
                                     getLoanAmount(loan);
+                                    insertLoanData(loan);
                                     // added end
                                   });
                                 }, error: function() {
@@ -792,6 +756,38 @@
                         });
                       } 
                       // newly added end
+
+                      // newly code added insert data to db
+                      // post error 
+                      function insertLoanData(data) {
+                        $('#loanapp_submit').click(function() {
+                          
+                          var url = '<?php echo base_url(); ?>loan_applications/insertLoanApp';
+                          var serialize =  $('#loanAppForm').serialize();
+                          serialize = serialize + '&loan_type=' + data;
+
+                          $.ajax({
+                            type:     'ajax',
+                            method:   'post',
+                            url:      url,
+                            data:     serialize,
+                            async:    false,
+                            dataType: 'json',
+                            success: function(response) {
+                              if (response == true) {
+                                $('#loanAppForm')[0].reset();
+                                var store = '<p class="alert alert-success alert-dismissable fade show text-center" role="alert"><button type="button" class="close float-right" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Loan Successfully Sent! Wait for further notifications about your loan</p>';
+
+                                $('#loanapp_alerts').html(store);
+                              } else {
+                                alert('loan app data response is false');
+                              }
+                            }, error: function() {
+                              alert('Error on submitting loan app data');
+                            }
+                          });
+                        });                        
+                      }
                   });           
                 </script>
 
