@@ -648,7 +648,6 @@
                           </h2>
                         </li>
                         <li class="nav-item ml-auto">
-                          <a class="nav-link active" data-toggle="tab" href="#pending_cm_applications">PENDING<span class="badge badge-danger badge-pill ml-2" id="cm_pending_badge">20</span></a>
                           <a class="nav-link active" data-toggle="tab" href="#pending_cm_applications">Pending<span class="badge badge-danger badge-pill ml-2" id="cm_pending_badge">20</span></a>
                         </li>
                       </ul>
