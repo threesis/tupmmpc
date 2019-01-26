@@ -514,7 +514,7 @@
                 <div class="card-header shadow-sm">
                   <ul class="nav nav-tabs card-header-tabs">
                     <li class="ml-2 pb-4">
-                      <h2 class="card-title"></h2>
+                      <h2 class="card-title">LOAN APPLICATIONS</h2>
                     </li>
                     <li class="nav-item ml-auto loan-apps">
                       <a class="nav-link active" data-toggle="tab" href="#pending_loans">Pending<span id="pendingNotif" class="badge badge-secondary ml-1"></span></a>
@@ -1896,6 +1896,7 @@
               $('#deleteModal').find('.modal-title').text('Delete user');
               $('#deleteModal').find('.modal-body').text("Are you sure you want to delete " + name + "'s account?");
               $('#deleteRecordBtn').unbind().click(function() {
+                alert(id);
                 $.ajax({
                   type    : 'ajax',
                   method  : 'get',
@@ -1941,7 +1942,6 @@
             type    : 'ajax',
             method  : 'post',
             url     : '<?php echo base_url() ?>administrators/search_user',
-
             async   : false,
             data    : {query : query},
             dataType: 'json',
@@ -1952,7 +1952,7 @@
               for(i = 0; i < data.length; i++) {
                 row += '<li class="list-group-item">' +
                           '<img id="membersListImg" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + ' ?>" class="rounded-circle member-icon">' +
-                          '<button href="javascript:;" class="btn btn-outline-success btn-sm float-right my-2 viewuser-perm4" style="display: block" user-id="' + data[i].id + '" user-name="' + data[i].name + '" user-position ="' + data[i].role_name + '" user-college="' + data[i].college + '" user-address="' + data[i].address + '" user-img="' + data[i].user_img + '" user-sharecap="' + data[i].total_share_capital + '">View Profile</button>' +
+                          '<button href="javascript:;" class="btn btn-outline-success btn-sm float-right my-2 viewuser-perm4" style="display: block" user-id="' + data[i].user_id + '" user-name="' + data[i].name + '" user-position ="' + data[i].role_name + '" user-college="' + data[i].college + '" user-address="' + data[i].address + '" user-img="' + data[i].user_img + '" user-sharecap="' + data[i].total_share_capital + '">View Profile</button>' +
                           '<h5 class="member-name">' + data[i].name + '</h5>' +
                           '<p class="text-muted"><small>' + data[i].college + '</small></p>' +
                         '</li>';
