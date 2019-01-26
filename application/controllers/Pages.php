@@ -5,14 +5,8 @@
 			if(!$this->session->userdata('signed_in')) {
 				$this->load->view('pages/home');
 			// If they go to the home page while signed in
-			} elseif($this->session->userdata('signed_in') && ($this->session->userdata('position') == 'Administrator')) {
-				redirect('admin');
-			} elseif($this->session->userdata('signed_in') && ($this->session->userdata('position') == 'Member')) {
-				redirect('member');
-			} elseif($this->session->userdata('signed_in') && ($this->session->userdata('position') == 'Treasurer')) {
-				redirect('treasurer');
-			} elseif($this->session->userdata('signed_in') && ($this->session->userdata('position') == 'Credit Officer')) {
-				redirect('credit_officer');
+			} elseif($this->session->userdata('signed_in')) {
+				redirect('home');
 			} else {
 				show_404();
 			}

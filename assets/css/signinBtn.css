@@ -6,7 +6,7 @@
 body {
   background: #fa9b9b;
   /* fallback for old browsers */
-  background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
+  background-image: linear-gradient(to top, #dfe9ec 0%, #dfe9ec 100%);
   font-family: 'Open Sans', 'sans-serif';
 }
 

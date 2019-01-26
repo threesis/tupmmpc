@@ -17,27 +17,16 @@
 			return $this->db->insert('members', $data);
 		}
 
-
 		public function signin($username, $password) {
 			// Validate
 			$this->db->where('username', $username);
 			$this->db->where('password', $password);
-			$result = $this->db->get('members');
+			$result = $this->db->from('members')->join('roles', 'roles.role_id = members.position')->get();
 
 			if(count($result) == 1) {
 				return $result->result_array();
 			} else {
 				return false;
 			}
-
-			/* $cmd = "select * from members where username = '" . $username . "' and password = '". $password . "'";
-			$query = $this->db->query($cmd);
-			$output = $query->result_array();
-
-			if(count($output) == 1) {
-				return $output;
-			} else {
-				return false;
-			} */
 		}
 	}
