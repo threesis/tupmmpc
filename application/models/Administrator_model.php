@@ -296,4 +296,23 @@
 			}
 		}
 		
+		public function save_info() {
+			$web_data = array(
+				'title' => $this->input->post('webtitle'),
+				'telephone_no' => $this->input->post('webtelno'),
+				'cellphone_no' => $this->input->post('webphoneno'),
+				'address' => $this->input->post('weblocation'),
+				'email' => $this->input->post('webemail'),
+				'web_link' => $this->input->post('webaddress'),
+				'fb_account' => $this->input->post('webfb'),
+				'twitter_account' => $this->input->post('webtwitter')
+			);
+			// Insert loan to db
+			$this->db->insert('website-info', $web_data);
+			if($this->db->affected_rows() > 0) {
+				return true; 
+			} else { 
+				return false;
+			}
+		}
 	}

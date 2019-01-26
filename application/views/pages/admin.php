@@ -98,6 +98,7 @@
                 <h6 id="displayUserName" class="admin-name text-center"><?php echo $image['name']; ?></h6>
                 <h6 class="info-text text-center text-muted"><?php echo $this->session->userdata('position') ?></h6>
               </div>
+<<<<<<< HEAD
               <div class="list-group profile-menu" id="list-tab" role="tablist">
                 <a class="list-group-item list-group-item-action active" id="dashboard-tab" data-toggle="list" href="#dashboardTab" role="tab" aria-controls="home">Dashboard<i class="fas fa-home mr-2 mt-1 float-left"></i>  <i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="loans-tab" data-toggle="list" href="#loansTab" role="tab" aria-controls="settings">Loans<i class="fas fa-credit-card mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
@@ -109,6 +110,15 @@
                 <a class="list-group-item list-group-item-action" id="sharecap-tab" data-toggle="list" href="#shareCapTab" role="tab" aria-controls="messages">Share Capital Records<i class="fas fa-money-check mr-2 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="applyloan-tab" data-toggle="list" href="#applyLoanTab" role="tab" aria-controls="messages">Apply Loan<i class="far fa-file-alt mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="websettings-tab" data-toggle="list" href="#websiteSettings" role="tab" aria-controls="messages">Settings<i class="fas fa-cog mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
+=======
+              <div class="list-group profile-menu my-3" id="list-tab" role="tablist">
+                <a class="list-group-item list-group-item-action active" id="home-list" data-toggle="list" href="#admin-home" role="tab" aria-controls="home"><i class="fas fa-home mr-2"></i> Home</a>
+                <a class="list-group-item list-group-item-action" id="loans-list" data-toggle="list" href="#admin-loans" role="tab" aria-controls="settings"><i class="fas fa-credit-card mr-2"></i> Loans</a>
+                <a class="list-group-item list-group-item-action" id="members-list" data-toggle="list" href="#admin-members" role="tab" aria-controls="messages"><i class="fas fa-users mr-2"></i> Members</a>
+                <a class="list-group-item list-group-item-action" id="transactions-list" data-toggle="list" href="#admin-transactions" role="tab" aria-controls="messages"><i class="fas fa-paperclip mr-2"></i> View Transactions</a>
+                <a class="list-group-item list-group-item-action" id="records-list" data-toggle="list" href="#admin-records" role="tab" aria-controls="messages"><i class="fas fa-folder-open mr-2"></i> View Records</a>
+                <a class="list-group-item list-group-item-action" id="settings-page" data-toggle="list" href="#admin-settings" role="tab" aria-controls="messages"><i class="fas fa-cogs mr-2"></i> Settings</a>
+>>>>>>> dd97dd93705c5850f875cd6f926c3ca93edc8b98
               </div>
             </div>
           </div>
@@ -313,8 +323,13 @@
                               </div>
                             </form>
                             <div class="modal-footer">
+<<<<<<< HEAD
                               <button type="submit" id="saveLoan" class="btn btn-success btn-sm"><i class="fas fa-plus-circle mr-2"></i>Add Loan</button>
                               <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cancel</button>
+=======
+                              <button type="submit" id="saveLoan" class="btn btn-primary">Apply</button>
+                              <button type="button" id="closeLoan" class="btn btn-secondary" data-dismiss="modal">Close</button>
+>>>>>>> dd97dd93705c5850f875cd6f926c3ca93edc8b98
                             </div>
                           </div>
                         </div>
@@ -757,14 +772,297 @@
                           ]
                         });
                       });
+<<<<<<< HEAD
                     </script>
+=======
+
+                    // Wait for user search input..
+                    $('#searchMember').keyup(function() {
+                      var input = $(this).val();
+                      if(input != '') {
+                        search_user(input);
+                      } else {
+                        search_user();
+                      }
+                    });
+
+                    // Search members 
+                    function search_user(query) {
+                      var sort = $('#sort').val();
+                      $.ajax({
+                        type    : 'ajax',
+                        method  : 'post',
+                        url     : '<?php echo base_url() ?>administrators/search_user',
+                        async   : false,
+                        data    : {query : query},
+                        dataType: 'json',
+                        success: function(data) {
+                          var row = '';
+                          var i;
+                          if(data.length > 0) {
+                          for(i = 0; i < data.length; i++) {
+                            row += '<li class="list-group-item">' +
+                                      '<img src="assets/img/team/ian.jpg" class="rounded-circle member-icon">' +
+                                      '<button href="javascript:;" class="btn btn-info btn-sm float-right my-2" id="viewProfileBtn" user-id="' + data[i].id + '" user-name="' + data[i].name + '" user-position ="' + data[i].position + '" user-college="' + data[i].college + '" user-address="' + data[i].address + '">View Profile</button>' +
+                                      '<h5 class="member-name">' + data[i].name + '</h5>' +
+                                      '<p class="text-muted"><small>' + data[i].college + '</small></p>' +
+                                      '</li>';
+                          }
+                          $('#returnRow').html(row);
+                        } else {
+                          row += '<h4 class="text-center mt-5"><strong class="text-danger">' + '"' + query + '"' + ' </strong>not found!</h4>';
+                        }
+                          $('#returnRow').html(row);
+                        },
+                        error: function() {
+                          alert('Error!');
+                        }
+                      });
+                    }
+                 
+                    // Sort members by date
+                    function sort_member_date() { 
+                      $.ajax({ 
+                        type    : 'ajax',
+                        url     : '<?php echo base_url() ?>administrators/sort_member_date',
+                        async   : false,
+                        dataType: 'json',
+                        success: function(data) {
+                          var column = ''; 
+                          var i; 
+                          for(i = 0; i < data.length; i++) {
+                            column += '<li class="list-group-item">' +
+                                      '<img src="assets/img/team/ian.jpg" class="rounded-circle member-icon">' +
+                                      '<button href="javascript:;" class="btn btn-info btn-sm float-right my-2" id="viewProfileBtn" user-id="' + data[i].id + '" user-name="' + data[i].name + '" user-position ="' + data[i].position + '" user-college="' + data[i].college + '" user-address="' + data[i].address + '">View Profile</button>' +
+                                      '<h5 class="member-name">' + data[i].name + '</h5>' +
+                                      '<p class="text-muted"><small>' + data[i].college + '</small></p>' +
+                                      '</li>';
+                          }
+                          $('#returnRow').html(column);
+                        }, 
+                          error: function() {
+                            $('#alert-msg').html('<p class="alert alert-danger alert-dismissable fade show text-center" role="alert">Could not get data from the database!</p>').fadeIn('slow');
+                          }
+                      });
+                    }
+
+                    //Retrieve latest date
+                    function getMember_latest_date() {
+                      $.ajax({
+                        type: 'ajax',
+                        url: '<?php echo base_url() ?>/administrators/getMember_latest_date',
+                        async: false,
+                        dataType: 'json',
+                        success: function(data) {
+                          var latestDate = '<p class="card-text small text-muted float-left mt-2"><em>Last updated: ' + data[0].register_date + '</em></p>';
+                          $('#returnMemberLatestDate').html(latestDate);
+                        },
+                        error: function() {
+                          alert('Error getting date!');
+                        }
+                      });
+                    }
+
+                  }); // End script
+                  </script> 
+
+                </div>
+
+                <!-- Transactions Part -->
+                <div class="tab-pane fade show" id="admin-transactions" role="tabpanel" aria-labelledby="home-tab">
+                  <h5 class="card-header">Transactions</h5>
+                  <div class="card-body card-body-mh">
+                    Content..
+>>>>>>> dd97dd93705c5850f875cd6f926c3ca93edc8b98
                   </div>
                   <div class="card-footer" style="min-height: 60px"></div>
                 </div>
 
+<<<<<<< HEAD
                 <!-- Loan Application part -->
                 <div class="tab-pane fade show" id="applyLoanTab" role="tabpanel" aria-labelledby="home-tab">
                   <h2 class="card-header">Apply Loan</h2>
+=======
+                <!-- Settings Part -->
+                <div class="tab-pane fade show" id="admin-settings" role="tabpanel" aria-labelledby="home-tab">
+                  <h5 class="card-header">Settings</h5>
+                  <div class="card-body card-body-mh">
+                    <div class="" id="saveInfosMessage"></div>
+                    <div class="row" id="saveInfoForm">
+                      <div class="form-group col-md-6 my-2">
+                        <label for="web-title" class="custom-sm">Website Title:</label>
+                        <input type="text-area" class="form-control" placeholder="Enter Website Title:" aria-describedby="webtitle" id="web-title" name="webtitle">
+                        <div class="invalid-feedback" id="invalidTitle"></div>
+                      </div>
+                      <div class="form-group col-md-6 my-2">
+                        <label for="web-telno" class="custom-sm">Telephone Number:</label>
+                        <input type="text-area" class="form-control" placeholder="Enter Telephone No.:" aria-describedby="webtelno" id="web-telno" name="webtelno">
+                        <div class="invalid-feedback" id="invalidTelno"></div>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="web-phoneno" class="custom-sm">Mobile Number:</label>
+                        <input type="text-area" class="form-control" placeholder="Enter Mobile No.:" aria-describedby="webphoneno" id="web-phoneno" name="webphoneno">
+                        <div class="invalid-feedback" id="invalidPhoneno"></div>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="web-location" class="custom-sm">Location:</label>
+                        <input type="text-area" class="form-control" placeholder="Enter Branch Location:" aria-describedby="weblocation" id="web-location" name="weblocation">
+                        <div class="invalid-feedback" id="invalidLocation"></div>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="web-email" class="custom-sm">Email: </label>
+                        <input type="text-area" class="form-control" id="web-email" placeholder="Enter Email Address:" name="webemail"></input>
+                        <div class="invalid-feedback" id="invalidEmail"></div>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="web-address" class="custom-sm">Website:</label>
+                        <input type="text-area" class="form-control" placeholder="Enter Website Url:" aria-describedby="webaddress" id="web-address" name="webaddress">
+                        <div class="invalid-feedback" id="invalidWebaddress"></div>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="web-fb" class="custom-sm">Facebook:</label>
+                        <input type="text-area" class="form-control" placeholder="Enter Facebook Account:" aria-describedby="weblocation" id="web-fb" name="webfb">
+                        <div class="invalid-feedback" id="invalidFbaccount"></div>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="web-twitter" class="custom-sm">Twitter:</label>
+                        <input type="text-area" class="form-control" placeholder="Enter Twitter Account:" aria-describedby="weblocation" id="web-twitter" name="webtwitter">
+                        <div class="invalid-feedback" id="invalidTwitteraccount"></div>
+                      </div>
+                      <div class="form-group col-md-6">
+                        <label for="exampleFormControlFile1">Upload Logo</label>
+                        <input type="file" class="form-control-file" id="exampleFormControlFile1">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <button type="submit" id="saveInfos" class="btn btn-primary">Save</button>
+                    <button type="button" id="closeLoan" class="btn btn-alert" data-dismiss="modal">Cancel</button>
+                  </div>
+                </div>
+
+                <!-- AJAX on Website Settings-->
+                <script type="text/javascript">
+                  $(function() {
+                    $('#saveInfos').click(function() {
+                            $('#saveInfoForm').attr('action', '<?php echo base_url() ?>administrators/save_info');
+                            var url = $('#saveInfoForm').attr('action');
+                            var data = $('#saveInfoForm').serialize();
+                            // Form validation
+                            var title = $('input[name=webtitle]');
+                            var telno = $('input[name=webtelno]');
+                            var phoneno = $('input[name=webphoneno]');
+                            var location = $('input[name=weblocation]');
+                            var email = $('input[name=webemail]');
+                            var fb = $('input[name=webfb]');
+                            var twitter = $('input[name=webtwitter]');
+                            var webaddress = $('input[name=webaddress]');
+                            var result = '';
+
+                            if(title.val() == 'Enter Website Title:') {
+                              title.addClass('is-invalid');
+                              $('#invalidTitle').html('Please fill out this field.');
+                            } else {
+                              title.removeClass('is-invalid');
+                              $('#invalidTitle').html('');
+                              result += '1';
+                            } 
+                            if(telno.val() == 'Enter Telephone No.:') {
+                              telno.addClass('is-invalid');
+                              $('#invalidTelno').html('Please fill out this field.');
+                            } else {
+                              telno.removeClass('is-invalid');
+                              $('#invalidTelno').html('');
+                              result += '2';
+                            } 
+                            if(phoneno.val() == 'Enter Mobile No.:') {
+                              phoneno.addClass('is-invalid');
+                              $('#invalidPhoneno').html('Please fill out this field.');
+                            } else {
+                              phoneno.removeClass('is-invalid');
+                              $('#invalidPhoneno').html('');
+                              result += '3';
+                            } 
+                            if(location.val() == 'Enter Branch Location:') {
+                              location.addClass('is-invalid');
+                              $('#invalidLocation').html('Please fill out this field.');
+                            } else {
+                              location.removeClass('is-invalid');
+                              $('#invalidLocation').html('');
+                              result += '4';
+                            }
+                            if(email.val() == 'Enter Email Address:') {
+                              email.addClass('is-invalid');
+                              $('#invalidEmail').html('Please fill out this field.');
+                            } else {
+                              email.removeClass('is-invalid');
+                              $('#invalidEmail').html('');
+                              result += '5';
+                            }
+                             if(fb.val() == 'Enter Facebook Account:') {
+                              fb.addClass('is-invalid');
+                              $('#invalidWebaddress').html('Please fill out this field.');
+                            } else {
+                              fb.removeClass('is-invalid');
+                              $('#invalidFbaccount').html('');
+                              result += '6';
+                            }
+                             if(twitter.val() == 'Enter Twitter Account:') {
+                              twitter.addClass('is-invalid');
+                              $('#invalidTwitteraccount').html('Please fill out this field.');
+                            } else {
+                              twitter.removeClass('is-invalid');
+                              $('#invalidTwitteraccount').html('');
+                              result += '7';
+                            }
+                            if(webaddress.val() == 'Enter Website Url:') {
+                              webaddress.addClass('is-invalid');
+                              $('#invalidWebaddress').html('Please fill out this field.');
+                            } else {
+                              webaddress.removeClass('is-invalid');
+                              $('#invalidWebaddress').html('');
+                              result += '8';
+                            }
+                            
+                            if(result == '12345678') {
+                              $.ajax({ 
+                              type    : 'ajax',
+                              method  : 'post',
+                              url     : url,
+                              data    : data,
+                              async   : false,
+                              dataType: 'json',
+                              success: function(response) {
+                                
+                                alert(data);
+                                if(response.success) {
+                                  if(response.type == 'add') {
+                                    var type = 'added';
+                                    var color = 'success';
+                                  } else if(response.type == 'update') {
+                                    var type = 'updated';
+                                    var color = 'primary';
+                                  }
+                                  $('#saveInfosMessage').html('<p class="alert alert-'+color+' alert-dismissable fade show text-center" role="alert">Loan ' + type + ' successfully!</p>').fadeIn().delay(3000).fadeOut('slow'); 
+                                } else {
+                                  alert('You did not made any changes! Please close it properly.');
+                                }
+                              }, 
+                              error: function() { 
+                              alert('Could not add data!');
+                              }
+                            });
+                          }
+                          });
+                        }); 
+
+                </script>
+                <!-- END of Ajax --> 
+
+                <!-- Reports Part -->
+                <div class="tab-pane fade show" id="admin-records" role="tabpanel" aria-labelledby="home-tab">
+                  <h5 class="card-header">Records</h5>
+>>>>>>> dd97dd93705c5850f875cd6f926c3ca93edc8b98
                   <div class="card-body card-body-mh">
                   <div class="no-padding" id="loanapp_alerts"></div>
                     <div class="row justify-content-md-center">
@@ -894,7 +1192,7 @@
                     <button type="button" id="cancelEdit" class="btn btn-alert" data-dismiss="modal">Cancel</button>
                   </div>
                 </div>
-
+                
                 <!-- ALL MODAL UI ARE HERE -->
                 <!-- Archive Loan Modal -->
                 <div class="modal fade" id="loanArchiveModal" tabindex="-1" role="dialog">

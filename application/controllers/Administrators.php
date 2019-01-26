@@ -99,6 +99,7 @@
 			echo json_encode($result);
 		}
 
+<<<<<<< HEAD
 		// Get loan details
 		public function getLoanAppDetails() {
 			$result = $this->loan_model->getLoanAppDetails();
@@ -116,9 +117,25 @@
 			echo json_encode($result);
 		}
 
+=======
+		public function save_info() {
+			// Add loan -> modal
+			$result = $this->administrator_model->save_info();
+			$msg['success'] = false;
+			$msg['type'] = 'add';
+			if($result) {
+				// If there are data returned from the model.. 
+				$msg['success'] = true;
+			}
+			// Convert $msg to json type to become readable thru ajax request
+			echo json_encode($msg);
+		}
+		
+>>>>>>> dd97dd93705c5850f875cd6f926c3ca93edc8b98
 		public function testing() {
 			$result = $this->administrator_model->testing();
 			echo json_encode($result);
+
 		}
 
 		public function testing1() {
