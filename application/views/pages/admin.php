@@ -514,7 +514,7 @@
                 <div class="card-header shadow-sm">
                   <ul class="nav nav-tabs card-header-tabs">
                     <li class="ml-2 pb-4">
-                      <h2 class="card-title">Loan Applications AGIKness HAHAHAASAASASASA</h2>
+                      <h2 class="card-title"></h2>
                     </li>
                     <li class="nav-item ml-auto loan-apps">
                       <a class="nav-link active" data-toggle="tab" href="#pending_loans">Pending<span id="pendingNotif" class="badge badge-secondary ml-1"></span></a>
