@@ -514,7 +514,7 @@
                 <div class="card-header shadow-sm">
                   <ul class="nav nav-tabs card-header-tabs">
                     <li class="ml-2 pb-4">
-                      <h2 class="card-title"></h2>
+                      <h2 class="card-title">LOAN APPLICATIONS</h2>
                     </li>
                     <li class="nav-item ml-auto loan-apps">
                       <a class="nav-link active" data-toggle="tab" href="#pending_loans">Pending<span id="pendingNotif" class="badge badge-secondary ml-1"></span></a>
@@ -667,9 +667,9 @@
                   <h2 class="card-header">Records</h2>
                   <div class="card-body card-body-mh">
                     <div class="col-md-12">
-                      <table id="loanRecordTbl" class="table table-striped table-bordered nowrap" cellspacing="0" width="100%" style="border: 0.5px solid lightgray">
-                        <thead>
-                          <tr class="table-font">
+                      <table id="loanRecordTbl" class="table table-striped table-bordered table-responsive text-nowrap" style="max-height: 400px" cellspacing="0" width="100%" style="border: 0.5px solid lightgray">
+                        <thead style="width: 500px">
+                          <tr class="table-font text-center">
                             <th>Date</th>
                             <th>Name</th>
                             <th>Take Home Pay</th>
@@ -697,6 +697,16 @@
                           success : function(data) {
                             var tbl = '';
                             for(var i = 0; i < data.length; i++) {
+                              var cm1 = data[i].comaker_1;
+                              var cm2 = data[i].comaker_2;
+                              var cm3 = data[i].comaker_3;
+                              if(cm1 == null) {
+                                cm1 = '-';
+                              } if(cm2 == null) {
+                                cm2 = '-';
+                              } if(cm3 == null) {
+                                cm3 = '-';
+                              }
                               var myDate = new Date(Date.parse(data[i].date_created.replace('-','/','g')));
                               myDate = myDate.toUTCString();
                               myDate = myDate.split(' ').slice(1, 4).join('-');
@@ -714,24 +724,49 @@
                                         '<td>' + data[i].loan_term + ' month/s</td>' +
                                         '<td>' + data[i].status + '</td>' +
                                         '<td>' + data[i].loanapp_id + '</td>' +
-                                      '</tr>';                          
+                                      '</tr>' +
+                                      '<tr class="small">' +
+                                        '<td></td>' +
+                                        '<td>' + cm1 + '</td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                      '</tr>' +
+                                      '<tr class="small">' +
+                                        '<td></td>' +
+                                        '<td>' + cm2 + '</td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                      '</tr>' +
+                                      '<tr class="small">' +
+                                        '<td></td>' +
+                                        '<td>' + cm3 + '</td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                        '<td></td>' +
+                                      '</tr>';                        
                             }
                             $('#returnLoanRecords').html(tbl);
                           },
                           error: function() {
                             alert('Error!');
                           }
-                        });
-
-                        var table = $('#loanRecordTbl').DataTable({       
-                          scrollX:        true,
-                          scrollCollapse: true,
-                          autoWidth:      false,  
-                          paging:         true,       
-                          columnDefs: [
-                          { "width": "150px", "targets": [0,1] },       
-                          { "width": "40px", "targets": [4] }
-                          ]
                         });
                       });
                     </script>
