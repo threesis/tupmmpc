@@ -74,16 +74,6 @@
     <div class="wrapper">
       <div class="container">
         <div class="msg">
-          <?php if($this->session->flashdata('user_signedin')): ?>
-            <?php echo '<p class="alert bg-success alert-dismissable fade show text-center" id="loginWelcomeMsg" role="alert">
-                      <button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span></button><a class="h7 text-white">'.$this->session->flashdata('user_signedin').
-                      $this->session->userdata('username').'!'.'</a></p>';
-            ?>
-            <script type="text/javascript">
-              $('#loginWelcomeMsg').fadeIn().delay(4000).fadeOut('slow');
-            </script>
-          <?php endif; ?>
         </div>
         <div class="row">
         <!-- Profile -->
