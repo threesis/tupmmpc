@@ -1896,7 +1896,6 @@
               $('#deleteModal').find('.modal-title').text('Delete user');
               $('#deleteModal').find('.modal-body').text("Are you sure you want to delete " + name + "'s account?");
               $('#deleteRecordBtn').unbind().click(function() {
-                alert(id);
                 $.ajax({
                   type    : 'ajax',
                   method  : 'get',
