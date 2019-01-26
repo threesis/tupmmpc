@@ -1,25 +1,5 @@
 <?php echo form_open('signin'); ?>
 
-<!-- PREVENTS USER TO GO BACK TO SIGN IN PAGE AFTER SIGNING IN -->
-<!-- <?php // if($this->session->userdata('username')) {
-    // if($this->session->userdata('user_position') == 'Administrator') {
-    //  redirect('admin');
-    //  exit;
-    // } elseif($this->session->userdata('user_position') == 'Member') {
-    //  $this->load->view('pages/member');
-    //  exit;
-    // } elseif($this->session->userdata('user_position') == 'Treasurer') {
-    //  $this->load->view('pages/treasurer');
-    //  exit;
-    // } elseif($this->session->userdata('user_position') == 'Credit Officer') {
-    //  $this->load->view('pages/creditofficer');
-    //  exit;
-    // } else {
-    //  show_404();
-    //  exit;
-    // }
-    // } 
-?> -->
 <head>
   <title>TUPMMPC | Sign In</title>
 </head>
