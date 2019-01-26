@@ -638,29 +638,6 @@
                     </div>
                   </div>
 
-                  <!-- CoMakers Part  -->
-                  <div class="tab-pane fade show" id="coMakersTab" role="tabpanel" aria-labelledby="home-tab">
-                    <div class="card-header">
-                      <ul class="nav nav-tabs card-header-tabs">
-                        <li class="ml-2 pb-4">
-                          <h2 class="card-title">
-                            <span>Co-Makers Application</span>
-                          </h2>
-                        </li>
-                        <li class="nav-item ml-auto">
-                          <a class="nav-link active" data-toggle="tab" href="#pending_cm_applications">Pending<span class="badge badge-danger badge-pill ml-2" id="cm_pending_badge">20</span></a>
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="card-body" style="height: 70vh; overflow-y: auto;">
-                      <div class="tab-pane list-group active" id="pending_cm_applications">
-                        <div id="return_cm_applications">
-                          <!-- insert comakers application list group -->
-                        </div>
-                      </div>            
-                    </div>
-                  </div>
-
                   <div class="modal fade" id="confirmationLoanAppModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
                       <div class="modal-content">
