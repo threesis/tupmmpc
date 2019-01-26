@@ -1976,7 +1976,6 @@
             type    : 'ajax',
             method  : 'post',
             url     : '<?php echo base_url() ?>administrators/search_user',
-
             async   : false,
             data    : {query : query},
             dataType: 'json',
@@ -1987,7 +1986,7 @@
               for(i = 0; i < data.length; i++) {
                 row += '<li class="list-group-item">' +
                           '<img id="membersListImg" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + ' ?>" class="rounded-circle member-icon">' +
-                          '<button href="javascript:;" class="btn btn-outline-success btn-sm float-right my-2 viewuser-perm4" style="display: block" user-id="' + data[i].id + '" user-name="' + data[i].name + '" user-position ="' + data[i].role_name + '" user-college="' + data[i].college + '" user-address="' + data[i].address + '" user-img="' + data[i].user_img + '" user-sharecap="' + data[i].total_share_capital + '">View Profile</button>' +
+                          '<button href="javascript:;" class="btn btn-outline-success btn-sm float-right my-2 viewuser-perm4" style="display: block" user-id="' + data[i].user_id + '" user-name="' + data[i].name + '" user-position ="' + data[i].role_name + '" user-college="' + data[i].college + '" user-address="' + data[i].address + '" user-img="' + data[i].user_img + '" user-sharecap="' + data[i].total_share_capital + '">View Profile</button>' +
                           '<h5 class="member-name">' + data[i].name + '</h5>' +
                           '<p class="text-muted"><small>' + data[i].college + '</small></p>' +
                         '</li>';
