@@ -26,12 +26,11 @@
     <link href="<?php echo base_url() ?>assets/css/admin.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
 
-
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.4/b-html5-1.5.4/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/datatables.min.css"/>
- 
+    <!-- Datatables -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/af-2.3.2/b-1.5.4/b-colvis-1.5.4/b-flash-1.5.4/b-html5-1.5.4/b-print-1.5.4/cr-1.5.0/r-2.2.2/datatables.min.css"/>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.18/b-1.5.4/b-html5-1.5.4/fc-3.2.5/fh-3.1.4/r-2.2.2/sc-1.5.0/datatables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/jszip-2.5.0/dt-1.10.18/af-2.3.2/b-1.5.4/b-colvis-1.5.4/b-flash-1.5.4/b-html5-1.5.4/b-print-1.5.4/cr-1.5.0/r-2.2.2/datatables.min.js"></script>
 
 
   </head>
@@ -74,16 +73,6 @@
     <div class="wrapper">
       <div class="container">
         <div class="msg">
-          <?php if($this->session->flashdata('user_signedin')): ?>
-            <?php echo '<p class="alert bg-success alert-dismissable fade show text-center" id="loginWelcomeMsg" role="alert">
-                      <button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span></button><a class="h7 text-white">'.$this->session->flashdata('user_signedin').
-                      $this->session->userdata('username').'!'.'</a></p>';
-            ?>
-            <script type="text/javascript">
-              $('#loginWelcomeMsg').fadeIn().delay(4000).fadeOut('slow');
-            </script>
-          <?php endif; ?>
         </div>
         <div class="row">
         <!-- Profile -->
@@ -393,7 +382,7 @@
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                       </div>
                         <form id="addMemberForm">
-                          <div class="modal-body" style="height: auto; max-height: 500px; overflow-y: auto">
+                          <div class="modal-body" style="max-height: 400px; overflow-y: auto">
                             <div class="row">
                               <div class="form-group col-md-6">
                                 <label for="firstname" class="custom-sm h6">First Name:</label>
@@ -514,7 +503,7 @@
                 <div class="card-header shadow-sm">
                   <ul class="nav nav-tabs card-header-tabs">
                     <li class="ml-2 pb-4">
-                      <h2 class="card-title">LOAN APPLICATIONS</h2>
+                      <h2 class="card-title">Loan Applications</h2>
                     </li>
                     <li class="nav-item ml-auto loan-apps">
                       <a class="nav-link active" data-toggle="tab" href="#pending_loans">Pending<span id="pendingNotif" class="badge badge-secondary ml-1"></span></a>
@@ -611,8 +600,6 @@
                                   <a class="custom-xs h6">Monthly Deduction:<span class="userLoanInfo ml-2" name="loan_deduc"></span></a><br>
                                   <input type="hidden" name="loan_deduc_hidden">
                                   <a class="custom-xs h6">Member Payslip:</a><br>
-                                  <a class="custom-xs h6" id="thpVerifyInfo">THP Verified By:<span class="userLoanInfo ml-2" name="loan_thp_verified"></span></a><br>
-                                  <a class="custom-xs h6" id="cnVerifyInfo">CN Verified On:<span class="userLoanInfo ml-2" name="loan_cn_verified"></span></a><br>
                                 </div>
                               </div>
                               <div class="col-md-6 col-sm-12">
@@ -666,77 +653,95 @@
                 <div class="tab-pane fade show" id="loanRecordTab" role="tabpanel" aria-labelledby="home-tab">
                   <h2 class="card-header">Records</h2>
                   <div class="card-body card-body-mh">
-                    <div class="col-md-12">
-                      <table id="loanRecordTbl" class="table table-striped table-bordered nowrap" cellspacing="0" width="100%" style="border: 0.5px solid lightgray">
-                        <thead>
-                          <tr class="table-font">
-                            <th>Date</th>
-                            <th>Name</th>
-                            <th>Take Home Pay</th>
-                            <th>THP After Deduction</th>
-                            <th>Amount of Loan</th>
-                            <th>Gross Amount of Loan</th>
-                            <th>Monthly Deduction</th>
-                            <th>Term of Payments</th>
-                            <th>Remarks</th>
-                            <th>Code No.</th>
-                          </tr>
-                        </thead>
-                        <tbody id="returnLoanRecords">
-                          
-                        </tbody>
-                      </table>
-                    </div>
-                    <script type="text/javascript">
-                      $(function(){
-                        $.ajax({
-                          type    : 'ajax',
-                          url     : '<?php echo base_url() ?>administrators/getMembers',
-                          async   : false,
-                          dataType: 'json',
-                          success : function(data) {
-                            var tbl = '';
-                            for(var i = 0; i < data.length; i++) {
-                              var myDate = new Date(Date.parse(data[i].date_created.replace('-','/','g')));
-                              myDate = myDate.toUTCString();
-                              myDate = myDate.split(' ').slice(1, 4).join('-');
-                              var loan_amt = data[i].loan_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                              var takehomepay = data[i].take_home_pay.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                              var monthlydeduc = data[i].monthly_deduc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); 
-                              tbl += '<tr class="small">' +
-                                        '<th scope="row">' + myDate + '</th>' +
-                                        '<td>' + data[i].name + '</td>' +
-                                        '<td>&#8369;' + takehomepay + '</td>' +
-                                        '<td>&#8369;' + takehomepay + '</td>' +
-                                        '<td>&#8369;' + loan_amt + '</td>' +
-                                        '<td>&#8369;' + loan_amt + '</td>' +
-                                        '<td>&#8369;' + monthlydeduc + '</td>' +
-                                        '<td>' + data[i].loan_term + ' month/s</td>' +
-                                        '<td>' + data[i].status + '</td>' +
-                                        '<td>' + data[i].loanapp_id + '</td>' +
-                                      '</tr>';                          
-                            }
-                            $('#returnLoanRecords').html(tbl);
-                          },
-                          error: function() {
-                            alert('Error!');
-                          }
-                        });
-
-                        var table = $('#loanRecordTbl').DataTable({       
-                          scrollX:        true,
-                          scrollCollapse: true,
-                          autoWidth:      false,  
-                          paging:         true,       
-                          columnDefs: [
-                          { "width": "150px", "targets": [0,1] },       
-                          { "width": "40px", "targets": [4] }
-                          ]
-                        });
-                      });
-                    </script>
+                    <table id="loanRecordTbl" class="table table-striped table-bordered table-responsive table-md display nowrap" width="100%">
+                      <thead style="width: 500px">
+                        <tr class="text-center">
+                          <th>Date</th>
+                          <th>Name</th>
+                          <th>Take Home Pay</th>
+                          <th>THP After Deduction</th>
+                          <th>Amount of Loan</th>
+                          <th>Gross Amount of Loan</th>
+                          <th>Monthly Deduction</th>
+                          <th>Term of Payments</th>
+                          <th>Remarks</th>
+                          <th>Code No.</th>
+                        </tr>
+                      </thead>
+                      <tbody id="returnLoanRecords">
+                        
+                      </tbody>
+                    </table>
                   </div>
-                  <div class="card-footer" style="min-height: 60px"></div>
+                  <div id="infoFooter" class="card-footer" style="min-height: 60px"></div>
+                  <script type="text/javascript">
+                    $(function(){
+                      $.ajax({
+                        type    : 'ajax',
+                        url     : '<?php echo base_url() ?>administrators/getMembers',
+                        async   : false,
+                        dataType: 'json',
+                        success : function(data) {
+                          var tbl = '';
+                          for(var i = 0; i < data.length; i++) {
+                            var cm1 = data[i].comaker_1;
+                            var cm2 = data[i].comaker_2;
+                            var cm3 = data[i].comaker_3;
+                            if(cm1 == null) {
+                              cm1 = '-';
+                            } if(cm2 == null) {
+                              cm2 = '-';
+                            } if(cm3 == null) {
+                              cm3 = '-';
+                            }
+                            var myDate = new Date(Date.parse(data[i].date_created.replace('-','/','g')));
+                            myDate = myDate.toUTCString();
+                            myDate = myDate.split(' ').slice(1, 4).join('-');
+                            var loanAmt = data[i].loan_amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            var takehomepay = data[i].take_home_pay.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            var monthlydeduc = data[i].monthly_deduc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            var thpAfterDeduc = data[i].take_home_pay - data[i].monthly_deduc;
+                            thpAfterDeduc = thpAfterDeduc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            var calcInterest = data[i].loan_amount * (data[i].loan_interest * 0.1);
+                            var grossAmt = Number(data[i].loan_amount) + Number(calcInterest);
+                            grossAmt = grossAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                            tbl += '<tr class="table-font">' +
+                                      '<th scope="row">' + myDate + '</th>' +
+                                      '<td>' + data[i].name + '</td>' +
+                                      '<td>&#8369;' + takehomepay + '</td>' +
+                                      '<td>&#8369;' + thpAfterDeduc + '</td>' +
+                                      '<td>&#8369;' + loanAmt + '</td>' +
+                                      '<td>&#8369;' + grossAmt + '</td>' +
+                                      '<td>&#8369;' + monthlydeduc + '</td>' +
+                                      '<td>' + data[i].loan_term + ' month/s</td>' +
+                                      '<td>' + data[i].status + '</td>' +
+                                      '<td>' + data[i].loanapp_id + '</td>' +
+                                    '</tr>';                        
+                          }
+                          $('#returnLoanRecords').html(tbl);
+                        },
+                        error: function() {
+                          alert('Error!');
+                        }
+                      });
+
+                       $('#loanRecordTbl').DataTable({
+                        dom: 'Bfrtip',
+                        lengthChange: false,
+                        buttons: [
+                            'copyHtml5',
+                            'excelHtml5',
+                            'pdfHtml5',
+                            'print'
+                        ]
+                      });
+
+                      $('.dt-buttons').find('button').addClass('btn-outline-success'); 
+                      $('#loanRecordTbl_info').addClass('small mt-2'); 
+                      $("#loanRecordTbl_info").detach().appendTo('#infoFooter');
+                      $("#loanRecordTbl_paginate").detach().appendTo('#infoFooter');
+                    });
+                  </script>
                 </div>
 
                 <!-- Loan Application part -->
@@ -883,7 +888,7 @@
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
-                      <div class="modal-body" style="height: auto; max-height: 500px; overflow-y: auto">
+                      <div class="modal-body" style="height: auto; max-height: 400px; overflow-y: auto">
                         <div id="unarchiveLoanMsg" style="margin: -15px -15px 15px -15px"></div>
                         <div id="returnLoanArchive" class="row">
                           
@@ -981,7 +986,7 @@
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
-                      <div class="modal-body" style="height: auto; max-height: 500px; overflow-y: auto;">
+                      <div class="modal-body" style="height: auto; max-height: 400px; overflow-y: auto;">
                         <div class="custom-sm ml-2">
                           <span id="loanType"></span><br>
                           <span id="loanTerm"></span><br>
@@ -1209,15 +1214,15 @@
                   if(data[i].cheque_no == null) {
                     color = 'info';
                     status = 'pending';
-                    approvedLoanNote = 'Pending cheque number..';
+                    approvedLoanNote = 'Pending cheque..';
                   } else {
                     color = 'primary';
                     status = 'verified';
-                    approvedLoanNote = 'Pending disbursement voucher..';
+                    approvedLoanNote = 'Pending voucher..';
                   }
                   row +=  '<li class="list-group-item" data-toggle="modal" data-target="#openLoanAppForm" status="' + status + '" data="' + data[i].loanapp_id + '" payslip="' + data[i].take_home_pay + '" verifiedBy="' + data[i].thp_verified_by + '" chequeNo="' + data[i].cheque_no + '" dateIssued="' + dateIssued + '" style="cursor: pointer">' +
                             '<img src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img +'" class="rounded-circle member-icon">' +
-                              '<span class="badge badge-' + color + ' p-2 mt-2 w-25 float-right">' + approvedLoanNote + '</span>' +
+                              '<span class="badge badge-' + color + ' p-2 mt-2 px-3 ml-auto float-right">' + approvedLoanNote + '</span>' +
                               '<h2 class="member-name">' + data[i].name + '<i class="far fa-check-circle text-' + color + ' ml-1"></i></h2>' +
                             '<p class="text-muted"><small>' + data[i].loan_name + '</small></p>' +
                           '</li>';   
@@ -1316,9 +1321,7 @@
           $('#openLoanApp').modal('show');
           if(selectedTab == 'returnPendingLoan') {
             $('#thpInfo').hide();
-            $('#thpVerifyInfo').hide();
             $('#cnInfo').hide();
-            $('#cnVerifyInfo').hide();
             $('#openLoanApp').find('.modal-title').html("<a class='text-info'>New</a> - Application #" + id);
             $('#openLoanApp').find('.modal-footer').html('<div class="input-group input-group-sm"><div class="input-group-prepend"><span class="input-group-text px-2" id="basic-addon1">&#8369;</span></div><input type="text" class="form-control form-control-sm mr-2" placeholder="Input the payslip amount.." id="loanAppPayslipAmt" name="loanAppPayslipAmt" maxlength="8"><button type="button" class="btn btn-primary btn-sm mr-1 px-4 float-right" id="approveLoanAppBtn"><i class="far fa-check-circle mr-1"></i> Approve</button><button type="button" class="btn btn-danger btn-sm float-right px-2" id="cancelLoanAppBtn" data-toggle="modal" data-target="#cancelLoanNote"><i class="fas fa-times-circle"></i> Cancel</button></div>').attr('id', 'approve-cancel-PL');
             if(status == 'verified') {
@@ -1328,7 +1331,6 @@
             }
             if(verifiedThp == 'verified') {
               $('#thpInfo').show();
-              $('#thpVerifyInfo').show();
               $('span[name=loan_thp]').html('&#8369;' + takeHomePay);
               $('span[name=loan_thp_verified]').html(verifiedBy);
               if(role == 'Credit Officer') {
@@ -1346,22 +1348,20 @@
           } else if(selectedTab == 'returnApprovedLoans') {
             $('#openLoanApp').find('.modal-title').html("<a class='text-primary'>Approved</a> - Application #" + id);
             $('#thpInfo').show();
-            $('#thpVerifyInfo').show();
             $('#cnInfo').hide();
-            $('#cnVerifyInfo').hide();
             $('span[name=loan_thp]').html('&#8369;' + takeHomePay);
             $('span[name=loan_thp_verified]').html(verifiedBy);
             $('#openLoanApp').find('.modal-footer').html('<div class="input-group input-group-sm"><input type="text" class="form-control form-control-sm mr-2" placeholder="Enter cheque number.." id="chequeNumberInput" name="cheque_number" maxlength="8"><button type="button" class="btn btn-outline-success btn-sm float-right px-2" id="chequeLoanAppBtn"><i class="fas fa-arrow-circle-right fa-sm mr-1"></i> Submit cheque</button></div>').attr('id', 'issue-cheque-AL');
             if(status == 'verified') {
               $('#cnInfo').show();
-              $('#cnVerifyInfo').show();
               $('span[name=loan_cn]').html(cheque);
               $('span[name=loan_cn_verified]').html(dateIssued);
               if(role == 'Treasurer') {
                 $('#chequeLoanAppBtn').prop('disabled', true).html('<i class="far fa-check-circle"></i> Cheque Issued!');
                 $('#chequeNumberInput').prop('disabled', true).val(cheque + " — cheque issued on: " + dateIssued);
               } else if(role == 'Administrator') {
-                $('#openLoanApp').find('.modal-footer').html('<button type="button" class="btn btn-outline-success btn-sm float-right px-2" id="voucherLoanAppBtn"><i class="fas fa-arrow-circle-right fa-sm mr-1"></i>Create cheque</button>');
+                $('#openLoanApp').find('.modal-footer').html('<button type="button" class="btn btn-outline-success btn-sm float-right px-2" id="voucherLoanAppBtn"><i class="fas fa-arrow-circle-right fa-sm mr-1"></i>Create voucher</button>');
+                $('#chequeNumberInput').hide();
               } else {
                 $('#issue-cheque-AL').hide();
               }
@@ -1372,7 +1372,6 @@
                 $('#openLoanApp').find('.modal-footer').html('<div class="text-center"><em>Pending cheque number</em></div>');
               } else {
                 $('#cnInfo').hide();
-                $('#cnVerifyInfo').hide();
                 $('#issue-cheque-AL').hide();
               }
             }
@@ -1440,6 +1439,82 @@
             });
           });
         }
+
+        $('#openLoanApp').on('click', '#voucherLoanAppBtn', function(){
+          var id = $('#openLoanApp').attr('selectedid');
+          var name = $('#openLoanApp').attr('selectedname');
+            $('#openLoanApp').modal('hide');
+            $('#confirmationLoanAppModal').find('.modal-dialog').removeClass('modal-md');
+            $('#confirmationLoanAppModal').modal('show');
+            $('#confirmationLoanAppModal').find('.modal-title').html('<p id="confirmationLoanAppBackBtn" class="fas fa-chevron-left mr-4" style="font-size: 15px; color: gray; cursor: pointer"></p>Disbursement voucher');
+            $('#confirmationLoanAppModal').find('.modal-body').html(
+              '<div class="row">' +
+                '<div class="col-md-3">' +
+                  '<span class="font-weight-bold custom-sm">Date: </span><br>' +
+                  '<span class="font-weight-bold custom-sm">DV No.: </span><br>' +
+                  '<span class="font-weight-bold custom-sm">Cheque No.: </span><br>' +
+                '</div>' +
+                '<div class="col-md-3">' +
+                  '<span class="custom-sm">August 29, 2019</span><br>' +
+                  '<span class="custom-sm">B323H</span><br>' +
+                  '<span class="custom-sm">13345</span><br>' +
+                '</div>' +
+              '</div>' +
+              '<table class="table table-striped table-bordered table-sm mt-3" style="border: 1px solid lightgray;">' +
+                '<tbody id="calcBody" style="height: auto; max-height: 400px; overflow-y: auto">' +
+                  '<tr>' +
+                    '<td colspan="2">Payee</td>' +
+                    '<td colspan="2">Juan Miguel C. Ladisla</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td colspan="2">Multi-Purpose Loan</td>' +
+                    '<td colspan="2">24,750</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td colspan="2"></td>' +
+                    '<td colspan="1"><strong>DEBIT</strong></td>' +
+                    '<td colspan="1"><strong>CREDIT</strong></td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td colspan="2">Loan Receivable - MPL</td>' +
+                    '<td colspan="1">25,000</td>' +
+                    '<td colspan="1">-</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td colspan="2">Loan Interest * - 24 month/s</td>' +
+                    '<td colspan="1">4,500</td>' +
+                    '<td colspan="1">-</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td colspan="2">Deferred Intereset Income</td>' +
+                    '<td colspan="1">-</td>' +
+                    '<td colspan="1">4,500</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td colspan="2">Retention Fee</td>' +
+                    '<td colspan="1">-</td>' +
+                    '<td colspan="1">-</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td colspan="2">Outstanding balance of</td>' +
+                    '<td colspan="1">-</td>' +
+                    '<td colspan="1">-</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td colspan="2"></td>' +
+                    '<td colspan="1">29,500</td>' +
+                    '<td colspan="1">29,500</td>' +
+                  '</tr>' +
+                  '<tr>' +
+                    '<td colspan="2">NET AMOUNT DUE</td>' +
+                    '<td colspan="1">-</td>' +
+                    '<td colspan="1">24,750</td>' +
+                  '</tr>' +
+                '</tbody>' +
+              '</table>');
+            $('#confirmationLoanAppModal').find('.modal-footer').html('<button type="button" class="btn btn-outline-success btn-sm mr-1" id="submitVoucherBtn"><i class="fas fa-check fa-sm mr-1"></i>Submit</button>');
+          
+        });
 
         function checkInputPayslipAmt() {
           if($('#loanAppPayslipAmt').val() == '') {
