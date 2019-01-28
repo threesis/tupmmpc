@@ -21,6 +21,47 @@
 			echo json_encode($result);
 		}
 
+		public function getActiveLoans(){
+			$result = $this->loan_model->getActiveLoans();
+			echo json_encode($result);
+		}
+
+		public function getLoans(){
+			$result = $this->loan_model->getLoans();
+			echo json_encode($result);
+		}
+
+		public function getLoanRecord(){
+			$result = $this->loan_model->getLoanRecord();
+			echo json_encode($result);
+		}
+
+		public function getChequeDetails(){
+			$result = $this->loan_model->getChequeDetails();
+
+			$data = array();
+
+			foreach($result->result() as $r) {
+       	$data[] = array(
+            $r->loan_amount,
+            $r->loan_term,
+            $r->loan_interest,
+            $r->monthly_deduc,
+            $r->cheque_no,
+            $r->id,
+            $r->loan_name,
+            $r->remarks
+       	);
+      }
+
+			echo json_encode($data);
+		}
+
+		public function insertLoanVoucher(){
+			$result = $this->loan_model->insertLoanVoucher();
+			echo json_encode($result);
+		}
+
 		public function addLoan() {
 			// Add loan -> modal
 			$result = $this->loan_model->addLoan();

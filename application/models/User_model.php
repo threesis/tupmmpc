@@ -29,4 +29,15 @@
 				return false;
 			}
 		}
+
+		public function getMyLoanRecords(){
+			$id = $this->input->get('id');
+			$this->db->select('*')->from('loan_applications a');
+			$this->db->join('active_loan_apps b', 'b.loanapp_id = a.loanapp_id', 'left');
+			$this->db->join('loan_types c', 'c.id = a.loan_applied');
+			$this->db->where('member_id', $id);
+			$this->db->order_by('a.loanapp_id', 'DESC');
+			$query = $this->db->get();
+			return $query->result();
+		}
 	}

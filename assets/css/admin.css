@@ -282,12 +282,26 @@ html, body {
 }
 /** /Statistics Interface **/
 
+div.dt-buttons{
+  position:relative;
+  float:left;
+}
 
+div.dataTables_paginate {
+ position:relative;
+float:right; 
+}
+
+div.dataTables_info {
+  position:relative;
+  float:left; 
+}
 
 /** Scrollbar style **/
 /* width */
 ::-webkit-scrollbar {
     width: 8px;
+    height: 10px;
 }
  
 /* Handle */

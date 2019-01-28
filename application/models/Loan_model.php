@@ -43,6 +43,7 @@
 			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
 			$this->db->join('members c', 'c.id = b.member_id');
 			$this->db->join('loan_types d', 'd.id = b.loan_applied', 'left');
+			$this->db->where('a.status', 'Approved');
 			$this->db->order_by('a.date_approved', 'DESC');
 			$query = $this->db->get();
 			return $query->result();
@@ -57,12 +58,47 @@
 			$this->db->join('loan_types b', 'b.id = a.loan_applied');
 			$this->db->join('members c', 'c.id = a.member_id', 'left');
 			$this->db->where('status', 'Cancelled');
-			$this->db->order_by('a.date_created', 'DESC');
+			$this->db->order_by('a.date_applied', 'DESC');
 			$query = $this->db->get();
 			return $query->result();
 		}
 
-		public function getLoanAppDetails() {
+		public function getActiveLoans() {
+			$input = $this->input->get('query');
+			if($input != '') {
+				$this->db->like('name', $input);
+			}
+			$this->db->select('*')->from('active_loan_apps a');
+			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
+			$this->db->join('members c', 'c.id = b.member_id');
+			$this->db->join('loan_types d', 'd.id = b.loan_applied', 'left');
+			$this->db->order_by('a.payment_date', 'DESC');
+			$query = $this->db->get();
+			return $query->result();
+		}
+
+		public function getLoans(){
+			$this->db->order_by('id', 'ASC');
+			$query = $this->db->get('loan_types');
+			if($query->num_rows() > 0) {
+				return $query->result();
+			} else {
+				return false;
+			}
+		}
+
+		public function getLoanRecord(){
+			$loanID = $this->input->get('loanID');
+			$this->db->select('*');
+			$this->db->where('loan_applied', $loanID);
+			$this->db->from('loan_applications a');
+			$this->db->join('members b', 'b.id = a.member_id');
+			$this->db->join('loan_types c', 'c.id = a.loan_applied', 'left');
+			$query = $this->db->get();
+			return $query->result();
+		}
+
+		public function getLoanAppDetails(){
 			$id = $this->input->get('id');
 			$this->db->select('*')->from('loan_applications a');
 			$this->db->join('members b', 'b.id = a.member_id');
@@ -71,6 +107,55 @@
 			$query = $this->db->get();
 			if($query->num_rows() > 0) {
 				return $query->row();
+			} else {
+				return false;
+			}
+		}
+
+		public function getChequeDetails(){
+			$id = $this->input->get('id');
+			$this->db->select('*')->from('loan_applications a');
+			$this->db->join('loan_types b', 'b.id = a.loan_applied');
+			$this->db->join('approved_loan_apps c', 'c.loanapp_id = a.loanapp_id');
+			$this->db->where('c.loanapp_id', $id);
+			return $this->db->get();
+		}
+
+		public function insertLoanVoucher(){
+			date_default_timezone_set('Asia/Manila');
+			$id = $this->input->post('loanapp_id');
+
+			$data = array(
+				'disbursement_no' => $this->input->post('dvNo'),
+				'retention_fee' => $this->input->post('retFee'),
+				'service_fee' => $this->input->post('serFee'),
+				'debit' => $this->input->post('debit'),
+				'credit' => $this->input->post('credit'),
+				'net_amount' => $this->input->post('netAmt'),
+				'status' => 'Active',
+				'date_accepted' => date('Y-m-d H:i:s')
+			);
+
+			$this->db->where('loanapp_id', $id);
+			$this->db->update('approved_loan_apps', $data);
+			if($this->db->affected_rows() > 0) {
+				$this->db->set('status', 'Active');
+				$this->db->where('loanapp_id', $id);
+				$this->db->update('loan_applications');
+
+				$data = array(
+				'loanapp_id' => $id,
+				'balance' => $this->input->post('balance'),
+				'remarks' => $this->input->post('remarks'),
+				'payment_date' => date('Y-m-d H:i:s')
+				);
+
+				$this->db->insert('active_loan_apps', $data);
+				if($this->db->affected_rows() > 0){
+					return true;
+				} else {
+					return false;
+				}
 			} else {
 				return false;
 			}
@@ -207,6 +292,7 @@
 							$this->db->update('loan_applications');
 							$approved = array(
 								'loanapp_id' => $id,
+								'status' => 'Approved',
 								'date_approved' => date('Y-m-d H:i:s')
 							);
 							$this->db->insert('approved_loan_apps', $approved);

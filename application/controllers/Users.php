@@ -29,6 +29,7 @@
 						'position' => $user_info[0]['role_name'],
 						'name' => $user_info[0]['name'],
 						'username' => $username,
+						'user_id' => $user_info[0]['id'],
 						'signed_in' => true
 					);
 					// Set user session
@@ -48,6 +49,11 @@
 
 			}
 			
+		}
+
+		public function getMyLoanRecords(){
+			$result = $this->user_model->getMyLoanRecords();
+			echo json_encode($result);
 		}
 
 		public function signout() {

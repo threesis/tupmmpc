@@ -253,15 +253,6 @@
 			return $query->num_rows();
 		}
 
-		public function getMembers() {
-			$this->db->select('*');
-			$this->db->from('loan_applications a');
-			$this->db->join('members b', 'b.id = a.member_id');
-			$this->db->join('loan_types c', 'c.id = a.loan_applied', 'left');
-			$query = $this->db->get();
-			return $query->result();
-		}
-
 		public function getAllAppliedLoans() {
 			$query = $this->db->get('loan_applications');
 			return $query->num_rows();
@@ -294,6 +285,18 @@
 			} else {
 				return false;
 			}
+		}
+
+		public function getShareCapitalRec(){
+			$input = $this->input->get('query');
+			if($input != '') {
+				$this->db->like('name', $input);
+			}
+			$this->db->select('*')->from('share_capital a');
+			$this->db->join('members b', 'b.id = a.user_id', 'left');
+			$this->db->order_by('a.id', 'DESC');
+			$query = $this->db->get();
+			return $query->result();
 		}
 		
 	}

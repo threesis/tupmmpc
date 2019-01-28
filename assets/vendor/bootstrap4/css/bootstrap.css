@@ -1714,6 +1714,11 @@ pre code {
   padding: 0.3rem;
 }
 
+.table-md th,
+.table-md td {
+  padding: 0.5rem;
+}
+
 .table-bordered {
   border: 1px solid #dee2e6;
 }

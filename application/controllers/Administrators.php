@@ -176,11 +176,6 @@
 			echo json_encode($result);
 		}
 
-		public function getMembers() {
-			$result = $this->administrator_model->getMembers();
-			echo json_encode($result);
-		}
-
 		public function retrieveCommitteeInstances() {
 			$result = $this->administrator_model->retrieveCommitteeInstances();
 			echo json_encode($result);
@@ -217,6 +212,11 @@
 				'currentPass' => md5($this->input->get('currentPass')),
 				'desiredNewPass' => md5($this->input->get('desiredNewPass'))
 			);
+			echo json_encode($result);
+		}
+
+		public function getShareCapitalRec(){
+			$result = $this->administrator_model->getShareCapitalRec();
 			echo json_encode($result);
 		}
 		
