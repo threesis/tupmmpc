@@ -298,5 +298,15 @@
 			$query = $this->db->get();
 			return $query->result();
 		}
+
+		public function viewLedger(){
+			$this->db->select('*')->from('members a');
+			$this->db->join('loan_applications b', 'b.member_id = a.id', 'left');
+			$this->db->join('loan_types c', 'c.id = b.loan_applied');
+			$this->db->join('share_capital d', 'd.user_id = a.id');
+			$this->db->order_by('a.id', 'DESC');
+			$query = $this->db->get();
+			return $query->result();
+		}
 		
 	}

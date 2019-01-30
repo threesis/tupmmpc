@@ -36,6 +36,11 @@
 			echo json_encode($result);
 		}
 
+		public function getActiveLoanTbl(){
+			$result = $this->loan_model->getActiveLoanTbl();
+			echo json_encode($result);
+		}
+
 		public function getChequeDetails(){
 			$result = $this->loan_model->getChequeDetails();
 

@@ -437,9 +437,9 @@ small,
   font-weight: 400;
 }
 
-.table-font {
-  font-size: 90%;
-  font-weight: 400;
+.smaller {
+  font-size: 75%;
+  font-weight: 350;
 }
 
 mark,

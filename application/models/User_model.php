@@ -19,8 +19,8 @@
 
 		public function signin($username, $password) {
 			// Validate
-			$this->db->where('username', $username);
-			$this->db->where('password', $password);
+			$this->db->where('username like binary', $username);
+			$this->db->where('password like binary', $password);
 			$result = $this->db->from('members')->join('roles', 'roles.role_id = members.position')->get();
 
 			if(count($result) == 1) {

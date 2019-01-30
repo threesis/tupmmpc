@@ -219,5 +219,10 @@
 			$result = $this->administrator_model->getShareCapitalRec();
 			echo json_encode($result);
 		}
+
+		public function viewLedger(){
+			$result = $this->administrator_model->viewLedger();
+			echo json_encode($result);
+		}
 		
 	}

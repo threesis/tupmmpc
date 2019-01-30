@@ -87,6 +87,18 @@
 			}
 		}
 
+		public function getActiveLoanTbl(){
+			$id = $this->input->get('id');
+			$this->db->select('*')->from('active_loan_apps a');
+			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
+			$this->db->join('members c', 'c.id = b.member_id');
+			$this->db->join('loan_types d', 'd.id = b.loan_applied', 'left');
+			$this->db->where('a.loanapp_id', $id);
+			$this->db->order_by('a.payment_date', 'DESC');
+			$query = $this->db->get();
+			return $query->result();
+		}
+
 		public function getLoanRecord(){
 			$loanID = $this->input->get('loanID');
 			$this->db->select('*');
@@ -170,6 +182,7 @@
 				'loan_max_term' => $this->input->post('loan_max_term'),
 				'loan_interest' => $this->input->post('loan_interest'),
 				'loan_status' => 'active',
+				'loan_description' => $this->input->post('loan_desc'),
 				'date_created' => date('Y-m-d H:i:s')
 			);
 			// Insert loan to db
@@ -201,6 +214,7 @@
 				'loan_max_amt' => $this->input->post('filteredAmt'),
 				'loan_max_term' => $this->input->post('loan_max_term'),
 				'loan_interest' => $this->input->post('loan_interest'),
+				'loan_description' => $this->input->post('loan_desc'),
 				'date_updated' => date('Y-m-d H:i:s')
 			);
 
