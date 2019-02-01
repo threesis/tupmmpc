@@ -14,6 +14,9 @@
 				$data['pendingLoans'] = $this->administrator_model->getAllPendingLoans();
 				$data['approvedLoans'] = $this->administrator_model->getAllApprovedLoans();
 				$data['ongoingLoans'] = $this->administrator_model->getAllActiveLoans();
+				$data['totalPayments'] = $this->administrator_model->getTotalLoanPayments();
+				$data['missedPayments'] = $this->administrator_model->getAllMissedPayments();
+				$data['totalShareCapital'] = $this->administrator_model->getTotalShareCapital();
 
 				$this->load->view('pages/admin', $data);
 			} else {
@@ -222,6 +225,22 @@
 
 		public function viewLedger(){
 			$result = $this->administrator_model->viewLedger();
+			echo json_encode($result);
+		}
+
+		// Dashboard 
+		public function getTotalLoanPayments(){
+			$result = $this->administrator_model->getTotalLoanPayments();
+			echo json_encode($result);
+		}
+
+		public function getAllMissedPayments(){
+			$result = $this->administrator_model->getAllMissedPayments();
+			echo json_encode($result);
+		}
+
+		public function getTotalShareCapital(){
+			$result = $this->administrator_model->getTotalShareCapital();
 			echo json_encode($result);
 		}
 		

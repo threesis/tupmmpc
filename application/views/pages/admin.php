@@ -798,8 +798,106 @@
                       <div id="ledgerTabMsg" class="no-padding"></div>
                       <div class="tab-pane active" id="ledgerSubTab">
                         <div class="form-row">
+                          <label for="ledgerEntrySelect" class="col-form-label col-form-label-sm">Show entries</label>
+                          <div class="col-md-1 mb-1 mr-auto">
+                            <select class="custom-select form-control-sm mr-sm-2" id="ledgerEntrySelect">
+                              
+                            </select>
+                          </div>
+                          <div class="col-md-2 mb-1">
+                            <select class="custom-select form-control-sm mr-sm-2" id="ledgerMonthSelect">
+                              <option selected>Month</option>
+                              <option value="1">January</option>
+                              <option value="2">February</option>
+                              <option value="3">March</option>
+                            </select>
+                          </div>
+                          <div class="col-md-2 mb-1">
+                            <select class="custom-select form-control-sm mr-sm-2" id="ledgerYearSelect">
+                              <option selected>Year</option>
+                              <option value="1">2019</option>
+                              <option value="2">2018</option>
+                              <option value="3">2017</option>
+                            </select>
+                          </div>
+                          <div class="col-md-2 mb-1">
+                            <input type="text" class="form-control form-control-sm" id="ledgerORno" placeholder="Search OR..">
+                          </div>
+                          <div class="col-md-3 mb-3">
+                            <input type="text" class="form-control form-control-sm" placeholder="Search member.." id="">
+                          </div>
+                        </div>
+                        <table id="viewLedgerTbl" class="table table-striped table-bordered table-hover table-responsive-sm table-md">
+                          <thead>
+                            <tr>
+                              <th>Name</th>
+                              <th>Loan Applied</th>
+                              <th>Monthly Amortization</th>
+                            </tr>
+                          </thead>
+                          <tbody id="returnViewLedgerBody">
+                            
+                          </tbody>
+                        </table>
+                        <small class="mt-2">Showing <strong id="numOfLedgerEntry"></strong> out of <strong id="totalLedgerEntry"></strong> entries</small>
+                        <script type="text/javascript">
+                          $(function(){
+                            viewLedger();
+
+                            $('#ledgerEntrySelect').change(function(){
+                              var entry = $('#ledgerEntrySelect').val();
+                              viewLedger(entries);
+                            });
+
+                            function viewLedger(entries){
+                              $.ajax({
+                              type    : 'ajax',
+                              method  : 'GET',
+                              url     : '<?php echo base_url() ?>administrators/viewLedger',
+                              data    : {entry: entries},
+                              async   : false,
+                              dataType: 'json',
+                              success : function(data) {
+                                var row = '';
+                                var opts = '';
+                                var totalMonthly = '';
+                                for(var i = 0; i < data.length; i++){
+                                  totalMonthly = Number(totalMonthly) + Number(data[i].monthly_deduc);
+                                  row +=  '<tr>' +
+                                            '<td>' + data[i].name + '</td>' +
+                                            '<td>' + data[i].loan_name + '</td>' +
+                                            '<td>&#8369;' + data[i].monthly_deduc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                                          '</tr>'; 
+                                }
+                                  row +=  '<tr>' +
+                                            '<th scope="row" colspan="2">Total</th>' +
+                                            '<th scope="row">&#8369;' + Math.round(totalMonthly).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
+                                          '</tr>';
+
+                                $('#returnViewLedgerBody').html(row);
+
+                                if(i >= 5) {
+                                  for(var a = 5; a < i; a+4){
+                                    opts += '<option value="' + a + '">' + a + '</option>';
+                                  }
+                                  $('#ledgerEntrySelect').html(opts);
+                                } else {
+                                  $('#ledgerEntrySelect').html('<option value="5">5</option>');
+                                }
+                              },
+                              error: function() {
+                                alert('Error!');
+                              }
+                              });
+                            }
+                          });
+                        </script>
+                      </div>
+
+                      <div class="tab-pane" id="shareCapSubTab">
+                        <div class="form-row">
                           <div class="col-md-2">
-                            <select class="custom-select mr-sm-2" id="ledgerMonthSelect">
+                            <select class="custom-select form-control-sm mr-sm-2" id="shareCapMonthSelect">
                               <option selected>Month</option>
                               <option value="1">January</option>
                               <option value="2">February</option>
@@ -807,62 +905,18 @@
                             </select>
                           </div>
                           <div class="col-md-2">
-                            <select class="custom-select mr-sm-2" id="ledgerYearSelect">
+                            <select class="custom-select form-control-sm mr-sm-2" id="shareCapYearSelect">
                               <option selected>Year</option>
                               <option value="1">2019</option>
                               <option value="2">2018</option>
                               <option value="3">2017</option>
                             </select>
                           </div>
-                          <div class="col-md-4">
-                            <input type="text" class="form-control" id="ledgerORno" placeholder="Search OR..">
-                          </div>
-                          <div class="col-md-4">
-                            <input type="text" class="form-control" placeholder="Search member.." id="searchMemberLedger">
+                          <div class="col-md-3">
+                            <input type="text" class="form-control form-control-sm" placeholder="Search member.." id="searchMemberLedger">
                           </div>
                         </div>
-                        <table id="viewLedgerTbl" class="table table-striped table-bordered table-responsive-sm table-md mt-3">
-                          <thead>
-                            <tr>
-                              <th>Name</th>
-                              <th>Share Capital</th>
-                              <th>Loan Type</th>
-                              <th>Monthly Amortization</th>
-                              <th>Total</th>
-                            </tr>
-                          </thead>
-                          <tbody id="returnViewLedgerBody">
-                            
-                          </tbody>
-                        </table>
-                        <script type="text/javascript">
-                          $.ajax({
-                            type    : 'ajax',
-                            url     : '<?php echo base_url() ?>administrators/viewLedger',
-                            async   : false,
-                            dataType: 'json',
-                            success : function(data) {
-                              var row = '';
-                              for(var i = 0; i < data.length; i++){
-                                row +=  '<tr>' +
-                                          '<th>' + data[i].name + '</th>' +
-                                          '<td>&#8369;' + Math.round(data[i].total_share_capital).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                                          '<td>' + data[i].loan_name + '</td>' +
-                                          '<td>&#8369;' + data[i].monthly_deduc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                                          '<td>' + data[i].balance + '</td>' +
-                                        '</tr>'; 
-                              }
-                              $('#returnViewLedgerBody').html(row);
-                            },
-                            error: function() {
-                              alert('Error!');
-                            }
-                          });
-                        </script>
-                      </div>
-
-                      <div class="tab-pane" id="shareCapSubTab">
-                        <table id="shareCapRecTbl" class="table table-striped table-bordered table-md">
+                        <table id="shareCapRecTbl" class="table table-striped table-bordered table-hover table-md mt-3">
                           <thead>
                             <tr>
                               <th>Name</th>
@@ -897,13 +951,22 @@
                                 dataType: 'json',
                                 success: function(data) {
                                   var tbl = '';
+                                  var total = '';
+                                  var share = '';
                                   for(var i = 0; i < data.length; i++) {
+                                    share = Number(share) + Number(data[i].share_capital);
+                                    total = Number(total) + Number(data[i].total_share_capital);
                                     tbl +=  '<tr>' +
-                                              '<th scope="row">' + data[i].name + '</th>' +
+                                              '<td scope="row">' + data[i].name + '</td>' +
                                               '<td>&#8369;' + data[i].share_capital.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                                               '<td>&#8369;' + data[i].total_share_capital.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                                             '</tr>'; 
                                   }
+                                    tbl +=  '<tr>' +
+                                              '<th scope="row">Total</th>' +
+                                              '<th>&#8369;' + Math.round(share).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
+                                              '<th>&#8369;' + Math.round(total).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
+                                            '</tr>'; 
                                   $('#returnShareCapRec').html(tbl);
                                 },
                                 error: function() {
@@ -931,7 +994,8 @@
                         </script>
                       </div>
                     </div>
-                    <div class="card-footer" style="min-height: 60px"></div>
+                    <div class="card-footer" style="min-height: 60px">
+                    </div>
                   </div>
 
                 
@@ -960,7 +1024,7 @@
                       <div id="returnLoanNames" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                       </div>
                     </div>
-                    <table id="loanRecordTbl" class="table table-striped table-bordered table-responsive table-sm text-nowrap">
+                    <table id="loanRecordTbl" class="table table-striped table-bordered table-hover table-responsive table-md text-nowrap">
                       <thead>
                         <tr>
                           <th>Date</th>
@@ -1065,7 +1129,7 @@
                                           '</tr>';                       
                                 }
                                 tbl +=  '<tr>' +
-                                          '<th scope="row">TOTAL</th>' +
+                                          '<th scope="row">Total</th>' +
                                           '<th scope="row">' + i + '</th>' +
                                           '<th scope="row"></th>' +
                                           '<th scope="row"></th>' +

@@ -274,6 +274,24 @@
 			return $query->num_rows();
 		}
 
+		public function getTotalLoanPayments() {
+			$this->db->select_sum('balance')->from('active_loan_apps');
+			$query = $this->db->get();
+			return $query->result();
+		}
+
+		public function getAllMissedPayments() {
+			$this->db->select_sum('balance')->from('active_loan_apps');
+			$query = $this->db->get();
+			return $query->result();
+		}
+
+		public function getTotalShareCapital() {
+			$this->db->select_sum('total_share_capital')->from('share_capital');
+			$query = $this->db->get();
+			return $query->result();
+		}
+
 		public function updateUserPass() {
 			$userID = $this->input->get('userID');
 			$newPass = $this->input->get('newPass');
@@ -301,7 +319,7 @@
 
 		public function viewLedger(){
 			$this->db->select('*')->from('members a');
-			$this->db->join('loan_applications b', 'b.member_id = a.id', 'left');
+			$this->db->join('loan_applications b', 'b.member_id = a.id');
 			$this->db->join('loan_types c', 'c.id = b.loan_applied');
 			$this->db->join('share_capital d', 'd.user_id = a.id');
 			$this->db->order_by('a.id', 'DESC');
