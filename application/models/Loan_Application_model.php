@@ -89,7 +89,9 @@
 
 			// "Select count(*) as num_of_rows from (Select * from loan_applications where loanapp_id like '$id%' order by date_created ASC) loan_applications"
 
-			$loanapp_id = "Select * from loan_applications where loanapp_id like '$id%' order by date_created ASC";
+			// "Select * from loan_applications where loanapp_id like '$id%' order by date_created ASC"
+
+			$loanapp_id = "Select count(*) as num_of_rows from (Select * from loan_applications where loanapp_id like '$id%' order by date_created ASC) loan_applications";
 			$query = $this->db->query($loanapp_id);
 
 			if($query->num_rows() >= 0) {
@@ -137,6 +139,7 @@
 				'loan_amount' => $this->input->post('loan-amount'),
 				'user_payslip' => $post_image,
 				'status' => 'Pending',
+				'remarks' => $this->input->post('loanapp-remarks'),
 				'comaker_1' => $this->input->post('user_username1'),
 				'comaker_2' => $this->input->post('user_username2'),
 				'comaker_3' => $this->input->post('user_username3'),

@@ -865,6 +865,9 @@
                         <h6>Please fill up the form below</h6>
                         <form id="loanAppForm" enctype="multipart/form-data">
                           <div class="form-group">
+                            <input type="hidden" name="loanapp-remarks" id="loanapp_remarks" class="form-control" value="New">
+                          </div>
+                          <div class="form-group">
                             <input type="hidden" name="loanapp-id-no" id="loanapp_id_no" class="form-control" value="">
                           </div>
                           <div class="form-group">
