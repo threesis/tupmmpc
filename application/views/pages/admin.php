@@ -1108,12 +1108,66 @@
                       </div>
                       <div class="modal-body" style="height: auto; max-height: 500px; overflow-y: auto;">
                         <div class="custom-sm ml-2">
-                          <span id="loanType"></span><br>
+                          <!-- <span id="loanType"></span><br>
                           <span id="loanTerm"></span><br>
                           <span id="loanAmt"></span><br>
                           <span id="loanInt"></span><br>
                           <span id="loanGross"></span><br>
-                          <span id="loanMoDed"></span>
+                          <span id="loanMoDed"></span><br>
+                          <span id="loanRetensionFee"></span><br>
+                          <span id="loanServiceFee"></span><br>
+                          <span id="loanOutstandingBal"></span><br> -->
+
+                          <div class="table-responsive">
+                            <table class="table table-bordered">
+                              <tbody>
+                                <tr>
+                                  <td colspan="3" rowspan="2">
+                                    <br>
+                                    <br>
+                                    <span>Loan Receivable - </span><span id="loanType"></span><br>
+                                    <span>Loan Interest - </span><span id="loanTerm"></span><br>
+                                    <span>Deferred Interest Income </span><br>
+                                    <span>Retention Fee 3%</span><br>
+                                    <span>Service Fee 1%</span><br>
+                                    <span>Outstanding Balance of </span><br>
+                                    <span>Cash in Bank</span>
+                                  </td>
+                                  <td class="text-center font-weight-bold">DEBIT</td>
+                                  <td class="text-center font-weight-bold">CREDIT</td>
+                                </tr>
+
+                                <tr>
+                                  <td id="debits" class="text-right">
+                                    <span id="loanAmt"></span><br>
+                                    <span id="loanInt"></span><br>
+                                  </td>
+                                  
+                                  <td id="credits" class="text-right">
+                                    <br>
+                                    <br>
+                                    <span id="loanDefIntInc"></span><br>
+                                    <span id="loanRetensionFee"></span><br>
+                                    <span id="loanServiceFee"></span><br>
+                                    <span id="loanOutstandingBal"></span><br>
+                                    <span id="loanCiB"></span>
+                                  </td>
+                                </tr>
+
+                                <tr>
+                                  <td colspan="3"></td>
+                                  <td id="debitTotal" class="text-right" rowspan="1"></td>
+                                  <td id="creditTotal" class="text-right" rowspan="1"></td>
+                                </tr>
+
+                                <tr>
+                                  <td colspan="3" class="text-right"><strong>NET AMOUNT DUE<strong></td>
+                                  <td colspan="2"  class="text-right" id="totalNetAmt"><span id="loanNetAmt"></span></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          
                           <div id="loanCms" class="mt-3"></div>
                         </div>
                         <div class="table-responsive p-2 mt-1">
@@ -2986,7 +3040,7 @@
 
           calcGrossAmt = calcInterest * calcTerm * Number(calcAmount);
 
-          var calcTotal =  Number(max_amount) + Number(calcGrossAmt);
+          var calcTotal =  Number(calcAmount) + Number(calcGrossAmt);
 
           $('input[name="calc_loan_grossamt"]').val(calcTotal.toFixed(2) + ' pesos');
           $('input[name="calc_loan_monthlydeduc"]').val((calcTotal / calcTerm).toFixed(0) + ' pesos');
@@ -3135,9 +3189,17 @@
             var loanTerm = $('#loan_term').val();
             var interest = loanInterest / 12;
             var grossAmt = interest * loanTerm * Number(loanAmount) ;
-            var calcTotal =  Number(max_amount) + Number(calcGrossAmt);
+            var calcTotal =  Number(loanAmount) + Number(calcGrossAmt);
             var monthlyDeduc = calcTotal/ loanTerm;
             var balance = calcTotal - monthlyDeduc;
+            var RetentionFee = 0;
+            var OutstandingBal = 0;
+            var servFee = loanAmount * 0.01; 
+            var loanNetAmt = loanAmount - servFee;
+
+            var loanDebitTotal = Number(loanAmount)+ Number(grossAmt);
+
+            var loanCreditTotal = grossAmt + RetentionFee + servFee + OutstandingBal + loanNetAmt;
 
             for(var i = 1; i <= loanTerm; i++) {
               var int = interest / loanTerm;
@@ -3152,12 +3214,21 @@
             }
 
             $('#calcBody').html(tableBody);
-            $('#loanType').html('Type of Loan: <span class="font-weight-bold">' + loanType + '</span>');
-            $('#loanTerm').html('Term of Loan: <span class="font-weight-bold">' + loanTerm + ' months</span>');
-            $('#loanAmt').html('Amount of Loan: <span class="font-weight-bold">&#8369;' + loanAmount + '</span>');
-            $('#loanInt').html('Interest on Loan: <span class="font-weight-bold">&#8369;' + grossAmt.toFixed(2) + 'pesos</span>');
-            $('#loanGross').html('Gross Loan: <span class="font-weight-bold">&#8369;' + calcTotal.toFixed(2) + '</span>');
-            $('#loanMoDed').html('Monthly Amortization: <span class="font-weight-bold">&#8369;' + monthlyDeduc.toFixed(0) + '</span>');
+            $('#loanType').html('<span class="font-weight-bold">' + loanType + '</span>');
+            $('#loanTerm').html('<span class="font-weight-bold">' + loanTerm + ' months</span>');
+            $('#loanAmt').html('<span class="font-weight-bold">' + Number(loanAmount).toFixed(2) + '</span>');
+            $('#loanInt').html('<span class="font-weight-bold">' + grossAmt.toFixed(2) + '</span>');
+            $('#loanDefIntInc').html('<span class="font-weight-bold">' + grossAmt.toFixed(2) + '</span>');
+            $('#loanGross').html('<span class="font-weight-bold">' + calcTotal.toFixed(2) + '</span>');
+            $('#loanMoDed').html('<span class="font-weight-bold">' + monthlyDeduc.toFixed(0) + '</span>');
+            $('#loanOutstandingBal').html('<span class="font-weight-bold">' + OutstandingBal + '</span>');
+            $('#loanRetensionFee').html('<span class="font-weight-bold">' + RetentionFee + '</span>');
+            $('#loanServiceFee').html('<span class="font-weight-bold">' + servFee.toFixed(2) + '</span>');
+            $('#loanCiB').html('<span class="font-weight-bold">' + loanNetAmt.toFixed(2) + '</span>');
+            $('#loanNetAmt').html('<span class="font-weight-bold">' + loanNetAmt.toFixed(2) + '</span>');
+            $('#debitTotal').html('<span class="font-weight-bold">' + loanDebitTotal.toFixed(2) + '</span>');
+            $('#creditTotal').html('<span class="font-weight-bold">' + loanCreditTotal.toFixed(2) + '</span>');
+
             $('#loanCms').html(returnLoanCms);
             $('#loanAppCalculations').modal('show');
           } else {
