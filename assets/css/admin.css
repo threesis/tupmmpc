@@ -1,52 +1,89 @@
 html, body {
-  background-image: linear-gradient(to top, #e6e9f0 0%, #eef1f5 100%);
-  height: 100%;
   overflow: auto;
-  /* background-image: url(../img/tupbg.jpg); */
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  background-size: cover;
-  font-family: 'Rambla', 'sans-serif';
+  font-family: "Segoe UI", Rambla, Arial, sans-serif;
+  background-image: linear-gradient(to top, #dfe9ec 0%, #dfe9ec 100%);
+}
+
+.wrapper {
+  margin-top: 4.5rem;
 }
 
 /* Navbar */
-.navbar-color {
-  color: white;
-  background-color: #00680a;
+.navbar {
+  border-bottom: 1px solid rgba(0,0,0,0.25);
 }
 
-
 .navbar-brand img {
-  width: 55px;
+  width: 50px;
   margin: -10px 5px -8px 0;
   height: auto;
 }
 
 .navbar-brand {
-  font-size: 21px;
-  letter-spacing: 1px;
+  color: rgba(0, 0, 0, 0.75);
+  font-size: 20px;
+  letter-spacing: 0.5px;
 }
 
-.nav-item {
-  font-size: 11px;
-  letter-spacing: 1.2px;
+.navbar-nav .nav-link {
+  font-size: 13px;
+  font-weight: bold;
+  color: #66757f !important;
+}
+
+.navbar-nav .nav-link:hover, .nav-link:focus {
+  color: #006600 !important;
+  text-decoration: none;
 }
 
 .dropdown-menu {
   font-size: 13px;
 }
 
+.dropdown-divider {
+  height: 0;
+  margin: 1rem 0 0.5rem 0;
+  overflow: hidden;
+  border-top: 1px solid #e9ecef;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.50rem 1.25rem 0.75rem;
+  clear: both;
+  font-weight: 400;
+  color: #66757f;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  color: #28a745;
+  text-decoration: none;
+  background-color: #f8f9fa;
+}
+
 .dropdown-item.active, .dropdown-item:active {
   color: #fff;
   text-decoration: none;
-  background-color: #28a745;
+  background-color: #007bff;
+}
+
+.dropdown-item.disabled, .dropdown-item:disabled {
+  color: #6c757d;
+  background-color: transparent;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  color: #006600;
+  text-decoration: none;
+  background-color: #f8f9fa;
 }
 /* /Navbar */
 
-.wrapper {
-  margin-top: 5rem;
-}
 
 .card-body-mh {
   min-height: 67.5vh;
@@ -63,26 +100,45 @@ html, body {
 }
 
 /* Profile Interface */
-#home-list, #loans-list, #members-list, #transactions-list, #records-list, #add-member, #dashboard, #addLoanBtn {
+#permission-mngmt, #dashboard-tab, #loans-tab, #loanapps-tab, #loanrecords-tab, #members-tab, #transactions-tab, 
+#records-tab, #comakers-tab, #sharecap-tab, #applyloan-tab, #add-user, #dashboard, #search-user, #addloan-perm1, 
+#searchuser-perm1, #adduser-perm2, #websettings-tab  {
   display: none;
 }
 
-.view-profile-btn {
+/* loan applications */
+#approve-cancel-PL, #issue-cheque-AL {
+  display: none;
+}
+
+#dashBoardPerms, #loanModPerm, #memberModPerm, #transactionModPerm, #recordModPerm, #deleteuser-perm3 {
+  display: none;
+}
+
+.editloan-perm2, .archiveloan-perm3, .viewuser-perm4, .dashboard-perm1, .none,   {
   display: none;
 }
 
 .card-text .admin-name {
+  color: #14171a;
   margin-top: 30px;
   font-size: 17px;
 }
 
-.card-text .position-text {
-  margin-top: -8px;
-  font-size: 15px;
+.info-text {
+  font-size: 14px;
+}
+
+.card-text .info-text {
+  margin-top: -6px;
 }
 
 .custom-sm {
   font-size: 15px;
+}
+
+.custom-xs {
+  font-size: 0.9rem;
 }
 
 .card-title {
@@ -91,7 +147,16 @@ html, body {
 
 .rounded-circle {
   width: 105px;
+  height: 105px;
+  background-size: cover;
+  border-radius: 50% 50% 50% 50%;
+}
+
+.member-icon-modal {
+  width: 45px;
   height: auto;
+  position: absolute;
+  border-radius: 50%;
 }
 
 .img-thumbnail {
@@ -102,15 +167,10 @@ html, body {
   height: 140px;
 }
 
-.card .profile-menu {
-  padding: 0 15px;
-  font-size: 15px;
-}
-
 .modal-text .memberprofile-name {
   margin-top: 20px;
   margin-left: 35px;
-  font-size: 17px;
+  font-size: 18px;
 }
 
 .modal-text .profile-text {
@@ -119,14 +179,15 @@ html, body {
 }
 
 .profile-menu .list-group-item {
-  padding: 8px;
+  font-size: 14px;
+  padding: 10px 15px;
+  border-top: 0.5px solid rgba(0, 0, 0, 0.125);
 }
 
 .list-group-item.active {
   z-index: 2;
-  color: #fff;
-  background-color: #00680a;
-  border-color: #00680a;
+  color: #000;
+  font-weight: bold;
 }
 /** /Profile Interface **/
 
@@ -134,9 +195,10 @@ html, body {
 /** Members List **/
 .list-group .member-icon {
   width: 50px;
-  height: auto;
+  height: 50px;
   position: absolute;
-  border-radius: 50%;
+  background-size: cover;
+  border-radius: 50% 50% 50% 50%;
 }
 
 .member-name {
@@ -151,6 +213,31 @@ html, body {
   margin-bottom: 5px;
   margin-left: 4rem;
 }
+
+.list-group-item-loanapp {
+  margin-bottom: 25px;
+}
+
+
+/** Loans Tab **/
+.userLoanInfo {
+  font-weight: normal;
+}
+
+.btn-green {
+  color: #28a745;
+  background-color: #fff;
+  border-color: #28a745;
+}
+
+.btn-green:hover {
+  background-color: #c1f0cc;
+}
+
+.btn-green:focus, .btn-green.focus {
+  box-shadow: 0 0 0 0.1rem rgba(40, 167, 69, 0.3);
+}
+
 
 
 /** Edit Position Module **/
@@ -195,12 +282,26 @@ html, body {
 }
 /** /Statistics Interface **/
 
+div.dt-buttons{
+position:relative;
+float:left;
+}
 
+div.dataTables_paginate {
+ position:relative;
+float:right; 
+}
+
+div.dataTables_info {
+  position:relative;
+  float:left; 
+}
 
 /** Scrollbar style **/
 /* width */
 ::-webkit-scrollbar {
     width: 8px;
+    height: 10px;
 }
  
 /* Handle */
@@ -212,6 +313,22 @@ html, body {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: gray; 
+}
+
+
+/*Columns*/
+
+.col-sm-padding {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+/*Wrapper Settings*/
+
+h2 {
+  color: #14171a;
+  font-weight: bold;
+  font-size: 22px;
 }
 
 

@@ -17,7 +17,6 @@
 			return $this->db->insert('members', $data);
 		}
 
-
 		public function signin($username, $password) {
 			// Validate
 			$this->db->where('username', $username);
@@ -29,15 +28,5 @@
 			} else {
 				return false;
 			}
-
-			/* $cmd = "select * from members where username = '" . $username . "' and password = '". $password . "'";
-			$query = $this->db->query($cmd);
-			$output = $query->result_array();
-
-			if(count($output) == 1) {
-				return $output;
-			} else {
-				return false;
-			} */
 		}
 	}

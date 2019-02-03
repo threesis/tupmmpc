@@ -8,59 +8,34 @@
 				// Redirect to sign in page
 				redirect('signin');
 			} elseif($this->session->userdata('signed_in')) {
-				// Redirect to admin page
-				$this->load->view('pages/admin');
+				$data['user_image'] = $this->administrator_model->retrieveUserInfo();
+				$data['members'] = $this->administrator_model->getAllMembers();
+				$data['loansApplied'] = $this->administrator_model->getAllAppliedLoans();
+				$data['pendingLoans'] = $this->administrator_model->getAllPendingLoans();
+				$data['approvedLoans'] = $this->administrator_model->getAllApprovedLoans();
+				$data['ongoingLoans'] = $this->administrator_model->getAllActiveLoans();
+
+				$this->load->view('pages/admin', $data);
 			} else {
 				show_404();
 			}
 		}
 
-
-		// Retrieve loan function
-		public function get_loans() {
-			// Get all loans from database -> model
-			$result = $this->administrator_model->get_all_loan_types();
+		//hget web infos 
+		public function get_infos() {
+			$result = $this->administrator_model->get_infos();
 			echo json_encode($result);
 		}
 
-		// Add loan function
-		public function add_loan() {
+		public function save_infos() {
 			// Add loan -> modal
-			$result = $this->administrator_model->register_loan();
+			$result = $this->administrator_model->save_infos();
 			$msg['success'] = false;
-			$msg['type'] = 'add';
 			if($result) {
 				// If there are data returned from the model.. 
 				$msg['success'] = true;
 			}
 			// Convert $msg to json type to become readable thru ajax request
-			echo json_encode($msg);
-		}
-
-		// Edit loan function
-		public function edit_loan() {
-			$result = $this->administrator_model->edit_loan();
-			echo json_encode($result);
-		}
-
-		// Update loan function
-		public function update_loan() {
-			$result = $this->administrator_model->update_loan();
-			$msg['success'] = false;
-			if($result) {
-				$msg['success'] = true;
-				$msg['type'] = 'update';
-			}
-			echo json_encode($msg);
-		}
-
-		// Delete loan function
-		public function delete_loan() {
-			$result = $this->administrator_model->delete_loan();
-			$msg['success'] = false;
-			if($result) {
-				$msg['success'] = true;
-			}
 			echo json_encode($msg);
 		}
 
@@ -97,7 +72,12 @@
 			$result = $this->administrator_model->search_user();
 			echo json_encode($result);
 		}
-		
+
+		public function searchLoan() {
+			$result = $this->administrator_model->searchLoan();
+			echo json_encode($result);
+		} 
+
 		// Register member function
 		public function add_member() {
 			$result = $this->administrator_model->add_member();
@@ -119,6 +99,23 @@
 			echo json_encode($result);
 		}
 
+		// Get loan details
+		public function getLoanAppDetails() {
+			$result = $this->loan_model->getLoanAppDetails();
+			echo json_encode($result);
+		}
+
+		// Manage loan apps
+		public function manageLoanApps() {
+			$result = $this->loan_model->manageLoanApps();
+			echo json_encode($result);
+		}
+
+		public function cancelLoanApp() {
+			$result = $this->loan_model->cancelLoanApp();
+			echo json_encode($result);
+		}
+
 		public function testing() {
 			$result = $this->administrator_model->testing();
 			echo json_encode($result);
@@ -128,4 +125,99 @@
 			$result = $this->administrator_model->testing1();
 			echo json_encode($result);
 		}
+
+		public function populateLoanAppManagementPerm() {
+			$result = $this->administrator_model->populateLoanAppManagementPerm();
+			echo json_encode($result);
+		}
+
+		public function getRoles() {
+			$result = $this->administrator_model->getRoles();
+			echo json_encode($result);
+		}
+
+		public function retrieveParentOptions() {
+			$result = $this->administrator_model->retrieveParentOptions();
+			echo json_encode($result);
+		}
+
+		public function retrieveChildOptions() {
+			$result = $this->administrator_model->retrieveChildOptions();
+			echo json_encode($result);
+		}
+
+		public function retrieveRolePermissions() {
+			$result = $this->administrator_model->retrieveRolePermissions();
+			echo json_encode($result);
+		}
+
+		public function setPermissions() {
+			$result = $this->administrator_model->setPermissions();
+			echo json_encode($result);
+		}
+
+		public function setPermissions2() {
+			$result = $this->administrator_model->setPermissions2();
+			echo json_encode($result);
+		}
+
+		public function verifyAccountPassword() {
+			$result = $this->administrator_model->verifyAccountPassword();
+			echo json_encode($result);
+		}
+
+		public function retrieveUserInfo() {
+			$result = $this->administrator_model->retrieveUserInfo();
+			echo json_encode($result);
+		}
+
+		public function getAllMembers() {
+			$result = $this->administrator_model->getAllMembers();
+			echo json_encode($result);
+		}
+
+		public function getMembers() {
+			$result = $this->administrator_model->getMembers();
+			echo json_encode($result);
+		}
+
+		public function retrieveCommitteeInstances() {
+			$result = $this->administrator_model->retrieveCommitteeInstances();
+			echo json_encode($result);
+		}
+
+		public function updateUserInfo() {
+			$config['upload_path']   = './assets/img/profile_img';
+			$config['allowed_types'] = 'gif|png|jpg';
+			$config['max_size'] 	 = 5000;
+			$config['max_width']     = 0;
+			$config['max_height']    = 0;
+
+			$this->load->library('upload', $config);
+
+			if(!$this->upload->do_upload()) {
+				$error = array('error' => $this->upload->display_errors());
+				$user_image = 'noimage.jpg';
+			} else {
+				$data = array('upload_data' => $this->upload->data());
+				$user_image = $_FILES['userfile']['name'];
+			}
+
+			$result = $this->administrator_model->updateUserInfo($user_image);
+			echo json_encode($result);
+		}
+
+		public function updateUserPass() {
+			$result = $this->administrator_model->updateUserPass();
+			echo json_encode($result);
+		}
+		
+		public function encryptCurrentPass() {
+			$result = array(
+				'currentPass' => md5($this->input->get('currentPass')),
+				'desiredNewPass' => md5($this->input->get('desiredNewPass'))
+			);
+			echo json_encode($result);
+		}
+		
 	}
