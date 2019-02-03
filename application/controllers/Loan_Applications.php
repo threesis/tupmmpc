@@ -121,8 +121,9 @@
 
  		if(!$this->upload->do_upload()) {
  			$error = array('error' => $this->upload->display_errors());
- 			echo $this->upload->display_errors(); die();
  			$user_image = 'noimage.jpg';
+
+ 			echo $error['error'];
  		} else {
  			$data = array('upload_data' => $this->upload->data());
  			$user_image = $_FILES['userfile']['name'];

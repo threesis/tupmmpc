@@ -29,7 +29,7 @@
 			$this->db->join('loan_types b', 'b.id = a.loan_applied');
 			$this->db->join('members c', 'c.id = a.member_id', 'left');
 			$this->db->where('status', 'Pending');
-			$this->db->order_by('a.take_home_pay', 'ASC');
+			// $this->db->order_by('a.take_home_pay', 'ASC');
 			$query = $this->db->get();
 			return $query->result();
 		}

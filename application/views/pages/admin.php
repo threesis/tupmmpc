@@ -2569,7 +2569,6 @@
                     passInterest(interest);
 
                     agik(interest);
-;
                   }, error: function() {
                     alert('New User function returned false');
                   }
@@ -2989,7 +2988,7 @@
 
           var calcTotal =  Number(max_amount) + Number(calcGrossAmt);
 
-          $('input[name="calc_loan_grossamt"]').val(calcGrossAmt.toFixed(2) + ' pesos');
+          $('input[name="calc_loan_grossamt"]').val(calcTotal.toFixed(2) + ' pesos');
           $('input[name="calc_loan_monthlydeduc"]').val((calcTotal / calcTerm).toFixed(0) + ' pesos');
         }
 
@@ -3146,7 +3145,7 @@
               bal = balance - bal;
               tableBody +=  '<tr>' +
                               '<th scope="row">' + i + '</th>' +
-                              '<td>' + int.toFixed(4) + '%</td>' +
+                              '<td>&#8369;' + grossAmt.toFixed(0) + 'pesos</td>' +
                               '<td>&#8369;' + monthlyDeduc.toFixed(0) + '</td>' +
                               '<td>&#8369;' + bal.toFixed(0) + '</td>' +
                             '</tr>';
@@ -3156,8 +3155,8 @@
             $('#loanType').html('Type of Loan: <span class="font-weight-bold">' + loanType + '</span>');
             $('#loanTerm').html('Term of Loan: <span class="font-weight-bold">' + loanTerm + ' months</span>');
             $('#loanAmt').html('Amount of Loan: <span class="font-weight-bold">&#8369;' + loanAmount + '</span>');
-            $('#loanInt').html('Interest on Loan: <span class="font-weight-bold">' + interest.toFixed(4) + '%</span>');
-            $('#loanGross').html('Gross Loan: <span class="font-weight-bold">&#8369;' + grossAmt.toFixed(2) + '</span>');
+            $('#loanInt').html('Interest on Loan: <span class="font-weight-bold">&#8369;' + grossAmt.toFixed(2) + 'pesos</span>');
+            $('#loanGross').html('Gross Loan: <span class="font-weight-bold">&#8369;' + calcTotal.toFixed(2) + '</span>');
             $('#loanMoDed').html('Monthly Amortization: <span class="font-weight-bold">&#8369;' + monthlyDeduc.toFixed(0) + '</span>');
             $('#loanCms').html(returnLoanCms);
             $('#loanAppCalculations').modal('show');
