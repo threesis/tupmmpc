@@ -256,7 +256,7 @@
 		public function getMembers() {
 			$this->db->select('*');
 			$this->db->from('loan_applications a');
-			$this->db->join('members b', 'b.id = a.member_id');
+			$this->db->join('members b', 'b.id = a.member_id', 'b.username = a.comaker_1 AND a.comaker_2 AND a.comaker_3');
 			$this->db->join('loan_types c', 'c.id = a.loan_applied', 'left');
 			$query = $this->db->get();
 			return $query->result();

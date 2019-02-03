@@ -13,6 +13,7 @@
 			$this->db->select('*')->from('loan_applications a');
 			$this->db->join('members b', 'b.id = a.member_id', 'left');
 			$this->db->where('a.member_id', $member_id);
+
 			$query = $this->db->get();
 
 			if ($query->num_rows() == 0) {
@@ -44,6 +45,7 @@
 			
 			$this->db->where_not_in('id', $data);
 			$this->db->order_by('date_updated', 'ASC');
+
 			$query = $this->db->get('loan_types');
 
 			if($query->num_rows() > 0) {
@@ -57,6 +59,7 @@
 		{
 			$this->db->order_by('date_updated', 'DESC limit 1');
 			$this->db->where('id', '71');
+
 			$query = $this->db->get('loan_types');
 
 			if($query->num_rows() > 0) {
@@ -99,6 +102,7 @@
 			$loan_id = $this->input->get('loan_id');
 			$this->db->order_by('date_updated', 'DESC limit 1');
 			$this->db->where('id', $loan_id);
+
 			$query = $this->db->get('loan_types');
 
 			if ($query->num_rows() > 0 ) {
@@ -113,6 +117,7 @@
 			$loan_id = $this->input->get('loan_id');
 			$this->db->order_by('date_updated', 'DESC limit 1');
 			$this->db->where('id', $loan_id);
+
 			$query = $this->db->get('loan_types');
 
 			if ($query->num_rows() > 0 ) {
@@ -209,7 +214,7 @@
 				return false;
 			}
 		}
-
+		
 		public function cmloanappData() 
 		{
 			$loanapp_data = $this->input->get('loanapp_data');
@@ -280,5 +285,4 @@
 
 		// 	return $query->result();
 		// }
-		
 	}

@@ -76,6 +76,8 @@ html, body {
   color: #6c757d;
   background-color: transparent;
 }
+/* /Navbar */
+
 
 .dropdown-item.active, .dropdown-item:active {
   color: #006600;

@@ -74,16 +74,6 @@
     <div class="wrapper">
       <div class="container">
         <div class="msg">
-          <?php if($this->session->flashdata('user_signedin')): ?>
-            <?php echo '<p class="alert bg-success alert-dismissable fade show text-center" id="loginWelcomeMsg" role="alert">
-                      <button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">
-                      <span aria-hidden="true">&times;</span></button><a class="h7 text-white">'.$this->session->flashdata('user_signedin').
-                      $this->session->userdata('username').'!'.'</a></p>';
-            ?>
-            <script type="text/javascript">
-              $('#loginWelcomeMsg').fadeIn().delay(4000).fadeOut('slow');
-            </script>
-          <?php endif; ?>
         </div>
         <div class="row">
         <!-- Profile -->
@@ -515,7 +505,7 @@
                 <div class="card-header shadow-sm">
                   <ul class="nav nav-tabs card-header-tabs">
                     <li class="ml-2 pb-4">
-                      <h2 class="card-title">Loan Applications</h2>
+                      <h2 class="card-title">LOAN APPLICATIONS</h2>
                     </li>
                     <li class="nav-item ml-auto loan-apps">
                       <a class="nav-link active" data-toggle="tab" href="#pending_loans">Pending<span id="pendingNotif" class="badge badge-secondary ml-1"></span></a>
@@ -638,8 +628,6 @@
                       </div>
                     </div>
                   </div>
-
-                  
 
                   <div class="modal fade" id="confirmationLoanAppModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
