@@ -255,8 +255,8 @@
 		}
 
 		public function cmUpdateAttachment($user_image) {
-			$id = $this->input->post('id');
-			$lid = $this->input->post('lid');
+			$id = $this->input->post('cm_id');
+			$lid = $this->input->post('loan_App_id');
 
 			$this->db->where('loanapp_id', $lid);
 

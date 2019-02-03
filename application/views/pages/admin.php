@@ -3280,7 +3280,7 @@
           // fix upload button for co maker attachment and design
           function Comakers() {
             var user_id = '<?php echo $this->session->userdata('user_id'); ?>';
-
+            
             $.ajax({
               type: 'ajax',
               method: 'get',
@@ -3334,7 +3334,7 @@
                     var cmCount = 0;
                     var cnt = '';
                     var cm = '';
-                    var cm_uploads =  '<form id="cmAttachmentForm" enctype="multipart/form-data" method="post">' +
+                    var cm_uploads =  '<form id="cmAttachmentForm" enctype="multipart/form-data">' +
                                         '<div class="form-group">'+
                                         '<input type="hidden" class="form-control" id="cm_id" name="cm_id" value="'+ get_username +'">' +
                                         '<input type="hidden" class="form-control" id="loan_App_id" name="loan_App_id" value="'+ result[0].loanapp_id +'">' +
@@ -3427,10 +3427,6 @@
                   var cm_id = $('#cm_id').val();
                   var lapp_id = $('#loan_App_id').val(); 
                   var cmdata = new FormData($('#cmAttachmentForm')[0]);
-
-                  alert(cmdata.get('cm_id'));
-                  alert(cmdata.get('loan_App_id'));
-                  alert(cmdata.get('userfile'));
 
                   $.ajax({
                     type: 'ajax',
