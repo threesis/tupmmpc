@@ -108,8 +108,8 @@
           <div class="col-sm-padding col-sm-12 col-md-8 col-lg-9 mb-3">
             <div class="card">
               <div class="tab-content">
-                <!-- Home Part -->
-                <div class="tab-pane fade show active" id="dashboardTab" role="tabpanel" aria-labelledby="home-tab">
+                <!--Admin Home Part -->
+                <div class="tab-pane fade show active" position="Admin" id="dashboardTab" role="tabpanel" aria-labelledby="home-tab">
                   <h2 class="card-header shadow-sm">Dashboard</h2>
                   <div class="card-body">
                     <div class="row mb-4">
@@ -222,6 +222,110 @@
                     </div>
                   </div>
                 </div>
+
+                <!--Member Home Part -->
+                <!-- <div class="tab-pane fade show active" id="dashboardTab" position="Member" role="tabpanel" aria-labelledby="home-tab">
+                  <h2 class="card-header shadow-sm">Dashboard</h2>
+                  <div class="card-body">
+                    <div class="row mb-4">
+                      <div class="col-md-6">
+                        <div class="card rounded shadow-sm">
+                          <div class="card-body p-3">
+                            <div class="row">
+                              <div class="col-6">
+                                <h6 id="dashboardMemberAppliedLoans" class="mb-0 text-warning" style="font-size: 2rem">9</h6>
+                                <footer class="text-muted" style="font-size: 0.8rem">Total Loans <cite>Applied</cite></footer>
+                              </div>
+                              <div class="col-6">
+                                <i class="far fa-file-alt text-secondary float-right" style="font-size: 2.5rem"></i>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="card-footer bg-warning p-1">
+                            <small class="text-white ml-2">Applied</small>
+                            <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="card rounded shadow-sm">
+                          <div class="card-body p-3">
+                            <div class="row">
+                              <div class="col-6">
+                                <h6 id="dashboardMemberPendingLoans" class="mb-0 text-info" style="font-size: 2rem">8</h6>
+                                <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Pending</cite></footer>
+                              </div>
+                              <div class="col-6">
+                                <i class="far fa-pause-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="card-footer bg-info p-1">
+                            <small class="text-white ml-2">Pending</small>
+                            <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row mb-4">
+                      <div class="col-md-6">
+                        <div class="card rounded shadow-sm">
+                          <div class="card-body p-3">
+                            <div class="row">
+                              <div class="col-6">
+                                <h6 id="dashboardMemberApprovedLoans" class="mb-0 text-success" style="font-size: 2rem"><?php echo $approvedLoans; ?></h6>
+                                <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Approved</cite></footer>
+                              </div>
+                              <div class="col-6">
+                                <i class="far fa-check-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="card-footer bg-success p-1">
+                            <small class="text-white ml-2">Approved</small>
+                            <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="card rounded shadow-sm">
+                          <div class="card-body p-3">
+                            <div class="row">
+                              <div class="col-6">
+                                <h6 id="dashboardMemberActiveLoans" class="mb-0 text-primary" style="font-size: 2rem"><?php echo $ongoingLoans; ?></h6>
+                                <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Active</cite></footer>
+                              </div>
+                              <div class="col-6">
+                                <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="card-footer bg-primary p-1">
+                            <small class="text-white ml-2">On-going</small>
+                            <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="card rounded shadow-sm">
+                          <div class="card-body p-3">
+                            <div class="row">
+                              <div class="col-5">
+                                <h6 class="mb-0 text-primary" style="font-size: 1.2rem">Monthly Loan Track</h6>
+                                <footer class="text-muted" style="font-size: 0.8rem"><cite>in 2018-2019</cite></footer>
+                              </div>
+                              <div class="col-7">
+                                <canvas id="line-chart"></canvas>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
 
                 <!-- Loans Part -->
                 <div class="tab-pane fade show" id="loansTab" role="tabpanel" aria-labelledby="home-tab">
