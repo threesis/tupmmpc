@@ -118,17 +118,7 @@
 			$result = $this->loan_model->cancelLoanApp();
 			echo json_encode($result);
 		}
-
-		public function testing() {
-			$result = $this->administrator_model->testing();
-			echo json_encode($result);
-		}
-
-		public function testing1() {
-			$result = $this->administrator_model->testing1();
-			echo json_encode($result);
-		}
-
+		
 		public function populateLoanAppManagementPerm() {
 			$result = $this->administrator_model->populateLoanAppManagementPerm();
 			echo json_encode($result);
@@ -228,6 +218,11 @@
 			echo json_encode($result);
 		}
 
+		public function updateLedger(){
+			$result = $this->administrator_model->updateLedger();
+			echo json_encode($result);
+		}
+
 		// Dashboard 
 		public function getTotalLoanPayments(){
 			$result = $this->administrator_model->getTotalLoanPayments();
@@ -241,6 +236,11 @@
 
 		public function getTotalShareCapital(){
 			$result = $this->administrator_model->getTotalShareCapital();
+			echo json_encode($result);
+		}
+
+		public function updateShareCapital(){
+			$result = $this->administrator_model->updateShareCapital();
 			echo json_encode($result);
 		}
 		

@@ -26,4 +26,14 @@
 			}
 		}
 
+		public function get_all_officers() {
+			$this->db->where_not_in('position', '2');
+			$query = $this->db->from('members')->join('roles', 'roles.role_id = members.position')->get();
+			if($query->num_rows() > 0) {
+				return $query->result();
+			} else { 
+				return false;
+			}
+		}
+
 	}

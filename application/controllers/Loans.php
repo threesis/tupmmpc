@@ -98,6 +98,26 @@
 			echo json_encode($result);
 		}
 
+		public function showLoanDeductions(){
+			$result = $this->loan_model->showLoanDeductions();
+			echo json_encode($result);
+		}
+
+		public function addLoanDeductions(){
+			$result = $this->loan_model->addLoanDeductions();
+			echo json_encode($result);
+		}
+
+		public function updateLoanDeductions(){
+			$result = $this->loan_model->updateLoanDeductions();
+			echo json_encode($result);
+		}
+
+		public function deleteLoanDeductions(){
+			$result = $this->loan_model->deleteLoanDeductions();
+			echo json_encode($result);
+		}
+
 		public function archiveLoan() {
 			$result = $this->loan_model->archiveLoan();
 			$msg['success'] = false;

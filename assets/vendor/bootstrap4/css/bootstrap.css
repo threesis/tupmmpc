@@ -1711,12 +1711,12 @@ pre code {
 
 .table-sm th,
 .table-sm td {
-  padding: 0.3rem;
+  padding: 0.75rem;
 }
 
 .table-md th,
 .table-md td {
-  padding: 0.5rem;
+  padding: 0.75rem;
 }
 
 .table-bordered {
@@ -1734,7 +1734,7 @@ pre code {
 }
 
 .table-striped tbody tr:nth-of-type(odd) {
-  background-color: rgba(0, 0, 0, 0.025);
+  background-color: rgba(0, 0, 0, 0.015);
 }
 
 .table-hover tbody tr:hover {
@@ -5843,7 +5843,6 @@ button.close-sm {
   color: inherit;
   background-color: #f7f7f7;
   border-bottom: 1px solid #ebebeb;
-  `: calc(0.3rem - 1px);
   border-top-right-radius: calc(0.3rem - 1px);
 }
 

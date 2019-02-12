@@ -60,8 +60,12 @@
 			if($input != '') {
 				$this->db->like('name', $input);
 			}
-			$this->db->order_by('name', 'ASC');
-			$query = $this->db->from('members')->join('roles', 'roles.role_id = members.position')->join('share_capital', 'share_capital.user_id = members.id')->get();
+			$this->db->select('*')->from('members a','left');
+			$this->db->join('roles b', 'b.role_id = a.position');
+			$this->db->join('share_capital c', 'c.user_id = a.id')->select_max('total_share_capital');
+			$this->db->group_by('id');
+			$this->db->order_by('register_date', 'DESC');
+			$query = $this->db->get();
 			return $query->result();
 		}
 
@@ -99,12 +103,27 @@
 				$share_cap_data = array(
 					'user_id' => $last_id,
 					'share_capital' => $this->input->post('sharecap'),
-					'total_share_capital' => $this->input->post('sharecap')
+					'total_share_capital' => $this->input->post('startingShareCap'),
+					'or_number' => $this->input->post('orNum'),
+					'status' => 'paid',
+					'updated_for' => date('Y-m-d'),
+					'date_updated' => date('Y-m-d')
 				);
 
 				$this->db->insert('share_capital', $share_cap_data);
 				if($this->db->affected_rows() > 0) {
-					return true;
+					$total = $this->db->query("select sum(share_capital+total_share_capital) as tot from share_capital where user_id = $last_id group by sc_id DESC LIMIT 1")->row()->{'tot'};
+					$data = array(
+						'user_id' => $last_id,
+						'share_capital' => $this->input->post('sharecap'),
+						'total_share_capital' => $total,
+						'status' => 'unpaid',
+						'updated_for' => date('Y-m-d', strtotime('+1 month'))
+					);
+					$this->db->insert('share_capital', $data);
+					if($this->db->affected_rows() > 0) {
+						return true;
+					}
 				}
 			} else {
 				return false;
@@ -129,71 +148,12 @@
 			}
 		}
 
-		public function testing() {
-			$id = $this->input->get('id');
-			$this->db->where('role_id', $id);
-			$this->db->where('access', '1');
-			$query = $this->db->select('*')->from('role_perm')->join('permissions', 'permissions.perm_id = role_perm.perm_id')->get();
-				return $query->result();
-		}
-
-		public function testing1() {
-			$id = $this->input->get('id');
-			$role_id = $this->input->get('role_id');
-			$this->db->where('perm_id', $id);
-			$this->db->where('role_id', $role_id);
-			$this->db->where('access', '1');
-			$query = $this->db->select('*')->from('role_perm')->join('permissions_roles', 'permissions_roles.pr_id = role_perm.perm_role_id')->get();
-				return $query->result();
-		}
-
-		public function populateLoanAppManagementPerm() {
-			$role_id = $this->input->get('role_id');
-			$this->db->where('perm_id', 5);
-			$this->db->where('role_id', $role_id);
-			$this->db->where('access', '1');
-			$query = $this->db->select('*')->from('role_perm')->join('permissions_roles', 'permissions_roles.pr_id = role_perm.perm_role_id')->get();
-				return $query->result();
-		}
-
-
 		public function getRoles() {
 			$this->db->order_by('role_id', 'ASC');
 			$query = $this->db->get('roles');
 			if($query->num_rows() > 0) {
 				// If there are data detected in the db, return the rows to the controller
 				return $query->result();
-			} else {
-				return false;
-			}
-		}
-
-		public function retrieveRolePermissions() {
-			$roleName = $this->input->get('role');
-			$this->db->where('role_name', $roleName);
-			$query = $this->db->select('*')->from('roles')->join('role_perm', 'role_perm.role_id = roles.role_id')->join('permissions', 'permissions.perm_id = role_perm.perm_id')->join('permissions_roles', 'permissions_roles.pr_id = role_perm.perm_role_id')->get();
-				return $query->result();
-		}
-
-		public function setPermissions() {
-			$array_id = $this->input->get('ids');
-			$this->db->set('access', 1);
-			$this->db->where_in('rp_id', $array_id);
-			$this->db->update('role_perm');
-			if($this->db->affected_rows() > 0) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		public function setPermissions2() {
-			$array_id2 = $this->input->get('ids');
-			$this->db->set('access', 0);
-			$this->db->where_in('rp_id', $array_id2);
-			$this->db->update('role_perm');
-			if($this->db->affected_rows() > 0) {
-				return true;
 			} else {
 				return false;
 			}
@@ -292,6 +252,40 @@
 			return $query->result();
 		}
 
+		public function updateShareCapital() {
+			date_default_timezone_set('Asia/Manila');
+
+			$or = $this->input->get('ornum');
+			$ids = json_decode($this->input->get('check'));
+
+			if($ids){
+				foreach ($ids as $id) {
+					$share = $this->db->query("select share_capital as share from share_capital where user_id = $id")->row()->{'share'};
+					$total = $this->db->query("select sum(share_capital+total_share_capital) as tot from share_capital where user_id = $id group by sc_id DESC LIMIT 1")->row()->{'tot'};
+					$lastID = $this->db->query("select sc_id as id from share_capital where user_id = $id group by total_share_capital DESC LIMIT 1")->row()->{'id'};
+
+						$this->db->set('or_number', $or);
+						$this->db->set('status', 'paid');
+						$this->db->set('date_updated', date('Y-m-d'));
+						$this->db->where('sc_id', $lastID);
+						$this->db->update('share_capital');
+
+						$data = array(
+							'user_id' => $id,
+							'share_capital' => $share,
+							'total_share_capital' => $total,
+							'status' => 'unpaid',
+							'updated_for' => date('Y-m-d', strtotime('+1 month'))
+						);
+						$this->db->insert('share_capital', $data);
+				}
+				return true;
+			} else {
+				return false;
+			}
+
+		}
+
 		public function updateUserPass() {
 			$userID = $this->input->get('userID');
 			$newPass = $this->input->get('newPass');
@@ -306,22 +300,55 @@
 		}
 
 		public function getShareCapitalRec(){
-			$input = $this->input->get('query');
-			if($input != '') {
-				$this->db->like('name', $input);
+			$month = $this->input->get('mo');
+			$year = $this->input->get('yr');
+			if(($month || $year) != ''){
+				$this->db->like('MONTH(updated_for)', $month);
+				$this->db->like('YEAR(updated_for)', $year);
 			}
-			$this->db->select('*')->from('share_capital a');
+			$this->db->select('*')->select_min('total_share_capital')->from('share_capital a');
 			$this->db->join('members b', 'b.id = a.user_id', 'left');
-			$this->db->order_by('a.id', 'DESC');
+			$this->db->group_by('user_id');
+			$this->db->order_by('status', 'DESC');
 			$query = $this->db->get();
 			return $query->result();
 		}
 
 		public function viewLedger(){
-			$this->db->select('*')->from('members a');
-			$this->db->join('loan_applications b', 'b.member_id = a.id');
-			$this->db->join('loan_types c', 'c.id = b.loan_applied');
-			$this->db->join('share_capital d', 'd.user_id = a.id');
+			$month = $this->input->get('mo');
+			$year = $this->input->get('yr');
+			$user = $this->input->get('name');
+			$or = $this->input->get('or');
+			if(($month || $year || $user || $or) != ''){
+				$this->db->like('MONTH(payment_date)', $month);
+				$this->db->like('YEAR(payment_date)', $year);
+				$this->db->like('name', $user);
+				$this->db->like('or_no', $or);
+			}
+			$this->db->select('*')->from('active_loan_apps a');
+			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
+			$this->db->join('members c', 'c.id = b.member_id');
+			$this->db->join('loan_types d', 'd.id = b.loan_applied');
+			$this->db->order_by('a.id', 'DESC');
+			$query = $this->db->get();
+			return $query->result();
+		}
+
+		public function updateLedger(){
+			$month = $this->input->get('mo');
+			$year = $this->input->get('yr');
+			$user = $this->input->get('name');
+			$or = $this->input->get('or');
+			if(($month || $year || $user || $or) != ''){
+				$this->db->like('MONTH(payment_date)', $month);
+				$this->db->like('YEAR(payment_date)', $year);
+				$this->db->like('name', $user);
+				$this->db->like('or_no', $or);
+			}
+			$this->db->select('*')->from('active_loan_apps a');
+			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
+			$this->db->join('members c', 'c.id = b.member_id');
+			$this->db->join('loan_types d', 'd.id = b.loan_applied');
 			$this->db->order_by('a.id', 'DESC');
 			$query = $this->db->get();
 			return $query->result();

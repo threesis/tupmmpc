@@ -51,6 +51,14 @@
 			
 		}
 
+		public function activities() {
+			if($this->session->userdata('signed_in')) {
+				redirect('home');
+			} else {
+				$this->load->view('pages/activities');
+			}
+		}
+
 		public function getMyLoanRecords(){
 			$result = $this->user_model->getMyLoanRecords();
 			echo json_encode($result);
