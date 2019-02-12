@@ -428,7 +428,7 @@
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                       </div>
                         <form id="addMemberForm">
-                          <div class="modal-body" style="max-height: 80%; overflow-y: auto">
+                          <div class="modal-body" style="max-height: 400px; overflow-y: auto">
                             <div class="row">
                               <div class="form-group col-md-4">
                                 <label for="firstname" class="custom-sm h6">First Name:</label>
@@ -491,7 +491,7 @@
                                 <div class="invalid-feedback" id="invalidPhone"></div>
                               </div>
 
-                              <div class="form-group col-md-12">
+                              <div class="form-group col-md-6">
                                 <label for="college" class="custom-sm h6">College:</label>
                                 <select id="college" name="college" style="cursor: pointer;">
                                   <option></option>
@@ -503,6 +503,15 @@
                                   <option>College of Industrial Education</option>
                                 </select>
                                 <div class="invalid-feedback" id="invalidCollege"></div>
+                              </div>
+
+                              <div class="form-group col-md-6">
+                                <label for="userType" class="custom-sm h6">User Type:</label>
+                                <select class="custom-select form-control-sm"  id="userType" name="userType">
+                                  <option value="1">New</option>
+                                  <option value="2">Existing</option>
+                                </select>
+                                <div class="invalid-feedback" id="invaliduserType"></div>
                               </div>
 
                               <div class="form-group col-md-4">
@@ -659,7 +668,7 @@
                             <span aria-hidden="true">&times;</span>
                           </button>
                         </div>
-                        <div class="modal-body" style="max-height: 80%; overflow-y: auto;">
+                        <div class="modal-body" style="max-height: 70%; overflow-y: auto;">
                           <div id="defaultLoanAppBody">
                             <div class="row">
                               <img id="loanAppFormImg" class="rounded w-25 h-25 ml-3" src="">
@@ -4186,7 +4195,7 @@
           }
         // SHARE CAPITAL CODES END
 
-         $('#loanapp_user_id').attr('value', '<?php echo $this->session->userdata('user_id'); ?>').hide();
+        $('#loanapp_user_id').attr('value', '<?php echo $this->session->userdata('user_id'); ?>').hide();
         $('#loanapp_name').attr('value', '<?php echo $this->session->userdata('name'); ?>').hide();
 
         var get_username = '';
@@ -4266,6 +4275,7 @@
                       async: false,
                       dataType: 'json',
                       success: function(data) {
+                        alert(data[0].total_share_capital);
                         var user_data_sc = data[0].total_share_capital * 2;
 
                         $('#loan-amount').val(user_data_sc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
@@ -4282,16 +4292,16 @@
                   }
                 });
               } else {
-                $('#loan_type').attr('style', 'display:none');
-                $('#loan_selector').attr('style', 'display:block');
+                $('#loan_type').attr('style', 'display: none');
+                $('#loan_selector').attr('style', 'display: block');
                 $('#loanapp_user_id').attr('status', 'oldUser');
 
                 $.ajax({
-                  type: 'ajax',
-                  method: 'get',
-                  url: '<?php echo base_url(); ?>loan_applications/oldUser_exsistingData',
-                  data:{get_oldUser_loanData: user_id_no},
-                  async: false,
+                  type    : 'ajax',
+                  method  : 'get',
+                  url     : '<?php echo base_url(); ?>loan_applications/oldUser_exsistingData',
+                  data    : { get_oldUser_loanData: user_id_no },
+                  async   : false,
                   dataType: 'json',
                   success: function(query) {
                     var i;
