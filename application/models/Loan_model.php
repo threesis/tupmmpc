@@ -159,7 +159,8 @@
 				'loanapp_id' => $id,
 				'balance' => $this->input->post('balance'),
 				'remarks' => $this->input->post('remarks'),
-				'payment_date' => date('Y-m-d H:i:s')
+				'status' => 'unpaid',
+				'payment_for' => date('Y-m-d', strtotime('+1 month'))
 				);
 
 				$this->db->insert('active_loan_apps', $data);

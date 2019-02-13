@@ -82,6 +82,11 @@
 		}
 
 		public function add_member() {
+			$memDate = $this->input->post('membershipDate');
+			if($memDate == ''){
+				$memDate = date('Y-m-d');
+			}
+
 			$member_data = array(
 				'name' => $this->input->post('name'),
 				'address' => $this->input->post('city'),
@@ -93,7 +98,8 @@
 				'email' => $this->input->post('email'),
 				'contact_no' => $this->input->post('phone'),
 				'user_img' => 'noimage.jpg',
-				'birthday' => date('Y-m-d', strtotime($this->input->post('bday')))
+				'birthday' => date('Y-m-d', strtotime($this->input->post('bday'))),
+				'register_date' => $memDate
 			);
 
 			$inserted = $this->db->insert('members', $member_data);
@@ -286,6 +292,40 @@
 
 		}
 
+		public function updateLedgers() {
+			date_default_timezone_set('Asia/Manila');
+
+			$or = $this->input->get('ornum');
+			$ids = json_decode($this->input->get('check'));
+			$md = json_decode($this->input->get('md'));
+
+			if($ids){
+				foreach ($ids as $id => $code) {
+					$balance = $this->db->query("select balance as bal from active_loan_apps where loanapp_id = $code")->row()->{'bal'};
+					$lastID = $this->db->query("select id as active_id from active_loan_apps where loanapp_id = $code")->row()->{'active_id'};
+					$diff = $balance - $md[$id];
+
+						$this->db->set('or_number', $or);
+						$this->db->set('status', 'paid');
+						$this->db->set('payment_date', date('Y-m-d'));
+						$this->db->where('id', $lastID);
+						$this->db->update('active_loan_apps');
+
+						$data = array(
+							'loanapp_id' => $code,
+							'balance' => $diff,
+							'status' => 'unpaid',
+							'payment_for' => date('Y-m-d', strtotime('+1 month'))
+						);
+						$this->db->insert('active_loan_apps', $data);
+				}
+				return true;
+			} else {
+				return false;
+			}
+
+		}
+
 		public function updateUserPass() {
 			$userID = $this->input->get('userID');
 			$newPass = $this->input->get('newPass');
@@ -317,13 +357,9 @@
 		public function viewLedger(){
 			$month = $this->input->get('mo');
 			$year = $this->input->get('yr');
-			$user = $this->input->get('name');
-			$or = $this->input->get('or');
-			if(($month || $year || $user || $or) != ''){
+			if(($month || $year) != ''){
 				$this->db->like('MONTH(payment_date)', $month);
 				$this->db->like('YEAR(payment_date)', $year);
-				$this->db->like('name', $user);
-				$this->db->like('or_no', $or);
 			}
 			$this->db->select('*')->from('active_loan_apps a');
 			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
@@ -337,13 +373,9 @@
 		public function updateLedger(){
 			$month = $this->input->get('mo');
 			$year = $this->input->get('yr');
-			$user = $this->input->get('name');
-			$or = $this->input->get('or');
-			if(($month || $year || $user || $or) != ''){
+			if(($month || $year) != ''){
 				$this->db->like('MONTH(payment_date)', $month);
 				$this->db->like('YEAR(payment_date)', $year);
-				$this->db->like('name', $user);
-				$this->db->like('or_no', $or);
 			}
 			$this->db->select('*')->from('active_loan_apps a');
 			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');

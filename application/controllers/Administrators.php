@@ -243,5 +243,10 @@
 			$result = $this->administrator_model->updateShareCapital();
 			echo json_encode($result);
 		}
+
+		public function updateLedgers(){
+			$result = $this->administrator_model->updateLedgers();
+			echo json_encode($result);
+		}
 		
 	}

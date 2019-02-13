@@ -47,4 +47,25 @@
 			$query = $this->db->get();
 			return $query->result();
 		}
+
+		public function getUserShareCap(){
+			$id = $this->input->get('id');
+			$this->db->select('*')->from('share_capital');
+			$this->db->where('user_id', $id);
+			$this->db->order_by('sc_id', 'ASC');
+			$query = $this->db->get();
+			return $query->result();
+		}
+
+		public function getUserLoanRecords(){
+			$id = $this->input->get('id');
+			$this->db->select('*')->from('active_loan_apps a');
+			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
+			$this->db->join('loan_types c', 'c.id = b.loan_applied');
+			$this->db->where('member_id', $id);
+			$this->db->order_by('a.id', 'DESC');
+			$query = $this->db->get();
+			return $query->result();
+		}
+
 	}

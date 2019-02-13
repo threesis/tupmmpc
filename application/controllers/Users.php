@@ -64,6 +64,16 @@
 			echo json_encode($result);
 		}
 
+		public function getUserShareCap(){
+			$result = $this->user_model->getUserShareCap();
+			echo json_encode($result);
+		}
+
+		public function getUserLoanRecords(){
+			$result = $this->user_model->getUserLoanRecords();
+			echo json_encode($result);
+		}
+
 		public function signout() {
 			// Unset user data
 			$this->session->sess_destroy();
