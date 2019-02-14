@@ -736,6 +736,30 @@ header.masthead .intro-text .intro-heading {
   font-family: 'Century Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
+/** Activities **/
+#activities{
+  padding: 0;
+}
+.carousel-item {
+    display: none;
+    position: relative;
+    .transition(.3s ease-in-out left);
+    background: linear-gradient(to top, #dfe9ec 0%, #dfe9ec 100%);
+}
+#activities img{
+  height: auto;
+  max-height: 600px;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  object-fit: cover;
+}
+.carousel-caption {
+ background: rgba(0, 0, 0, 0.4);
+ letter-spacing: 2px;
+ font-family: 'Century Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
 
 /** Contact US **/ 
 #contact .parallax{
