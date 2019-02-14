@@ -1165,7 +1165,7 @@
                             </select>
                           </div>
                         </div>
-                        <table id="viewLedgerTbl" class="table table-striped table-hover table-responsive-md table-md text-nowrap">
+                        <table id="viewLedgerTbl" class="table table-striped table-hover table-responsive table-md text-nowrap">
                           <thead>
                             <tr>
                               <th>Name</th>
@@ -1213,7 +1213,7 @@
                           <div id="updateLedgerOR" class="col-sm-12 col-md-4 text-center">
                           </div>
                         </div>
-                        <table id="viewUpdateLedgerTbl" class="table table-striped table-hover table-responsive-md table-md text-nowrap">
+                        <table id="viewUpdateLedgerTbl" class="table table-striped table-hover table-responsive table-md text-nowrap">
                           <thead>
                             <tr>
                               <th style="vertical-align: middle"><input id="selectAllLedger" type="checkbox"></th>
@@ -1261,7 +1261,7 @@
                           <div id="shareCapOR" class="col-sm-12 col-md-4 text-center">
                           </div>
                         </div>
-                        <table id="shareCapRecTbl" class="table table-striped table-hover table-md text-nowrap">
+                        <table id="shareCapRecTbl" class="table table-striped table-hover table-responsive table-md text-nowrap">
                           <thead>
                             <tr>
                               <th style="vertical-align: middle"><input id="selectAllShareCap" type="checkbox"></th>
