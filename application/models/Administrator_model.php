@@ -302,11 +302,12 @@
 			if($ids){
 				foreach ($ids as $id => $code) {
 					$balance = $this->db->query("select balance as bal from active_loan_apps where loanapp_id = $code")->row()->{'bal'};
+					$remark = $this->db->query("select remarks as rm from active_loan_apps where loanapp_id = $code")->row()->{'rm'};
 					$lastID = $this->db->query("select id as active_id from active_loan_apps where loanapp_id = $code")->row()->{'active_id'};
 					$diff = $balance - $md[$id];
 
 						$this->db->set('or_number', $or);
-						$this->db->set('status', 'paid');
+						$this->db->set('payment_status', 'paid');
 						$this->db->set('payment_date', date('Y-m-d'));
 						$this->db->where('id', $lastID);
 						$this->db->update('active_loan_apps');
@@ -314,7 +315,8 @@
 						$data = array(
 							'loanapp_id' => $code,
 							'balance' => $diff,
-							'status' => 'unpaid',
+							'remarks' => $remark,
+							'payment_status' => 'unpaid',
 							'payment_for' => date('Y-m-d', strtotime('+1 month'))
 						);
 						$this->db->insert('active_loan_apps', $data);
@@ -358,14 +360,15 @@
 			$month = $this->input->get('mo');
 			$year = $this->input->get('yr');
 			if(($month || $year) != ''){
-				$this->db->like('MONTH(payment_date)', $month);
-				$this->db->like('YEAR(payment_date)', $year);
+				$this->db->like('MONTH(payment_for)', $month);
+				$this->db->like('YEAR(payment_for)', $year);
 			}
-			$this->db->select('*')->from('active_loan_apps a');
+			$this->db->select('*')->select_min('balance')->from('active_loan_apps a', 'left');
 			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
 			$this->db->join('members c', 'c.id = b.member_id');
 			$this->db->join('loan_types d', 'd.id = b.loan_applied');
-			$this->db->order_by('a.id', 'DESC');
+			$this->db->group_by('a.loanapp_id');
+			$this->db->order_by('payment_status', 'DESC');
 			$query = $this->db->get();
 			return $query->result();
 		}
@@ -374,14 +377,15 @@
 			$month = $this->input->get('mo');
 			$year = $this->input->get('yr');
 			if(($month || $year) != ''){
-				$this->db->like('MONTH(payment_date)', $month);
-				$this->db->like('YEAR(payment_date)', $year);
+				$this->db->like('MONTH(payment_for)', $month);
+				$this->db->like('YEAR(payment_for)', $year);
 			}
-			$this->db->select('*')->from('active_loan_apps a');
+			$this->db->select('*')->select_min('balance')->from('active_loan_apps a');
 			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
 			$this->db->join('members c', 'c.id = b.member_id');
 			$this->db->join('loan_types d', 'd.id = b.loan_applied');
-			$this->db->order_by('a.id', 'DESC');
+			$this->db->group_by('a.loanapp_id');
+			$this->db->order_by('payment_status', 'DESC');
 			$query = $this->db->get();
 			return $query->result();
 		}

@@ -92,7 +92,7 @@
                 <a class="list-group-item list-group-item-action" id="members-tab" data-toggle="list" href="#membersTab" role="tab" aria-controls="messages">Members<i class="fas fa-users mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="loanapps-tab" data-toggle="list" href="#loanAppTab" role="tab" aria-controls="settings"> Loan Applications<i class="fas fa-poll mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="myloanrecords-tab" data-toggle="list" href="#myloanrecordsTab" role="tab" aria-controls="messages">My Loan Records<i class="fas fa-folder-open mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
-                <a class="list-group-item list-group-item-action" id="records-comakers-tab" data-toggle="list" href="#loanRecordsCoMakersTab" role="tab" aria-controls="settings">Loan Records & Co-Makers<i class="fas fa-poll-h mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
+                <a class="list-group-item list-group-item-action" id="records-comakers-tab" data-toggle="list" href="#loanRecordsCoMakersTab" role="tab" aria-controls="settings"><span id="loanRecordsTabText">Loan Records</span> <span id="comakersTabText">& Co-Makers</span><i class="fas fa-poll-h mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="sharecap-ledger-tab" data-toggle="list" href="#ledgerShareCapTab" role="tab" aria-controls="messages">Ledger & Share Capital<i class="fas fa-users mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="applyloan-tab" data-toggle="list" href="#applyLoanTab" role="tab" aria-controls="messages">Apply Loan<i class="far fa-file-alt mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="websettings-tab" data-toggle="list" href="#websiteSettings" role="tab" aria-controls="messages">Settings<i class="fas fa-cog mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
@@ -655,7 +655,7 @@
                               </div>
                               <div class="form-group col-md-6 offset-md-3" id="membershipPicker" style="display: none">
                                 <div class="text-center"><label for="membershipDate" class="custom-sm h6">Date of Membership:</label></div>
-                                <input type="date" class="form-control form-control-sm" placeholder="Date" aria-describedby="Birthday" id="membershipDate" name="membershipDate">
+                                <input type="date" class="form-control form-control-sm" placeholder="Date" id="membershipDate" name="membershipDate">
                                 <div class="invalid-feedback" id="invalidBday"></div>
                               </div>
 
@@ -663,9 +663,9 @@
                                 var type = $('#userTypeSelect');
                                 type.change(function(){
                                   if(type.val() == 2){
-                                    $('#membershipPicker').show();
+                                    $('#membershipPicker, #membershipDate').show();
                                   } else {
-                                    $('#membershipPicker').hide();
+                                    $('#membershipPicker, #membershipDate').hide();
                                   }
                                 });
                               </script>
@@ -860,13 +860,16 @@
                     </div>
 
                     <div class="tab-pane list-group" id="active_loans">
-                      <table id="activeLoansTbl" class="table table-striped table-hover table-responsive-sm table-md nowrap">
+                      <table id="activeLoansTbl" class="table table-striped table-hover table-responsive nowrap">
                         <thead>
                           <tr>
+                            <th>#</th>
                             <th>Name</th>
                             <th>Location</th>
                             <th>Loan Applied</th>
-                            <th>Balance</th>
+                            <th>Loan Amount</th>
+                            <th>Cheque No.</th>
+                            <th>Disbursement No.</th>
                           </tr>
                         </thead>
                         <tbody id="returnActiveLoans">
@@ -954,21 +957,20 @@
                                 <tr>
                                   <td>Interest on Loan</td>
                                   <td name="loan_interest"></td>
-                                  <td colspan="2"><button class="btn btn-outline-info btn-sm btn-block">LEDGER</button></td>
+                                  <td colspan="2"><button class="btn btn-outline-info btn-sm btn-block">View Ledger</button></td>
                                 </tr>
                                 <tr>
                                   <td>Monthly Amortization</td>
                                   <td name="loan_deduc"></td>
-                                  <td colspan="2"><button class="btn btn-outline-info btn-sm btn-block">SUMMARY</button></td>
+                                  <td colspan="2"><button class="btn btn-outline-info btn-sm btn-block">View Loans</button></td>
                                 </tr>
                                 <tr>
                                   <td>Payslip</td>
-                                  <td><button class="btn btn-outline-info btn-sm btn-block">ATTACHMENT</button></td>
+                                  <td><button class="btn btn-outline-info btn-sm btn-block" data-toggle="modal" data-target="#applicantPayslipModal" onclick="$('#openLoanApp').modal('hide');">View payslip</button></td>
                                   <td colspan="2"></td>
                                 </tr>
                               </tbody>
                             </table>
-
                           </div>
                           <div id="confirmationLoanAppBody">
                           </div>
@@ -982,6 +984,31 @@
                         </div>
                       </div>
                     </div>
+                  </div>
+
+                  <div class="modal fade" id="applicantPayslipModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h2 id="applicant-payslip" class="modal-title"></h2>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body" style="max-height: 80%; overflow-y: auto">
+                          <img class="img-fluid" id="loan_payslip">
+                        </div>
+                        <div class="modal-footer">
+                          <button class="btn btn-secondary btn-sm float-right" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                    <script type="text/javascript">
+                      $('#applicantPayslipModal').on('click', '#applicantPayslipBackBtn', function(){
+                        $('#applicantPayslipModal').modal('hide');
+                        $('#openLoanApp').modal('show');
+                      });
+                    </script>
                   </div>
 
                   <div class="modal fade" id="confirmationLoanAppModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
@@ -1173,6 +1200,7 @@
                               <th>Loan Applied</th>
                               <th>Balance (&#8369;)</th>
                               <th>Monthly Amortization (&#8369;)</th>
+                              <th>Date Updated</th>
                             </tr>
                           </thead>
                           <tbody id="returnViewLedgerBody">
@@ -1295,7 +1323,7 @@
                 <div class="card-header shadow-sm">
                   <ul class="nav nav-tabs card-header-tabs">
                     <li class="ml-2 pb-4" style="min-height: 40px">
-                      <h2 class="card-title">Loan Records & Co-Makers</h2>
+                      <h2 class="card-title"><span id="loanRecordsText">Loan Records</span> <span id="comakersText">& Co-Makers</span></h2>
                     </li>
                     <li id="loanrecords-tab" class="nav-item ml-auto loan-apps">
                       <a class="nav-link active" data-toggle="tab" href="#loanRecordsSubTab">Loan Records<span id="pendingNotif" class="badge badge-secondary ml-1"></span></a>
@@ -1929,7 +1957,6 @@
         searchLoan();
         getActiveLoans();
         getApprovedLoans();
-        getDisapprovedLoans();
         getPendingLoans();
         get_latest_date();
         search_user();
@@ -2109,7 +2136,7 @@
           $('#shareCapRecTbl input[type="checkbox"]:enabled').prop('checked', this.checked);
         });
         $('#selectAllLedger').click( function () {
-          $('#viewUpdateLedgerTbl input[type="checkbox"]').prop('checked', this.checked);
+          $('#viewUpdateLedgerTbl input[type="checkbox"]:enabled').prop('checked', this.checked);
         });
         $('#ledgerTab').click(function(){
           $('#ledgerShareCapBtn').hide();
@@ -2134,43 +2161,6 @@
           $('#shareCapInfo').show();
         });
         
-
-        // All loan related scripts
-        $('#searchPendingLoanApp').keyup(function() {
-          var input = $(this).val();
-          if(input != '') {
-            getPendingLoans(input);
-          } else {
-            getPendingLoans();
-          }
-        });
-
-        $('#searchApprovedLoanApp').keyup(function() {
-          var input = $(this).val();
-          if(input != '') {
-            getApprovedLoans(input);
-          } else {
-            getApprovedLoans();
-          }
-        });
-
-        $('#searchActiveLoanApp').keyup(function() {
-          var input = $(this).val();
-          if(input != '') {
-            getActiveLoans(input);
-          } else {
-            getActiveLoans();
-          }
-        });
-
-        $('#searchDisapprovedLoanApp').keyup(function() {
-          var input = $(this).val();
-          if(input != '') {
-            getDisapprovedLoans(input);
-          } else {
-            getDisapprovedLoans();
-          }
-        });
 
         function getPendingLoans(query){
           var ccUsername = '<?php echo $this->session->userdata('username'); ?>';
@@ -2387,52 +2377,11 @@
           });
         }
 
-        function getDisapprovedLoans(query){
-          $.ajax({
-            type: 'ajax',
-            method: 'get',
-            url: '<?php echo base_url() ?>loans/getDisapprovedLoans',
-            data: {query: query},
-            async: false,
-            dataType: 'json',
-            success: function(data){
-              if(data.length > 0) {
-                $('#disapprovedNotif').html(data.length);
-                var row = '';
-                for(var i = 0; i < data.length; i++){
-                  row += '<li class="list-group-item" data-toggle="modal" data-target="#openLoanAppForm" data="' + data[i].loanapp_id + '" style="cursor: pointer">' +
-                            '<img src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img +'" class="rounded-circle member-icon">' +
-                              '<span class=" badge badge-primary p-2 mr-2 w-15 float-right">' + data[i].date_created + '</span>' +
-                              '<h2 class="member-name">' + data[i].name + '</h2>' +
-                            '<p class="text-muted"><small>' + data[i].loan_name + '</small></p>' +
-                          '</li>';   
-                }
-                $('#returnDisapprovedLoans').html(row);
-              } else {
-                if(query != null) {
-                  $('#disapprovedNotif').html('0');
-                  $('#returnDisapprovedLoans').html('<div class="ml-4">' +
-                                       '<h4 class="mt-5"><strong class="text-danger">No results for ' + query + '</h4>' +
-                                       '<h7 style="color: #66757f; font-weight: light; padding-top: 20px">The term you entered did not bring up any results.</h7>' +
-                                     '</div>');
-                } else {
-                  $('#disapprovedNotif').html('0');
-                  $('#returnDisapprovedLoans').html('<div class="ml-4"><h4 class="mt-5"><strong class="text-success">Looks good!</h4><h7 style="color: #66757f; font-weight: light; padding-top: 20px">Nothing to display.</h7></div>');
-                }
-              } 
-            }, 
-            error: function(){
-              alert('ERROR');
-            }
-          });
-        }
-
-        function getActiveLoans(query){
+        function getActiveLoans(){
           $.ajax({
             type: 'ajax',
             method: 'get',
             url: '<?php echo base_url() ?>loans/getActiveLoans',
-            data: {query: query},
             async: false,
             dataType: 'json',
             success: function(data){
@@ -2443,8 +2392,9 @@
               var approvedLoanNote = '';
               if(data.length > 0) {
                 $('#activeNotif').html(data.length);
-                var row = ''; 
+                var c = 0, row = ''; 
                 for(var i = 0; i < data.length; i++){
+                  c++;
                   var dateActive = new Date(Date.parse(data[i].payment_date.replace('-','/','g')));
                   dateActive = dateActive.toUTCString();
                   dateActive = dateActive.split(' ').slice(0, 4).join(' ');
@@ -2473,10 +2423,13 @@
                   }
 
                   row +=  '<tr class="text-secondary" remarks="' + data[i].remarks + '" data="' + data[i].loanapp_id + '" activeLoanID="' + data[i].id + '" payslip="' + data[i].take_home_pay + '" balance="' + data[i].balance + '" dateActive="' + dateActive + '" style="cursor: pointer">' +
+                            '<td style="vertical-align: middle">' + c + '</td>' +
                             '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
                             '<td style="vertical-align: middle">' + col + '</td>' +
                             '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
                             '<td style="vertical-align: middle">' + Math.round(data[i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                            '<td style="vertical-align: middle">' + data[i].cheque_no + '</td>' +
+                            '<td style="vertical-align: middle">' + data[i].disbursement_no + '</td>' +
                           '</tr>'; 
                 }
                 $('#returnActiveLoans').html(row);
@@ -2624,6 +2577,8 @@
                 $('a[name=loanApplicantContact]').text(data.contact_no);
                 $('a[name=loanApplicantAddress]').text(data.address);
                 $('a[name=loanApplicantZip]').text(' — ' + data.zipcode);
+                $('img[id=loan_payslip]').attr('src', '<?php echo base_url() ?>assets/img/payslips/' + data.user_payslip);
+                $('#applicant-payslip').html('<p id="applicantPayslipBackBtn" class="fas fa-chevron-left mr-4" style="font-size: 15px; color: gray; cursor: pointer"></p><span style="font-weight: normal">Payslip of</span> ' + data.name);
                 $('td[name=loan_id]').text(data.loanapp_id);
                 $('td[name=loan_type]').text(data.loan_name);
                 $('td[name=loan_amt]').html('&#8369;' + Math.round(data.loan_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
@@ -3104,7 +3059,7 @@
             }
           });
           $('#addMemberModal').modal('show');
-          $('#membershipDate').hide();
+          $('#membershipPicker, #membershipDate').hide();
           $('#addMemberForm').attr('action', '<?php echo base_url() ?>administrators/add_member');
         });
 
@@ -4108,16 +4063,27 @@
           dataType: 'json',
           success : function(data) {
             if(data.length > 0){
-            var row, rowFoot, opts, totalMonthly = '', totalBalance = '';
+            var row, rowFoot, opts, totalMonthly = '', totalBalance = '', or = '';
             for(var i = 0; i < data.length; i++){
+              if(data[i].payment_date == '0000-00-00') {
+                lastUp = 'Pending';
+              } else {
+                lastUp = new Date(data[i].payment_date).toUTCString();
+                lastUp = lastUp.split(' ').slice(0, 4).join(' ');
+              } if(data[i].or_number == '') {
+                or = 'Pending';
+              } else {
+                or = data[i].or_number;
+              }
               totalMonthly = Number(totalMonthly) + Number(data[i].monthly_deduc);
               totalBalance = Number(totalBalance) + Number(data[i].balance);
               row +=  '<tr class="text-secondary">' +
                         '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
-                        '<td style="vertical-align: middle">' + data[i].or_number + '</td>' +
+                        '<td style="vertical-align: middle">' + or + '</td>' +
                         '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
                         '<td style="vertical-align: middle">' + Math.round(data[i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                         '<td style="vertical-align: middle">' + Math.round(data[i].monthly_deduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                        '<td style="vertical-align: middle">' + lastUp + '</td>' +
                       '</tr>'; 
             }
               rowFoot +=  '<tr>' +
@@ -4126,6 +4092,7 @@
                         '<th style="vertical-align: middle"></th>' +
                         '<th style="vertical-align: middle">&#8369;' + Math.round(totalBalance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
                         '<th style="vertical-align: middle">&#8369;' + Math.round(totalMonthly).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
+                        '<th style="vertical-align: middle"></th>' +
                       '</tr>';
 
               $('#returnViewLedgerBody').html(row);
@@ -4258,10 +4225,10 @@
           dataType: 'json',
           success : function(data) {
             if(data.length > 0){
-            var row, rowFoot, opts, totalMonthly = '', totalBalance = '', count = 0;
+            var row, rowFoot, opts, totalMonthly = '', totalBalance = '', count = 0, lock = '';
             for(var i = 0; i < data.length; i++){
               or = data[0].or_number;
-              if(data[i].status == 'paid') {
+              if(data[i].payment_status == 'paid') {
                 cond = 'far fa-check-circle text-success';
                 lock = 'disabled';
               } else {
@@ -4269,7 +4236,7 @@
                 lock = '';
                 count++;
               }
-              if(data[i].date_updated == '0000-00-00') {
+              if(data[i].payment_date == '0000-00-00') {
                 lastUp = 'Pending';
               } else {
                 lastUp = new Date(data[i].payment_date).toUTCString();
@@ -5879,27 +5846,47 @@
     </script>
 
     <script type="text/javascript">
-      var role = '<?php echo $this->session->userdata('roleID'); ?>';
-      switch(role){
-        case '1':
-        $('#dashboardTab').addClass('active');
-        break;
-        case '2':
-        $('#dashboardTab').addClass('active');
-        break;
-        case '3':
-        $('#dashboardTab').addClass('active');
-        break;
-        case '4':
-        $('#dashboardTab').addClass('active');
-        break;
-        case '5':
-        $('#dashboardTab').addClass('active');
-        break;
-        case '6':
-        $('#membersTab').addClass('active');
-        break;
-      }
+      $(function(){
+        var role = '<?php echo $this->session->userdata('roleID'); ?>';
+        switch(role){
+          case '1':
+          $('#websettings-tab').show();
+          $('#websiteSettings').addClass('active');
+          break;
+          case '2':
+          $('#dashboardTab').addClass('active');
+          $('#loans-tab').show();
+          $('#myloanrecords-tab').show();
+          $('#applyloan-tab').show();
+          break;
+          case '3':
+          $('#dashboardTab').addClass('active');
+          $('#loans-tab, #loans-deduction, #returnLatestDate, #add-loan, .edit-loan').show();
+          $('#members-tab, #viewuser-perm4, #returnMemberLatestDate').show();
+          $('#loanapps-tab').show();
+          $('#records-comakers-tab, #loanrecords-tab, #loanRecordsText, #loanRecordsTabText').show();
+          break;
+          case '4':
+          $('#dashboardTab').addClass('active');
+          $('#loans-tab, #returnLatestDate').show();
+          $('#loanapps-tab').show();
+          $('#sharecap-ledger-tab, #view-ledgers').show();
+          break;
+          case '5':
+          $('#dashboardTab').addClass('active');
+          $('#loans-tab').show();
+          $('#loanapps-tab').show();
+          $('#records-comakers-tab, #loanrecords-tab, #loanRecordsText, #loanRecordsTabText').show();
+          $('#sharecap-ledger-tab, #view-ledgers, #update-ledgers, #update-share-capitals').show();
+          break;
+          case '6':
+          $('#dashboardTab').addClass('active');
+          $('#loans-tab, #loans-deduction, #loans-archive, #returnLatestDate, #add-loan, .edit-loan, .archive-loan').show();
+          $('#members-tab, #adduser-perm2, #viewuser-perm4').show();
+          $('#records-comakers-tab, #loanrecords-tab, #comakers-tab, #loanRecordsText, #loanRecordsTabText, #comakersText, #comakersTabText').show();
+          break;
+        }
+      });
     </script>
 
     
