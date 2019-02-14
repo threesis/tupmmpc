@@ -21,10 +21,6 @@
 		}
 
 		public function getPendingLoans() {
-			$input = $this->input->get('query');
-			if($input != '') {
-				$this->db->like('name', $input);
-			}
 			$this->db->select('*')->from('loan_applications a');
 			$this->db->join('loan_types b', 'b.id = a.loan_applied');
 			$this->db->join('members c', 'c.id = a.member_id', 'left');
@@ -35,10 +31,6 @@
 		}
 
 		public function getApprovedLoans() {
-			$input = $this->input->get('query');
-			if($input != '') {
-				$this->db->like('name', $input);
-			}
 			$this->db->select('*')->from('approved_loan_apps a');
 			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
 			$this->db->join('members c', 'c.id = b.member_id');
@@ -49,29 +41,13 @@
 			return $query->result();
 		}
 
-		public function getDisapprovedLoans(){
-			$input = $this->input->get('query');
-			if($input != '') {
-				$this->db->like('loan_applications.name', $input);
-			}
-			$this->db->select('*')->from('loan_applications a');
-			$this->db->join('loan_types b', 'b.id = a.loan_applied');
-			$this->db->join('members c', 'c.id = a.member_id', 'left');
-			$this->db->where('status', 'Cancelled');
-			$this->db->order_by('a.date_applied', 'DESC');
-			$query = $this->db->get();
-			return $query->result();
-		}
-
 		public function getActiveLoans() {
-			$input = $this->input->get('query');
-			if($input != '') {
-				$this->db->like('name', $input);
-			}
-			$this->db->select('*')->from('active_loan_apps a');
-			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
-			$this->db->join('members c', 'c.id = b.member_id');
-			$this->db->join('loan_types d', 'd.id = b.loan_applied', 'left');
+			$this->db->select('*')->select_max('balance')->from('active_loan_apps a');
+			$this->db->join('approved_loan_apps b', 'b.loanapp_id = a.loanapp_id');
+			$this->db->join('loan_applications c', 'c.loanapp_id = b.loanapp_id');
+			$this->db->join('members d', 'd.id = c.member_id');
+			$this->db->join('loan_types e', 'e.id = c.loan_applied');
+			$this->db->group_by('a.loanapp_id');
 			$this->db->order_by('a.payment_date', 'DESC');
 			$query = $this->db->get();
 			return $query->result();
@@ -159,7 +135,7 @@
 				'loanapp_id' => $id,
 				'balance' => $this->input->post('balance'),
 				'remarks' => $this->input->post('remarks'),
-				'status' => 'unpaid',
+				'payment_status' => 'unpaid',
 				'payment_for' => date('Y-m-d', strtotime('+1 month'))
 				);
 

@@ -174,8 +174,8 @@ html, body {
 
 /** Members List **/
 tr .member-icon {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   background-size: cover;
   border-radius: 50% 50% 50% 50%;
 }
@@ -348,6 +348,40 @@ h2 {
 .selectize-input {
   font-size: 90%;
 }
+
+/* hidden elements for role perm */
+#loans-tab, #loans-deduction, #loans-archive, #add-loan, .edit-loan, .archive-loan, #returnLatestDate {
+  display: none;
+}
+
+#members-tab, #adduser-perm2, #viewuser-perm4, #returnMemberLatestDate {
+  display: none;
+}
+
+#loanapps-tab {
+  display: none;
+}
+
+#myloanrecords-tab {
+  display: none;
+}
+
+#records-comakers-tab, #loanrecords-tab, #comakers-tab, #loanRecordsText, #comakersText, #loanRecordsTabText, #comakersTabText {
+  display: none;
+}
+
+#sharecap-ledger-tab, #view-ledgers, #update-ledgers, #update-share-capitals {
+  display: none;
+}
+
+#applyloan-tab {
+  display: none;
+}
+
+#websettings-tab {
+  display: none;
+}
+
 
 
 

@@ -16,11 +16,6 @@
 			echo json_encode($result);
 		}
 
-		public function getDisapprovedLoans(){
-			$result = $this->loan_model->getDisapprovedLoans();
-			echo json_encode($result);
-		}
-
 		public function getActiveLoans(){
 			$result = $this->loan_model->getActiveLoans();
 			echo json_encode($result);
