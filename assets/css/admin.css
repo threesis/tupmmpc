@@ -350,7 +350,7 @@ h2 {
 }
 
 /* hidden elements for role perm */
-#loans-tab, #loans-deduction, #loans-archive, #add-loan, .edit-loan, .archive-loan, #returnLatestDate {
+#loans-tab, #loans-deduction, #loans-archive, #add-loan, .edit-loan, .archive-loan,  #returnLatestDate {
   display: none;
 }
 
@@ -379,6 +379,10 @@ h2 {
 }
 
 #websettings-tab {
+  display: none;
+}
+
+#memberDash, #managerDash, #treasurerDash, #creditDash, #chairmanDash {
   display: none;
 }
 

@@ -71,23 +71,28 @@
 
     <div class="wrapper">
       <div class="container">
-        <div class="msg">
-        </div>
         <div class="row">
         <!-- Profile -->
           <div class="col-sm-padding col-sm-12 col-md-4 col-lg-3 offset-md mb-3">
-            <div class="card">
+            <div class="card shadow-sm">
               <div class="card-header bg-secondary p-5 bobo">
                 <div id="displayUserImg" class="card-title">
                   <img src="<?php echo base_url(); ?>assets/img/profile_img/<?php echo $image['user_img']; ?>" class="img-thumbnail rounded-circle mx-auto d-block my-3 shadow-sm">
                 </div>
               </div>
-              <div class="card-text mb-2 mx-3">
+              <div class="card-text mb-3 mx-3">
                 <h6 id="displayUserName" class="admin-name text-center"><?php echo $image['name']; ?></h6>
                 <h6 class="info-text text-center text-muted"><?php echo $this->session->userdata('position') ?></h6>
               </div>
               <div class="list-group profile-menu" id="list-tab" role="tablist">
-                <a class="list-group-item list-group-item-action active" id="dashboard-tab" data-toggle="list" href="#dashboardTab" role="tab" aria-controls="home">Dashboard<i class="fas fa-home mr-2 mt-1 float-left"></i>  <i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
+                <?php if($this->session->flashdata('user_signedin')): ?>
+                  <?php echo '<p class="alert bg-primary alert-dismissable fade show text-center mb-0" id="loginWelcomeMsg" role="alert">
+                            <button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button><a class="h7 text-white">'.$this->session->flashdata('user_signedin').
+                            $this->session->userdata('username').'!'.'</a></p>';
+                  ?>
+                <?php endif; ?>
+                <a class="list-group-item list-group-item-action mt-0 active" id="dashboard-tab" data-toggle="list" href="#dashboardTab" role="tab" aria-controls="home">Dashboard<i class="fas fa-home mr-2 mt-1 float-left"></i>  <i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="loans-tab" data-toggle="list" href="#loansTab" role="tab" aria-controls="settings">Loans<i class="fas fa-credit-card mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="members-tab" data-toggle="list" href="#membersTab" role="tab" aria-controls="messages">Members<i class="fas fa-users mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="loanapps-tab" data-toggle="list" href="#loanAppTab" role="tab" aria-controls="settings"> Loan Applications<i class="fas fa-poll mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
@@ -103,167 +108,279 @@
 
           <!-- Navigation Body -->
           <div class="col-sm-padding col-sm-12 col-md-8 col-lg-9 mb-3">
-            <div class="card">
+            <div class="card shadow-sm">
               <div class="tab-content">
                 <!-- Home Part -->
                 <div class="tab-pane fade show" id="dashboardTab" role="tabpanel" aria-labelledby="home-tab">
                   <h2 class="card-header shadow-sm">Dashboard</h2>
-                  <div class="card-body card-body-mh">
-                    <div class="row mb-3">
-                      <div class="col-md-6">
-                        <div class="card rounded shadow-sm">
-                          <div class="card-body p-3">
-                            <div class="row">
-                              <div class="col-6">
-                                <h6 id="dashboardTotalMembers" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $members; ?></h6>
-                                <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Members</cite></footer>
-                              </div>
-                              <div class="col-6">
-                                <i class="far fa-user-circle text-secondary float-right" style="font-size: 2.5rem"></i>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="card rounded shadow-sm">
-                          <div class="card-body p-3">
-                            <div class="row">
-                              <div class="col-6">
-                                <h6 id="dashboardLoansApplied" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $loansApplied; ?></h6>
-                                <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Applied</cite></footer>
-                              </div>
-                              <div class="col-6">
-                                <i class="far fa-file-alt text-secondary float-right" style="font-size: 2.5rem"></i>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row mb-3">
-                      <div class="col-md-4">
-                        <div class="card rounded shadow-sm">
-                          <div class="card-body p-3">
-                            <div class="row">
-                              <div class="col-6">
-                                <h6 id="dashboardPendingLoans" class="mb-0 text-warning" style="font-size: 2rem"><?php echo $pendingLoans; ?></h6>
-                                <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Pending</cite></footer>
-                              </div>
-                              <div class="col-6">
-                                <i class="far fa-pause-circle text-secondary float-right" style="font-size: 2.5rem"></i>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card-footer bg-warning p-1">
-                            <small class="text-white ml-2">Pending</small>
-                            <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="card rounded shadow-sm">
-                          <div class="card-body p-3">
-                            <div class="row">
-                              <div class="col-6">
-                                <h6 id="dashboardApprovedLoans" class="mb-0 text-info" style="font-size: 2rem"><?php echo $approvedLoans; ?></h6>
-                                <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Approved</cite></footer>
-                              </div>
-                              <div class="col-6">
-                                <i class="far fa-check-circle text-secondary float-right" style="font-size: 2.5rem"></i>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card-footer bg-info p-1">
-                            <small class="text-white ml-2">Accepted</small>
-                            <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-md-4">
-                        <div class="card rounded shadow-sm">
-                          <div class="card-body p-3">
-                            <div class="row">
-                              <div class="col-6">
-                                <h6 id="dashboardActiveLoans" class="mb-0 text-primary" style="font-size: 2rem"><?php echo $ongoingLoans; ?></h6>
-                                <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Active</cite></footer>
-                              </div>
-                              <div class="col-6">
-                                <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="card-footer bg-primary p-1">
-                            <small class="text-white ml-2">On-going</small>
-                            <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-md-5">
-                        <div class="row mb-3">
-                          <div class="col-md-12">
-                            <div class="card rounded shadow-sm">
-                              <div class="card-body p-3">
-                                <div class="row">
-                                  <div class="col-6">
-                                    <h6 id="dashboardPayments" class="mb-0 text-success" style="font-size: 2rem">&#8369;65,250</h6>
-                                    <footer class="text-muted" style="font-size: 0.8rem">Total Loan <cite>Payments</cite></footer>
-                                  </div>
-                                  <div class="col-6">
-                                    <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
-                                  </div>
+                  <div id="chairmanDash">
+                    <div class="card-body card-body-mh">
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="dashboardTotalMembers" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $members; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Members</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-user-circle text-secondary float-right" style="font-size: 2.5rem"></i>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                        <div class="row mb-3">
-                          <div class="col-md-12">
-                            <div class="card rounded shadow-sm">
-                              <div class="card-body p-3">
-                                <div class="row">
-                                  <div class="col-6">
-                                    <h6 id="dashboardMissedPayments" class="mb-0 text-danger" style="font-size: 2rem">&#8369;27,500</h6>
-                                    <footer class="text-muted" style="font-size: 0.8rem">Total Missed <cite>Payments</cite></footer>
-                                  </div>
-                                  <div class="col-6">
-                                    <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
-                                  </div>
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="dashboardLoansApplied" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $loansApplied; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Applied</cite></footer>
                                 </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-12">
-                            <div class="card rounded shadow-sm">
-                              <div class="card-body p-3">
-                                <div class="row">
-                                  <div class="col-6">
-                                    <h6 id="dashboardMissedPayments" class="mb-0 text-warning" style="font-size: 2rem">&#8369;82,900</h6>
-                                    <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Share Capital</cite></footer>
-                                  </div>
-                                  <div class="col-6">
-                                    <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
-                                  </div>
+                                <div class="col-6">
+                                  <i class="far fa-file-alt text-secondary float-right" style="font-size: 2.5rem"></i>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-7">
-                        <div class="card rounded shadow-sm">
-                          <div class="card-body p-3">
-                            <h6 class="mb-0 text-primary" style="font-size: 1.2rem">Monthly Loan Track</h6>
-                            <footer class="text-muted" style="font-size: 0.8rem"><cite>in 2018-2019</cite></footer>
-                            <canvas id="line-chart"></canvas>
+                      <div class="row mb-3">
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="dashboardPendingLoans" class="mb-0 text-warning" style="font-size: 2rem"><?php echo $pendingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Pending</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-pause-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-warning p-1">
+                              <small class="text-white ml-2">Pending</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="dashboardApprovedLoans" class="mb-0 text-info" style="font-size: 2rem"><?php echo $approvedLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Approved</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-check-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-info p-1">
+                              <small class="text-white ml-2">Accepted</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="dashboardActiveLoans" class="mb-0 text-primary" style="font-size: 2rem"><?php echo $ongoingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Active</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-primary p-1">
+                              <small class="text-white ml-2">On-going</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="row mb-3">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="dashboardPayments" class="mb-0 text-success" style="font-size: 2rem">&#8369;65,250</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total Loan <cite>Payments</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="dashboardMissedPayments" class="mb-0 text-danger" style="font-size: 2rem">&#8369;27,500</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total Missed <cite>Payments</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="dashboardMissedPayments" class="mb-0 text-warning" style="font-size: 2rem">&#8369;82,900</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Share Capital</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-7">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <h6 class="mb-0 text-primary" style="font-size: 1.2rem">Monthly Loan Track</h6>
+                              <footer class="text-muted" style="font-size: 0.8rem"><cite>in 2018-2019</cite></footer>
+                              <canvas id="line-chart"></canvas>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
+                  </div>
+                  <div id="memberDash">
+                    <div class="card-body card-body-mh">
+                      <div class="row mb-4">
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="dashboardMemberAppliedLoans" class="mb-0 text-warning" style="font-size: 2rem"><?php echo $loansApplied; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Total Loans <cite>Applied</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-file-alt text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-warning p-1">
+                              <small class="text-white ml-2">Applied</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="dashboardMemberPendingLoans" class="mb-0 text-info" style="font-size: 2rem"><?php echo $pendingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Pending</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-pause-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-info p-1">
+                              <small class="text-white ml-2">Pending</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row mb-4">
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="dashboardMemberApprovedLoans" class="mb-0 text-success" style="font-size: 2rem"><?php echo $approvedLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Approved</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-check-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-success p-1">
+                              <small class="text-white ml-2">Approved</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="dashboardMemberActiveLoans" class="mb-0 text-primary" style="font-size: 2rem"><?php echo $ongoingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Active</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-primary p-1">
+                              <small class="text-white ml-2">On-going</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-5">
+                                  <h6 class="mb-0 text-primary" style="font-size: 1.2rem">Monthly Loan Track</h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem"><cite>in 2018-2019</cite></footer>
+                                </div>
+                                <div class="col-7">
+                                  <canvas id="line-chart"></canvas>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="creditDash">
+                    CREDIT OFFICER DASHBOARD
+                  </div>
+                  <div id="managerDash">
+                    MANAGER DASHBOARD
+                  </div>
+                  <div id="treasurerDash">
+                    TREASURER DASHBOARD
                   </div>
                   <div class="card-footer" style="min-height: 60px"></div>
                 </div>
@@ -645,33 +762,6 @@
                         <form id="addMemberForm">
                           <div class="modal-body" style="max-height: 400px; overflow-y: auto">
                             <div class="row">
-                              <div class="form-group col-md-6 offset-md-3">
-                                <div class="text-center"><label for="userTypeSelect" class="custom-sm h6">User Type:</label></div>
-                                <select class="custom-select form-control-sm"  id="userTypeSelect" name="userTypeSelect">
-                                  <option value="1">New</option>
-                                  <option value="2">Existing</option>
-                                </select>
-                                <div class="invalid-feedback" id="invaliduserType"></div>
-                              </div>
-                              <div class="form-group col-md-6 offset-md-3" id="membershipPicker" style="display: none">
-                                <div class="text-center"><label for="membershipDate" class="custom-sm h6">Date of Membership:</label></div>
-                                <input type="date" class="form-control form-control-sm" placeholder="Date" id="membershipDate" name="membershipDate">
-                                <div class="invalid-feedback" id="invalidBday"></div>
-                              </div>
-
-                              <script type="text/javascript">
-                                var type = $('#userTypeSelect');
-                                type.change(function(){
-                                  if(type.val() == 2){
-                                    $('#membershipPicker, #membershipDate').show();
-                                  } else {
-                                    $('#membershipPicker, #membershipDate').hide();
-                                  }
-                                });
-                              </script>
-
-                              <div class="col-12"><hr></div>
-
                               <div class="form-group col-md-4">
                                 <label for="firstname" class="custom-sm h6">First Name:</label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Enter First Name.." aria-describedby="Fname" id="firstname" name="Fname" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode == 32)">
@@ -732,7 +822,7 @@
                                 <div class="invalid-feedback" id="invalidPhone"></div>
                               </div>
 
-                              <div class="form-group col-md-12">
+                              <div class="form-group col-md-6" id="selectizeCollege">
                                 <label for="college" class="custom-sm h6">College:</label>
                                 <select id="college" name="college" style="cursor: pointer;">
                                   <option></option>
@@ -744,6 +834,12 @@
                                   <option>College of Industrial Education</option>
                                 </select>
                                 <div class="invalid-feedback" id="invalidCollege"></div>
+                              </div>
+
+                              <div class="form-group col-md-6">
+                                <label for="membershipDate" class="custom-sm h6">Date of Membership:</label>
+                                <input type="date" class="form-control form-control-sm" placeholder="Date" id="membershipDate" name="membershipDate">
+                                <div class="invalid-feedback" id="invalidMembership"></div>
                               </div>
 
                               <div class="col-12"><hr></div>
@@ -766,33 +862,46 @@
                                 <div class="invalid-feedback" id="invalidPass2"></div>
                               </div>
 
-                              <div class="form-group col-md-4">
+                              <div class="col-12"><hr></div>
+
+                              <div class="form-group col-md-6">
+                                <label for="subscribeShare" class="custom-sm h6">Subscribe Share:</label>
+                                <div class="input-group input-group-sm mb-2">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">&#8369;</span>
+                                  </div>
+                                  <input type="text" class="form-control form-control-sm" placeholder="Enter Subscribe Share.." aria-describedby="Subscribeshare" id="subscribeShare" name="subscribeShare" maxlength="9">
+                                  <div class="invalid-feedback" id="invalidSubscribeShare"></div>
+                                </div>
+                              </div> 
+
+                              <div class="form-group col-md-6">
                                 <label for="sharecap" class="custom-sm h6">Share Capital:</label>
                                 <div class="input-group input-group-sm mb-2">
                                   <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">&#8369;</span>
                                   </div>
-                                  <input type="text" class="form-control form-control-sm" placeholder="Enter Share Capital.." aria-describedby="Sharecap" id="sharecap" name="sharecap" maxlength="6">
+                                  <input type="text" class="form-control form-control-sm" placeholder="Enter Share Capital.." aria-describedby="Sharecap" id="sharecap" name="sharecap" maxlength="9">
                                   <div class="invalid-feedback" id="invalidShareCapital"></div>
                                 </div>
                               </div> 
 
-                              <div class="form-group col-md-4">
+                              <div class="form-group col-md-6">
                                 <label for="startingShareCap" class="custom-sm h6">Starting Share Capital:</label>
                                 <div class="input-group input-group-sm mb-2">
                                   <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">&#8369;</span>
                                   </div>
-                                  <input type="text" class="form-control form-control-sm" placeholder="Enter Staring Capital.." aria-describedby="Ewan" id="startingShareCap" name="startingShareCap" maxlength="6">
-                                  <div class="invalid-feedback" id="invalidShareCapital"></div>
+                                  <input type="text" class="form-control form-control-sm" placeholder="Enter Staring Capital.." aria-describedby="Ewan" id="startingShareCap" name="startingShareCap" maxlength="9">
+                                  <div class="invalid-feedback" id="invalidStarting"></div>
                                 </div>
                               </div> 
 
-                              <div class="form-group col-md-4">
+                              <div class="form-group col-md-6">
                                 <label for="orNum" class="custom-sm h6">OR Number:</label>
                                 <div class="input-group input-group-sm mb-2" onkeypress="if(event.charCode == 32){return false;}">
-                                  <input type="text" class="form-control form-control-sm" placeholder="Enter OR Number.." aria-describedby="ORnumber" id="orNum" name="orNum" maxlength="" >
-                                  <div class="invalid-feedback" id="invalidShareCapital"></div>
+                                  <input type="text" class="form-control form-control-sm" placeholder="Enter OR Number.." aria-describedby="ORnumber" id="orNum" name="orNum" maxlength="">
+                                  <div class="invalid-feedback" id="invalidOR"></div>
                                 </div>
                               </div> 
                             </div>
@@ -831,6 +940,7 @@
                       <table id="pendingLoansTbl" class="table table-striped table-hover table-responsive-sm table-md nowrap">
                         <thead>
                           <tr>
+                            <th>#</th>
                             <th>Name</th>
                             <th>Location</th>
                             <th>Loan Applied</th>
@@ -847,6 +957,7 @@
                       <table id="approvedLoansTbl" class="table table-striped table-hover table-responsive-sm table-md nowrap">
                         <thead>
                           <tr>
+                            <th>#</th>
                             <th>Name</th>
                             <th>Location</th>
                             <th>Loan Applied</th>
@@ -910,7 +1021,7 @@
                             <div class="row">
                               <img id="loanAppFormImg" class="rounded w-25 h-25 ml-3" src="">
                                 <div class="col align-self-start">
-                                  <label name="loanApplicant" class="custom-sm h6"></label><br>
+                                  <label name="loanApplicant" style="font-size: 110%; font-weight: 600"></label><br>
                                   <a name="loanApplicantEmail" class="small text-primary em"></a><br>
                                   <a name="loanApplicantContact" class="small"></a><br>
                                   <a name="loanApplicantCollege" class="small"></a><br>
@@ -918,8 +1029,8 @@
                                   <a name="loanApplicantRegDate" class="small"></a>
                                 </div>
                                 <div class="col align-self-start">
-                                  <a class="custom-xs h6" id="thpInfo">Take home pay:<span class="userLoanInfo ml-2" name="loan_thp"></span></a><br>
-                                  <a class="custom-xs h6" id="cnInfo">Cheque number:<span class="userLoanInfo ml-2" name="loan_cn"></span></a><br>
+                                  <a class="custom-xs h6" id="thpInfo"><em>Take home pay:<span class="userLoanInfo ml-2" name="loan_thp"></span></em></a><br>
+                                  <a class="custom-xs h6" id="cnInfo"><em>Cheque No.:<span class="userLoanInfo ml-2" name="loan_cn"></span></a></em><br>
                                 </div>
                               </div>
                                   
@@ -952,7 +1063,7 @@
                                 <tr>
                                   <td>Amount of Loan</td>
                                   <td name="loan_amt"></td>
-                                  <th colspan="2" class="text-center">Member Records</th>
+                                  <th colspan="2"><button class="btn btn-outline-info btn-sm btn-block" data-toggle="modal" data-target="#applicantPayslipModal" onclick="$('#openLoanApp').modal('hide');">View payslip</button></th>
                                 </tr>
                                 <tr>
                                   <td>Interest on Loan</td>
@@ -963,11 +1074,6 @@
                                   <td>Monthly Amortization</td>
                                   <td name="loan_deduc"></td>
                                   <td colspan="2"><button class="btn btn-outline-info btn-sm btn-block">View Loans</button></td>
-                                </tr>
-                                <tr>
-                                  <td>Payslip</td>
-                                  <td><button class="btn btn-outline-info btn-sm btn-block" data-toggle="modal" data-target="#applicantPayslipModal" onclick="$('#openLoanApp').modal('hide');">View payslip</button></td>
-                                  <td colspan="2"></td>
                                 </tr>
                               </tbody>
                             </table>
@@ -1020,7 +1126,7 @@
                             <span aria-hidden="true">&times;</span>
                           </button>
                         </div>
-                        <div class="modal-body" style="max-height: 80%; overflow-y: auto">
+                        <div class="modal-body" style="max-height: 400px; overflow-y: auto">
                           <div id="confirmationLoanAppBody">
                             
                           </div>
@@ -1110,7 +1216,7 @@
                             $('#returnMyLoanRecords').html(tbl);
                           } else {
                             $('#returnMyLoanRecords').html('');
-                            $('#myLoanRecApplyLoan').html('<button class="btn btn-outline-primary btn-lg">New here? Apply for a loan now!</button>');
+                            $('#myLoanRecApplyLoan').html('<button class="btn btn-outline-primary btn-lg" onclick="$("#applyLoanTab").addClass("active");">New here? Apply for a loan now!</button>');
                           }
                         },
                         error: function() {
@@ -1192,21 +1298,16 @@
                             </select>
                           </div>
                         </div>
-                        <table id="viewLedgerTbl" class="table table-striped table-hover table-responsive table-md text-nowrap">
+                        <table id="collectionsTbl" class="table table-striped table-hover table-responsive table-md text-nowrap">
                           <thead>
-                            <tr>
-                              <th>Name</th>
-                              <th>OR Number</th>
-                              <th>Loan Applied</th>
-                              <th>Balance (&#8369;)</th>
-                              <th>Monthly Amortization (&#8369;)</th>
-                              <th>Date Updated</th>
+                            <tr id="returnCollectionsHeader">
+                              
                             </tr>
                           </thead>
-                          <tbody id="returnViewLedgerBody">
+                          <tbody id="returnCollectionsBody">
                             
                           </tbody>
-                          <tfoot id="returnViewLedgerFoot">
+                          <tfoot id="returnCollectionsFooter">
                             
                           </tfoot>
                         </table>
@@ -1826,7 +1927,7 @@
 
                 <!-- EDIT PROFILE MODAL -->
                 <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog">
-                  <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
                         <h2 class="modal-title">Edit Account</h2>
@@ -1966,33 +2067,6 @@
         Check();
 
         // DataTables CODES
-        var memberDataTbl = $('#memberListTbl').DataTable({
-          "dom": 'lBfrtip',
-          buttons: [
-            {
-            extend: 'pdf',
-            text: 'Export PDF'
-            },
-            {
-            extend: 'excel',
-            text: 'Export Excel'
-            },
-            {
-            extend: 'print',
-            text: 'Print table',
-            exportOptions: {
-              columns: [0, 1, 2, 3]
-            }
-            },
-          ],
-          "pagingType": "simple_numbers",
-          "language": { search: "", searchPlaceholder: "Search user.." },
-          "columnDefs": [
-            { "orderable": false, "targets": 4 }
-          ]
-        });
-
-        $('#memberListTbl_info').addClass('text-muted font-italic');
 
         var pendingLoansDataTbl = $('#pendingLoansTbl').DataTable({
           "dom": 'lBfrtip',
@@ -2174,6 +2248,7 @@
             success: function(data) {
               if(data.length > 0) {
                 $('#pendingNotif').html(data.length);
+                var c = 0;
                 var row = '';
                 var txtCol1 = '';
                 var txtCol2 = '';
@@ -2184,6 +2259,7 @@
                 var verifiedThp = '';
                 var takeHomePay = '';
                 for(var i = 0; i < data.length; i++){
+                  c++;
                   if(data[i].cc_approval_1 == ccUsername) {
                     status = 'verified';
                     if(data[i].take_home_pay > 0) {
@@ -2260,7 +2336,8 @@
                       col = data[i].college; 
                   }
 
-                  row +=  '<tr class="text-secondary" status="' + status + '" verifiedThp="' + verifiedThp + '" payslip="' + takeHomePay + '" verifiedBy="' + verifiedBy + '" monthlyDeduc="' + data[i].monthly_deduc + '" data="' + data[i].loanapp_id + '" style="cursor: pointer">' +
+                  row +=  '<tr class="text-secondary" name="' + data[i].name + '" status="' + status + '" verifiedThp="' + verifiedThp + '" payslip="' + takeHomePay + '" verifiedBy="' + verifiedBy + '" monthlyDeduc="' + data[i].monthly_deduc + '" data="' + data[i].loanapp_id + '" style="cursor: pointer">' +
+                            '<td style="vertical-align: middle">' + c + '</td>' +
                             '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span><i class="' + verifiedIcon + ' ml-1"></i></td>' +
                             '<td style="vertical-align: middle">' + col + '</td>' +
                             '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
@@ -2311,8 +2388,9 @@
               var approvedLoanNote = '';
               if(data.length > 0) {
                 $('#approvedNotif').html(data.length);
-                var row = ''; 
+                var c = 0, row = ''; 
                 for(var i = 0; i < data.length; i++){
+                  c++;
                   var dateIssued = new Date(Date.parse(data[i].date_approved.replace('-','/','g')));
                   dateIssued = dateIssued.toUTCString();
                   dateIssued = dateIssued.split(' ').slice(0, 4).join(' ');
@@ -2349,7 +2427,8 @@
                       col = data[i].college; 
                   }
 
-                  row +=  '<tr class="text-secondary" status="' + status + '" data="' + data[i].loanapp_id + '"payslip="' + data[i].take_home_pay + '" verifiedBy="' + data[i].thp_verified_by + '" chequeNo="' + data[i].cheque_no + '" dateIssued="' + dateIssued + '" style="cursor: pointer">' +
+                  row +=  '<tr class="text-secondary" name="' + data[i].name + '" status="' + status + '" data="' + data[i].loanapp_id + '"payslip="' + data[i].take_home_pay + '" verifiedBy="' + data[i].thp_verified_by + '" chequeNo="' + data[i].cheque_no + '" dateIssued="' + dateIssued + '" style="cursor: pointer">' +
+                            '<td style="vertical-align: middle">' + c + '</td>' +
                             '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
                             '<td style="vertical-align: middle">' + col + '</td>' +
                             '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
@@ -2422,7 +2501,7 @@
                       col = data[i].college; 
                   }
 
-                  row +=  '<tr class="text-secondary" remarks="' + data[i].remarks + '" data="' + data[i].loanapp_id + '" activeLoanID="' + data[i].id + '" payslip="' + data[i].take_home_pay + '" balance="' + data[i].balance + '" dateActive="' + dateActive + '" style="cursor: pointer">' +
+                  row +=  '<tr class="text-secondary" name="' + data[i].name + '" remarks="' + data[i].remarks + '" data="' + data[i].loanapp_id + '" activeLoanID="' + data[i].id + '" payslip="' + data[i].take_home_pay + '" balance="' + data[i].balance + '" dateActive="' + dateActive + '" style="cursor: pointer">' +
                             '<td style="vertical-align: middle">' + c + '</td>' +
                             '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
                             '<td style="vertical-align: middle">' + col + '</td>' +
@@ -2496,12 +2575,12 @@
           var verifiedBy = $(this).attr('verifiedBy');
           var verifiedThp = $(this).attr('verifiedThp');
           var takeHomePay = $(this).attr('payslip');
+          takeHomePay = Math.round(takeHomePay).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           var cheque = $(this).attr('chequeNo');
-          var name = $(this).find('h2').text();
+          var name = $(this).attr('name');
           var img = $(this).find('img').attr('src');
           $('#openLoanApp').attr('selectedname', name);
           $('#openLoanApp').attr('selectedid', id);
-          $('#openLoanApp').modal('show');
           if(selectedTab == 'returnPendingLoan') {
             $('#thpInfo').hide();
             $('#cnInfo').hide();
@@ -2514,25 +2593,25 @@
             }
             if(verifiedThp == 'verified') {
               $('#thpInfo').show();
-              $('span[name=loan_thp]').html('&#8369;' + Math.round(takeHomePay).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+              $('span[name=loan_thp]').html('&#8369;' + takeHomePay);
               $('span[name=loan_thp_verified]').html(verifiedBy);
               if(role == 'Credit Officer') {
-                $('#loanAppPayslipAmt').prop('disabled', true).val(Math.round(takeHomePay).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " — reviewed by: " + verifiedBy);
-              } else {
-                $('#approve-cancel-PL').hide();
+                $('#approve-cancel-PL').show();
+                $('#openLoanApp').modal('show');
+                $('#loanAppPayslipAmt').prop('disabled', true).val(takeHomePay + " — reviewed by: " + verifiedBy);
               }
             } else {
               if(role == 'Credit Officer') {
+                $('#approve-cancel-PL').show();
+                $('#openLoanApp').modal('show');
                 $('#loanAppPayslipAmt').prop('disabled', false).attr('placeholder', 'Input the payslip amount..');
-              } else {
-                $('#approve-cancel-PL').hide();
               }
             }
           } else if(selectedTab == 'returnApprovedLoans') {
             $('#openLoanApp').find('.modal-title').html("<a class='text-primary'>Approved</a> - Application #" + id);
             $('#thpInfo').show();
             $('#cnInfo').hide();
-            $('span[name=loan_thp]').html('&#8369;' + Math.round(takeHomePay).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+            $('span[name=loan_thp]').html('&#8369;' + takeHomePay);
             $('span[name=loan_thp_verified]').html(verifiedBy);
             $('#openLoanApp').find('.modal-footer').html('<div class="input-group input-group-sm"><input type="text" class="form-control form-control-sm mr-2" placeholder="Enter cheque number.." id="chequeNumberInput" name="cheque_number" maxlength="8"><button type="button" class="btn btn-outline-success btn-sm float-right px-2" id="chequeLoanAppBtn"><i class="fas fa-arrow-circle-right fa-sm mr-1"></i> Submit cheque</button></div>').attr('id', 'issue-cheque-AL');
             if(status == 'verified') {
@@ -2540,25 +2619,25 @@
               $('span[name=loan_cn]').html(cheque);
               $('span[name=loan_cn_verified]').html(dateIssued);
               if(role == 'Treasurer') {
+                $('#openLoanApp').modal('show');
                 $('#chequeLoanAppBtn').prop('disabled', true).html('<i class="far fa-check-circle"></i> Cheque Issued!');
                 $('#chequeNumberInput').prop('disabled', true).val(cheque + " — cheque issued on: " + dateIssued);
-              } else if(role == 'Administrator') {
+              } else if(role == 'Manager') {
+                $('#openLoanApp').modal('show');
                 $('#openLoanApp').find('.modal-footer').html('<button type="button" class="btn btn-outline-success btn-sm float-right px-2" id="voucherLoanAppBtn"><i class="fas fa-arrow-circle-right fa-sm mr-1"></i>Create voucher</button>');
-                $('#chequeNumberInput').hide();
-              } else {
-                $('#issue-cheque-AL').hide();
               }
             } else {
               if(role == 'Treasurer') {
+                $('#openLoanApp').modal('show');
+                $('#chequeNumberInput').show();
                 $('#chequeNumberInput').prop('disabled', false).attr('placeholder', 'Enter cheque number..');
-              } else if(role == 'Administrator') {
-                $('#openLoanApp').find('.modal-footer').html('<div class="text-center"><em>Pending cheque number</em></div>');
-              } else {
-                $('#cnInfo').hide();
-                $('#issue-cheque-AL').hide();
+              } else if(role == 'Manager') {
+                $('#openLoanApp').modal('show');
+                $('#openLoanApp').find('.modal-footer').html('<div class="mx-auto"><em>Pending cheque number</em></div>');
               }
             }
-          } else if(selectedTab == 'returnActiveLoans') {
+          }  else if(selectedTab == 'returnActiveLoans') {
+
             }
             $.ajax({
               type    : 'ajax',
@@ -2672,20 +2751,13 @@
             $('#confirmationLoanAppModal').modal('show');
             $('#confirmationLoanAppModal').find('.modal-title').html('<p id="confirmationLoanAppBackBtn" class="fas fa-chevron-left mr-4" style="font-size: 15px; color: gray; cursor: pointer"></p>Disbursement voucher');
             $('#confirmationLoanAppModal').find('.modal-body').html(
-              '<div class="row">' +
-                '<div class="col-md-3">' +
-                  '<span class="font-weight-bold custom-sm">Date: </span><br>' +
-                  '<span class="font-weight-bold custom-sm">DV No.: </span><br>' +
-                  '<span class="font-weight-bold custom-sm">Cheque No.: </span><br>' +
-                '</div>' +
-                '<div class="col-md-3">' +
-                  '<span class="custom-sm"><?php date_default_timezone_set("Asia/Manila"); echo date("Y-m-d"); ?></span><br>' +
-                  '<span class="custom-sm">' + APLid + '</span><br>' +
-                  '<span class="custom-sm">' + cheque + '</span><br>' +
-                '</div>' +
-              '</div>' +
-              '<table class="table table-striped table-bordered table-sm mt-3" style="border: 1px solid lightgray;">' +
-                '<tbody id="calcBody" style="height: auto; max-height: 400px; overflow-y: auto">' +
+              '<div class="mb-5"><span class="h4 float-left">NET AMOUNT: </span><span class="h3 float-right text-success">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></div>' +
+              '<table class="table table-striped table-bordered table-hover table-sm">' +
+                '<tbody id="calcBody" style="height: auto; max-height: 400px; overflow-y: auto; font-size: 90%">' +
+                  '<tr>' +
+                    '<td colspan="2"><strong>DATE: <?php date_default_timezone_set("Asia/Manila"); echo date("Y/m/d"); ?></strong></td>' +
+                    '<td><strong>VOUCHER: ' + APLid + '</strong></td>' +
+                    '<td><strong>CHEQUE: ' + cheque + '</strong></td>' +
                   '<tr>' +
                     '<td colspan="2">Payee</td>' +
                     '<td colspan="2">' + name + '</td>' +
@@ -2743,7 +2815,7 @@
                   '<tr>' +
                     '<td colspan="2" class="h5">NET AMOUNT DUE</td>' +
                     '<td colspan="1"></td>' +
-                    '<td colspan="1" class="h4">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td colspan="1" class="h4"><span class="text-success">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></td>' +
                   '</tr>' +
                 '</tbody>' +
               '</table>');
@@ -2795,6 +2867,7 @@
             $('#loanAppPayslipAmt').attr('placeholder', 'Please input the payslip amount..');
           } else {
             $('#loanAppPayslipAmt').removeClass('is-invalid');
+            $('#approveLoanAppBtn').unbind().html('<i class="fas fa-arrow-circle-right"></i> Approve');
           }
         }
 
@@ -2804,21 +2877,6 @@
 
         // Change content of modal when aproving a loan - CC UI
         $('#openLoanApp').on('click', '#approveLoanAppBtn', function(){
-          var name = $('#openLoanApp').attr('selectedname');
-          if($('#loanAppPayslipAmt').val() != '') {
-            $('#openLoanApp').modal('hide');
-            $('#confirmationLoanAppModal').modal('show');
-            $('#confirmationLoanAppModal').find('.modal-title').html('<p id="confirmationLoanAppBackBtn" class="fas fa-chevron-left mr-4" style="font-size: 15px; color: gray; cursor: pointer"></p>Confirmation');
-            $('#confirmationLoanAppModal').find('.modal-body').html("Accept <strong>"+ name +"</strong>'s application?");
-            $('#confirmationLoanAppModal').find('.modal-footer').html('<button type="button" class="btn btn-success btn-sm mr-1" id="acceptLoanAppBtn"><i class="fas fa-check fa-sm mr-1"></i>  I am sure</button>');
-          } else {
-            $('#loanAppPayslipAmt').addClass('is-invalid');
-            $('#loanAppPayslipAmt').attr('placeholder', 'Please input the payslip amount..');
-          }
-        });
-
-        // Approve loan app - insert data to db
-        $('#confirmationLoanAppModal').on('click', '#acceptLoanAppBtn', function(){
           var apostrophe = "'s";
           var id = $('#openLoanApp').attr('selectedid');
           var name = $('#openLoanApp').attr('selectedname');
@@ -2826,72 +2884,81 @@
           var payslip = $('#loanAppPayslipAmt').val().replace(/\D/g, "");
           var monthlyDeduc = $('input[name=loan_deduc_hidden]').text();
           var thp = payslip - monthlyDeduc;
-          $.ajax({
-            type    : 'ajax',
-            method  : 'get',
-            url     : '<?php echo base_url() ?>loan_applications/checkCreditCommiteeApprovals',
-            data    : {id:id},
-            async   : false,
-            dataType: 'json',
-            success : function(data) {
-              // check cc columns are filled - approved
-              var ccCheck;
-              var cc1 = data.cc_approval_1;
-              var cc2 = data.cc_approval_2;
-              var cc3 = data.cc_approval_3;
-              if((cc1 == null) && (cc2 == null) && (cc3 == null)) {
-                ccCheck = 0;
-              } else if(cc1 == null) {
-                ccCheck = 1;
-              } else if(cc2 == null) {
-                ccCheck = 2;
-              } else if(cc3 == null) {
-                ccCheck = 3;
-              } else {
-                ccCheck = 4;
-              }
+            if($('#loanAppPayslipAmt').val() != '') {
+              $('#loanAppPayslipAmt').removeClass('is-invalid');
+              $(this).text('Are you sure?');
+              $(this).click(function(){
+                $.ajax({
+                  type    : 'ajax',
+                  method  : 'get',
+                  url     : '<?php echo base_url() ?>loan_applications/checkCreditCommiteeApprovals',
+                  data    : {id:id},
+                  async   : false,
+                  dataType: 'json',
+                  success : function(data) {
+                    // check cc columns are filled - approved
+                    var ccCheck;
+                    var cc1 = data.cc_approval_1;
+                    var cc2 = data.cc_approval_2;
+                    var cc3 = data.cc_approval_3;
+                    if((cc1 == null) && (cc2 == null) && (cc3 == null)) {
+                      ccCheck = 0;
+                    } else if(cc1 == null) {
+                      ccCheck = 1;
+                    } else if(cc2 == null) {
+                      ccCheck = 2;
+                    } else if(cc3 == null) {
+                      ccCheck = 3;
+                    } else {
+                      ccCheck = 4;
+                    }
 
-              $.ajax({
-                // verifying you accepted a loan app
-                type    : 'ajax',
-                method  : 'get',
-                url     : '<?php echo base_url() ?>administrators/manageLoanApps',
-                data    : {id:id, cc:ccUsername, check:ccCheck, thp:thp},
-                async   : false,
-                dataType: 'json',
-                success : function(data) {
-                  if(data == true) {
-                    $('#confirmationLoanAppModal').modal('hide');
-                    $('#loanAppMsg').html('<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, you approved ' + name + apostrophe + ' application.</a>' +
-                                '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
-                                  '<span aria-hidden="true">&times;</span>' +
-                                '</button>' +
-                              '</p>').fadeIn().delay(3000).fadeOut('fast');
-                    getPendingLoans();
-                    getApprovedLoans();
-                    getDisapprovedLoans();
-                  } else {
-                    $('#confirmationLoanAppModal').modal('hide');
-                    $('#loanAppMsg').html('<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, ' + name + apostrophe + ' application has been approved.</a>' +
-                                '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
-                                  '<span aria-hidden="true">&times;</span>' +
-                                '</button>' +
-                              '</p>').fadeIn().delay(3000).fadeOut('fast');
-                    getPendingLoans();
-                    getApprovedLoans();
-                    getDisapprovedLoans();
+                    $.ajax({
+                      // verifying you accepted a loan app
+                      type    : 'ajax',
+                      method  : 'get',
+                      url     : '<?php echo base_url() ?>administrators/manageLoanApps',
+                      data    : {id:id, cc:ccUsername, check:ccCheck, thp:thp},
+                      async   : false,
+                      dataType: 'json',
+                      success : function(data) {
+                        if(data == true) {
+                          $('#confirmationLoanAppModal').modal('hide');
+                          $('#loanAppMsg').html('<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, you approved ' + name + apostrophe + ' application.</a>' +
+                                      '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
+                                        '<span aria-hidden="true">&times;</span>' +
+                                      '</button>' +
+                                    '</p>').fadeIn().delay(3000).fadeOut('fast');
+                          getPendingLoans();
+                          getApprovedLoans();
+                          getDisapprovedLoans();
+                        } else {
+                          $('#confirmationLoanAppModal').modal('hide');
+                          $('#loanAppMsg').html('<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, ' + name + apostrophe + ' application has been approved.</a>' +
+                                      '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
+                                        '<span aria-hidden="true">&times;</span>' +
+                                      '</button>' +
+                                    '</p>').fadeIn().delay(3000).fadeOut('fast');
+                          getPendingLoans();
+                          getApprovedLoans();
+                          getDisapprovedLoans();
+                        }
+                      },
+                      error: function() {
+                        alert('Error!');
+                      }
+                    });
+                  },
+                  error: function() {
+                    alert('Error!');
                   }
-                },
-                error: function() {
-                  alert('Error!');
-                }
+                });
+                $('#openLoanApp').modal('hide');
               });
-            },
-            error: function() {
-              alert('Error!');
+            } else {
+              $('#loanAppPayslipAmt').addClass('is-invalid');
+              $('#loanAppPayslipAmt').attr('placeholder', 'Please input the payslip amount..');
             }
-          });
-          
         });
 
         // Back button in loan application approve conf
@@ -2956,6 +3023,7 @@
             $('#chequeNumberInput').attr('placeholder', 'Please enter cheque number..');
           } else {
             $('#chequeNumberInput').removeClass('is-invalid');
+            $('#chequeLoanAppBtn').unbind().html('<i class="fas fa-arrow-circle-right fa-sm mr-1"></i> Submit cheque');
           }
         }
 
@@ -2965,12 +3033,14 @@
 
         $('#openLoanApp').on('click', '#chequeLoanAppBtn', function(){
           if($('#chequeNumberInput').val() != '') {
+            var id = $('#openLoanApp').attr('selectedid');
+            var name = $('#openLoanApp').attr('selectedname');
+            var cheque = $('#chequeNumberInput').val();
+            var apostrophe = "'s";
+
+            alert(cheque);
             $(this).text('Are you sure?');
             $(this).click(function(){
-              var id = $('#openLoanApp').attr('selectedid');
-              var name = $('#openLoanApp').attr('selectedname');
-              var cheque = $('#chequeNumberInput').val();
-              var apostrophe = "'s";
               $.ajax({
                 type    : 'ajax',
                 method  : 'get',
@@ -3010,6 +3080,14 @@
             });
           });
         $('input[name=loan_max_amt]').keyup(function(){
+          $(this).val(function(index, value) {
+            return value
+            .replace(/\D/g, "")
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+        });
+        $('input[name=subscribeShare]').keyup(function(){
           $(this).val(function(index, value) {
             return value
             .replace(/\D/g, "")
@@ -3059,7 +3137,6 @@
             }
           });
           $('#addMemberModal').modal('show');
-          $('#membershipPicker, #membershipDate').hide();
           $('#addMemberForm').attr('action', '<?php echo base_url() ?>administrators/add_member');
         });
 
@@ -3074,6 +3151,7 @@
           var username = $('input[name=Uname]');
           var email = $('input[name=email]');
           var phone = $('input[name=phone]');
+          var college = $('input[id=college-selectized]');
           var password = $('input[name=password]');
           var password2 = $('input[name=password2]');
           var city = $('input[name=city]');
@@ -3082,7 +3160,9 @@
           var birthday = $('input[id=birthday]');
           var sharecap = $('input[name=sharecap]');
           var startingShareCap = $('input[name=startingShareCap]');
-          var orno = $('input[name=orNum]');
+          var membershipDate = $('input[id=membershipDate]');
+          var subscribeShare = $('input[id=subscribeShare]');
+          var orno = $('input[id=orNum]');
           var result = '';
 
           if(fname.val() == ''){
@@ -3177,16 +3257,48 @@
             $('#invalidPhone').html('');
             result += '11';
           }
+          if(membershipDate.val() == ''){
+            membershipDate.addClass('is-invalid');
+            $('#invalidMembership').html('Please fill out this field.');
+          } else {
+            membershipDate.removeClass('is-invalid');
+            $('#invalidMembership').html('');
+            result += '12';
+          }
           if(sharecap.val() == ''){
             sharecap.addClass('is-invalid');
             $('#invalidShareCapital').html('Please fill out this field.');
           } else {
             sharecap.removeClass('is-invalid');
             $('#invalidShareCapital').html('');
-            result += '12';
+            result += '13';
+          }
+          if(startingShareCap.val() == ''){
+            startingShareCap.addClass('is-invalid');
+            $('#invalidStarting').html('Please fill out this field.');
+          } else {
+            startingShareCap.removeClass('is-invalid');
+            $('#invalidStarting').html('');
+            result += '14';
+          }
+          if(subscribeShare.val() == ''){
+            subscribeShare.addClass('is-invalid');
+            $('#invalidSubscribeShare').html('Please fill out this field.');
+          } else {
+            subscribeShare.removeClass('is-invalid');
+            $('#invalidSubscribeShare').html('');
+            result += '15';
+          }
+          if(orno.val() == ''){
+            orno.addClass('is-invalid');
+            $('#invalidOR').html('Please fill out this field.');
+          } else {
+            orno.removeClass('is-invalid');
+            $('#invalidOR').html('');
+            result += '16';
           }
 
-          if(result == '123456789101112') {
+          if(result == '12345678910111213141516') {
             var name = fname.val()+' '+mname.val()+' '+lname.val();
             var filteredShareCap = sharecap.val().replace(/\D/g, "");
             var filteredStarting = startingShareCap.val().replace(/\D/g, "");
@@ -3289,13 +3401,13 @@
         });
 
         // Search members 
-        function search_user(query) {
+        function search_user() {
+          $("#memberListTbl").DataTable().destroy();
           $.ajax({
             type    : 'ajax',
-            method  : 'post',
+            method  : 'get',
             url     : '<?php echo base_url() ?>administrators/search_user',
             async   : false,
-            data    : {query : query},
             dataType: 'json',
             success: function(data) {
               var row = '';
@@ -3307,9 +3419,8 @@
                 if(data[i].last_login == '0000-00-00 00:00:00') {
                   last_login = 'New user';
                 } else {
-                  last_login = new Date(Date.parse(data[i].last_login.replace('-','/','g')));
-                  last_login = last_login.toUTCString();
-                  last_login = last_login.split(' ').slice(0, 4).join(' ');
+                  last_login = new Date(data[i].last_login);
+                  last_login = last_login.toLocaleDateString("en-US");
                 }
                 switch(data[i].college) {
                   case 'College of Science':
@@ -3337,7 +3448,7 @@
                           '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
                           '<td style="vertical-align: middle">' + col + '</td>' +
                           '<td style="vertical-align: middle">' + data[i].role_name + '</td>' +
-                          '<td style="vertical-align: middle">' + last_login + '</td>' +
+                          '<td style="vertical-align: middle"><span style="display: none">' + data[i].register_date +'</span>'+last_login + '</td>' +
                           '<td style="vertical-align: middle"><button href="javascript:;" class="btn btn-outline-success btn-sm viewuser-perm4" user-id="' + data[i].user_id + '" user-name="' + data[i].name + '" user-position ="' + data[i].role_name + '" user-college="' + data[i].college + '" user-address="' + data[i].address + '" user-img="' + data[i].user_img + '" user-sharecap="' + data[i].total_share_capital + '" since="'+ data[i].register_date +'">More info</button></td>' +
                         '</tr>'; 
               }  
@@ -3354,6 +3465,35 @@
               alert('A database error occured!');
             }
           });
+
+          var memberDataTbl = $('#memberListTbl').DataTable({
+          "dom": 'lBfrtip',
+          "order": [[ 3, "desc" ]],
+          buttons: [
+            {
+            extend: 'pdf',
+            text: 'Export PDF'
+            },
+            {
+            extend: 'excel',
+            text: 'Export Excel'
+            },
+            {
+            extend: 'print',
+            text: 'Print table',
+            exportOptions: {
+              columns: [0, 1, 2, 3]
+            }
+            },
+          ],
+          "pagingType": "simple_numbers",
+          "language": { search: "", searchPlaceholder: "Search user.." },
+          "columnDefs": [
+            { "orderable": false, "targets": 4 }
+          ]
+        });
+
+        $('#memberListTbl_info').addClass('text-muted font-italic');
         }
 
         // Wait for user search input..
@@ -3396,7 +3536,7 @@
                               '</div>' + 
                             '</div>' + 
                           '</div>';
-              }  
+              }
               $('#returnLoans').html(card);
             } else {
               card  =  '<div class="ml-5">' +
@@ -3410,6 +3550,27 @@
               alert('A database error occured!');
             }
           });
+          var role = '<?php echo $this->session->userdata('roleID'); ?>';
+                switch(role){
+                  case '3':
+                  $('.edit-loan').show();
+                  $('#viewuser-perm4, #returnMemberLatestDate').show();
+                  $('#loanRecordsText, #loanRecordsTabText').show();
+                  break;
+                  case '4':
+                  $('#returnLatestDate').show();
+                  $('#view-ledgers').show();
+                  break;
+                  case '5':
+                  $('#loanRecordsText, #loanRecordsTabText').show();
+                  $('#view-ledgers, #update-ledgers, #update-share-capitals').show();
+                  break;
+                  case '6':
+                  $('#add-loan, .edit-loan, .archive-loan').show();
+                  $('#adduser-perm2, #viewuser-perm4').show();
+                  $('#loanRecordsText, #loanRecordsTabText, #comakersText, #comakersTabText').show();
+                  break;
+                }
         }
 
         // Retrieve latest date
@@ -3558,6 +3719,7 @@
                                         '</button>' +
                                       '</p>').fadeIn(); 
                 searchLoan();
+                refreshCollections();
                 get_latest_date();
                 $('#loansTab .card-body').animate({scrollTop: 0}, 'fast');
               } else {
@@ -4031,75 +4193,81 @@
         }
 
         // VIEW LEDGER CODES 
-        refreshViewLedger();
+        refreshCollections();
 
-        function refreshViewLedger() {
+        function refreshCollections() {
           var months  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
           var year = new Date().getFullYear();
           var month = new Date().getMonth()+1;
-          viewLedger(month, year);
+          viewCollections(month, year);
         }
 
         $('#viewLedgerMonthSelect').change(function(){
           month = $('#viewLedgerMonthSelect').val();
           year = $('#viewLedgerYearSelect').val();
-          viewLedger(month, year);
+          viewCollections(month, year);
         });
 
         $('#viewLedgerYearSelect').change(function(){
           month = $('#viewLedgerMonthSelect').val();
           year = $('#viewLedgerYearSelect').val();
-          viewLedger(month, year);
+          viewCollections(month, year);
         });
 
-        function viewLedger(month, year){
-          $("#viewLedgerTbl").DataTable().destroy();
+        function viewCollections(month, year){
           $.ajax({
           type    : 'ajax',
           method  : 'GET',
-          url     : '<?php echo base_url() ?>administrators/viewLedger',
+          url     : '<?php echo base_url() ?>administrators/viewCollections',
           data    : {mo: month, yr: year},
           async   : false,
           dataType: 'json',
           success : function(data) {
-            if(data.length > 0){
-            var row, rowFoot, opts, totalMonthly = '', totalBalance = '', or = '';
-            for(var i = 0; i < data.length; i++){
-              if(data[i].payment_date == '0000-00-00') {
+            if(data){
+            var head, row, rowFoot, opts, totalMonthly = '', totalBalance = '', or = '';
+            head = '<th style="vertical-align: middle">Month</th>' +
+                   '<th style="vertical-align: middle">OR No.</th>';
+            for(var a = 0; a < data['numcols'].length; a++){
+              head += '<th style="vertical-align: middle">' + data['numcols'][a].loan_name + ' (&#8369;)</th>';
+            }
+            for(var i = 0; i < data['result'].length; i++){
+              if(data['result'][i].payment_date == '0000-00-00') {
                 lastUp = 'Pending';
               } else {
-                lastUp = new Date(data[i].payment_date).toUTCString();
-                lastUp = lastUp.split(' ').slice(0, 4).join(' ');
-              } if(data[i].or_number == '') {
+                lastUp = new Date(data['result'][i].payment_date);
+                lastUp = lastUp.toLocaleDateString("en-US");
+              } if(data['result'][i].or_number == '') {
                 or = 'Pending';
               } else {
-                or = data[i].or_number;
+                or = data['result'][i].or_number;
               }
-              totalMonthly = Number(totalMonthly) + Number(data[i].monthly_deduc);
-              totalBalance = Number(totalBalance) + Number(data[i].balance);
-              row +=  '<tr class="text-secondary">' +
-                        '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
-                        '<td style="vertical-align: middle">' + or + '</td>' +
-                        '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
-                        '<td style="vertical-align: middle">' + Math.round(data[i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                        '<td style="vertical-align: middle">' + Math.round(data[i].monthly_deduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                        '<td style="vertical-align: middle">' + lastUp + '</td>' +
-                      '</tr>'; 
-            }
-              rowFoot +=  '<tr>' +
-                        '<th style="vertical-align: middle">Total</th>' +
-                        '<th style="vertical-align: middle"></th>' +
-                        '<th style="vertical-align: middle"></th>' +
-                        '<th style="vertical-align: middle">&#8369;' + Math.round(totalBalance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
-                        '<th style="vertical-align: middle">&#8369;' + Math.round(totalMonthly).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
-                        '<th style="vertical-align: middle"></th>' +
-                      '</tr>';
 
-              $('#returnViewLedgerBody').html(row);
-              $('#returnViewLedgerFoot').html(rowFoot);
+
+              row  += '<tr class="text-secondary">' +
+                        '<td style="vertical-align: middle">' + lastUp + '</td>' +
+                        '<td style="vertical-align: middle">' + or + '</td>';
+              for(var loans = 0; loans < data['numcols'].length; loans++){
+                if(data['result'][i].loan_name == data['numcols'][loans].loan_name) {
+                  var totalInRow = 0;
+                  row += '<td style="vertical-align: middle">' + Math.round(data['result'][i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>';
+                  totalInRow = Number(totalInRow) + Number(data['result'][i].balance);
+                } else {
+                  row += '<td style="vertical-align: middle">0</td>';
+                }
+              }
+              row  += '<td style="vertical-align: middle">0</td>' +
+                      '<td style="vertical-align: middle">' + Math.round(totalInRow).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                      '</tr>';  
+            }
+
+              head += '<th style="vertical-align: middle">Others</th>' +
+                      '<th style="vertical-align: middle">Total (&#8369;)</th>';
+
+              $('#returnCollectionsHeader').html(head);
+              $('#returnCollectionsBody').html(row);
             } else {
-              $('#returnViewLedgerBody').html('');
-              $('#returnViewLedgerFoot').html('');
+              $('#returnCollectionsBody').html('');
+              $('#returnCollectionsFooter').html('');
             }
           },
           error: function() {
@@ -4107,7 +4275,55 @@
           }
           });
 
-          var viewLedgerDataTbl = $('#viewLedgerTbl').DataTable({
+          /*if(data){
+            var head, row, rowFoot, opts, totalMonthly = '', totalBalance = '', or = '';
+            head = '<th style="vertical-align: middle">Month</th>' +
+                   '<th style="vertical-align: middle">OR No.</th>';
+            for(var a = 0; a < data['numcols'].length; a++){
+              head += '<th style="vertical-align: middle">' + data['numcols'][a].loan_name + ' (&#8369;)</th>';
+            }
+            for(var i = 0; i < data['result'].length; i++){
+              if(data['result'][i].payment_date == '0000-00-00') {
+                lastUp = 'Pending';
+              } else {
+                lastUp = new Date(data['result'][i].payment_date);
+                lastUp = lastUp.toLocaleDateString("en-US");
+              } if(data['result'][i].or_number == '') {
+                or = 'Pending';
+              } else {
+                or = data['result'][i].or_number;
+              }
+
+
+              row  += '<tr class="text-secondary">' +
+                        '<td style="vertical-align: middle">' + lastUp + '</td>' +
+                        '<td style="vertical-align: middle">' + or + '</td>';
+              for(var loans = 0; loans < data['numcols'].length; loans++){
+                if(data['result'][i].loan_name == data['numcols'][loans].loan_name) {
+                  var totalInRow = 0;
+                  row += '<td style="vertical-align: middle">' + Math.round(data['result'][i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>';
+                  totalInRow = Number(totalInRow) + Number(data['result'][i].balance);
+                } else {
+                  row += '<td style="vertical-align: middle">0</td>';
+                }
+              }
+              row  += '<td style="vertical-align: middle">0</td>' +
+                      '<td style="vertical-align: middle">' + Math.round(totalInRow).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                      '</tr>';  
+            }
+
+              head += '<th style="vertical-align: middle">Others</th>' +
+                      '<th style="vertical-align: middle">Total (&#8369;)</th>';
+
+              $('#returnCollectionsHeader').html(head);
+              $('#returnCollectionsBody').html(row);
+            } else {
+              $('#returnCollectionsBody').html('');
+              $('#returnCollectionsFooter').html('');
+            }
+*/
+          $("#collectionsTbl").DataTable().destroy();
+          var collectionsDataTbl = $('#collectionsTbl').DataTable({
             "dom": 'lBfrtip',
             buttons: [
               {
@@ -4124,16 +4340,13 @@
               },
             ],
             "pagingType": "simple_numbers",
-            "language": { search: "", searchPlaceholder: "Search.." },
-            "columnDefs": [
-              { "orderable": false, "targets": 0 }
-            ]
+            "language": { search: "", searchPlaceholder: "Search.." }
           });
 
-          $('#viewLedgerInfo').html($('#viewLedgerTbl_info').clone());
-          $('#viewLedgerPaginate').html($('#viewLedgerTbl_paginate').clone());
-          $('#viewLedgerTbl_info').remove();
-          $('#viewLedgerTbl_paginate').remove();
+          $('#viewLedgerInfo').html($('#collectionsTbl_info').clone());
+          $('#viewLedgerPaginate').html($('#collectionsTbl_paginate').clone());
+          $('#collectionsTbl_info').remove();
+          $('#collectionsTbl_paginate').remove();
         }
 
         // VIEW LEDGER CODES END
@@ -5514,7 +5727,7 @@
 
           var defaultEditProfileFooter =  '<button type="submit" class="btn btn-success btn-sm float-right" id="editProfileSaveBtn">Save changes</button>' +
                                           '<button type="button" class="btn btn-secondary btn-sm float-right" data-dismiss="modal">Cancel</button>';
-                                            
+          $('#editProfileModal').find('.modal-title').html('Edit Account');
           $("#returnEditProfileBody").html(defaultEditProfileBody);
           $("#editProfileModal").find(".modal-footer").html(defaultEditProfileFooter);                   
         }
@@ -5847,44 +6060,52 @@
 
     <script type="text/javascript">
       $(function(){
-        var role = '<?php echo $this->session->userdata('roleID'); ?>';
-        switch(role){
-          case '1':
-          $('#websettings-tab').show();
-          $('#websiteSettings').addClass('active');
-          break;
-          case '2':
-          $('#dashboardTab').addClass('active');
-          $('#loans-tab').show();
-          $('#myloanrecords-tab').show();
-          $('#applyloan-tab').show();
-          break;
-          case '3':
-          $('#dashboardTab').addClass('active');
-          $('#loans-tab, #loans-deduction, #returnLatestDate, #add-loan, .edit-loan').show();
-          $('#members-tab, #viewuser-perm4, #returnMemberLatestDate').show();
-          $('#loanapps-tab').show();
-          $('#records-comakers-tab, #loanrecords-tab, #loanRecordsText, #loanRecordsTabText').show();
-          break;
-          case '4':
-          $('#dashboardTab').addClass('active');
-          $('#loans-tab, #returnLatestDate').show();
-          $('#loanapps-tab').show();
-          $('#sharecap-ledger-tab, #view-ledgers').show();
-          break;
-          case '5':
-          $('#dashboardTab').addClass('active');
-          $('#loans-tab').show();
-          $('#loanapps-tab').show();
-          $('#records-comakers-tab, #loanrecords-tab, #loanRecordsText, #loanRecordsTabText').show();
-          $('#sharecap-ledger-tab, #view-ledgers, #update-ledgers, #update-share-capitals').show();
-          break;
-          case '6':
-          $('#dashboardTab').addClass('active');
-          $('#loans-tab, #loans-deduction, #loans-archive, #returnLatestDate, #add-loan, .edit-loan, .archive-loan').show();
-          $('#members-tab, #adduser-perm2, #viewuser-perm4').show();
-          $('#records-comakers-tab, #loanrecords-tab, #comakers-tab, #loanRecordsText, #loanRecordsTabText, #comakersText, #comakersTabText').show();
-          break;
+        checkPerms();
+        function checkPerms(){
+          var role = '<?php echo $this->session->userdata('roleID'); ?>';
+          switch(role){
+            case '1':
+            $('#websettings-tab').show();
+            $('#websiteSettings').addClass('active');
+            break;
+            case '2':
+            $('#memberDash').show();
+            $('#dashboardTab').addClass('active');
+            $('#loans-tab').show();
+            $('#myloanrecords-tab').show();
+            $('#applyloan-tab').show();
+            break;
+            case '3':
+            $('#creditDash').show();
+            $('#dashboardTab').addClass('active');
+            $('#loans-tab, #loans-deduction, #returnLatestDate, #add-loan, .edit-loan').show();
+            $('#members-tab, #viewuser-perm4, #returnMemberLatestDate').show();
+            $('#loanapps-tab').show();
+            $('#records-comakers-tab, #loanrecords-tab, #loanRecordsText, #loanRecordsTabText').show();
+            break;
+            case '4':
+            $('#treasurerDash').show();
+            $('#dashboardTab').addClass('active');
+            $('#loans-tab, #returnLatestDate').show();
+            $('#loanapps-tab').show();
+            $('#sharecap-ledger-tab, #view-ledgers').show();
+            break;
+            case '5':
+            $('#managerDash').show();
+            $('#dashboardTab').addClass('active');
+            $('#loans-tab').show();
+            $('#loanapps-tab').show();
+            $('#records-comakers-tab, #loanrecords-tab, #loanRecordsText, #loanRecordsTabText').show();
+            $('#sharecap-ledger-tab, #view-ledgers, #update-ledgers, #update-share-capitals').show();
+            break;
+            case '6':
+            $('#chairmanDash').show();
+            $('#dashboardTab').addClass('active');
+            $('#loans-tab, #loans-deduction, #loans-archive, #returnLatestDate, #add-loan, .edit-loan, .archive-loan').show();
+            $('#members-tab, #adduser-perm2, #viewuser-perm4').show();
+            $('#records-comakers-tab, #loanrecords-tab, #comakers-tab, #loanRecordsText, #loanRecordsTabText, #comakersText, #comakersTabText').show();
+            break;
+          }
         }
       });
     </script>
