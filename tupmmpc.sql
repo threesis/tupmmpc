@@ -43,6 +43,7 @@ CREATE TABLE `active_loan_apps` (
 -- Dumping data for table `active_loan_apps`
 --
 
+
 INSERT INTO `active_loan_apps` (`id`, `loanapp_id`, `or_number`, `balance`, `remarks`, `payment_status`, `payment_for`, `payment_date`) VALUES
 (1, 9, 'UPL12345', '48604.17', 'New', 'paid', '2019-02-04', '2019-02-15'),
 (2, 1, 'UPL12345', '4329.00', 'New', 'paid', '2019-02-04', '2019-02-15'),
@@ -165,6 +166,7 @@ INSERT INTO `loan_applications` (`loanapp_id`, `member_id`, `loan_applied`, `loa
 (9, 9, 71, 36, 50000, '250.00', '1395.83', 'payslip-example.png', '28604.17', 'ianwilab', '2019-01-18 07:48:10', 'Approved', 'New', 4, NULL, NULL, NULL, NULL, NULL, 'ianwilab', 'leignlirasan', 'jamescaturas'),
 (2721, 2, 72, 24, 25000, '0.00', '0.00', 'payslip-example.png', '0.00', NULL, '2019-02-04 08:42:42', 'Pending', 'New', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
 (2741, 2, 74, 24, 25000, '0.00', '0.00', 'payslip-example.png', '0.00', NULL, '2019-02-12 17:42:14', 'Pending', 'New', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
 
 -- --------------------------------------------------------
 
@@ -456,7 +458,6 @@ ALTER TABLE `loan_applications`
   ADD KEY `comaker_fk1` (`comaker_1`),
   ADD KEY `comaker_fk2` (`comaker_2`),
   ADD KEY `comaker_fk3` (`comaker_3`);
-
 --
 -- Indexes for table `loan_deductions`
 --

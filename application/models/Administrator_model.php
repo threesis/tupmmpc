@@ -210,7 +210,7 @@
 			$query = $this->db->get('members');
 			return $query->num_rows();
 		}
-
+    
 		public function getAllAppliedLoans($userType, $userID) {
 			if($userType == 'Chairman') {
 				$query = $this->db->get('loan_applications');
