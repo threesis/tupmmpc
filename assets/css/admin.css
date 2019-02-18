@@ -99,26 +99,6 @@ html, body {
   font-size: 90%;
 }
 
-/* Profile Interface */
-#permission-mngmt, #dashboard-tab, #loans-tab, #loanapps-tab, #loanrecords-tab, #members-tab, #transactions-tab, 
-#records-tab, #comakers-tab, #sharecap-tab, #applyloan-tab, #add-user, #dashboard, #search-user, #addloan-perm1, 
-#searchuser-perm1, #adduser-perm2, #websettings-tab  {
-  display: none;
-}
-
-/* loan applications */
-#approve-cancel-PL, #issue-cheque-AL {
-  display: none;
-}
-
-#dashBoardPerms, #loanModPerm, #memberModPerm, #transactionModPerm, #recordModPerm, #deleteuser-perm3 {
-  display: none;
-}
-
-.editloan-perm2, .archiveloan-perm3, .viewuser-perm4, .dashboard-perm1, .none,   {
-  display: none;
-}
-
 .card-text .admin-name {
   color: #14171a;
   margin-top: 30px;
@@ -193,15 +173,14 @@ html, body {
 
 
 /** Members List **/
-.list-group .member-icon {
-  width: 50px;
-  height: 50px;
-  position: absolute;
+tr .member-icon {
+  width: 30px;
+  height: 30px;
   background-size: cover;
   border-radius: 50% 50% 50% 50%;
 }
 
-.member-name {
+tr .member-name {
   font-size: 15px;
   font-weight: 400;
   margin-left: 4rem;
@@ -282,6 +261,40 @@ html, body {
 }
 /** /Statistics Interface **/
 
+div.dt-buttons{
+  position:relative;
+  float:left;
+  margin-left: 1rem;
+}
+
+div.dataTables_length{
+  position:relative;
+  float:left;
+}
+
+.dataTables_info {
+  position:relative;
+  float:left; 
+  font-size: 90%;
+}
+
+.dataTables_paginate {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: 0.2rem;
+}
+
+.dataTables_paginate .pagination {
+  margin: 0;
+}
+
+td.details-control {
+    background: url('../resources/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('../resources/details_close.png') no-repeat center center;
+}
 
 
 /** Scrollbar style **/
@@ -331,6 +344,48 @@ h2 {
     margin-bottom: 30px;
   }
 }
+
+.selectize-input {
+  font-size: 90%;
+}
+
+/* hidden elements for role perm */
+#loans-tab, #loans-deduction, #loans-archive, #add-loan, .edit-loan, .archive-loan,  #returnLatestDate {
+  display: none;
+}
+
+#members-tab, #adduser-perm2, #viewuser-perm4, #returnMemberLatestDate {
+  display: none;
+}
+
+#loanapps-tab {
+  display: none;
+}
+
+#myloanrecords-tab {
+  display: none;
+}
+
+#records-comakers-tab, #loanrecords-tab, #comakers-tab, #loanRecordsText, #comakersText, #loanRecordsTabText, #comakersTabText {
+  display: none;
+}
+
+#sharecap-ledger-tab, #view-ledgers, #update-ledgers, #update-share-capitals {
+  display: none;
+}
+
+#applyloan-tab {
+  display: none;
+}
+
+#websettings-tab {
+  display: none;
+}
+
+#memberDash, #managerDash, #treasurerDash, #creditDash, #chairmanDash {
+  display: none;
+}
+
 
 
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 11, 2019 at 05:39 PM
+-- Generation Time: Feb 14, 2019 at 07:23 PM
 -- Server version: 10.1.33-MariaDB
 -- PHP Version: 7.2.6
 
@@ -31,21 +31,28 @@ SET time_zone = "+00:00";
 CREATE TABLE `active_loan_apps` (
   `id` int(11) NOT NULL,
   `loanapp_id` int(11) NOT NULL,
-  `or_no` int(255) NOT NULL,
+  `or_number` varchar(255) NOT NULL,
   `balance` decimal(7,2) NOT NULL,
   `remarks` varchar(255) NOT NULL,
-  `payment_date` datetime NOT NULL
+  `payment_status` varchar(255) NOT NULL,
+  `payment_for` date NOT NULL,
+  `payment_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `active_loan_apps`
 --
 
-INSERT INTO `active_loan_apps` (`id`, `loanapp_id`, `or_no`, `balance`, `remarks`, `payment_date`) VALUES
-(1, 9, 123, '48604.17', 'New', '2019-01-04 00:00:00'),
-(2, 1, 123, '4329.00', 'New', '2019-01-29 00:42:38'),
-(3, 3, 123, '7076.25', 'New', '2019-01-29 00:59:58'),
-(4, 2, 123, '29526.15', 'New', '2019-01-29 01:01:05');
+
+INSERT INTO `active_loan_apps` (`id`, `loanapp_id`, `or_number`, `balance`, `remarks`, `payment_status`, `payment_for`, `payment_date`) VALUES
+(1, 9, 'UPL12345', '48604.17', 'New', 'paid', '2019-02-04', '2019-02-15'),
+(2, 1, 'UPL12345', '4329.00', 'New', 'paid', '2019-02-04', '2019-02-15'),
+(3, 3, 'UPL12345', '7076.25', 'New', 'paid', '2019-02-04', '2019-02-15'),
+(4, 2, 'UPL12345', '29526.15', 'New', 'paid', '2019-02-04', '2019-02-15'),
+(11, 3, '', '5652.50', 'New', 'unpaid', '2019-03-15', '0000-00-00'),
+(12, 9, '', '47208.34', 'New', 'unpaid', '2019-03-15', '0000-00-00'),
+(13, 2, '', '27052.30', 'New', 'unpaid', '2019-03-15', '0000-00-00'),
+(14, 1, '', '2158.00', 'New', 'unpaid', '2019-03-15', '0000-00-00');
 
 -- --------------------------------------------------------
 
@@ -133,11 +140,11 @@ CREATE TABLE `loan_applications` (
   `date_applied` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `status` varchar(255) NOT NULL,
   `remarks` varchar(255) NOT NULL,
-  `comaker_1` varchar(255) DEFAULT NULL,
+  `comaker_1` int(11) UNSIGNED DEFAULT NULL,
   `cm_payslip_1` varchar(255) DEFAULT NULL,
-  `comaker_2` varchar(255) DEFAULT NULL,
+  `comaker_2` int(11) UNSIGNED DEFAULT NULL,
   `cm_payslip_2` varchar(255) DEFAULT NULL,
-  `comaker_3` varchar(255) DEFAULT NULL,
+  `comaker_3` int(11) UNSIGNED DEFAULT NULL,
   `cm_payslip_3` varchar(255) DEFAULT NULL,
   `cc_approval_1` varchar(255) DEFAULT NULL,
   `cc_approval_2` varchar(255) DEFAULT NULL,
@@ -149,15 +156,17 @@ CREATE TABLE `loan_applications` (
 --
 
 INSERT INTO `loan_applications` (`loanapp_id`, `member_id`, `loan_applied`, `loan_term`, `loan_amount`, `loan_int`, `monthly_deduc`, `user_payslip`, `take_home_pay`, `thp_verified_by`, `date_applied`, `status`, `remarks`, `comaker_1`, `cm_payslip_1`, `comaker_2`, `cm_payslip_2`, `comaker_3`, `cm_payslip_3`, `cc_approval_1`, `cc_approval_2`, `cc_approval_3`) VALUES
-(1, 2, 73, 3, 6500, '13.00', '2171.00', '', '22829.00', 'ianwilab', '2019-01-13 15:36:23', 'Approved', 'New', 'ugelofranco', NULL, 'ysadomingo', NULL, NULL, NULL, 'ianwilab', 'leignlirasan', 'jamescaturas'),
-(2, 2, 71, 13, 32000, '160.00', '2473.85', '', '62526.15', 'ianwilab', '2019-01-13 15:38:05', 'Active', 'New', 'leignlirasan', NULL, 'angelaladisla', NULL, NULL, NULL, 'ianwilab', 'leignlirasan', 'jamescaturas'),
-(3, 3, 71, 6, 8500, '42.50', '1423.75', '', '33076.25', 'ianwilab', '2019-01-14 14:14:23', 'Approved', 'New', 'ugelofranco', NULL, 'maygarcia', NULL, NULL, NULL, 'ianwilab', 'leignlirasan', 'jamescaturas'),
-(4, 3, 70, 9, 75000, '750.00', '8416.67', '', '15083.33', 'ianwilab', '2019-01-14 14:15:00', 'Approved', 'New', 'ugelofranco', NULL, 'angelaladisla', NULL, NULL, NULL, 'ianwilab', 'leignlirasan', 'jamescaturas'),
-(5, 2, 71, 22, 35000, '175.00', '1598.86', '', '0.00', NULL, '2019-01-15 07:14:57', 'Pending', 'New', 'ugelofranco', NULL, 'ianwilab', NULL, NULL, NULL, NULL, NULL, NULL),
-(6, 3, 71, 6, 7000, '35.00', '1172.50', '', '25327.50', 'ianwilab', '2019-01-17 14:44:47', 'Pending', 'New', 'ugelofranco', NULL, NULL, NULL, NULL, NULL, 'ianwilab', 'leignlirasan', NULL),
-(7, 8, 71, 36, 50000, '250.00', '1395.83', '', '63604.17', 'ianwilab', '2019-01-18 07:48:10', 'Approved', 'New', 'jamescaturas', NULL, NULL, NULL, NULL, NULL, 'ianwilab', 'leignlirasan', 'jamescaturas'),
-(9, 9, 71, 36, 50000, '250.00', '1395.83', '', '28604.17', 'ianwilab', '2019-01-18 07:48:10', 'Approved', 'New', 'jamescaturas', NULL, NULL, NULL, NULL, NULL, 'ianwilab', 'leignlirasan', 'jamescaturas'),
-(2721, 2, 72, 24, 25000, '0.00', '0.00', 'noimage.jpg', '0.00', NULL, '2019-02-04 08:42:42', 'Pending', 'New', '1', NULL, '4', NULL, NULL, NULL, NULL, NULL, NULL);
+(1, 2, 73, 3, 6500, '13.00', '2171.00', 'payslip-example.png', '22829.00', 'ianwilab', '2019-01-13 15:36:23', 'Approved', 'New', 6, NULL, 1, NULL, NULL, NULL, 'ianwilab', 'leignlirasan', 'jamescaturas'),
+(2, 2, 71, 13, 32000, '160.00', '2473.85', 'payslip-example.png', '62526.15', 'ianwilab', '2019-01-13 15:38:05', 'Active', 'New', 5, NULL, NULL, NULL, NULL, NULL, 'ianwilab', 'leignlirasan', 'jamescaturas'),
+(3, 3, 71, 6, 8500, '42.50', '1423.75', 'payslip-example.png', '33076.25', 'ianwilab', '2019-01-14 14:14:23', 'Approved', 'New', 6, NULL, 7, NULL, NULL, NULL, 'ianwilab', 'leignlirasan', 'jamescaturas'),
+(4, 3, 70, 9, 75000, '750.00', '8416.67', 'payslip-example.png', '15083.33', 'ianwilab', '2019-01-14 14:15:00', 'Approved', 'New', 6, NULL, NULL, NULL, NULL, NULL, 'ianwilab', 'leignlirasan', 'jamescaturas'),
+(5, 2, 71, 22, 35000, '175.00', '1598.86', 'payslip-example.png', '0.00', NULL, '2019-01-15 07:14:57', 'Pending', 'New', 6, NULL, 3, NULL, NULL, NULL, NULL, NULL, NULL),
+(6, 3, 71, 6, 7000, '35.00', '1172.50', 'payslip-example.png', '25327.50', 'ianwilab', '2019-01-17 14:44:47', 'Pending', 'New', 6, NULL, NULL, NULL, NULL, NULL, 'ianwilab', 'leignlirasan', NULL),
+(7, 8, 71, 36, 50000, '250.00', '1395.83', 'payslip-example.png', '63604.17', 'ianwilab', '2019-01-18 07:48:10', 'Approved', 'New', 4, NULL, NULL, NULL, NULL, NULL, 'ianwilab', 'leignlirasan', 'jamescaturas'),
+(9, 9, 71, 36, 50000, '250.00', '1395.83', 'payslip-example.png', '28604.17', 'ianwilab', '2019-01-18 07:48:10', 'Approved', 'New', 4, NULL, NULL, NULL, NULL, NULL, 'ianwilab', 'leignlirasan', 'jamescaturas'),
+(2721, 2, 72, 24, 25000, '0.00', '0.00', 'payslip-example.png', '0.00', NULL, '2019-02-04 08:42:42', 'Pending', 'New', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(2741, 2, 74, 24, 25000, '0.00', '0.00', 'payslip-example.png', '0.00', NULL, '2019-02-12 17:42:14', 'Pending', 'New', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
+
 
 -- --------------------------------------------------------
 
@@ -181,8 +190,7 @@ CREATE TABLE `loan_deductions` (
 INSERT INTO `loan_deductions` (`deduc_id`, `deduc_name`, `deduc_type`, `deduc_val`, `date_added`, `date_updated`) VALUES
 (1, 'No Deductions', 'None', '0.00', '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
 (24, 'Service Fee', 'percentage', '2.00', '2019-02-08 23:35:29', '0000-00-00 00:00:00'),
-(25, 'Retention Fee', 'amount', '250.00', '2019-02-08 23:40:22', '0000-00-00 00:00:00'),
-(28, 'Testing Fee', 'percentage', '1.00', '2019-02-09 21:00:02', '0000-00-00 00:00:00');
+(25, 'Retention Fee', 'amount', '250.00', '2019-02-08 23:40:22', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -212,7 +220,7 @@ INSERT INTO `loan_types` (`id`, `loan_name`, `loan_max_amt`, `loan_max_term`, `l
 (72, 'Appliance Loan', 100000, 36, '0.09', 'active', 'A loan is a thing that is borrowed, especially a sum of money that is expected to be paid back with interest.', '2018-11-07 09:37:36', '2019-02-09 20:52:03'),
 (73, 'Balik-Eskwela Loan', 50000, 24, '0.09', 'active', 'A loan is a thing that is borrowed, especially a sum of money that is expected to be paid back with interest.', '2018-11-07 09:38:17', '2019-01-30 22:35:15'),
 (74, 'Birthday Loan', 50000, 24, '0.09', 'active', 'A loan is a thing that is borrowed, especially a sum of money that is expected to be paid back with interest.', '2018-11-07 09:38:30', '2019-01-30 22:35:12'),
-(83, 'Holiday Loan', 20000, 24, '0.09', 'archived', 'A loan is a thing that is borrowed, especially a sum of money that is expected to be paid back with interest.', '2019-01-15 15:06:17', '2019-01-30 22:35:06'),
+(83, 'Holiday Loan', 20000, 24, '0.09', 'active', 'A loan is a thing that is borrowed, especially a sum of money that is expected to be paid back with interest.', '2019-01-15 15:06:17', '2019-01-30 22:35:06'),
 (84, 'Poverty Alleviation Loan', 200000, 24, '0.09', 'active', 'A loan is a thing that is borrowed, especially a sum of money that is expected to be paid back with interest.', '2019-01-15 15:08:07', '2019-02-11 02:06:07');
 
 -- --------------------------------------------------------
@@ -261,7 +269,7 @@ CREATE TABLE `members` (
   `contact_no` varchar(255) NOT NULL,
   `user_img` varchar(255) NOT NULL,
   `last_login` datetime NOT NULL,
-  `register_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `register_date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -269,21 +277,22 @@ CREATE TABLE `members` (
 --
 
 INSERT INTO `members` (`id`, `name`, `username`, `password`, `email`, `birthday`, `address`, `zipcode`, `college`, `position`, `contact_no`, `user_img`, `last_login`, `register_date`) VALUES
-(1, 'Ysa Domingo', 'ysadomingo', 'fcfd2ce63584cb06f919ed085bfea5a1', 'ysadomingo@gmail.com', '1998-06-10', 'Las Pinas City', '1630', 'College of Science', 2, '09175086666', 'ysa.jpg', '2019-02-10 01:08:34', '2018-10-07 16:11:06'),
-(2, 'Juan Miguel C. Ladisla', 'migsladisla', '4e4d6c332b6fe62a63afe56171fd3725', 'nonoyladisla@yahoo.com.ph', '1999-02-08', 'Taguig City', '1630', 'College of Science', 1, '09175086666', 'fcd72677dcaa701e191c01c8e8ba83e0.jpg', '2019-02-12 00:32:19', '2018-10-07 16:11:32'),
-(3, 'Ian Arellano', 'ianwilab', 'fcfd2ce63584cb06f919ed085bfea5a1', 'ianwilab@yahoo.com', '6667-06-07', 'Manila City', '1630', 'College of Liberal Arts', 3, '09175086666', 'ian.jpg', '2019-02-05 02:19:48', '2018-10-07 17:45:48'),
-(4, 'James Caturas', 'jamescaturas', 'fcfd2ce63584cb06f919ed085bfea5a1', 'jamescaturas@yahoo.com', '7722-07-07', 'Manila City', '1630', 'College of Industrial Technology', 3, '09175086666', 'james.jpg', '2019-02-03 20:14:16', '2018-10-07 17:46:19'),
-(5, 'Leign Lirasan', 'leignlirasan', 'fcfd2ce63584cb06f919ed085bfea5a1', 'leignlirasan@gmail.com', '7722-07-07', 'Paranaque City', '1630', 'College of Industrial Education', 3, '09175086666', 'leyn.jpg', '2019-02-03 20:14:16', '2018-10-07 17:46:55'),
-(6, 'Eugene Lofranco', 'ugelofranco', 'fcfd2ce63584cb06f919ed085bfea5a1', 'eugenelofranco@gmail.com', '2006-12-30', 'Manila City', '1630', 'College of Science', 4, '09175086666', 'noimage.jpg', '2019-02-03 20:14:16', '2018-10-08 15:11:08'),
-(7, 'May F. Garcia', 'maygarcia', 'fcfd2ce63584cb06f919ed085bfea5a1', 'jana', '1970-01-01', 'Pateros', '3312', 'College of Science', 4, '09175086666', 'may.jpg', '2019-02-05 01:50:57', '2018-10-17 16:25:28'),
-(8, 'Butch Ross Bituonan', 'bbituonan', '827ccb0eea8a706c4c34a16891f84e7b', 'rbituonan@tup.edu.ph', '1970-01-01', 'Manila', '1012', 'College of Science', 2, '09175086666', 'noimage.jpg', '2019-02-03 20:14:16', '2019-01-18 07:35:08'),
-(9, 'Jezikiel Dolores Guevarra', 'jezguevarraa', '4e4d6c332b6fe62a63afe56171fd3725', 'jez@gmail.com', '1970-01-01', 'Cavite', '1630', 'College of Science', 2, '09175449999', 'noimage.jpg', '2019-02-03 20:14:16', '2019-01-26 19:51:54'),
-(39, 'Jezikiel Dolores Guevarra', 'jezguevarra', '4e4d6c332b6fe62a63afe56171fd3725', 'jez@gmail.com', '1970-01-01', 'Cavite', '1630', 'College of Science', 2, '09175449999', 'noimage.jpg', '2019-02-03 20:14:16', '2019-01-26 19:51:54'),
-(41, 'Dhan Ritsard Francisco', 'dhanrichard', 'd50230a50070e59d7ad316962a55ac71', 'dhanrichard@gmail.com', '1970-01-01', 'Pasay', '1630', 'College of Science', 2, '09178566666', 'noimage.jpg', '2019-02-03 20:14:16', '2019-01-28 15:12:09'),
-(42, 'Franz Duterte Esponilla', 'franz', '827ccb0eea8a706c4c34a16891f84e7b', 'franz@y.com', '1970-01-01', 'Las Pinas', '1000', 'College of Liberal Arts', 2, '12345', 'noimage.jpg', '2019-02-04 17:16:13', '2019-02-04 09:15:56'),
-(43, 'Fjord Ramses Dela Cruz', 'fjord', '202cb962ac59075b964b07152d234b70', 'fjord@y.com', '1970-01-01', 'Paranaque', '1000', 'College of Science', 2, '19275666666', 'noimage.jpg', '2019-02-04 22:39:50', '2019-02-04 14:28:05'),
-(52, 'Bentong Dela Cruz Dela Laptrip', 'fsafafsa', '202cb962ac59075b964b07152d234b70', 'dsadsadsa', '1970-01-01', 'Taguig', '1243', 'College of Science', 2, '23242', 'noimage.jpg', '0000-00-00 00:00:00', '2019-02-11 13:36:54'),
-(53, 'George Oliveros Domingo', 'kainnakayo', '202cb962ac59075b964b07152d234b70', 'gsdgfsdgd', '1970-01-01', 'Las Pinas City', '1222', 'College of Engineering', 2, '23243342', 'noimage.jpg', '0000-00-00 00:00:00', '2019-02-11 14:14:18');
+(1, 'Ysa Domingo', 'ysadomingo', 'fcfd2ce63584cb06f919ed085bfea5a1', 'ysadomingo@gmail.com', '1998-06-10', 'Las Pinas City', '1630', 'College of Science', 2, '09175086666', 'ysa.jpg', '2019-02-14 22:41:55', '2018-10-08 00:11:06'),
+(2, 'Juan Miguel C. Ladisla', 'migsladisla', '4e4d6c332b6fe62a63afe56171fd3725', 'nonoyladisla@yahoo.com.ph', '1999-02-08', 'Taguig City', '1630', 'College of Science', 6, '09175086666', 'fcd72677dcaa701e191c01c8e8ba83e0.jpg', '2019-02-15 00:09:03', '2018-10-08 00:11:32'),
+(3, 'Ian Arellano', 'ianwilab', 'fcfd2ce63584cb06f919ed085bfea5a1', 'ianwilab@yahoo.com', '6667-06-07', 'Manila City', '1630', 'College of Liberal Arts', 3, '09175086666', 'ian.jpg', '2019-02-15 02:06:29', '2018-10-08 01:45:48'),
+(4, 'James Caturas', 'jamescaturas', 'fcfd2ce63584cb06f919ed085bfea5a1', 'jamescaturas@yahoo.com', '7722-07-07', 'Manila City', '1630', 'College of Industrial Technology', 3, '09175086666', 'james.jpg', '2019-02-03 20:14:16', '2018-10-08 01:46:19'),
+(5, 'Leign Lirasan', 'leignlirasan', 'fcfd2ce63584cb06f919ed085bfea5a1', 'leignlirasan@gmail.com', '7722-07-07', 'Paranaque City', '1630', 'College of Industrial Education', 3, '09175086666', 'leyn.jpg', '2019-02-03 20:14:16', '2018-10-08 01:46:55'),
+(6, 'Eugene Lofranco', 'ugelofranco', 'fcfd2ce63584cb06f919ed085bfea5a1', 'eugenelofranco@gmail.com', '2006-12-30', 'Manila City', '1630', 'College of Science', 5, '09175086666', 'noimage.jpg', '2019-02-15 00:09:35', '2018-10-08 23:11:08'),
+(7, 'May F. Garcia', 'maygarcia', 'fcfd2ce63584cb06f919ed085bfea5a1', 'jana', '1970-01-01', 'Pateros', '3312', 'College of Science', 4, '09175086666', 'may.jpg', '2019-02-14 22:58:38', '2018-10-18 00:25:28'),
+(8, 'Butch Ross Bituonan', 'bbituonan', '827ccb0eea8a706c4c34a16891f84e7b', 'rbituonan@tup.edu.ph', '1970-01-01', 'Manila', '1012', 'College of Science', 2, '09175086666', 'noimage.jpg', '2019-02-03 20:14:16', '2019-01-18 15:35:08'),
+(9, 'Jezikiel Dolores Guevarra', 'jezguevarraa', '4e4d6c332b6fe62a63afe56171fd3725', 'jez@gmail.com', '1970-01-01', 'Cavite', '1630', 'College of Science', 2, '09175449999', 'noimage.jpg', '2019-02-03 20:14:16', '2019-01-27 03:51:54'),
+(39, 'Jezikiel Dolores Guevarra', 'jezguevarra', '4e4d6c332b6fe62a63afe56171fd3725', 'jez@gmail.com', '1970-01-01', 'Cavite', '1630', 'College of Science', 2, '09175449999', 'noimage.jpg', '2019-02-03 20:14:16', '2019-01-27 03:51:54'),
+(41, 'Dhan Ritsard Francisco', 'dhanrichard', 'd50230a50070e59d7ad316962a55ac71', 'dhanrichard@gmail.com', '1970-01-01', 'Pasay', '1630', 'College of Science', 2, '09178566666', 'noimage.jpg', '2019-02-03 20:14:16', '2019-01-28 23:12:09'),
+(42, 'Franz Duterte Esponilla', 'franz', '827ccb0eea8a706c4c34a16891f84e7b', 'franz@y.com', '1970-01-01', 'Las Pinas', '1000', 'College of Liberal Arts', 2, '12345', 'noimage.jpg', '2019-02-04 17:16:13', '2019-02-04 17:15:56'),
+(43, 'Fjord Ramses Dela Cruz', 'fjord', '202cb962ac59075b964b07152d234b70', 'fjord@y.com', '1970-01-01', 'Paranaque', '1000', 'College of Science', 2, '19275666666', 'noimage.jpg', '2019-02-04 22:39:50', '2019-02-04 22:28:05'),
+(52, 'Bentong Dela Cruz Dela Laptrip', 'fsafafsa', '202cb962ac59075b964b07152d234b70', 'dsadsadsa', '1970-01-01', 'Taguig', '1243', 'College of Science', 2, '23242', 'noimage.jpg', '0000-00-00 00:00:00', '2019-02-11 21:36:54'),
+(53, 'George Oliveros Domingo', 'kainnakayo', '202cb962ac59075b964b07152d234b70', 'gsdgfsdgd', '1970-01-01', 'Las Pinas City', '1222', 'College of Engineering', 2, '23243342', 'noimage.jpg', '0000-00-00 00:00:00', '2019-02-11 22:14:18'),
+(57, 'Eminem Marshall Matters', 'eminem123', '4e4d6c332b6fe62a63afe56171fd3725', 'hhhhha232', '1970-01-01', 'Cleveland', '1666', 'College of Science', 2, '09929129192', 'noimage.jpg', '0000-00-00 00:00:00', '2019-02-13 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -306,7 +315,7 @@ INSERT INTO `roles` (`role_id`, `role_name`) VALUES
 (3, 'Credit Officer'),
 (4, 'Treasurer'),
 (5, 'Manager'),
-(6, 'Board of Directors');
+(6, 'Chairman');
 
 -- --------------------------------------------------------
 
@@ -446,10 +455,9 @@ ALTER TABLE `loan_applications`
   ADD KEY `member_id_fk` (`member_id`),
   ADD KEY `loan_type_fk` (`loan_applied`),
   ADD KEY `thm_verifiedby_fk` (`thp_verified_by`),
-  ADD KEY `comaker_1_fk` (`comaker_1`),
-  ADD KEY `comaker_2_fk` (`comaker_2`),
-  ADD KEY `comaker_3_fk` (`comaker_3`);
-
+  ADD KEY `comaker_fk1` (`comaker_1`),
+  ADD KEY `comaker_fk2` (`comaker_2`),
+  ADD KEY `comaker_fk3` (`comaker_3`);
 --
 -- Indexes for table `loan_deductions`
 --
@@ -505,7 +513,7 @@ ALTER TABLE `website_info`
 -- AUTO_INCREMENT for table `active_loan_apps`
 --
 ALTER TABLE `active_loan_apps`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `approved_loan_apps`
@@ -529,7 +537,7 @@ ALTER TABLE `home_descriptions`
 -- AUTO_INCREMENT for table `loan_applications`
 --
 ALTER TABLE `loan_applications`
-  MODIFY `loanapp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2722;
+  MODIFY `loanapp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2742;
 
 --
 -- AUTO_INCREMENT for table `loan_deductions`
@@ -553,7 +561,7 @@ ALTER TABLE `loan_type_deducs`
 -- AUTO_INCREMENT for table `members`
 --
 ALTER TABLE `members`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=54;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `roles`
@@ -599,6 +607,9 @@ ALTER TABLE `disbursement_voucher`
 -- Constraints for table `loan_applications`
 --
 ALTER TABLE `loan_applications`
+  ADD CONSTRAINT `comaker_fk1` FOREIGN KEY (`comaker_1`) REFERENCES `members` (`id`),
+  ADD CONSTRAINT `comaker_fk2` FOREIGN KEY (`comaker_2`) REFERENCES `members` (`id`),
+  ADD CONSTRAINT `comaker_fk3` FOREIGN KEY (`comaker_3`) REFERENCES `members` (`id`),
   ADD CONSTRAINT `loan_app_cc1fk_1` FOREIGN KEY (`cc_approval_1`) REFERENCES `members` (`username`),
   ADD CONSTRAINT `loan_app_cc2fk_2` FOREIGN KEY (`cc_approval_2`) REFERENCES `members` (`username`),
   ADD CONSTRAINT `loan_app_cc3fk_3` FOREIGN KEY (`cc_approval_3`) REFERENCES `members` (`username`),
