@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/logo.png"/>
 
-    <title>TUP Manila Coop | Multi-Purpose Loan</title>
+    <title>TUP Manila Multi-Purpose Cooperative</title>
 
     <!-- Bootstrap core CSS -->
     <link href="<?php echo base_url(); ?>assets/vendor/bootstrap4/css/bootstrap.css" rel="stylesheet">
@@ -57,6 +57,9 @@
               <a class="nav-link js-scroll-trigger" href="#team">Officers</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#activities">Activities</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
             </li>
             <li class="nav-item">
@@ -66,6 +69,7 @@
         </div>
       </div>
     </nav>
+    
     <!-- Header -->
     <header class="masthead">
       <div class="container">
@@ -82,43 +86,64 @@
       <!-- About -->
     <section id="about">
       <div class="container">
+        <div class="one">
         <div class="row">
-          <div class="col-md-12 text-center">
-            <p class="section-subheading text-uppercase">a little about</p>
-            <h2 class="section-heading text-uppercase mb-5" data-aos="fade-down" data-aos-easing="linear" data-aos-duration="2000">TUP Manila Multi-purpose cooperative</h2>
-          </div>
-          <hr width="15%" align="center">
+          <div class="col-md-12 text-center" data-aos="fade-down" data-aos-duration="1500">
+            <p class="section-subheading mt-5">about</p>
+            <h2 class="section-heading text-uppercase">TUP Manila Multi-purpose cooperative</h2>
+              <div class="row mb-3">
+                <div class="col-sm-12 col-md-12">
+                  <h6 class="section-subheading mb-5 px-5 text-justify">Cooperative is a private business organization that is owned and controlled by the people who use its products, supplies or services. Although cooperatives vary in type and membership size, all were formed to meet the specific objectives of members, and are structured to adapt to member's changing needs. Cooperatives are formed by individuals who coordinate among themselves (horizontal coordination) to achieve vertical integration in their business activities. Technological University of the Philippines - Manila Multi-Purpose Cooperative is a member-owned, non-profit, financial cooperative organized by consumers to encourage savings and to obtain loans at the lowest possible cost. Its members share a common bond such as having the same occupation or employer, belonging to the same institution, which is TUP- Manila. Members elect a board of directors on a one-member one-vote basis. </h6>
+                  </div>
+              </div>
+            </div>
+            <div class="col-md-12 text-center" data-aos="fade-up" data-aos-duration="1500">
+            <h4 class="section-heading text-center text-uppercase">G o a l s</h4>
+            <h6 class="section-subheading goals text-justify">
+            The TUPMMPC shall aim to:<br>
+             1. Provide goods and services to its members to enable them to attain increased income, savings, investments, productivity, and purchasing power, and promote among themselves equitable distribution of net surplus through maximization of economies of scale, cost-sharing, and risk-sharing; <br>
+             2.   Provide optimum social and economic benefits to its members; <br>
+             3.  Improve efficiency of its operations; <br>
+             4.  Inculcate values of economy, cooperation, integrity and commitment; <br>
+             5.  Strengthen capability of officers, potential leaders, and employees; <br>
+             6.  Promote cooperativism; and <br>
+             7.  Follow established policies and procedures of relevant government agencies.s
+            </h6>
         </div>
-        <div class="row mb-5">
-          <div class="col-sm-12 col-md-12">
-            <h6 class="section-subheading my-5" data-aos="fade-down" data-aos-easing="linear" data-aos-duration="2000">"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"</h6>
-          </div>
-        </div>
+      </div>
+      </div>
+    </div>
     </section>
 
-    <!--Vision and Mission -->
-    <section id="vision">
-        <div class="container-fluid">
-          <div class="row">
-          <div class="col-xs-12 col-sm-12 col-md-6 vision">
-             <h2 class="heading text-uppercase my-5" data-aos="fade-right" data-aos-duration="2000">Vision and Mission</h2>
-             <p class="statement my-3 text-justify" data-aos="fade-right" data-aos-duration="2000">"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?"</p>
+      <!-- vision mission -->
+      <section id="vision" class="showcase">
+          <div class="container-fluid p-0">
+            <div id="visionBG" class="row no-gutters">
+              <div class="col-lg-6 order-lg-2 text-white showcase-img-1"></div>
+              <div class="col-lg-6 order-lg-1 my-auto showcase-text" data-aos="flip-left" data-aos-duration="3000">
+                <h2>Vision</h2>
+                <p id="returnVision" class="lead mb-0"></p>
+              </div>
+            </div>
+            <div id="missionBG" class="row no-gutters">
+              <div class="col-lg-6 text-white showcase-img-2"></div>
+              <div class="col-lg-6 my-auto showcase-text" data-aos="flip-right" data-aos-duration="3000">
+                <h2>Mission</h2>
+                <p id="returnMission" class="lead mb-0"></p>
+              </div>
+            </div>
           </div>
-          <div class="col-xs-12 col-sm-12 col-md-6 mission text-center"></div>
+        </section>
+       <!-- Service -->
+        <div id="service" class="section md-padding">
+          <div class="container">
+              <div class="section-header text-center">
+                <h2 class="title text-uppercase"></i>Loans Offered</h2>
+                <h6 class="title text-uppercase mb-5">by TUPMMPC</h6>
+              </div>
+            <div class="row" id="returnLoans" data-aos="zoom-in" data-aos-duration="2000"></div>
           </div>
-          </div>
-      </section>
-
-     <!-- Service -->
-  <div id="service" class="section md-padding">
-    <div class="container">
-        <div class="section-header text-center">
-          <h2 class="title text-uppercase" data-aos="fade-down" data-aos-duration="2000"></i>Loans Offered</h2>
-          <h6 class="title text-uppercase" data-aos="fade-down" data-aos-duration="2000">by TUPMMPC</h6>
         </div>
-      <div class="row" id="returnLoans" data-aos="zoom-in" data-aos-duration="1500"></div>
-    </div>
-  </div>
 
          <!--Ajax  -->
         <script type="text/JavaScript">
@@ -126,6 +151,7 @@
             get_loans();
             get_officers();
             getWebsiteInfos();
+            getActivities();
 
             function get_loans() { 
               $.ajax({ 
@@ -139,11 +165,12 @@
                   for(i = 0; i < data.length; i++) { 
                     column += '<div class="col-sm-12 col-md-6 col-lg-4 mx-auto">' + 
                                 '<div class="service">' +
-                                  '<h3>' + data[i].loan_name + '</h3>' +
-                                  '<hr>'+
-                                    '<p class="text">Max. Loan Amount' + data[i].loan_max_amt + '</p>' +
-                                    '<p class="text">Interest Rate ' + data[i].loan_interest + '</p>' +
-                                    '<p class="text">Max. Loan Term: ' + data[i].loan_max_term + '</p>' + 
+                                  '<h3 class="loan-name">' + data[i].loan_name + '</h3>' +
+                                  '<p class = "loan-description">' +  data[i].loan_description + '</p>' +
+                                  '<hr>' +
+                                    '<p class="text">Interest Rate: ' + data[i].loan_interest + '%' + '</p>' +
+                                    '<p class="text">Max. Loan Term: ' + data[i].loan_max_term + ' months' + '</p>' + 
+                                    '<p class="text">Max. Loan Amount: &#8369;' + data[i].loan_max_amt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '.00'  + '</p>' +
                                 '</div>' +
                               '</div>';
                   }
@@ -165,12 +192,12 @@
                 var column = ''; 
                 var i;
                 for(i = 0; i < data.length; i++) {
-                  column += '<div class="col-lg-3 col-xs-12">' + 
+                  column += '<div class="col-lg-4 col-xs-12 mx-auto">' + 
                               '<div class="team-member">' +
-                                '<img class="mx-auto rounded-circle" src="<?php echo base_url() ?>assets/img/team/may.jpg" alt="">' +
+                                '<img class="mx-auto rounded-circle" src=" ' + '<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + ' ">' +
                                 '<h4>' + data[i].name + '</h4>' + 
-                                '<p class="text-muted">' + data[i].college +
-                                '<br>' +data[i].role_name +'</p>' +
+                                '<p class="text-muted my-1">' + data[i].college +
+                                '<br>' + data[i].role_name +'</p>' +
                               '</div>' +
                             '</div>';
                 }
@@ -190,6 +217,8 @@
               dataType : 'json',
               success: function(data) {
                 var title = data[0].title;
+                var vision = data[0].vision;
+                var mission = data[0].mission;
                 var address = data[0].address;
                 var telephone = data[0].telephone_no;
                 var cellphone = data[0].cellphone_no;
@@ -199,6 +228,8 @@
                 var email = data[0].email;
 
                 $('#returnTitle').html(title);
+                $('#returnVision').html(vision);
+                $('#returnMission').html(mission);
                 $('#returnAddress').html(address);
                 $('#returnTelephone').html(telephone);
                 $('#returnCellphone').html(cellphone);
@@ -212,6 +243,22 @@
                 }
             });
           }
+
+          function getActivities(){
+            $.ajax({
+              type : 'ajax',
+              url : '<?php echo base_url() ?>home/getActivities',
+              async : false, 
+              dataType : 'json', 
+              success: function(data){
+
+              },
+                error: function(){
+                  $('#returnWebsiteInfos').html('<p class="alert alert-danger alert-dismissable fade show text-center" role="alert">Could not get data from the database!</p>').fadeIn('slow');
+                }
+            });
+          }
+
           });
           
         </script>
@@ -221,7 +268,7 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-12 text-center">
-            <h2 class="section-heading text-uppercase" data-aos="fade-down" data-aos-duration="2000">TUPMMPC Officers</h2>
+            <h1 class="section-heading text-uppercase" data-aos="fade-down" data-aos-duration="2000">TUPMMPC Officers</h1>
           </div>
         </div>
         <div class="row pt-5" id="returnOfficers" data-aos="zoom-in-down" data-aos-duration="3000"></div>
@@ -242,43 +289,63 @@
       </div>
     </section>  -->
 
+    <!-- Activities --> 
+    <section id="activities">
+        <div id="carouselpic" class="carousel slide" data-ride="carousel">
+          <ol class="carousel-indicators">
+            <li data-target="#carouselpic" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselpic" data-slide-to="1"></li>
+            <li data-target="#carouselpic" data-slide-to="2"></li>
+            <li data-target="#carouselpic" data-slide-to="3"></li>
+          </ol>
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img class="d-block w-100" src="assets/img/oh.jpg" alt="Third slide">
+              <div class="carousel-caption d-none d-md-block">
+              <h4>TUPMMPC Seminar 2018</h4>
+              <p>Bakasyunan Resort and Conference Center, Tanay Rizal - June 1, 2018</p>
+            </div>
+            </div>
+            <div class="carousel-item">
+              <img class="d-block w-100" src="assets/img/wow2.jpg" alt="First slide">
+              <div class="carousel-caption d-none d-md-block">
+              <h4>TUPMMPC Seminar 2018</h4>
+              <p>Bakasyunan Resort and Conference Center, Tanay Rizal - June 1, 2018</p>
+            </div>
+            </div>
+            <div class="carousel-item">
+              <img class="d-block w-100" src="assets/img/wow1.jpg" alt="Second slide">
+              <div class="carousel-caption d-none d-md-block">
+              <h4>TUPMMPC Seminar 2018</h4>
+              <p>Bakasyunan Resort and Conference Center, Tanay Rizal - June 1, 2018</p>
+            </div>
+            </div>
+            <div class="carousel-item">
+              <img class="d-block w-100" src="assets/img/wow.jpg" alt="Third slide">
+              <div class="carousel-caption d-none d-md-block">
+              <h4>TUPMMPC Seminar 2018</h4>
+              <p>Bakasyunan Resort and Conference Center, Tanay Rizal - June 1, 2018</p>
+            </div>
+            </div>
+          </div>
+          <a class="carousel-control-prev" href="#carouselpic" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselpic" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+    </section>
+
     <!-- Contact -->
     <div id="contact">
       <div class="container-fluid parallax">
         <div class="row">
-          <div class="col-sm-12 col-md-12 text-center">
+          <div class="col-sm-12 col-md-12 text-center my-5">
            <h2>Maximizing members' financial well-being.</h2>
-           <h6>How can we help you?</h6>
-           <button type="button" class="btn btn-pill btn-success my-5 py-2" data-toggle="modal" data-target="#openSendMessageModal">send us a message</button>
-          </div>
-        </div>
-      </div>
-    </div>
-           
-    <footer>
-      <div class="container-fluid parallax footer">
-        <div class="row">
-            <div class="col-xs-6 col-sm-6 col-md-4 text-center pt-5" data-aos="zoom-in" data-aos-duration="1500">
-              <p class="contact-details">
-                <i class="fas fa-map-marker-alt text-uppercase" id="icons"> <a>Location</a></i><br>
-                <a id="returnAddress"></a>
-              </p>
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-4 text-center pt-5" data-aos="zoom-in" data-aos-duration="1500">
-              <p class="contact-details">
-                <i class="fas fa-mobile text-uppercase" id="icons" > <a>Call us</a></i><br>
-                <a id="returnTelephone"></a><br>
-                <a id="returnCellphone"></a>
-              </p>
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-4 text-center pt-5" data-aos="zoom-in" data-aos-duration="1500">
-              <p class="contact-details">
-                <i class="fas fa-envelope text-uppercase" id="icons"> <a>Email</a></i><br>
-                <a id="returnEmail"></a>
-              </p>
-            </div>
-          </div>
-          <div class="col-sm-12 col-md-12 text-center">
+           <div class="col-sm-12 col-md-12 text-center">
         <ul class="list-inline social-buttons py-4">
           <li class="list-inline-item text-center">
             <a id="returnTwitter">
@@ -297,6 +364,34 @@
           </li> 
         </ul>
     </div>
+          </div>
+        </div>
+      </div>
+    </div>
+           
+    <footer>
+      <div class="container-fluid parallax footer">
+        <div class="row">
+            <div class="col-xs-6 col-sm-6 col-md-4 text-center pt-5 my-5" data-aos="zoom-in" data-aos-duration="1500">
+              <p class="contact-details px-5">
+                <i class="fas fa-map-marker-alt text-uppercase" id="icons"> <a>Location</a></i><br>
+                <a id="returnAddress"></a>
+              </p>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-4 text-center pt-5 my-5" data-aos="zoom-in" data-aos-duration="1500">
+              <p class="contact-details">
+                <i class="fas fa-mobile text-uppercase" id="icons" > <a>Call us</a></i><br>
+                <a id="returnTelephone"></a><br>
+                <a id="returnCellphone"></a>
+              </p>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-4 text-center pt-5 my-5" data-aos="zoom-in" data-aos-duration="1500">
+              <p class="contact-details">
+                <i class="fas fa-envelope text-uppercase" id="icons"> <a>Email</a></i><br>
+                <a id="returnEmail"></a>
+              </p>
+            </div>
+          </div>
       </div>
     </footer>
         

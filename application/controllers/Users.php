@@ -28,7 +28,9 @@
 						'roleID' => $user_info[0]['position'],
 						'position' => $user_info[0]['role_name'],
 						'name' => $user_info[0]['name'],
+						'user_id' => $user_info[0]['id'],
 						'username' => $username,
+						'user_id' => $user_info[0]['id'],
 						'signed_in' => true
 					);
 					// Set user session
@@ -48,6 +50,29 @@
 
 			}
 			
+		}
+
+		public function activities() {
+			if($this->session->userdata('signed_in')) {
+				redirect('home');
+			} else {
+				$this->load->view('pages/activities');
+			}
+		}
+
+		public function getMyLoanRecords(){
+			$result = $this->user_model->getMyLoanRecords();
+			echo json_encode($result);
+		}
+
+		public function getUserShareCap(){
+			$result = $this->user_model->getUserShareCap();
+			echo json_encode($result);
+		}
+
+		public function getUserLoanRecords(){
+			$result = $this->user_model->getUserLoanRecords();
+			echo json_encode($result);
 		}
 
 		public function signout() {

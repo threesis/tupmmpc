@@ -138,7 +138,7 @@ img::-moz-selection {
 header.masthead {
   text-align: center;
   color: white;
-  background-image: url("../img/header-bg.jpg");
+  background-image: url("../img/tupbg.jpg");
   height: 750px;
   background-attachment: fixed;
   background-position: center;
@@ -541,17 +541,24 @@ header.masthead .intro-text .intro-heading {
 
 /** About TUPMMPC **/
 #about{
-  padding: 100px;
+  padding: 70px;
 }
 #about p{
   color: gray;
   font-family: 'Century Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; 
-  letter-spacing: 00001em;
-  font-size: 12px;
+  letter-spacing: 00002em;
+  font-size: 17px;
   font-weight: 400;
 }
 
 #about h2{
+  color:  #0c271a;
+  font-family: 'Century Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; 
+  font-weight: 400;
+  margin-bottom: 50px;
+}
+
+#about h4{
   color:  #0c271a;
   font-family: 'Century Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; 
   font-weight: 400;
@@ -572,40 +579,49 @@ header.masthead .intro-text .intro-heading {
   position: relative;
 }
 
-
 /** Vision and Mission **/
-#vision{
-  margin-top: -200px;
+.showcase { 
+    margin-top: -150px;
+ }
+.showcase .showcase-text {
+  padding: 3rem;
+
 }
 
-.vision {
-  background-color: #262626;
-  padding: 50px;
+#visionBG, #missionBG {
+  background-color: #f2f2f2;
 }
 
-.vision h2{
-  letter-spacing: 0.13em;
-  color: white;
-  font-weight: 400;
-  text-align: left;
+.showcase h2{
+  font-weight: 700;
   font-family: 'Century Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; 
 }
-
-.vision p{
-  color: #f2f2f2;
-  font-weight: 400;
-  letter-spacing: 0.17em;
-  font-size: 14px;
-  text-align: left;
-  font-family: 'Century Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; 
-}
-
-.mission {
+.showcase-img-1{
   background-image: url("../img/7.jpg");
-  background-position: center;
+  min-height: 22rem;
   background-size: cover;
 }
 
+.showcase-img-2{
+  background-image: url("../img/vision.jpg");
+  min-height: 22rem;
+  background-size: cover;
+}
+
+.goals{
+  padding-left: 120px;
+  padding-right: 120px;
+}
+
+.two{
+  background-color: transparent;
+  padding: 50px;
+}
+@media (min-width: 768px) {
+  .showcase .showcase-text {
+    padding: 7rem;
+  }
+}
 
 /** Loans Offered **/
 #service{
@@ -638,15 +654,18 @@ header.masthead .intro-text .intro-heading {
 #service p{
   font-weight: 500;
   margin-bottom: -5px;
+  font-size: 14px;
+  font-family: 'Verdana', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; 
 }
 
 .service h3 {
    color: #08630d;
   -webkit-transition: 0.2s color;
   transition: 0.2s color;
+  font-family: 'Century Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji'; 
 }
 .service p {
-   color: #08630d;
+   color: #444444;
   -webkit-transition: 0.2s color;
   transition: 0.2s color;
 }
@@ -685,6 +704,10 @@ header.masthead .intro-text .intro-heading {
   background-image: url('../img/Clouds.jpg');
   background-size: cover;
 }
+#team h1{
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
 .team-member {
   margin-bottom: 25px;
   text-align: center;
@@ -694,18 +717,49 @@ header.masthead .intro-text .intro-heading {
   width: 180px;
   height: auto;
   border: 7px solid #fff;
+  transition: transform .5s;
+}
+.team-member img:hover {
+  transform: scale(1.2);
 }
 
 .team-member h4 {
   margin-top: 25px;
   margin-bottom: 0;
+  font-weight: 700;
   text-transform: none;
+  font-family: 'Century Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
 .team-member p {
   margin-top: 0;
+  font-family: 'Century Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
+/** Activities **/
+#activities{
+  padding: 0;
+}
+.carousel-item {
+    display: none;
+    position: relative;
+    .transition(.3s ease-in-out left);
+    background: linear-gradient(to top, #dfe9ec 0%, #dfe9ec 100%);
+}
+#activities img{
+  height: auto;
+  max-height: 600px;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  object-fit: cover;
+}
+.carousel-caption {
+ background: rgba(0, 0, 0, 0.4);
+ letter-spacing: 2px;
+ font-family: 'Century Gothic', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
 
 /** Contact US **/ 
 #contact .parallax{
@@ -740,11 +794,11 @@ header.masthead .intro-text .intro-heading {
 
 .contact-details{
   color: #f6f6ee;
-  transition: transform .2s;
+  transition: transform .3s;
 }
 
 .contact-details:hover {
-  transform: scale(1.5); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+  transform: scale(1.2); /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
 }
 
 .contact-details a{
