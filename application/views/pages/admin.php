@@ -49,10 +49,10 @@
             <li class="nav-item active mr-2">
               <a class="nav-link" href="#"><span class="far fa-envelope fa-lg mr-2"></span>Messages</a>
             </li>
-            <li class="nav-item dropdown mr-2">
+            <li id="notificationBar" class="nav-item dropdown mr-2">
               <a class="nav-link" href="#" id="navbarDropdownNoti" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-bell fa-lg mr-2"></i>Notifications</a>
-              <div id="returnNoti" class="dropdown-menu" aria-labelledby="navbarDropdownNoti">
-                <a id="openApp" class="dropdown-item">Account</a>
+              <div id="returnNotifications" class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownNoti">
+
               </div>
             </li>
             <li class="nav-item dropdown active">
@@ -2399,7 +2399,7 @@
                       col = data[i].college; 
                   }
 
-                  row +=  '<tr class="text-secondary" name="' + data[i].name + '" status="' + status + '" data="' + data[i].loanapp_id + '"payslip="' + data[i].take_home_pay + '" verifiedBy="' + data[i].thp_verified_by + '" chequeNo="' + data[i].cheque_no + '" dateIssued="' + dateIssued + '" style="cursor: pointer">' +
+                  row +=  '<tr class="text-secondary" username="' + data[i].username + '" name="' + data[i].name + '" status="' + status + '" data="' + data[i].loanapp_id + '"payslip="' + data[i].take_home_pay + '" verifiedBy="' + data[i].thp_verified_by + '" chequeNo="' + data[i].cheque_no + '" dateIssued="' + dateIssued + '" style="cursor: pointer">' +
                             '<td style="vertical-align: middle">' + c + '</td>' +
                             '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
                             '<td style="vertical-align: middle">' + col + '</td>' +
@@ -2541,8 +2541,10 @@
           takeHomePay = Math.round(takeHomePay).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           var cheque = $(this).attr('chequeNo');
           var name = $(this).attr('name');
+          var uname = $(this).attr('username');
           var img = $(this).find('img').attr('src');
           $('#openLoanApp').attr('selectedname', name);
+          $('#openLoanApp').attr('username', uname);
           $('#openLoanApp').attr('selectedid', id);
           if(selectedTab == 'returnPendingLoan') {
             $('#thpInfo').hide();
@@ -2666,6 +2668,7 @@
 
         $('#openLoanApp').on('click', '#voucherLoanAppBtn', function(){
           var id = $('#openLoanApp').attr('selectedid');
+          var uname = $('#openLoanApp').attr('username');
           var name = $('#openLoanApp').attr('selectedname');
           var loan = '';
           var loanAmt = '';
@@ -2694,9 +2697,8 @@
               loanInterest = data[0][2];
               monthlyDeduc = data[0][3];
               cheque = data[0][4];
-              APLid = data[0][5];
+              APLid = data[0][5].concat(new Date().getFullYear());
               loan = data[0][6];
-              remarks = data[0][7];
               dii = loanInterest * loanAmt;
               serviceFee = 0.01 * loanAmt;
               retentionFee = 0.03 * loanAmt;
@@ -2719,15 +2721,15 @@
                 '<tbody id="calcBody" style="height: auto; max-height: 400px; overflow-y: auto; font-size: 90%">' +
                   '<tr>' +
                     '<td colspan="2"><strong>DATE: <?php date_default_timezone_set("Asia/Manila"); echo date("Y/m/d"); ?></strong></td>' +
-                    '<td><strong>VOUCHER: ' + APLid + '</strong></td>' +
-                    '<td><strong>CHEQUE: ' + cheque + '</strong></td>' +
+                    '<td name="APLid" value="'+APLid+'"><strong>VOUCHER: ' + APLid + '</strong></td>' +
+                    '<td name="id" value="'+id+'"><strong>CHEQUE: ' + cheque + '</strong></td>' +
                   '<tr>' +
                     '<td colspan="2">Payee</td>' +
-                    '<td colspan="2">' + name + '</td>' +
+                    '<td name="uname" value="'+uname+'" colspan="2">' + name + '</td>' +
                   '</tr>' +
                   '<tr>' +
-                    '<td colspan="2">' + loan + '</td>' +
-                    '<td colspan="2">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="loan" value="'+loan+'" colspan="2">' + loan + '</td>' +
+                    '<td name="APLid" value="'+cashInBank+'" colspan="2">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2"></td>' +
@@ -2750,14 +2752,14 @@
                     '<td colspan="1">&#8369;' + dii.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr>' +
-                    '<td colspan="2">Retention Fee 3%</td>' +
+                    '<td name="retentionFee" colspan="2">Retention Fee 3%</td>' +
                     '<td colspan="1">-</td>' +
                     '<td colspan="1">-</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2">Service Fee 1%</td>' +
                     '<td colspan="1">-</td>' +
-                    '<td colspan="1">&#8369;' + serviceFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="serviceFee" value="'+serviceFee+'" colspan="1">&#8369;' + serviceFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2">Outstanding balance of</td>' +
@@ -2767,62 +2769,104 @@
                   '<tr>' +
                     '<td colspan="2">Cash in bank</td>' +
                     '<td colspan="1">-</td>' +
-                    '<td colspan="1">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="APLid" colspan="1">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr><td colspan="4">-</td></tr>' +
                   '<tr>' +
                     '<td colspan="2">TOTAL</td>' +
-                    '<td colspan="1">&#8369;' + totalDebit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                    '<td colspan="1">&#8369;' + totalCredit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="totalDebit" value="'+totalDebit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1">&#8369;' + totalDebit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="totalCredit" value="'+totalCredit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1">&#8369;' + totalCredit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2" class="h5">NET AMOUNT DUE</td>' +
-                    '<td colspan="1"></td>' +
-                    '<td colspan="1" class="h4"><span class="text-success">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></td>' +
+                    '<td name="totalBalance" value="'+totalBalance+'" colspan="1"></td>' +
+                    '<td name="cashInBank" value="'+cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1" class="h4"><span class="text-success">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></td>' +
                   '</tr>' +
                 '</tbody>' +
               '</table>');
             $('#confirmationLoanAppModal').find('.modal-footer').html('<button type="button" class="btn btn-outline-success btn-sm mr-1" id="submitVoucherBtn"><i class="fas fa-check fa-sm mr-1"></i>Submit</button>');
 
-            $('#confirmationLoanAppModal').on('click', '#submitVoucherBtn', function(){
-              var apostrophe = "'s";
-              var data = '&loanapp_id=' + id + '&dvNo=' + APLid + '&retFee=' + retentionFee + '&serFee=' + serviceFee + '&debit=' + totalDebit +'&credit=' + totalCredit +'&netAmt=' + cashInBank + '&balance=' + totalBalance + '&remarks=' + remarks;
-              $.ajax({
-                type    : 'ajax',
-                method  : 'post',
-                url     : '<?php echo base_url() ?>loans/insertLoanVoucher',
-                data    : data,
-                async   : false,
-                dataType: 'json',
-                success : function(data){
-                  if(data) {
-                    $('#confirmationLoanAppModal').modal('hide');
-                    $('#loanAppMsg').html('<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, ' + name + apostrophe + ' loan has started.</a>' +
-                                '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
-                                  '<span aria-hidden="true">&times;</span>' +
-                                '</button>' +
-                              '</p>').fadeIn().delay(3000).fadeOut('fast');
-                    getApprovedLoans();
-                    getActiveLoans();
-                  } else {
-                    $('#confirmationLoanAppModal').modal('hide');
-                    $('#loanAppMsg').html('<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Oops, something went wrong!</a>' +
-                                '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
-                                  '<span aria-hidden="true">&times;</span>' +
-                                '</button>' +
-                              '</p>').fadeIn().delay(3000).fadeOut('fast');
-                    getApprovedLoans();
-                    getActiveLoans();
-                  }
-                },
-                error : function(){
-                  alert('ERROR!');
-                }
-              });
-            });
         });
 
+        $('#confirmationLoanAppModal').on('click', '#submitVoucherBtn', function(){
+          var apostrophe = "'s";
+          var id = $('#confirmationLoanAppModal').find('td[name=id]').attr('value');
+          var uname = $('#confirmationLoanAppModal').find('td[name=uname]').attr('value');
+          var loan = $('#confirmationLoanAppModal').find('td[name=loan]').attr('value');
+          var APLid = $('#confirmationLoanAppModal').find('td[name=APLid]').attr('value');
+          var retentionFee = $('#confirmationLoanAppModal').find('td[name=retentionFee]').attr('value');
+          var serviceFee = $('#confirmationLoanAppModal').find('td[name=serviceFee]').attr('value');
+          var totalDebit = $('#confirmationLoanAppModal').find('td[name=totalDebit]').attr('value');
+          var totalCredit = $('#confirmationLoanAppModal').find('td[name=totalCredit]').attr('value');
+          var cashInBank = $('#confirmationLoanAppModal').find('td[name=cashInBank]').attr('value');
+          var totalBalance = $('#confirmationLoanAppModal').find('td[name=totalBalance]').attr('value');
 
+          var data = '&uname=' + uname + '&loanapp_id=' + id + '&dvNo=' + APLid + '&retFee=' + retentionFee + '&serFee=' + serviceFee + '&debit=' + totalDebit +'&credit=' + totalCredit +'&netAmt=' + cashInBank + '&balance=' + totalBalance;
+          alert(data);
+          $.ajax({
+            type    : 'ajax',
+            method  : 'post',
+            url     : '<?php echo base_url() ?>loans/insertLoanVoucher',
+            data    : data,
+            async   : false,
+            dataType: 'json',
+            success : function(data){
+              if(data) {
+                $('#confirmationLoanAppModal').modal('hide');
+                $('#loanAppMsg').html('<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, ' + name + apostrophe + ' loan has started.</a>' +
+                            '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
+                              '<span aria-hidden="true">&times;</span>' +
+                            '</button>' +
+                          '</p>').fadeIn().delay(3000).fadeOut('fast');
+                getApprovedLoans();
+                getActiveLoans();
+              } else {
+                $('#confirmationLoanAppModal').modal('hide');
+                $('#loanAppMsg').html('<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Oops, something went wrong!</a>' +
+                            '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
+                              '<span aria-hidden="true">&times;</span>' +
+                            '</button>' +
+                          '</p>').fadeIn().delay(3000).fadeOut('fast');
+                getApprovedLoans();
+                getActiveLoans();
+              }
+            },
+            error : function(){
+              alert('ERROR!');
+            }
+          });
+        });
+
+        if('<?php echo $this->session->userdata('roleID'); ?>' == '2') {
+          setInterval(function() {
+            checkNotif();
+          }, 1000);
+        }
+
+        function checkNotif() {
+          var uname = '<?php echo $this->session->userdata('username'); ?>';
+          $.ajax({
+            type    : 'ajax',
+            method  : 'get',
+            url     : '<?php echo base_url() ?>users/checkNotif',
+            data    : {username:uname},
+            async   : false,
+            dataType: 'json',
+            success : function(data){
+              if(data.length) {
+                var myDate = new Date(Date.parse(data[0].noti_date.replace('-','/','g')));
+                myDate = myDate.toUTCString();
+                myDate = myDate.split(' ').slice(0, 4).join(' ');
+                $('#returnNotifications').html('<a class="dropdown-item text-info">'+data[0].noti_desc+'<br><span class="text-secondary float-right p-2" style="font-size: 80%">' + myDate + '</span></a>');
+              } else {
+                $('#returnNotifications').html('<a class="dropdown-item text-danger">Nothing to display..</a>');
+              }
+            },
+            error : function(){
+              alert('ERROR!');
+            }
+          });
+        }
 
         function checkInputPayslipAmt() {
           if($('#loanAppPayslipAmt').val() == '') {
@@ -6035,6 +6079,7 @@
             $('#websiteSettings').addClass('active');
             break;
             case '2':
+            $('#notificationBar').show();
             $('#memberDash').show();
             $('#dashboardTab').addClass('active');
             $('#loans-tab').show();

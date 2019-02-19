@@ -59,6 +59,11 @@
 			}
 		}
 
+		public function checkNotif() {
+			$result = $this->user_model->checkNotif();
+			echo json_encode($result);
+		}
+
 		public function getMyLoanRecords(){
 			$result = $this->user_model->getMyLoanRecords();
 			echo json_encode($result);

@@ -114,6 +114,7 @@
 		public function insertLoanVoucher(){
 			date_default_timezone_set('Asia/Manila');
 			$id = $this->input->post('loanapp_id');
+			$noti = "Your Loan Application ".$this->input->post('loanapp_id')." has been approved!";
 
 			$data = array(
 				'disbursement_no' => $this->input->post('dvNo'),
@@ -140,7 +141,15 @@
 				'payment_for' => date('Y-m-d', strtotime('+1 month'))
 				);
 
+				$noti = array(
+					'noti_for' => $this->input->post('uname'),
+					'noti_desc' => $noti,
+					'noti_status' => 1,
+					'noti_date' =>  date('Y-m-d')
+				);
+
 				$this->db->insert('active_loan_apps', $data);
+				$this->db->insert('notifications', $noti);
 				if($this->db->affected_rows() > 0){
 					return true;
 				} else {

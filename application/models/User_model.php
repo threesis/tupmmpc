@@ -68,4 +68,14 @@
 			return $query->result();
 		}
 
+		public function checkNotif(){
+			$username = $this->input->get('username');
+			$this->db->select('*')->from('notifications a');
+			$this->db->join('members b', 'b.username = a.noti_for');
+			$this->db->where('noti_for', $username);
+			$this->db->where('noti_status', 1);
+			$query = $this->db->get();
+			return $query->result();
+		}
+
 	}
