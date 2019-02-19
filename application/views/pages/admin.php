@@ -1257,13 +1257,13 @@
                   <div class="card-header shadow-sm">
                     <ul class="nav nav-tabs card-header-tabs">
                       <li class="ml-2 pb-4" style="min-height: 40px;">
-                        <h2 class="card-title">Ledger & Share Capital</h2>
+                        <h2 class="card-title">Collections & Remittances</h2>
                       </li>
                       <li id="view-ledgers" class="nav-item ml-auto loan-apps">
-                        <a id="ledgerTab" class="nav-link active" data-toggle="tab" href="#ledgerSubTab">View Ledger<span class="badge badge-secondary ml-1"></span></a>
+                        <a id="ledgerTab" class="nav-link active" data-toggle="tab" href="#ledgerSubTab">Collections<span class="badge badge-secondary ml-1"></span></a>
                       </li>
                       <li id="update-ledgers" class="nav-item loan-apps">
-                        <a id="updateLedgerTab" class="nav-link" data-toggle="tab" href="#updateLedgerSubTab">Update Ledger<span class="badge badge-secondary ml-1"></span></a>
+                        <a id="updateLedgerTab" class="nav-link" data-toggle="tab" href="#updateLedgerSubTab">Remittances<span class="badge badge-secondary ml-1"></span></a>
                       </li>
                       <li id="update-share-capitals" class="nav-item loan-apps">
                         <a id="shareCapTab" class="nav-link" data-toggle="tab" href="#shareCapSubTab">Share Capital<span class="badge badge-secondary ml-1"></span></a>
@@ -1274,34 +1274,19 @@
                     <div id="ledgerShareCapMsg" class="no-padding"></div>
                       <div class="tab-pane active" id="ledgerSubTab">
                         <div class="form-row mb-1">
-                          <div class="col-sm-12 col-md-6">
-                            <select id="viewLedgerMonthSelect">
-                              <option></option>
-                              <option value="1">January</option>
-                              <option value="2">February</option>
-                              <option value="3">March</option>
-                              <option value="4">April</option>
-                              <option value="5">May</option>
-                              <option value="6">June</option>
-                              <option value="7">July</option>
-                              <option value="8">August</option>
-                              <option value="9">September</option>
-                              <option value="10">October</option>
-                              <option value="11">November</option>
-                              <option value="12">December</option>
-                            </select>
-                          </div>
-
-                          <div class="col-sm-12 col-md-6">
-                            <select id="viewLedgerYearSelect">
+                          <div class="col-sm-12 col-md-4">
+                            <select id="collectionsNameSelect">
 
                             </select>
                           </div>
                         </div>
-                        <table id="collectionsTbl" class="table table-striped table-hover table-responsive table-md text-nowrap">
+                        <table id="collectionsTbl" class="table table-striped table-hover table-responsive-sm table-md text-nowrap">
                           <thead>
-                            <tr id="returnCollectionsHeader">
-                              
+                            <tr>
+                              <th>Date</th>
+                              <th>OR No.</th>
+                              <th>Loan Applied</th>
+                              <th>Balance (&#8369;)</th>
                             </tr>
                           </thead>
                           <tbody id="returnCollectionsBody">
@@ -1453,7 +1438,6 @@
                           <th>Gross Amount of Loan (&#8369;)</th>
                           <th>Monthly Amortization (&#8369;)</th>
                           <th>Term of Payments</th>
-                          <th>Remarks</th>
                         </tr>
                       </thead>
                       <tbody id="returnLoanRecords">
@@ -1541,7 +1525,6 @@
                                           '<td style="vertical-align: middle">' + grossAmt + '</td>' +
                                           '<td style="vertical-align: middle">' + monthlydeduc + '</td>' +
                                           '<td style="vertical-align: middle">' + data[i].loan_term + ' month/s</td>' +
-                                          '<td style="vertical-align: middle">' + data[i].status + '</td>' +
                                         '</tr>';                       
                                 }
                                 loanRecFoot =  '<tr>' +
@@ -1550,7 +1533,6 @@
                                                   '<th></th>' +
                                                   '<th>&#8369;' + Math.round(totalLoanAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
                                                   '<th>&#8369;' + Math.round(totalGrossAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
-                                                  '<th></th>' +
                                                   '<th></th>' +
                                                   '<th></th>' +
                                                 '</tr>'; 
@@ -2065,6 +2047,7 @@
         get_infos();
         Comakers();
         Check();
+        $('[data-toggle="tooltip"]').tooltip()
 
         // DataTables CODES
 
@@ -2172,17 +2155,6 @@
           closeAfterSelect: true
         });
         $('#shareCapMonthSelect').selectize({
-          create: false,
-          maxOptions: 12,
-          placeholder: months[month.getMonth()],
-          closeAfterSelect: true
-        });
-        $('#viewLedgerYearSelect').html(yrOptions).selectize({
-          create: false,
-          placeholder: "Year..",
-          closeAfterSelect: true
-        });
-        $('#viewLedgerMonthSelect').selectize({
           create: false,
           maxOptions: 12,
           placeholder: months[month.getMonth()],
@@ -2514,16 +2486,7 @@
                 $('#returnActiveLoans').html(row);
                 $('#dashboardActiveLoans').load(location.href + " #dashboardActiveLoans"); 
               } else {
-                if(query != null) {
                   $('#activeNotif').html('0');
-                  $('#returnActiveLoans').html('<div class="ml-4">' +
-                                       '<h4 class="mt-5"><strong class="text-danger">No results for ' + query + '</h4>' +
-                                       '<h7 style="color: #66757f; font-weight: light; padding-top: 20px">The term you entered did not bring up any results.</h7>' +
-                                     '</div>');
-                } else {
-                  $('#activeNotif').html('0');
-                  $('#returnActiveLoans').html('<div class="ml-4"><h4 class="mt-5"><strong class="text-success">Looks good!</h4><h7 style="color: #66757f; font-weight: light; padding-top: 20px">Nothing to display.</h7></div>');
-                }
               } 
             }, 
             error: function(){
@@ -3037,8 +3000,6 @@
             var name = $('#openLoanApp').attr('selectedname');
             var cheque = $('#chequeNumberInput').val();
             var apostrophe = "'s";
-
-            alert(cheque);
             $(this).text('Are you sure?');
             $(this).click(function(){
               $.ajax({
@@ -4193,37 +4154,94 @@
         }
 
         // VIEW LEDGER CODES 
-        refreshCollections();
+        getCollectionMembers();
+        viewCollections();
+        var id = '';
 
-        function refreshCollections() {
-          var months  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-          var year = new Date().getFullYear();
-          var month = new Date().getMonth()+1;
-          viewCollections(month, year);
+        function getCollectionMembers() {
+          $.ajax({
+            type    : 'ajax',
+            url     : '<?php echo base_url() ?>administrators/getCollectionMembers',
+            async   : false,
+            dataType: 'json',
+            success: function(data) {
+              var names = '<option></option>';
+              for(var i = 0; i < data.length; i++) {
+                names += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+              }
+              $('#collectionsNameSelect').html(names);
+            },
+            error: function() {
+              alert('A database error occured!');
+            } 
+          });
         }
 
-        $('#viewLedgerMonthSelect').change(function(){
-          month = $('#viewLedgerMonthSelect').val();
-          year = $('#viewLedgerYearSelect').val();
-          viewCollections(month, year);
+        $('#collectionsNameSelect').selectize({
+          create: false,
+          placeholder: "Please select a user..",
+          closeAfterSelect: true
         });
 
-        $('#viewLedgerYearSelect').change(function(){
-          month = $('#viewLedgerMonthSelect').val();
-          year = $('#viewLedgerYearSelect').val();
-          viewCollections(month, year);
+        $('#collectionsNameSelect').change(function(){
+          id = $('#collectionsNameSelect').val();
+          if($(this).val() != '') {
+            viewCollections(id);
+          } else {
+            viewCollections();
+          }
         });
 
-        function viewCollections(month, year){
+        function viewCollections(id){
+          $("#collectionsTbl").DataTable().destroy();
           $.ajax({
           type    : 'ajax',
           method  : 'GET',
           url     : '<?php echo base_url() ?>administrators/viewCollections',
-          data    : {mo: month, yr: year},
+          data    : {id: id},
           async   : false,
           dataType: 'json',
           success : function(data) {
             if(data){
+            var row = '', foot = '', total = 0, or = 0;
+            for(var i = 0; i < data.length; i++){
+              total = Number(total) + Number(data[i].balance);
+              if(data[i].payment_date == '0000-00-00') {
+                lastUp = 'Pending';
+              } else {
+                lastUp = new Date(data[i].payment_date);
+                lastUp = lastUp.toLocaleDateString("en-US");
+              } if(data[i].or_number == '') {
+                or = 'Pending';
+              } else {
+                or = data[i].or_number;
+              }
+              row  += '<tr class="text-secondary">' +
+                        '<td style="vertical-align: middle">' + lastUp + '</td>' +
+                        '<td style="vertical-align: middle">' + or + '</td>' +
+                        '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
+                        '<td style="vertical-align: middle">' + Math.round(data[i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>';
+                      '</tr>';  
+            }
+              foot = '<tr>' +
+                        '<th style="vertical-align: middle">Total</th>' +
+                        '<th style="vertical-align: middle"></th>' +
+                        '<th style="vertical-align: middle"></th>' +
+                        '<th style="vertical-align: middle">' + Math.round(total).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
+                      '</tr>';
+              $('#returnCollectionsBody').html(row);
+              $('#returnCollectionsFooter').html(foot);
+            } else {
+              $('#returnCollectionsBody').html('');
+              $('#returnCollectionsFooter').html('');
+            }
+          },
+          error: function() {
+            alert('Error!');
+          }
+          });
+
+          /* if(data){
             var head, row, rowFoot, opts, totalMonthly = '', totalBalance = '', or = '';
             head = '<th style="vertical-align: middle">Month</th>' +
                    '<th style="vertical-align: middle">OR No.</th>';
@@ -4270,59 +4288,7 @@
               $('#returnCollectionsFooter').html('');
             }
           },
-          error: function() {
-            alert('Error!');
-          }
-          });
-
-          /*if(data){
-            var head, row, rowFoot, opts, totalMonthly = '', totalBalance = '', or = '';
-            head = '<th style="vertical-align: middle">Month</th>' +
-                   '<th style="vertical-align: middle">OR No.</th>';
-            for(var a = 0; a < data['numcols'].length; a++){
-              head += '<th style="vertical-align: middle">' + data['numcols'][a].loan_name + ' (&#8369;)</th>';
-            }
-            for(var i = 0; i < data['result'].length; i++){
-              if(data['result'][i].payment_date == '0000-00-00') {
-                lastUp = 'Pending';
-              } else {
-                lastUp = new Date(data['result'][i].payment_date);
-                lastUp = lastUp.toLocaleDateString("en-US");
-              } if(data['result'][i].or_number == '') {
-                or = 'Pending';
-              } else {
-                or = data['result'][i].or_number;
-              }
-
-
-              row  += '<tr class="text-secondary">' +
-                        '<td style="vertical-align: middle">' + lastUp + '</td>' +
-                        '<td style="vertical-align: middle">' + or + '</td>';
-              for(var loans = 0; loans < data['numcols'].length; loans++){
-                if(data['result'][i].loan_name == data['numcols'][loans].loan_name) {
-                  var totalInRow = 0;
-                  row += '<td style="vertical-align: middle">' + Math.round(data['result'][i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>';
-                  totalInRow = Number(totalInRow) + Number(data['result'][i].balance);
-                } else {
-                  row += '<td style="vertical-align: middle">0</td>';
-                }
-              }
-              row  += '<td style="vertical-align: middle">0</td>' +
-                      '<td style="vertical-align: middle">' + Math.round(totalInRow).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                      '</tr>';  
-            }
-
-              head += '<th style="vertical-align: middle">Others</th>' +
-                      '<th style="vertical-align: middle">Total (&#8369;)</th>';
-
-              $('#returnCollectionsHeader').html(head);
-              $('#returnCollectionsBody').html(row);
-            } else {
-              $('#returnCollectionsBody').html('');
-              $('#returnCollectionsFooter').html('');
-            }
 */
-          $("#collectionsTbl").DataTable().destroy();
           var collectionsDataTbl = $('#collectionsTbl').DataTable({
             "dom": 'lBfrtip',
             buttons: [
@@ -6093,7 +6059,7 @@
             case '5':
             $('#managerDash').show();
             $('#dashboardTab').addClass('active');
-            $('#loans-tab').show();
+            $('#loans-tab, #returnLatestDate').show();
             $('#loanapps-tab').show();
             $('#records-comakers-tab, #loanrecords-tab, #loanRecordsText, #loanRecordsTabText').show();
             $('#sharecap-ledger-tab, #view-ledgers, #update-ledgers, #update-share-capitals').show();

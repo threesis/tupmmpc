@@ -221,6 +221,11 @@
 			echo json_encode($result);
 		}
 
+		public function getCollectionMembers(){
+			$result = $this->administrator_model->getCollectionMembers();
+			echo json_encode($result);
+		}
+
 		public function updateLedger(){
 			$result = $this->administrator_model->updateLedger();
 			echo json_encode($result);

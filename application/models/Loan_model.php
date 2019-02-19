@@ -77,11 +77,13 @@
 
 		public function getLoanRecord(){
 			$loanID = $this->input->get('loanID');
-			$this->db->select('*');
-			$this->db->where('loan_applied', $loanID);
-			$this->db->from('loan_applications a');
-			$this->db->join('members b', 'b.id = a.member_id');
-			$this->db->join('loan_types c', 'c.id = a.loan_applied', 'left');
+			$this->db->select('*')->select_min('balance');
+			$this->db->from('active_loan_apps a');
+			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
+			$this->db->join('members c', 'c.id = b.member_id');
+			$this->db->join('loan_types d', 'd.id = b.loan_applied');
+			$this->db->where('b.loan_applied', $loanID);
+			$this->db->group_by('a.loanapp_id');
 			$query = $this->db->get();
 			return $query->result();
 		}
@@ -134,7 +136,6 @@
 				$data = array(
 				'loanapp_id' => $id,
 				'balance' => $this->input->post('balance'),
-				'remarks' => $this->input->post('remarks'),
 				'payment_status' => 'unpaid',
 				'payment_for' => date('Y-m-d', strtotime('+1 month'))
 				);
