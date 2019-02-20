@@ -93,6 +93,12 @@
  		echo json_encode($data_result);
  	}
 
+ 	public function getLoanDeductions() {
+ 		$data_result = $this->loan_application_model->getLoanDeductions();
+ 		echo json_encode($data_result);
+ 	}
+
+
  	public function cmloanappData() {
  		$data_result = $this->loan_application_model->cmloanappData();
  		echo json_encode($data_result);

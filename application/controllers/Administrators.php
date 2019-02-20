@@ -14,6 +14,9 @@
 				$data['pendingLoans'] = $this->administrator_model->getAllPendingLoans();
 				$data['approvedLoans'] = $this->administrator_model->getAllApprovedLoans();
 				$data['ongoingLoans'] = $this->administrator_model->getAllActiveLoans();
+				$data['totalPayments'] = $this->administrator_model->getTotalLoanPayments();
+				$data['missedPayments'] = $this->administrator_model->getAllMissedPayments();
+				$data['totalShareCapital'] = $this->administrator_model->getTotalShareCapital();
 
 				$this->load->view('pages/admin', $data);
 			} else {
@@ -115,17 +118,7 @@
 			$result = $this->loan_model->cancelLoanApp();
 			echo json_encode($result);
 		}
-
-		public function testing() {
-			$result = $this->administrator_model->testing();
-			echo json_encode($result);
-		}
-
-		public function testing1() {
-			$result = $this->administrator_model->testing1();
-			echo json_encode($result);
-		}
-
+		
 		public function populateLoanAppManagementPerm() {
 			$result = $this->administrator_model->populateLoanAppManagementPerm();
 			echo json_encode($result);
@@ -176,11 +169,6 @@
 			echo json_encode($result);
 		}
 
-		public function getMembers() {
-			$result = $this->administrator_model->getMembers();
-			echo json_encode($result);
-		}
-
 		public function retrieveCommitteeInstances() {
 			$result = $this->administrator_model->retrieveCommitteeInstances();
 			echo json_encode($result);
@@ -217,6 +205,47 @@
 				'currentPass' => md5($this->input->get('currentPass')),
 				'desiredNewPass' => md5($this->input->get('desiredNewPass'))
 			);
+			echo json_encode($result);
+		}
+
+		public function getShareCapitalRec(){
+			$result = $this->administrator_model->getShareCapitalRec();
+			echo json_encode($result);
+		}
+
+		public function viewLedger(){
+			$result = $this->administrator_model->viewLedger();
+			echo json_encode($result);
+		}
+
+		public function updateLedger(){
+			$result = $this->administrator_model->updateLedger();
+			echo json_encode($result);
+		}
+
+		// Dashboard 
+		public function getTotalLoanPayments(){
+			$result = $this->administrator_model->getTotalLoanPayments();
+			echo json_encode($result);
+		}
+
+		public function getAllMissedPayments(){
+			$result = $this->administrator_model->getAllMissedPayments();
+			echo json_encode($result);
+		}
+
+		public function getTotalShareCapital(){
+			$result = $this->administrator_model->getTotalShareCapital();
+			echo json_encode($result);
+		}
+
+		public function updateShareCapital(){
+			$result = $this->administrator_model->updateShareCapital();
+			echo json_encode($result);
+		}
+
+		public function updateLedgers(){
+			$result = $this->administrator_model->updateLedgers();
 			echo json_encode($result);
 		}
 		

@@ -73,7 +73,7 @@
 		{
 			$userSC = $this->input->get('member_id');
 
-			$data = "Select total_share_capital from share_capital where user_id = '$userSC' order by user_id ASC limit 1";
+			$data = "Select total_share_capital from share_capital where user_id = '$userSC' order by date_updated ASC limit 1";
 			$query = $this->db->query($data);
 
 			if ($query->num_rows() > 0) {
@@ -91,7 +91,7 @@
 
 			// "Select * from loan_applications where loanapp_id like '$id%' order by date_created ASC"
 
-			$loanapp_id = "Select count(*) as num_of_rows from (Select * from loan_applications where loanapp_id like '$id%' order by date_created ASC) loan_applications";
+			$loanapp_id = "Select count(*) as num_of_rows from (Select * from loan_applications where loanapp_id like '$id%' order by date_applied ASC) loan_applications";
 			$query = $this->db->query($loanapp_id);
 
 			if($query->num_rows() >= 0) {
@@ -137,6 +137,8 @@
 				'loan_applied' => $this->input->post('loan-selector-data'),
 				'loan_term' => $this->input->post('loan-term'),
 				'loan_amount' => $this->input->post('loan-amount'),
+				'loan_int' => $this->input->post('loan_int'),
+				'monthly_deduc' => $this->input->post('monthly_deduc'),
 				'user_payslip' => $post_image,
 				'status' => 'Pending',
 				'remarks' => $this->input->post('loanapp-remarks'),
@@ -169,6 +171,7 @@
 				$this->db->where('id !=', $comaker1);
 				$this->db->where('id !=', $comaker2);
 				$this->db->where('id !=', $comaker3);
+				$this->db->where('position', '2');
 				// $this->db->where('username !=', $comaker4);
 			}
 			$this->db->order_by('name', 'ASC');
@@ -205,13 +208,30 @@
 		{
 			$coMakerApply = $this->input->get('user_id');
 
-			$this->db->order_by('loan_applications.date_created', 'DESC');
+			$this->db->order_by('loan_applications.date_applied', 'DESC');
 			$this->db->where('comaker_1', $coMakerApply );
+			$this->db->where('cm_payslip_1', null);
 			$this->db->or_where('comaker_2', $coMakerApply );
+			$this->db->where('cm_payslip_2', null);
 			$this->db->or_where('comaker_3', $coMakerApply );
+			$this->db->where('cm_payslip_3', null);
 			$query = $this->db->from('loan_applications')->join('members', 'members.id=loan_applications.member_id')->join('loan_types', 'loan_types.id=loan_applications.loan_applied')->get();
 
 			if ($query->num_rows() > 0) {
+				return $query->result();
+			} else {
+				return false;
+			}
+		}
+
+		public function getLoanDeductions() 
+		{
+			$loan_type = $this->input->get('loan_type');
+
+			$this->db->where('loan_type_name', $loan_type);
+			$query = $this->db->from('loan_type_deducs')->join('loan_types', 'loan_types.id=loan_type_deducs.loan_type_name')->join('loan_deductions', 'loan_deductions.deduc_id=loan_type_deducs.loan_deduc')->get();
+
+			if($query->num_rows() > 0) {
 				return $query->result();
 			} else {
 				return false;
