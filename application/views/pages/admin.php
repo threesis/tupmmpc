@@ -50,7 +50,7 @@
               <a class="nav-link" href="#"><span class="far fa-envelope fa-lg mr-2"></span>Messages</a>
             </li>
             <li id="notificationBar" class="nav-item dropdown mr-2">
-              <a class="nav-link" href="#" id="navbarDropdownNoti" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-bell fa-lg mr-2"></i>Notifications</a>
+              <a class="nav-link" href="#" id="navbarDropdownNoti" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-bell fa-lg mr-2"></i><span id="returnNotifIndicator" class="badge badge-pill badge-danger p-1" style="position: absolute; left: 3px; top: 3px"></span>Notifications</a>
               <div id="returnNotifications" class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownNoti">
 
               </div>
@@ -2854,12 +2854,24 @@
             dataType: 'json',
             success : function(data){
               if(data.length) {
-                var myDate = new Date(Date.parse(data[0].noti_date.replace('-','/','g')));
-                myDate = myDate.toUTCString();
-                myDate = myDate.split(' ').slice(0, 4).join(' ');
-                $('#returnNotifications').html('<a class="dropdown-item text-info">'+data[0].noti_desc+'<br><span class="text-secondary float-right p-2" style="font-size: 80%">' + myDate + '</span></a>');
+                var c = '';
+                var row = '';
+                for(var i = 0; i < data.length; i++) {
+                  var myDate = new Date(Date.parse(data[i].noti_date.replace('-','/','g')));
+                  myDate = myDate.toUTCString();
+                  myDate = myDate.split(' ').slice(0, 4).join(' ');
+                  row += '<a class="dropdown-item text-info" href="#">'+data[i].noti_desc+'<br><span class="float-left py-2" style="font-size: 85%">Click to view voucher</span><span class="text-secondary float-right py-2" style="font-size: 80%">' + myDate + '</span></a>';
+                  if(data[i].noti_status == 1) {
+                    c++;
+                  } else {
+                    $('#returnNotifIndicator').html('');
+                  }
+                }
+                    $('#returnNotifications').html(row);
+                    $('#returnNotifIndicator').html(c);
               } else {
-                $('#returnNotifications').html('<a class="dropdown-item text-danger">Nothing to display..</a>');
+                $('#returnNotifIndicator').html('');
+                $('#returnNotifications').html('<a class="dropdown-item text-muted" href="#">'+data[i].noti_desc+'<br><span class="float-left py-2" style="font-size: 85%">Click to view voucher</span><span class="text-secondary float-right py-2" style="font-size: 80%">' + myDate + '</span></a>');
               }
             },
             error : function(){
@@ -2867,6 +2879,30 @@
             }
           });
         }
+
+        function notified() {
+          var uname = '<?php echo $this->session->userdata('username'); ?>';
+          $.ajax({
+            type   : 'ajax',
+            method : 'get',
+            url    : '<?php echo base_url() ?>users/notified',
+            data   : {username: uname},
+            async  : false,
+            dataType : 'json',
+            success  : function(data){
+              if(data) {
+                $('#returnNotifIndicator').html('');
+              }
+            },
+            error : function(){
+              alert('Error!');
+            }
+          });
+        }
+
+        $('#notificationBar').click(function(){
+          notified();
+        });
 
         function checkInputPayslipAmt() {
           if($('#loanAppPayslipAmt').val() == '') {
