@@ -49,10 +49,10 @@
             <li class="nav-item active mr-2">
               <a class="nav-link" href="#"><span class="far fa-envelope fa-lg mr-2"></span>Messages</a>
             </li>
-            <li class="nav-item dropdown mr-2">
-              <a class="nav-link" href="#" id="navbarDropdownNoti" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-bell fa-lg mr-2"></i>Notifications</a>
-              <div id="returnNoti" class="dropdown-menu" aria-labelledby="navbarDropdownNoti">
-                <a id="openApp" class="dropdown-item">Account</a>
+            <li id="notificationBar" class="nav-item dropdown mr-2">
+              <a class="nav-link" href="#" id="navbarDropdownNoti" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-bell fa-lg mr-2"></i><span id="returnNotifIndicator" class="badge badge-pill badge-danger p-1" style="position: absolute; left: 3px; top: 3px"></span>Notifications</a>
+              <div id="returnNotifications" class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownNoti">
+
               </div>
             </li>
             <li class="nav-item dropdown active">
@@ -1257,13 +1257,13 @@
                   <div class="card-header shadow-sm">
                     <ul class="nav nav-tabs card-header-tabs">
                       <li class="ml-2 pb-4" style="min-height: 40px;">
-                        <h2 class="card-title">Ledger & Share Capital</h2>
+                        <h2 class="card-title">Collections & Remittances</h2>
                       </li>
                       <li id="view-ledgers" class="nav-item ml-auto loan-apps">
-                        <a id="ledgerTab" class="nav-link active" data-toggle="tab" href="#ledgerSubTab">View Ledger<span class="badge badge-secondary ml-1"></span></a>
+                        <a id="ledgerTab" class="nav-link active" data-toggle="tab" href="#ledgerSubTab">Collections<span class="badge badge-secondary ml-1"></span></a>
                       </li>
                       <li id="update-ledgers" class="nav-item loan-apps">
-                        <a id="updateLedgerTab" class="nav-link" data-toggle="tab" href="#updateLedgerSubTab">Update Ledger<span class="badge badge-secondary ml-1"></span></a>
+                        <a id="updateLedgerTab" class="nav-link" data-toggle="tab" href="#updateLedgerSubTab">Remittances<span class="badge badge-secondary ml-1"></span></a>
                       </li>
                       <li id="update-share-capitals" class="nav-item loan-apps">
                         <a id="shareCapTab" class="nav-link" data-toggle="tab" href="#shareCapSubTab">Share Capital<span class="badge badge-secondary ml-1"></span></a>
@@ -1274,34 +1274,19 @@
                     <div id="ledgerShareCapMsg" class="no-padding"></div>
                       <div class="tab-pane active" id="ledgerSubTab">
                         <div class="form-row mb-1">
-                          <div class="col-sm-12 col-md-6">
-                            <select id="viewLedgerMonthSelect">
-                              <option></option>
-                              <option value="1">January</option>
-                              <option value="2">February</option>
-                              <option value="3">March</option>
-                              <option value="4">April</option>
-                              <option value="5">May</option>
-                              <option value="6">June</option>
-                              <option value="7">July</option>
-                              <option value="8">August</option>
-                              <option value="9">September</option>
-                              <option value="10">October</option>
-                              <option value="11">November</option>
-                              <option value="12">December</option>
-                            </select>
-                          </div>
-
-                          <div class="col-sm-12 col-md-6">
-                            <select id="viewLedgerYearSelect">
+                          <div class="col-sm-12 col-md-4">
+                            <select id="collectionsNameSelect">
 
                             </select>
                           </div>
                         </div>
-                        <table id="collectionsTbl" class="table table-striped table-hover table-responsive table-md text-nowrap">
+                        <table id="collectionsTbl" class="table table-striped table-hover table-responsive-sm table-md text-nowrap">
                           <thead>
-                            <tr id="returnCollectionsHeader">
-                              
+                            <tr>
+                              <th>Date</th>
+                              <th>OR No.</th>
+                              <th>Loan Applied</th>
+                              <th>Balance (&#8369;)</th>
                             </tr>
                           </thead>
                           <tbody id="returnCollectionsBody">
@@ -1453,7 +1438,6 @@
                           <th>Gross Amount of Loan (&#8369;)</th>
                           <th>Monthly Amortization (&#8369;)</th>
                           <th>Term of Payments</th>
-                          <th>Remarks</th>
                         </tr>
                       </thead>
                       <tbody id="returnLoanRecords">
@@ -1541,7 +1525,6 @@
                                           '<td style="vertical-align: middle">' + grossAmt + '</td>' +
                                           '<td style="vertical-align: middle">' + monthlydeduc + '</td>' +
                                           '<td style="vertical-align: middle">' + data[i].loan_term + ' month/s</td>' +
-                                          '<td style="vertical-align: middle">' + data[i].status + '</td>' +
                                         '</tr>';                       
                                 }
                                 loanRecFoot =  '<tr>' +
@@ -1550,7 +1533,6 @@
                                                   '<th></th>' +
                                                   '<th>&#8369;' + Math.round(totalLoanAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
                                                   '<th>&#8369;' + Math.round(totalGrossAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
-                                                  '<th></th>' +
                                                   '<th></th>' +
                                                   '<th></th>' +
                                                 '</tr>'; 
@@ -2065,6 +2047,7 @@
         get_infos();
         Comakers();
         Check();
+        $('[data-toggle="tooltip"]').tooltip()
 
         // DataTables CODES
 
@@ -2172,17 +2155,6 @@
           closeAfterSelect: true
         });
         $('#shareCapMonthSelect').selectize({
-          create: false,
-          maxOptions: 12,
-          placeholder: months[month.getMonth()],
-          closeAfterSelect: true
-        });
-        $('#viewLedgerYearSelect').html(yrOptions).selectize({
-          create: false,
-          placeholder: "Year..",
-          closeAfterSelect: true
-        });
-        $('#viewLedgerMonthSelect').selectize({
           create: false,
           maxOptions: 12,
           placeholder: months[month.getMonth()],
@@ -2427,7 +2399,7 @@
                       col = data[i].college; 
                   }
 
-                  row +=  '<tr class="text-secondary" name="' + data[i].name + '" status="' + status + '" data="' + data[i].loanapp_id + '"payslip="' + data[i].take_home_pay + '" verifiedBy="' + data[i].thp_verified_by + '" chequeNo="' + data[i].cheque_no + '" dateIssued="' + dateIssued + '" style="cursor: pointer">' +
+                  row +=  '<tr class="text-secondary" username="' + data[i].username + '" name="' + data[i].name + '" status="' + status + '" data="' + data[i].loanapp_id + '"payslip="' + data[i].take_home_pay + '" verifiedBy="' + data[i].thp_verified_by + '" chequeNo="' + data[i].cheque_no + '" dateIssued="' + dateIssued + '" style="cursor: pointer">' +
                             '<td style="vertical-align: middle">' + c + '</td>' +
                             '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
                             '<td style="vertical-align: middle">' + col + '</td>' +
@@ -2514,16 +2486,7 @@
                 $('#returnActiveLoans').html(row);
                 $('#dashboardActiveLoans').load(location.href + " #dashboardActiveLoans"); 
               } else {
-                if(query != null) {
                   $('#activeNotif').html('0');
-                  $('#returnActiveLoans').html('<div class="ml-4">' +
-                                       '<h4 class="mt-5"><strong class="text-danger">No results for ' + query + '</h4>' +
-                                       '<h7 style="color: #66757f; font-weight: light; padding-top: 20px">The term you entered did not bring up any results.</h7>' +
-                                     '</div>');
-                } else {
-                  $('#activeNotif').html('0');
-                  $('#returnActiveLoans').html('<div class="ml-4"><h4 class="mt-5"><strong class="text-success">Looks good!</h4><h7 style="color: #66757f; font-weight: light; padding-top: 20px">Nothing to display.</h7></div>');
-                }
               } 
             }, 
             error: function(){
@@ -2578,8 +2541,10 @@
           takeHomePay = Math.round(takeHomePay).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           var cheque = $(this).attr('chequeNo');
           var name = $(this).attr('name');
+          var uname = $(this).attr('username');
           var img = $(this).find('img').attr('src');
           $('#openLoanApp').attr('selectedname', name);
+          $('#openLoanApp').attr('username', uname);
           $('#openLoanApp').attr('selectedid', id);
           if(selectedTab == 'returnPendingLoan') {
             $('#thpInfo').hide();
@@ -2703,6 +2668,7 @@
 
         $('#openLoanApp').on('click', '#voucherLoanAppBtn', function(){
           var id = $('#openLoanApp').attr('selectedid');
+          var uname = $('#openLoanApp').attr('username');
           var name = $('#openLoanApp').attr('selectedname');
           var loan = '';
           var loanAmt = '';
@@ -2731,9 +2697,8 @@
               loanInterest = data[0][2];
               monthlyDeduc = data[0][3];
               cheque = data[0][4];
-              APLid = data[0][5];
+              APLid = data[0][5].concat(new Date().getFullYear());
               loan = data[0][6];
-              remarks = data[0][7];
               dii = loanInterest * loanAmt;
               serviceFee = 0.01 * loanAmt;
               retentionFee = 0.03 * loanAmt;
@@ -2756,15 +2721,15 @@
                 '<tbody id="calcBody" style="height: auto; max-height: 400px; overflow-y: auto; font-size: 90%">' +
                   '<tr>' +
                     '<td colspan="2"><strong>DATE: <?php date_default_timezone_set("Asia/Manila"); echo date("Y/m/d"); ?></strong></td>' +
-                    '<td><strong>VOUCHER: ' + APLid + '</strong></td>' +
-                    '<td><strong>CHEQUE: ' + cheque + '</strong></td>' +
+                    '<td name="APLid" value="'+APLid+'"><strong>VOUCHER: ' + APLid + '</strong></td>' +
+                    '<td name="id" value="'+id+'"><strong>CHEQUE: ' + cheque + '</strong></td>' +
                   '<tr>' +
                     '<td colspan="2">Payee</td>' +
-                    '<td colspan="2">' + name + '</td>' +
+                    '<td name="uname" value="'+uname+'" colspan="2">' + name + '</td>' +
                   '</tr>' +
                   '<tr>' +
-                    '<td colspan="2">' + loan + '</td>' +
-                    '<td colspan="2">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="loan" value="'+loan+'" colspan="2">' + loan + '</td>' +
+                    '<td name="APLid" value="'+cashInBank+'" colspan="2">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2"></td>' +
@@ -2787,14 +2752,14 @@
                     '<td colspan="1">&#8369;' + dii.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr>' +
-                    '<td colspan="2">Retention Fee 3%</td>' +
+                    '<td name="retentionFee" colspan="2">Retention Fee 3%</td>' +
                     '<td colspan="1">-</td>' +
                     '<td colspan="1">-</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2">Service Fee 1%</td>' +
                     '<td colspan="1">-</td>' +
-                    '<td colspan="1">&#8369;' + serviceFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="serviceFee" value="'+serviceFee+'" colspan="1">&#8369;' + serviceFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2">Outstanding balance of</td>' +
@@ -2804,62 +2769,140 @@
                   '<tr>' +
                     '<td colspan="2">Cash in bank</td>' +
                     '<td colspan="1">-</td>' +
-                    '<td colspan="1">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="APLid" colspan="1">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr><td colspan="4">-</td></tr>' +
                   '<tr>' +
                     '<td colspan="2">TOTAL</td>' +
-                    '<td colspan="1">&#8369;' + totalDebit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                    '<td colspan="1">&#8369;' + totalCredit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="totalDebit" value="'+totalDebit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1">&#8369;' + totalDebit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="totalCredit" value="'+totalCredit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1">&#8369;' + totalCredit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2" class="h5">NET AMOUNT DUE</td>' +
-                    '<td colspan="1"></td>' +
-                    '<td colspan="1" class="h4"><span class="text-success">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></td>' +
+                    '<td name="totalBalance" value="'+totalBalance+'" colspan="1"></td>' +
+                    '<td name="cashInBank" value="'+cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1" class="h4"><span class="text-success">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></td>' +
                   '</tr>' +
                 '</tbody>' +
               '</table>');
             $('#confirmationLoanAppModal').find('.modal-footer').html('<button type="button" class="btn btn-outline-success btn-sm mr-1" id="submitVoucherBtn"><i class="fas fa-check fa-sm mr-1"></i>Submit</button>');
 
-            $('#confirmationLoanAppModal').on('click', '#submitVoucherBtn', function(){
-              var apostrophe = "'s";
-              var data = '&loanapp_id=' + id + '&dvNo=' + APLid + '&retFee=' + retentionFee + '&serFee=' + serviceFee + '&debit=' + totalDebit +'&credit=' + totalCredit +'&netAmt=' + cashInBank + '&balance=' + totalBalance + '&remarks=' + remarks;
-              $.ajax({
-                type    : 'ajax',
-                method  : 'post',
-                url     : '<?php echo base_url() ?>loans/insertLoanVoucher',
-                data    : data,
-                async   : false,
-                dataType: 'json',
-                success : function(data){
-                  if(data) {
-                    $('#confirmationLoanAppModal').modal('hide');
-                    $('#loanAppMsg').html('<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, ' + name + apostrophe + ' loan has started.</a>' +
-                                '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
-                                  '<span aria-hidden="true">&times;</span>' +
-                                '</button>' +
-                              '</p>').fadeIn().delay(3000).fadeOut('fast');
-                    getApprovedLoans();
-                    getActiveLoans();
-                  } else {
-                    $('#confirmationLoanAppModal').modal('hide');
-                    $('#loanAppMsg').html('<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Oops, something went wrong!</a>' +
-                                '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
-                                  '<span aria-hidden="true">&times;</span>' +
-                                '</button>' +
-                              '</p>').fadeIn().delay(3000).fadeOut('fast');
-                    getApprovedLoans();
-                    getActiveLoans();
-                  }
-                },
-                error : function(){
-                  alert('ERROR!');
-                }
-              });
-            });
         });
 
+        $('#confirmationLoanAppModal').on('click', '#submitVoucherBtn', function(){
+          var apostrophe = "'s";
+          var id = $('#confirmationLoanAppModal').find('td[name=id]').attr('value');
+          var uname = $('#confirmationLoanAppModal').find('td[name=uname]').attr('value');
+          var loan = $('#confirmationLoanAppModal').find('td[name=loan]').attr('value');
+          var APLid = $('#confirmationLoanAppModal').find('td[name=APLid]').attr('value');
+          var retentionFee = $('#confirmationLoanAppModal').find('td[name=retentionFee]').attr('value');
+          var serviceFee = $('#confirmationLoanAppModal').find('td[name=serviceFee]').attr('value');
+          var totalDebit = $('#confirmationLoanAppModal').find('td[name=totalDebit]').attr('value');
+          var totalCredit = $('#confirmationLoanAppModal').find('td[name=totalCredit]').attr('value');
+          var cashInBank = $('#confirmationLoanAppModal').find('td[name=cashInBank]').attr('value');
+          var totalBalance = $('#confirmationLoanAppModal').find('td[name=totalBalance]').attr('value');
 
+          var data = '&uname=' + uname + '&loanapp_id=' + id + '&dvNo=' + APLid + '&retFee=' + retentionFee + '&serFee=' + serviceFee + '&debit=' + totalDebit +'&credit=' + totalCredit +'&netAmt=' + cashInBank + '&balance=' + totalBalance;
+          alert(data);
+          $.ajax({
+            type    : 'ajax',
+            method  : 'post',
+            url     : '<?php echo base_url() ?>loans/insertLoanVoucher',
+            data    : data,
+            async   : false,
+            dataType: 'json',
+            success : function(data){
+              if(data) {
+                $('#confirmationLoanAppModal').modal('hide');
+                $('#loanAppMsg').html('<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, ' + name + apostrophe + ' loan has started.</a>' +
+                            '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
+                              '<span aria-hidden="true">&times;</span>' +
+                            '</button>' +
+                          '</p>').fadeIn().delay(3000).fadeOut('fast');
+                getApprovedLoans();
+                getActiveLoans();
+              } else {
+                $('#confirmationLoanAppModal').modal('hide');
+                $('#loanAppMsg').html('<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Oops, something went wrong!</a>' +
+                            '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
+                              '<span aria-hidden="true">&times;</span>' +
+                            '</button>' +
+                          '</p>').fadeIn().delay(3000).fadeOut('fast');
+                getApprovedLoans();
+                getActiveLoans();
+              }
+            },
+            error : function(){
+              alert('ERROR!');
+            }
+          });
+        });
+
+        if('<?php echo $this->session->userdata('roleID'); ?>' == '2') {
+          setInterval(function() {
+            checkNotif();
+          }, 1000);
+        }
+
+        function checkNotif() {
+          var uname = '<?php echo $this->session->userdata('username'); ?>';
+          $.ajax({
+            type    : 'ajax',
+            method  : 'get',
+            url     : '<?php echo base_url() ?>users/checkNotif',
+            data    : {username:uname},
+            async   : false,
+            dataType: 'json',
+            success : function(data){
+              if(data.length) {
+                var c = '';
+                var row = '';
+                for(var i = 0; i < data.length; i++) {
+                  var myDate = new Date(Date.parse(data[i].noti_date.replace('-','/','g')));
+                  myDate = myDate.toUTCString();
+                  myDate = myDate.split(' ').slice(0, 4).join(' ');
+                  row += '<a class="dropdown-item text-info" href="#">'+data[i].noti_desc+'<br><span class="float-left py-2" style="font-size: 85%">Click to view voucher</span><span class="text-secondary float-right py-2" style="font-size: 80%">' + myDate + '</span></a>';
+                  if(data[i].noti_status == 1) {
+                    c++;
+                  } else {
+                    $('#returnNotifIndicator').html('');
+                  }
+                }
+                    $('#returnNotifications').html(row);
+                    $('#returnNotifIndicator').html(c);
+              } else {
+                $('#returnNotifIndicator').html('');
+                $('#returnNotifications').html('<a class="dropdown-item text-muted" href="#">'+data[i].noti_desc+'<br><span class="float-left py-2" style="font-size: 85%">Click to view voucher</span><span class="text-secondary float-right py-2" style="font-size: 80%">' + myDate + '</span></a>');
+              }
+            },
+            error : function(){
+              alert('ERROR!');
+            }
+          });
+        }
+
+        function notified() {
+          var uname = '<?php echo $this->session->userdata('username'); ?>';
+          $.ajax({
+            type   : 'ajax',
+            method : 'get',
+            url    : '<?php echo base_url() ?>users/notified',
+            data   : {username: uname},
+            async  : false,
+            dataType : 'json',
+            success  : function(data){
+              if(data) {
+                $('#returnNotifIndicator').html('');
+              }
+            },
+            error : function(){
+              alert('Error!');
+            }
+          });
+        }
+
+        $('#notificationBar').click(function(){
+          notified();
+        });
 
         function checkInputPayslipAmt() {
           if($('#loanAppPayslipAmt').val() == '') {
@@ -3037,8 +3080,6 @@
             var name = $('#openLoanApp').attr('selectedname');
             var cheque = $('#chequeNumberInput').val();
             var apostrophe = "'s";
-
-            alert(cheque);
             $(this).text('Are you sure?');
             $(this).click(function(){
               $.ajax({
@@ -4193,37 +4234,94 @@
         }
 
         // VIEW LEDGER CODES 
-        refreshCollections();
+        getCollectionMembers();
+        viewCollections();
+        var id = '';
 
-        function refreshCollections() {
-          var months  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-          var year = new Date().getFullYear();
-          var month = new Date().getMonth()+1;
-          viewCollections(month, year);
+        function getCollectionMembers() {
+          $.ajax({
+            type    : 'ajax',
+            url     : '<?php echo base_url() ?>administrators/getCollectionMembers',
+            async   : false,
+            dataType: 'json',
+            success: function(data) {
+              var names = '<option></option>';
+              for(var i = 0; i < data.length; i++) {
+                names += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+              }
+              $('#collectionsNameSelect').html(names);
+            },
+            error: function() {
+              alert('A database error occured!');
+            } 
+          });
         }
 
-        $('#viewLedgerMonthSelect').change(function(){
-          month = $('#viewLedgerMonthSelect').val();
-          year = $('#viewLedgerYearSelect').val();
-          viewCollections(month, year);
+        $('#collectionsNameSelect').selectize({
+          create: false,
+          placeholder: "Please select a user..",
+          closeAfterSelect: true
         });
 
-        $('#viewLedgerYearSelect').change(function(){
-          month = $('#viewLedgerMonthSelect').val();
-          year = $('#viewLedgerYearSelect').val();
-          viewCollections(month, year);
+        $('#collectionsNameSelect').change(function(){
+          id = $('#collectionsNameSelect').val();
+          if($(this).val() != '') {
+            viewCollections(id);
+          } else {
+            viewCollections();
+          }
         });
 
-        function viewCollections(month, year){
+        function viewCollections(id){
+          $("#collectionsTbl").DataTable().destroy();
           $.ajax({
           type    : 'ajax',
           method  : 'GET',
           url     : '<?php echo base_url() ?>administrators/viewCollections',
-          data    : {mo: month, yr: year},
+          data    : {id: id},
           async   : false,
           dataType: 'json',
           success : function(data) {
             if(data){
+            var row = '', foot = '', total = 0, or = 0;
+            for(var i = 0; i < data.length; i++){
+              total = Number(total) + Number(data[i].balance);
+              if(data[i].payment_date == '0000-00-00') {
+                lastUp = 'Pending';
+              } else {
+                lastUp = new Date(data[i].payment_date);
+                lastUp = lastUp.toLocaleDateString("en-US");
+              } if(data[i].or_number == '') {
+                or = 'Pending';
+              } else {
+                or = data[i].or_number;
+              }
+              row  += '<tr class="text-secondary">' +
+                        '<td style="vertical-align: middle">' + lastUp + '</td>' +
+                        '<td style="vertical-align: middle">' + or + '</td>' +
+                        '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
+                        '<td style="vertical-align: middle">' + Math.round(data[i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>';
+                      '</tr>';  
+            }
+              foot = '<tr>' +
+                        '<th style="vertical-align: middle">Total</th>' +
+                        '<th style="vertical-align: middle"></th>' +
+                        '<th style="vertical-align: middle"></th>' +
+                        '<th style="vertical-align: middle">' + Math.round(total).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
+                      '</tr>';
+              $('#returnCollectionsBody').html(row);
+              $('#returnCollectionsFooter').html(foot);
+            } else {
+              $('#returnCollectionsBody').html('');
+              $('#returnCollectionsFooter').html('');
+            }
+          },
+          error: function() {
+            alert('Error!');
+          }
+          });
+
+          /* if(data){
             var head, row, rowFoot, opts, totalMonthly = '', totalBalance = '', or = '';
             head = '<th style="vertical-align: middle">Month</th>' +
                    '<th style="vertical-align: middle">OR No.</th>';
@@ -4270,59 +4368,7 @@
               $('#returnCollectionsFooter').html('');
             }
           },
-          error: function() {
-            alert('Error!');
-          }
-          });
-
-          /*if(data){
-            var head, row, rowFoot, opts, totalMonthly = '', totalBalance = '', or = '';
-            head = '<th style="vertical-align: middle">Month</th>' +
-                   '<th style="vertical-align: middle">OR No.</th>';
-            for(var a = 0; a < data['numcols'].length; a++){
-              head += '<th style="vertical-align: middle">' + data['numcols'][a].loan_name + ' (&#8369;)</th>';
-            }
-            for(var i = 0; i < data['result'].length; i++){
-              if(data['result'][i].payment_date == '0000-00-00') {
-                lastUp = 'Pending';
-              } else {
-                lastUp = new Date(data['result'][i].payment_date);
-                lastUp = lastUp.toLocaleDateString("en-US");
-              } if(data['result'][i].or_number == '') {
-                or = 'Pending';
-              } else {
-                or = data['result'][i].or_number;
-              }
-
-
-              row  += '<tr class="text-secondary">' +
-                        '<td style="vertical-align: middle">' + lastUp + '</td>' +
-                        '<td style="vertical-align: middle">' + or + '</td>';
-              for(var loans = 0; loans < data['numcols'].length; loans++){
-                if(data['result'][i].loan_name == data['numcols'][loans].loan_name) {
-                  var totalInRow = 0;
-                  row += '<td style="vertical-align: middle">' + Math.round(data['result'][i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>';
-                  totalInRow = Number(totalInRow) + Number(data['result'][i].balance);
-                } else {
-                  row += '<td style="vertical-align: middle">0</td>';
-                }
-              }
-              row  += '<td style="vertical-align: middle">0</td>' +
-                      '<td style="vertical-align: middle">' + Math.round(totalInRow).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                      '</tr>';  
-            }
-
-              head += '<th style="vertical-align: middle">Others</th>' +
-                      '<th style="vertical-align: middle">Total (&#8369;)</th>';
-
-              $('#returnCollectionsHeader').html(head);
-              $('#returnCollectionsBody').html(row);
-            } else {
-              $('#returnCollectionsBody').html('');
-              $('#returnCollectionsFooter').html('');
-            }
 */
-          $("#collectionsTbl").DataTable().destroy();
           var collectionsDataTbl = $('#collectionsTbl').DataTable({
             "dom": 'lBfrtip',
             buttons: [
@@ -6069,6 +6115,7 @@
             $('#websiteSettings').addClass('active');
             break;
             case '2':
+            $('#notificationBar').show();
             $('#memberDash').show();
             $('#dashboardTab').addClass('active');
             $('#loans-tab').show();
@@ -6093,7 +6140,7 @@
             case '5':
             $('#managerDash').show();
             $('#dashboardTab').addClass('active');
-            $('#loans-tab').show();
+            $('#loans-tab, #returnLatestDate').show();
             $('#loanapps-tab').show();
             $('#records-comakers-tab, #loanrecords-tab, #loanRecordsText, #loanRecordsTabText').show();
             $('#sharecap-ledger-tab, #view-ledgers, #update-ledgers, #update-share-capitals').show();

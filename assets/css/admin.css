@@ -288,13 +288,6 @@ div.dataTables_length{
   margin: 0;
 }
 
-td.details-control {
-    background: url('../resources/details_open.png') no-repeat center center;
-    cursor: pointer;
-}
-tr.shown td.details-control {
-    background: url('../resources/details_close.png') no-repeat center center;
-}
 
 
 /** Scrollbar style **/
@@ -350,6 +343,10 @@ h2 {
 }
 
 /* hidden elements for role perm */
+#notificationBar {
+  display: none;
+}
+
 #loans-tab, #loans-deduction, #loans-archive, #add-loan, .edit-loan, .archive-loan,  #returnLatestDate {
   display: none;
 }

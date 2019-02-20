@@ -49,8 +49,7 @@
             $r->monthly_deduc,
             $r->cheque_no,
             $r->id,
-            $r->loan_name,
-            $r->remarks
+            $r->loan_name
        	);
       }
 
