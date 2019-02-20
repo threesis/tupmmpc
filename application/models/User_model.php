@@ -68,26 +68,4 @@
 			return $query->result();
 		}
 
-		public function checkNotif(){
-			$username = $this->input->get('username');
-			$this->db->select('*')->from('notifications a');
-			$this->db->join('members b', 'b.username = a.noti_for');
-			$this->db->where('noti_for', $username);
-			$query = $this->db->get();
-			return $query->result();
-		}
-
-
-		public function notified() {
-			$username = $this->input->get('username');
-			$this->db->set('noti_status', 0);
-			$this->db->where('noti_for', $username);
-			$this->db->update('notifications');
-			if($this->db->affected_rows() > 0) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
 	}

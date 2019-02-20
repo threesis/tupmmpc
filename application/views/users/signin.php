@@ -38,8 +38,8 @@
             </div>
 
             <div class="custom-control custom-checkbox mb-3">
-              <input type="checkbox" class="custom-control-input" id="remember" name="remember">
-              <label class="custom-control-label small" for="remember">Remember password</label>
+              <input type="checkbox" class="custom-control-input" id="customCheck1">
+              <label class="custom-control-label small" for="customCheck1">Remember password</label>
             </div>
             <button type="submit" class="btn btn-lg btn-success btn-block text-uppercase mt-4">Sign in</button>
           </form>
