@@ -216,6 +216,11 @@
 			echo json_encode($result);
 		}
 
+		public function getCollectionMembers(){
+			$result = $this->administrator_model->getCollectionMembers();
+			echo json_encode($result);
+		}
+
 		public function viewCollections(){
 			$result = $this->administrator_model->viewCollections();
 			echo json_encode($result);
