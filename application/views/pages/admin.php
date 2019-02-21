@@ -3378,7 +3378,7 @@
                   $('#returnNotifications').html(row);
               } else {
                 $('#returnNotifIndicator').html('');
-                $('#returnNotifications').html('<a class="dropdown-item text-muted" href="#">'+data[i].noti_desc+'<br><span class="float-left py-2" style="font-size: 85%">Click to view voucher</span><span class="text-secondary float-right py-2" style="font-size: 80%">' + myDate + '</span></a>');
+                $('#returnNotifications').html('<a class="dropdown-item text-muted" href="#">Nothing to show.</a>');
               }
             },
             error : function(){
