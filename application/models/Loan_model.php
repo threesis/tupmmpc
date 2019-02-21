@@ -103,6 +103,7 @@
 			$loanID = $this->input->get('loanID');
 			$this->db->select('*');
 			$this->db->where('loan_applied', $loanID);
+			$this->db->where('status', 'Active');
 			$this->db->from('loan_applications a');
 			$this->db->join('members b', 'b.id = a.member_id');
 			$this->db->join('loan_types c', 'c.id = a.loan_applied', 'left');
