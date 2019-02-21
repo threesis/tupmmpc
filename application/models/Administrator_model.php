@@ -261,10 +261,15 @@
 			}
 		}
 
-		public function getTotalLoanPayments($userType) {
-			$this->db->select_sum('balance')->from('active_loan_apps');
-			$query = $this->db->get();
-			return $query->result();
+		public function getTotalLoanPayments() {
+			$this->db->select_max('balance')->from('active_loan_apps');
+			$this->db->group_by('loanapp_id');
+			$query = $this->db->get()->result();
+			$total = 0;
+			foreach ($query as $sum) {
+				$total += $sum->balance;
+			}
+			return $total;
 		}
 
 		public function getAllMissedPayments() {
@@ -274,9 +279,14 @@
 		}
 
 		public function getTotalShareCapital() {
-			$this->db->select_sum('total_share_capital')->from('share_capital');
-			$query = $this->db->get();
-			return $query->result();
+			$this->db->select_max('total_share_capital')->from('share_capital');
+			$this->db->group_by('user_id');
+			$query = $this->db->get()->result();
+			$total = 0;
+			foreach ($query as $sum) {
+				$total += $sum->total_share_capital;
+			}
+			return $total;
 		}
 
 		public function updateShareCapital() {
