@@ -213,11 +213,16 @@
                               <div class="card rounded shadow-sm">
                                 <div class="card-body p-3">
                                   <div class="row">
-                                    <div class="col-6">
-                                      <h6 id="CHpaymentsDash" class="mb-0 text-success" style="font-size: 2rem">&#8369;0</h6>
+                                    <div class="col-10">
+                                      <h6 id="CHpaymentsDash" class="mb-0 text-success" style="font-size: 2rem"></h6>
+                                      <script type="text/javascript">
+                                        var totalPayments = '<?php echo $totalPayments; ?>';
+                                        totalPayments = Math.round(totalPayments).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                        $('#CHpaymentsDash').html('&#8369;'+totalPayments);
+                                      </script>
                                       <footer class="text-muted" style="font-size: 0.8rem">Total Loan <cite>Payments</cite></footer>
                                     </div>
-                                    <div class="col-6">
+                                    <div class="col-2">
                                       <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
                                     </div>
                                   </div>
@@ -248,7 +253,12 @@
                                 <div class="card-body p-3">
                                   <div class="row">
                                     <div class="col-6">
-                                      <h6 id="CHsharecapDash" class="mb-0 text-warning" style="font-size: 2rem">&#8369;0</h6>
+                                      <h6 id="CHsharecapDash" class="mb-0 text-warning" style="font-size: 2rem"></h6>
+                                      <script type="text/javascript">
+                                        var totalShare = '<?php echo $totalShareCapital; ?>';
+                                        totalShare = Math.round(totalShare).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                        $('#CHsharecapDash').html('&#8369;'+totalShare);
+                                      </script>
                                       <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Share Capital</cite></footer>
                                     </div>
                                     <div class="col-6">
@@ -1661,7 +1671,7 @@
                         async   : false,
                         dataType: 'json',
                         success: function(data) {
-                          var c = '';
+                          var c = 0;
                           if(data.length) {
                             var tbl = '';
                             var cm1 = '';
@@ -2277,7 +2287,7 @@
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
-                      <div class="modal-body" style="max-height: 80%; overflow-y: auto">
+                      <div class="modal-body" style="max-height: 450px; overflow-y: auto">
                         <div id="unarchiveLoanMsg" style="margin: -15px -15px 15px -15px"></div>
                         <div id="returnLoanArchive" class="row">
                           
@@ -3351,7 +3361,7 @@
             dataType: 'json',
             success : function(data){
               if(data.length) {
-                var c = 0;
+                var c = '';
                 var row = '';
                 for(var i = 0; i < data.length; i++) {
                   var myDate = new Date(Date.parse(data[i].noti_date.replace('-','/','g')));
@@ -3364,8 +3374,8 @@
                     $('#returnNotifIndicator').html('');
                   }
                 }
-                    $('#returnNotifications').html(row);
-                    $('#returnNotifIndicator').html(c);
+                  $('#returnNotifIndicator').html(c);
+                  $('#returnNotifications').html(row);
               } else {
                 $('#returnNotifIndicator').html('');
                 $('#returnNotifications').html('<a class="dropdown-item text-muted" href="#">'+data[i].noti_desc+'<br><span class="float-left py-2" style="font-size: 85%">Click to view voucher</span><span class="text-secondary float-right py-2" style="font-size: 80%">' + myDate + '</span></a>');
@@ -4268,10 +4278,10 @@
                                           '<span aria-hidden="true">&times;</span>' +
                                         '</button>' +
                                       '</p>').fadeIn(); 
+                $('#loansTab .card-body').animate({scrollTop: 0}, 'fast');
                 searchLoan();
                 refreshCollections();
                 get_latest_date();
-                $('#loansTab .card-body').animate({scrollTop: 0}, 'fast');
               } else {
                 alert('You did not made any changes! Please close it properly.');
               }
