@@ -49,10 +49,10 @@
             <li class="nav-item active mr-2">
               <a class="nav-link" href="#"><span class="far fa-envelope fa-lg mr-2"></span>Messages</a>
             </li>
-            <li class="nav-item dropdown mr-2">
-              <a class="nav-link" href="#" id="navbarDropdownNoti" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-bell fa-lg mr-2"></i>Notifications</a>
-              <div id="returnNoti" class="dropdown-menu" aria-labelledby="navbarDropdownNoti">
-                <a id="openApp" class="dropdown-item">Account</a>
+            <li id="notificationBar" class="nav-item dropdown mr-2">
+              <a class="nav-link" href="#" id="navbarDropdownNoti" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-bell fa-lg mr-2"></i><span id="returnNotifIndicator" class="badge badge-pill badge-danger p-1" style="position: absolute; left: 3px; top: 3px"></span>Notifications</a>
+              <div id="returnNotifications" class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownNoti">
+
               </div>
             </li>
             <li class="nav-item dropdown active">
@@ -71,29 +71,34 @@
 
     <div class="wrapper">
       <div class="container">
-        <div class="msg">
-        </div>
         <div class="row">
         <!-- Profile -->
           <div class="col-sm-padding col-sm-12 col-md-4 col-lg-3 offset-md mb-3">
-            <div class="card">
+            <div class="card shadow-sm">
               <div class="card-header bg-secondary p-5 bobo">
                 <div id="displayUserImg" class="card-title">
                   <img src="<?php echo base_url(); ?>assets/img/profile_img/<?php echo $image['user_img']; ?>" class="img-thumbnail rounded-circle mx-auto d-block my-3 shadow-sm">
                 </div>
               </div>
-              <div class="card-text mb-2 mx-3">
+              <div class="card-text mb-3 mx-3">
                 <h6 id="displayUserName" class="admin-name text-center"><?php echo $image['name']; ?></h6>
                 <h6 class="info-text text-center text-muted"><?php echo $this->session->userdata('position') ?></h6>
               </div>
               <div class="list-group profile-menu" id="list-tab" role="tablist">
-                <a class="list-group-item list-group-item-action active" id="dashboard-tab" data-toggle="list" href="#dashboardTab" role="tab" aria-controls="home">Dashboard<i class="fas fa-home mr-2 mt-1 float-left"></i>  <i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
+                <?php if($this->session->flashdata('user_signedin')): ?>
+                  <?php echo '<p class="alert bg-primary alert-dismissable fade show text-center mb-0" id="loginWelcomeMsg" role="alert">
+                            <button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button><a class="h7 text-white">'.$this->session->flashdata('user_signedin').
+                            $this->session->userdata('username').'!'.'</a></p>';
+                  ?>
+                <?php endif; ?>
+                <a class="list-group-item list-group-item-action mt-0 active" id="dashboard-tab" data-toggle="list" href="#dashboardTab" role="tab" aria-controls="home">Dashboard<i class="fas fa-home mr-2 mt-1 float-left"></i>  <i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="loans-tab" data-toggle="list" href="#loansTab" role="tab" aria-controls="settings">Loans<i class="fas fa-credit-card mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="members-tab" data-toggle="list" href="#membersTab" role="tab" aria-controls="messages">Members<i class="fas fa-users mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="loanapps-tab" data-toggle="list" href="#loanAppTab" role="tab" aria-controls="settings"> Loan Applications<i class="fas fa-poll mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="myloanrecords-tab" data-toggle="list" href="#myloanrecordsTab" role="tab" aria-controls="messages">My Loan Records<i class="fas fa-folder-open mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
-                <a class="list-group-item list-group-item-action" id="records-comakers-tab" data-toggle="list" href="#loanRecordsCoMakersTab" role="tab" aria-controls="settings">Loan Records & Co-Makers<i class="fas fa-poll-h mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
-                <a class="list-group-item list-group-item-action" id="sharecap-ledger-tab" data-toggle="list" href="#ledgerShareCapTab" role="tab" aria-controls="messages">Ledger & Share Capital<i class="fas fa-users mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
+                <a class="list-group-item list-group-item-action" id="records-comakers-tab" data-toggle="list" href="#loanRecordsCoMakersTab" role="tab" aria-controls="settings"><span id="loanRecordsTabText">Loan Records</span> <span id="comakersTabText">& Co-Makers</span><i class="fas fa-poll-h mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
+                <a class="list-group-item list-group-item-action" id="sharecap-ledger-tab" data-toggle="list" href="#ledgerShareCapTab" role="tab" aria-controls="messages">Remittances and Collections<i class="fas fa-users mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="applyloan-tab" data-toggle="list" href="#applyLoanTab" role="tab" aria-controls="messages">Apply Loan<i class="far fa-file-alt mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="websettings-tab" data-toggle="list" href="#websiteSettings" role="tab" aria-controls="messages">Settings<i class="fas fa-cog mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
               </div>
@@ -103,163 +108,743 @@
 
           <!-- Navigation Body -->
           <div class="col-sm-padding col-sm-12 col-md-8 col-lg-9 mb-3">
-            <div class="card">
+            <div class="card shadow-sm">
               <div class="tab-content">
                 <!-- Home Part -->
                 <div class="tab-pane fade show" id="dashboardTab" role="tabpanel" aria-labelledby="home-tab">
                   <h2 class="card-header shadow-sm">Dashboard</h2>
-                  <div class="card-body card-body-mh">
-                    <div class="row mb-3">
-                      <div class="col-md-6">
-                        <div class="card rounded shadow-sm">
-                          <div class="card-body p-3">
-                            <div class="row">
-                              <div class="col-6">
-                                <h6 id="dashboardTotalMembers" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $members; ?></h6>
-                                <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Members</cite></footer>
+                  <div id="chairmanDash">
+                    <div class="card-body card-body-mh">
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="CHmembersDash" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $members; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Members</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-user-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
                               </div>
-                              <div class="col-6">
-                                <i class="far fa-user-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="CHloansAppliedDash" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $loansApplied; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Applied</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-file-alt text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-6">
-                        <div class="card rounded shadow-sm">
-                          <div class="card-body p-3">
-                            <div class="row">
-                              <div class="col-6">
-                                <h6 id="dashboardLoansApplied" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $loansApplied; ?></h6>
-                                <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Applied</cite></footer>
+                      <div class="row mb-3">
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="CHpendingDash" class="mb-0 text-warning" style="font-size: 2rem"><?php echo $pendingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Pending</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-pause-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
                               </div>
-                              <div class="col-6">
-                                <i class="far fa-file-alt text-secondary float-right" style="font-size: 2.5rem"></i>
+                            </div>
+                            <div class="card-footer bg-warning p-1">
+                              <small class="text-white ml-2">Pending</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="CHapprovedDash" class="mb-0 text-info" style="font-size: 2rem"><?php echo $approvedLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Approved</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-check-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-info p-1">
+                              <small class="text-white ml-2">Accepted</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="CHactiveDash" class="mb-0 text-primary" style="font-size: 2rem"><?php echo $ongoingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Active</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-primary p-1">
+                              <small class="text-white ml-2">On-going</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="row mb-3">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="CHpaymentsDash" class="mb-0 text-success" style="font-size: 2rem">&#8369;0</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total Loan <cite>Payments</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="CHmissedPaymentsDash" class="mb-0 text-danger" style="font-size: 2rem">&#8369;0</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total Missed <cite>Payments</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="CHsharecapDash" class="mb-0 text-warning" style="font-size: 2rem">&#8369;0</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Share Capital</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-7">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <h6 class="mb-0 text-primary" style="font-size: 1.2rem">Monthly Loan Track</h6>
+                              <footer class="text-muted" style="font-size: 0.8rem"><cite>in 2018-2019</cite></footer>
+                              <canvas id="line-chart"></canvas>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="memberDash">
+                    <div class="card-body card-body-mh">
+                      <div class="row mb-4">
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="dashboardMemberAppliedLoans" class="mb-0 text-warning" style="font-size: 2rem"><?php echo $loansApplied; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Total Loans <cite>Applied</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-file-alt text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-warning p-1">
+                              <small class="text-white ml-2">Applied</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="dashboardMemberPendingLoans" class="mb-0 text-info" style="font-size: 2rem"><?php echo $pendingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Pending</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-pause-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-info p-1">
+                              <small class="text-white ml-2">Pending</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row mb-4">
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="dashboardMemberApprovedLoans" class="mb-0 text-success" style="font-size: 2rem"><?php echo $approvedLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Approved</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-check-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-success p-1">
+                              <small class="text-white ml-2">Approved</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="dashboardMemberActiveLoans" class="mb-0 text-primary" style="font-size: 2rem"><?php echo $ongoingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Active</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-primary p-1">
+                              <small class="text-white ml-2">On-going</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-5">
+                                  <h6 class="mb-0 text-primary" style="font-size: 1.2rem">Monthly Loan Track</h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem"><cite>in 2018-2019</cite></footer>
+                                </div>
+                                <div class="col-7">
+                                  <canvas id="line-chart"></canvas>
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="row mb-3">
-                      <div class="col-md-4">
-                        <div class="card rounded shadow-sm">
-                          <div class="card-body p-3">
-                            <div class="row">
-                              <div class="col-6">
-                                <h6 id="dashboardPendingLoans" class="mb-0 text-warning" style="font-size: 2rem"><?php echo $pendingLoans; ?></h6>
-                                <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Pending</cite></footer>
-                              </div>
-                              <div class="col-6">
-                                <i class="far fa-pause-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                  </div>
+                  <div id="creditDash">
+                    <div class="card-body card-body-mh">
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="CCmembersDash" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $members; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Members</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-user-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
                               </div>
                             </div>
                           </div>
-                          <div class="card-footer bg-warning p-1">
-                            <small class="text-white ml-2">Pending</small>
-                            <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="CCloansAppliedDash" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $loansApplied; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Applied</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-file-alt text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-4">
-                        <div class="card rounded shadow-sm">
-                          <div class="card-body p-3">
-                            <div class="row">
-                              <div class="col-6">
-                                <h6 id="dashboardApprovedLoans" class="mb-0 text-info" style="font-size: 2rem"><?php echo $approvedLoans; ?></h6>
-                                <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Approved</cite></footer>
-                              </div>
-                              <div class="col-6">
-                                <i class="far fa-check-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                      <div class="row mb-3">
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="CCpendingDash" class="mb-0 text-warning" style="font-size: 2rem"><?php echo $pendingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Pending</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-pause-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
                               </div>
                             </div>
+                            <div class="card-footer bg-warning p-1">
+                              <small class="text-white ml-2">Pending</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
                           </div>
-                          <div class="card-footer bg-info p-1">
-                            <small class="text-white ml-2">Accepted</small>
-                            <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="CCapprovedDash" class="mb-0 text-info" style="font-size: 2rem"><?php echo $approvedLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Approved</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-check-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-info p-1">
+                              <small class="text-white ml-2">Accepted</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="CCactiveDash" class="mb-0 text-primary" style="font-size: 2rem"><?php echo $ongoingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Active</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-primary p-1">
+                              <small class="text-white ml-2">On-going</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-4">
-                        <div class="card rounded shadow-sm">
-                          <div class="card-body p-3">
-                            <div class="row">
-                              <div class="col-6">
-                                <h6 id="dashboardActiveLoans" class="mb-0 text-primary" style="font-size: 2rem"><?php echo $ongoingLoans; ?></h6>
-                                <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Active</cite></footer>
-                              </div>
-                              <div class="col-6">
-                                <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="row mb-3">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="CCloanPaymentsDash" class="mb-0 text-success" style="font-size: 2rem">&#8369;0</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total Loan <cite>Payments</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
-                          <div class="card-footer bg-primary p-1">
-                            <small class="text-white ml-2">On-going</small>
-                            <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                          <div class="row mb-3">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="CCmissedPaymentsDash" class="mb-0 text-danger" style="font-size: 2rem">&#8369;0</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total Missed <cite>Payments</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="CCsharecapDash" class="mb-0 text-warning" style="font-size: 2rem">&#8369;0</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Share Capital</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-7">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <h6 class="mb-0 text-primary" style="font-size: 1.2rem">Monthly Loan Track</h6>
+                              <footer class="text-muted" style="font-size: 0.8rem"><cite>in 2018-2019</cite></footer>
+                              <canvas id="line-chart"></canvas>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="col-md-5">
-                        <div class="row mb-3">
-                          <div class="col-md-12">
-                            <div class="card rounded shadow-sm">
-                              <div class="card-body p-3">
-                                <div class="row">
-                                  <div class="col-6">
-                                    <h6 id="dashboardPayments" class="mb-0 text-success" style="font-size: 2rem">&#8369;65,250</h6>
-                                    <footer class="text-muted" style="font-size: 0.8rem">Total Loan <cite>Payments</cite></footer>
-                                  </div>
-                                  <div class="col-6">
-                                    <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
-                                  </div>
+                  </div>
+                  <div id="managerDash">
+                   <div class="card-body card-body-mh">
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="MNGmembersDash" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $members; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Members</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-user-circle text-secondary float-right" style="font-size: 2.5rem"></i>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
-                        <div class="row mb-3">
-                          <div class="col-md-12">
-                            <div class="card rounded shadow-sm">
-                              <div class="card-body p-3">
-                                <div class="row">
-                                  <div class="col-6">
-                                    <h6 id="dashboardMissedPayments" class="mb-0 text-danger" style="font-size: 2rem">&#8369;27,500</h6>
-                                    <footer class="text-muted" style="font-size: 0.8rem">Total Missed <cite>Payments</cite></footer>
-                                  </div>
-                                  <div class="col-6">
-                                    <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
-                                  </div>
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="MNGloansAppliedDash" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $loansApplied; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Applied</cite></footer>
                                 </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-md-12">
-                            <div class="card rounded shadow-sm">
-                              <div class="card-body p-3">
-                                <div class="row">
-                                  <div class="col-6">
-                                    <h6 id="dashboardMissedPayments" class="mb-0 text-warning" style="font-size: 2rem">&#8369;82,900</h6>
-                                    <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Share Capital</cite></footer>
-                                  </div>
-                                  <div class="col-6">
-                                    <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
-                                  </div>
+                                <div class="col-6">
+                                  <i class="far fa-file-alt text-secondary float-right" style="font-size: 2.5rem"></i>
                                 </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div class="col-md-7">
-                        <div class="card rounded shadow-sm">
-                          <div class="card-body p-3">
-                            <h6 class="mb-0 text-primary" style="font-size: 1.2rem">Monthly Loan Track</h6>
-                            <footer class="text-muted" style="font-size: 0.8rem"><cite>in 2018-2019</cite></footer>
-                            <canvas id="line-chart"></canvas>
+                      <div class="row mb-3">
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="MNGpendingDash" class="mb-0 text-warning" style="font-size: 2rem"><?php echo $pendingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Pending</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-pause-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-warning p-1">
+                              <small class="text-white ml-2">Pending</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="MNGapprovedDash" class="mb-0 text-info" style="font-size: 2rem"><?php echo $approvedLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Approved</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-check-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-info p-1">
+                              <small class="text-white ml-2">Accepted</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="MNGactiveDash" class="mb-0 text-primary" style="font-size: 2rem"><?php echo $ongoingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Active</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-primary p-1">
+                              <small class="text-white ml-2">On-going</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="row mb-3">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="MNGpaymentsDash" class="mb-0 text-success" style="font-size: 2rem">&#8369;0</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total Loan <cite>Payments</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="MNGmissedPaymentsDash" class="mb-0 text-danger" style="font-size: 2rem">&#8369;0</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total Missed <cite>Payments</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="MNGsharecapDash" class="mb-0 text-warning" style="font-size: 2rem">&#8369;0</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Share Capital</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-7">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <h6 class="mb-0 text-primary" style="font-size: 1.2rem">Monthly Loan Track</h6>
+                              <footer class="text-muted" style="font-size: 0.8rem"><cite>in 2018-2019</cite></footer>
+                              <canvas id="line-chart"></canvas>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="treasurerDash">
+                    <div class="card-body card-body-mh">
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="TRmembersDash" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $members; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Members</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-user-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="TRloansAppliedDash" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $loansApplied; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Applied</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-file-alt text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="TRpendingDash" class="mb-0 text-warning" style="font-size: 2rem"><?php echo $pendingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Pending</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-pause-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-warning p-1">
+                              <small class="text-white ml-2">Pending</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="TRapprovedDash" class="mb-0 text-info" style="font-size: 2rem"><?php echo $approvedLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Approved</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-check-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-info p-1">
+                              <small class="text-white ml-2">Accepted</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="TRactiveDash" class="mb-0 text-primary" style="font-size: 2rem"><?php echo $ongoingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Active</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-primary p-1">
+                              <small class="text-white ml-2">On-going</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="row mb-3">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="TRpaymentsDash" class="mb-0 text-success" style="font-size: 2rem">&#8369;65,250</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total Loan <cite>Payments</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="TRmissedPaymentsDash" class="mb-0 text-danger" style="font-size: 2rem">&#8369;27,500</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total Missed <cite>Payments</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="TRsharecapDash" class="mb-0 text-warning" style="font-size: 2rem">&#8369;82,900</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Share Capital</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-7">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <h6 class="mb-0 text-primary" style="font-size: 1.2rem">Monthly Loan Track</h6>
+                              <footer class="text-muted" style="font-size: 0.8rem"><cite>in 2018-2019</cite></footer>
+                              <canvas id="line-chart"></canvas>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -645,33 +1230,6 @@
                         <form id="addMemberForm">
                           <div class="modal-body" style="max-height: 400px; overflow-y: auto">
                             <div class="row">
-                              <div class="form-group col-md-6 offset-md-3">
-                                <div class="text-center"><label for="userTypeSelect" class="custom-sm h6">User Type:</label></div>
-                                <select class="custom-select form-control-sm"  id="userTypeSelect" name="userTypeSelect">
-                                  <option value="1">New</option>
-                                  <option value="2">Existing</option>
-                                </select>
-                                <div class="invalid-feedback" id="invaliduserType"></div>
-                              </div>
-                              <div class="form-group col-md-6 offset-md-3" id="membershipPicker" style="display: none">
-                                <div class="text-center"><label for="membershipDate" class="custom-sm h6">Date of Membership:</label></div>
-                                <input type="date" class="form-control form-control-sm" placeholder="Date" aria-describedby="Birthday" id="membershipDate" name="membershipDate">
-                                <div class="invalid-feedback" id="invalidBday"></div>
-                              </div>
-
-                              <script type="text/javascript">
-                                var type = $('#userTypeSelect');
-                                type.change(function(){
-                                  if(type.val() == 2){
-                                    $('#membershipPicker').show();
-                                  } else {
-                                    $('#membershipPicker').hide();
-                                  }
-                                });
-                              </script>
-
-                              <div class="col-12"><hr></div>
-
                               <div class="form-group col-md-4">
                                 <label for="firstname" class="custom-sm h6">First Name:</label>
                                 <input type="text" class="form-control form-control-sm" placeholder="Enter First Name.." aria-describedby="Fname" id="firstname" name="Fname" onkeypress="return (event.charCode > 64 && event.charCode < 91) || (event.charCode > 96 && event.charCode < 123) || (event.charCode == 32)">
@@ -732,10 +1290,12 @@
                                 <div class="invalid-feedback" id="invalidPhone"></div>
                               </div>
 
-                              <div class="form-group col-md-12">
-                                <label for="college" class="custom-sm h6">College:</label>
+                              <div class="form-group col-md-6" id="selectizeCollege">
+                                <label for="college" class="custom-sm h6">Office/Sector:</label>
                                 <select id="college" name="college" style="cursor: pointer;">
                                   <option></option>
+                                  <option>Admin Sector</option>
+                                  <option>Research and Extension</option>
                                   <option>College of Science</option>
                                   <option>College of Industrial Technology</option>
                                   <option>College of Liberal Arts</option>
@@ -744,6 +1304,12 @@
                                   <option>College of Industrial Education</option>
                                 </select>
                                 <div class="invalid-feedback" id="invalidCollege"></div>
+                              </div>
+
+                              <div class="form-group col-md-6">
+                                <label for="membershipDate" class="custom-sm h6">Date of Membership:</label>
+                                <input type="date" class="form-control form-control-sm" placeholder="Date" id="membershipDate" name="membershipDate">
+                                <div class="invalid-feedback" id="invalidMembership"></div>
                               </div>
 
                               <div class="col-12"><hr></div>
@@ -766,13 +1332,26 @@
                                 <div class="invalid-feedback" id="invalidPass2"></div>
                               </div>
 
+                              <div class="col-12"><hr></div>
+
                               <div class="form-group col-md-4">
-                                <label for="sharecap" class="custom-sm h6">Share Capital:</label>
+                                <label for="subscribeShare" class="custom-sm h6">Subscribe Share:</label>
                                 <div class="input-group input-group-sm mb-2">
                                   <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">&#8369;</span>
                                   </div>
-                                  <input type="text" class="form-control form-control-sm" placeholder="Enter Share Capital.." aria-describedby="Sharecap" id="sharecap" name="sharecap" maxlength="6">
+                                  <input type="text" class="form-control form-control-sm" placeholder="Enter Subscribe Share.." aria-describedby="Subscribeshare" id="subscribeShare" name="subscribeShare" maxlength="12">
+                                  <div class="invalid-feedback" id="invalidSubscribeShare"></div>
+                                </div>
+                              </div> 
+
+                              <div class="form-group col-md-4">
+                                <label for="sharecap" class="custom-sm h6" style="font-size: 90%">Forced Monthly Savings:</label>
+                                <div class="input-group input-group-sm mb-2">
+                                  <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon1">&#8369;</span>
+                                  </div>
+                                  <input type="text" class="form-control form-control-sm" placeholder="Enter Forced Monthly Savings.." aria-describedby="Sharecap" id="sharecap" name="sharecap" maxlength="12">
                                   <div class="invalid-feedback" id="invalidShareCapital"></div>
                                 </div>
                               </div> 
@@ -783,18 +1362,24 @@
                                   <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">&#8369;</span>
                                   </div>
-                                  <input type="text" class="form-control form-control-sm" placeholder="Enter Staring Capital.." aria-describedby="Ewan" id="startingShareCap" name="startingShareCap" maxlength="6">
-                                  <div class="invalid-feedback" id="invalidShareCapital"></div>
+                                  <input type="text" class="form-control form-control-sm" placeholder="Enter Staring Capital.." aria-describedby="Ewan" id="startingShareCap" name="startingShareCap" maxlength="12">
+                                  <div class="invalid-feedback" id="invalidStarting"></div>
                                 </div>
                               </div> 
 
-                              <div class="form-group col-md-4">
+                              <div class="form-group col-md-6">
                                 <label for="orNum" class="custom-sm h6">OR Number:</label>
                                 <div class="input-group input-group-sm mb-2" onkeypress="if(event.charCode == 32){return false;}">
-                                  <input type="text" class="form-control form-control-sm" placeholder="Enter OR Number.." aria-describedby="ORnumber" id="orNum" name="orNum" maxlength="" >
-                                  <div class="invalid-feedback" id="invalidShareCapital"></div>
+                                  <input type="text" class="form-control form-control-sm" placeholder="Enter OR Number.." aria-describedby="ORnumber" id="orNum" name="orNum" maxlength="">
+                                  <div class="invalid-feedback" id="invalidOR"></div>
                                 </div>
                               </div> 
+
+                              <div class="form-group col-md-6">
+                                <label for="orDate" class="custom-sm h6">OR Date:</label>
+                                <input type="date" class="form-control form-control-sm" placeholder="Date" id="orDate" name="orDate">
+                                <div class="invalid-feedback" id="invalidORDate"></div>
+                              </div>
                             </div>
                           </div> 
                         </form>     
@@ -831,6 +1416,8 @@
                       <table id="pendingLoansTbl" class="table table-striped table-hover table-responsive-sm table-md nowrap">
                         <thead>
                           <tr>
+                            <th>#</th>
+                            <th>App ID</th>
                             <th>Name</th>
                             <th>Location</th>
                             <th>Loan Applied</th>
@@ -847,6 +1434,8 @@
                       <table id="approvedLoansTbl" class="table table-striped table-hover table-responsive-sm table-md nowrap">
                         <thead>
                           <tr>
+                            <th>#</th>
+                            <th>App ID</th>
                             <th>Name</th>
                             <th>Location</th>
                             <th>Loan Applied</th>
@@ -860,13 +1449,17 @@
                     </div>
 
                     <div class="tab-pane list-group" id="active_loans">
-                      <table id="activeLoansTbl" class="table table-striped table-hover table-responsive-sm table-md nowrap">
+                      <table id="activeLoansTbl" class="table table-striped table-hover table-responsive nowrap">
                         <thead>
                           <tr>
+                            <th>#</th>
+                            <th>App ID</th>
                             <th>Name</th>
                             <th>Location</th>
                             <th>Loan Applied</th>
-                            <th>Balance</th>
+                            <th>Loan Amount</th>
+                            <th>Cheque No.</th>
+                            <th>Disbursement No.</th>
                           </tr>
                         </thead>
                         <tbody id="returnActiveLoans">
@@ -907,7 +1500,7 @@
                             <div class="row">
                               <img id="loanAppFormImg" class="rounded w-25 h-25 ml-3" src="">
                                 <div class="col align-self-start">
-                                  <label name="loanApplicant" class="custom-sm h6"></label><br>
+                                  <label name="loanApplicant" style="font-size: 110%; font-weight: 600"></label><br>
                                   <a name="loanApplicantEmail" class="small text-primary em"></a><br>
                                   <a name="loanApplicantContact" class="small"></a><br>
                                   <a name="loanApplicantCollege" class="small"></a><br>
@@ -915,8 +1508,8 @@
                                   <a name="loanApplicantRegDate" class="small"></a>
                                 </div>
                                 <div class="col align-self-start">
-                                  <a class="custom-xs h6" id="thpInfo">Take home pay:<span class="userLoanInfo ml-2" name="loan_thp"></span></a><br>
-                                  <a class="custom-xs h6" id="cnInfo">Cheque number:<span class="userLoanInfo ml-2" name="loan_cn"></span></a><br>
+                                  <a class="custom-xs h6" id="thpInfo"><em>Take home pay:<span class="userLoanInfo ml-2" name="loan_thp"></span></em></a><br>
+                                  <a class="custom-xs h6" id="cnInfo"><em>Cheque No.:<span class="userLoanInfo ml-2" name="loan_cn"></span></a></em><br>
                                 </div>
                               </div>
                                   
@@ -949,26 +1542,20 @@
                                 <tr>
                                   <td>Amount of Loan</td>
                                   <td name="loan_amt"></td>
-                                  <th colspan="2" class="text-center">Member Records</th>
+                                  <th colspan="2"><button class="btn btn-outline-info btn-sm btn-block" data-toggle="modal" data-target="#applicantPayslipModal" onclick="$('#openLoanApp').modal('hide');">View payslip</button></th>
                                 </tr>
                                 <tr>
                                   <td>Interest on Loan</td>
                                   <td name="loan_interest"></td>
-                                  <td colspan="2"><button class="btn btn-outline-info btn-sm btn-block">LEDGER</button></td>
+                                  <td colspan="2"><button class="btn btn-outline-info btn-sm btn-block">View Ledger</button></td>
                                 </tr>
                                 <tr>
                                   <td>Monthly Amortization</td>
                                   <td name="loan_deduc"></td>
-                                  <td colspan="2"><button class="btn btn-outline-info btn-sm btn-block">SUMMARY</button></td>
-                                </tr>
-                                <tr>
-                                  <td>Payslip</td>
-                                  <td><button class="btn btn-outline-info btn-sm btn-block">ATTACHMENT</button></td>
-                                  <td colspan="2"></td>
+                                  <td colspan="2"><button class="btn btn-outline-info btn-sm btn-block">View Loans</button></td>
                                 </tr>
                               </tbody>
                             </table>
-
                           </div>
                           <div id="confirmationLoanAppBody">
                           </div>
@@ -984,6 +1571,31 @@
                     </div>
                   </div>
 
+                  <div class="modal fade" id="applicantPayslipModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h2 id="applicant-payslip" class="modal-title"></h2>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body" style="max-height: 80%; overflow-y: auto">
+                          <img class="img-fluid" id="loan_payslip">
+                        </div>
+                        <div class="modal-footer">
+                          <button class="btn btn-secondary btn-sm float-right" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                    <script type="text/javascript">
+                      $('#applicantPayslipModal').on('click', '#applicantPayslipBackBtn', function(){
+                        $('#applicantPayslipModal').modal('hide');
+                        $('#openLoanApp').modal('show');
+                      });
+                    </script>
+                  </div>
+
                   <div class="modal fade" id="confirmationLoanAppModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-md" role="document">
                       <div class="modal-content">
@@ -993,7 +1605,7 @@
                             <span aria-hidden="true">&times;</span>
                           </button>
                         </div>
-                        <div class="modal-body" style="max-height: 80%; overflow-y: auto">
+                        <div class="modal-body" style="max-height: 400px; overflow-y: auto">
                           <div id="confirmationLoanAppBody">
                             
                           </div>
@@ -1014,7 +1626,7 @@
                     <table id="myLoanRecordTbl" class="table table-striped table-hover table-responsive table-md nowrap">
                       <thead>
                         <tr>
-                          <th></th>
+                          <th>#</th>
                           <th>Date Applied</th>
                           <th>Loan Applied</th>
                           <th>Loan Interest (&#8369;)</th>
@@ -1023,7 +1635,6 @@
                           <th>Monthly Amortization (&#8369;)</th>
                           <th>Status</th>
                           <th>Comakers</th>
-                          <th>Remarks</th>
                         </tr>
                       </thead>
                       <tbody id="returnMyLoanRecords">
@@ -1050,12 +1661,14 @@
                         async   : false,
                         dataType: 'json',
                         success: function(data) {
+                          var c = '';
                           if(data.length) {
                             var tbl = '';
                             var cm1 = '';
                             var cm2 = '';
                             var cm3 = '';
                             for(var i = 0; i < data.length; i++) {
+                              c++;
                               var myDate  = new Date(data[i].date_applied);
                               if(data[i].comaker_1 == null) {
                                 cm1 = '';
@@ -1072,22 +1685,21 @@
                               }
 
                               tbl +=  '<tr class="text-secondary">' +
-                                        '<td style="vertical-align: middle">' + '<button class="btn btn-sm btn-outline-info">Renew</button>' + '</td>' +
+                                        '<td style="vertical-align: middle">' + c + '</td>' +
                                         '<td style="vertical-align: middle">' + myDate.toLocaleDateString("en-US") + '</td>' +
                                         '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].loan_name + '</span></td>' +
-                                        '<td style="vertical-align: middle">&#8369;' + Math.round(data[i].loan_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                                        '<td style="vertical-align: middle">&#8369;' + Math.round(data[i].loan_int).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                                        '<td style="vertical-align: middle">' + Math.round(data[i].loan_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                                        '<td style="vertical-align: middle">' + Math.round(data[i].loan_int).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                                         '<td style="vertical-align: middle">' + data[i].loan_term + ' month/s</td>' +
-                                        '<td style="vertical-align: middle">&#8369;' + Math.round(data[i].monthly_deduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                                        '<td style="vertical-align: middle">' + Math.round(data[i].monthly_deduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                                         '<td style="vertical-align: middle">' + data[i].status + '</td>' +
                                         '<td style="vertical-align: middle">' + cm1 + cm2 + cm3 + '</td>' +
-                                        '<td style="vertical-align: middle">' + data[i].remarks + '</td>' +
                                       '</tr>'; 
                             }
                             $('#returnMyLoanRecords').html(tbl);
                           } else {
                             $('#returnMyLoanRecords').html('');
-                            $('#myLoanRecApplyLoan').html('<button class="btn btn-outline-primary btn-lg">New here? Apply for a loan now!</button>');
+                            $('#myLoanRecApplyLoan').html('<button class="btn btn-outline-primary btn-lg" onclick="$("#applyLoanTab").addClass("active");">New here? Apply for a loan now!</button>');
                           }
                         },
                         error: function() {
@@ -1128,13 +1740,13 @@
                   <div class="card-header shadow-sm">
                     <ul class="nav nav-tabs card-header-tabs">
                       <li class="ml-2 pb-4" style="min-height: 40px;">
-                        <h2 class="card-title">Ledger & Share Capital</h2>
+                        <h2 class="card-title">Collections & Remittances</h2>
                       </li>
                       <li id="view-ledgers" class="nav-item ml-auto loan-apps">
-                        <a id="ledgerTab" class="nav-link active" data-toggle="tab" href="#ledgerSubTab">View Ledger<span class="badge badge-secondary ml-1"></span></a>
+                        <a id="ledgerTab" class="nav-link active" data-toggle="tab" href="#ledgerSubTab">Collections<span class="badge badge-secondary ml-1"></span></a>
                       </li>
                       <li id="update-ledgers" class="nav-item loan-apps">
-                        <a id="updateLedgerTab" class="nav-link" data-toggle="tab" href="#updateLedgerSubTab">Update Ledger<span class="badge badge-secondary ml-1"></span></a>
+                        <a id="updateLedgerTab" class="nav-link" data-toggle="tab" href="#updateLedgerSubTab">Remittances<span class="badge badge-secondary ml-1"></span></a>
                       </li>
                       <li id="update-share-capitals" class="nav-item loan-apps">
                         <a id="shareCapTab" class="nav-link" data-toggle="tab" href="#shareCapSubTab">Share Capital<span class="badge badge-secondary ml-1"></span></a>
@@ -1145,44 +1757,25 @@
                     <div id="ledgerShareCapMsg" class="no-padding"></div>
                       <div class="tab-pane active" id="ledgerSubTab">
                         <div class="form-row mb-1">
-                          <div class="col-sm-12 col-md-6">
-                            <select id="viewLedgerMonthSelect">
-                              <option></option>
-                              <option value="1">January</option>
-                              <option value="2">February</option>
-                              <option value="3">March</option>
-                              <option value="4">April</option>
-                              <option value="5">May</option>
-                              <option value="6">June</option>
-                              <option value="7">July</option>
-                              <option value="8">August</option>
-                              <option value="9">September</option>
-                              <option value="10">October</option>
-                              <option value="11">November</option>
-                              <option value="12">December</option>
-                            </select>
-                          </div>
-
-                          <div class="col-sm-12 col-md-6">
-                            <select id="viewLedgerYearSelect">
+                          <div class="col-sm-12 col-md-4">
+                            <select id="collectionsNameSelect">
 
                             </select>
                           </div>
                         </div>
-                        <table id="viewLedgerTbl" class="table table-striped table-hover table-responsive table-md text-nowrap">
+                        <table id="collectionsTbl" class="table table-striped table-hover table-responsive-sm table-md text-nowrap">
                           <thead>
                             <tr>
-                              <th>Name</th>
-                              <th>OR Number</th>
+                              <th>Date</th>
+                              <th>OR No.</th>
                               <th>Loan Applied</th>
                               <th>Balance (&#8369;)</th>
-                              <th>Monthly Amortization (&#8369;)</th>
                             </tr>
                           </thead>
-                          <tbody id="returnViewLedgerBody">
+                          <tbody id="returnCollectionsBody">
                             
                           </tbody>
-                          <tfoot id="returnViewLedgerFoot">
+                          <tfoot id="returnCollectionsFooter">
                             
                           </tfoot>
                         </table>
@@ -1299,7 +1892,7 @@
                 <div class="card-header shadow-sm">
                   <ul class="nav nav-tabs card-header-tabs">
                     <li class="ml-2 pb-4" style="min-height: 40px">
-                      <h2 class="card-title">Loan Records & Co-Makers</h2>
+                      <h2 class="card-title"><span id="loanRecordsText">Loan Records</span> <span id="comakersText">& Co-Makers</span></h2>
                     </li>
                     <li id="loanrecords-tab" class="nav-item ml-auto loan-apps">
                       <a class="nav-link active" data-toggle="tab" href="#loanRecordsSubTab">Loan Records<span id="pendingNotif" class="badge badge-secondary ml-1"></span></a>
@@ -1321,6 +1914,7 @@
                     <table id="loanRecordTbl" class="table table-striped table-hover table-responsive table-md text-nowrap">
                       <thead>
                         <tr>
+                          <th>#</th>
                           <th>Date</th>
                           <th>Name</th>
                           <th>Take Home Pay (&#8369;)</th>
@@ -1328,7 +1922,6 @@
                           <th>Gross Amount of Loan (&#8369;)</th>
                           <th>Monthly Amortization (&#8369;)</th>
                           <th>Term of Payments</th>
-                          <th>Remarks</th>
                         </tr>
                       </thead>
                       <tbody id="returnLoanRecords">
@@ -1382,9 +1975,10 @@
                             dataType: 'json',
                             success : function(data) {
                               var tbl, loanRecFoot, nameCount;
-                              var totalLoanAmt = 0, totalGrossAmt = 0;
+                              var c = 0, totalLoanAmt = 0, totalGrossAmt = 0;
                               if(data.length > 0) {
                                 for(var i = 0; i < data.length; i++) {
+                                  c++;
                                   var cm1 = data[i].comaker_1;
                                   var cm2 = data[i].comaker_2;
                                   var cm3 = data[i].comaker_3;
@@ -1409,6 +2003,7 @@
                                   grossAmt = Math.round(grossAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
                                 tbl +=  '<tr class="text-secondary">' +
+                                          '<td style="vertical-align: middle">' + c + '</td>' +
                                           '<td style="vertical-align: middle">' + myDate.toLocaleDateString("en-US") + '</td>' +
                                           '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
                                           '<td style="vertical-align: middle">' + takehomepay + '</td>' +
@@ -1416,16 +2011,15 @@
                                           '<td style="vertical-align: middle">' + grossAmt + '</td>' +
                                           '<td style="vertical-align: middle">' + monthlydeduc + '</td>' +
                                           '<td style="vertical-align: middle">' + data[i].loan_term + ' month/s</td>' +
-                                          '<td style="vertical-align: middle">' + data[i].status + '</td>' +
                                         '</tr>';                       
                                 }
                                 loanRecFoot =  '<tr>' +
-                                                  '<th>Total</th>' +
                                                   '<th>' + i + '</th>' +
+                                                  '<th></th>' +
+                                                  '<th></th>' +
                                                   '<th></th>' +
                                                   '<th>&#8369;' + Math.round(totalLoanAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
                                                   '<th>&#8369;' + Math.round(totalGrossAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
-                                                  '<th></th>' +
                                                   '<th></th>' +
                                                   '<th></th>' +
                                                 '</tr>'; 
@@ -1475,7 +2069,6 @@
                     <div class="tab-pane" id="comakersSubTab">
                       <!-- CoMakers Part  -->
                   <div class="tab-pane fade show" id="coMakersTab" role="tabpanel" aria-labelledby="home-tab">
-                    <div class="no-padding" id="coMakers_alerts"></div>
                     <div class="card-header">
                       <ul class="nav nav-tabs card-header-tabs">
                         <li class="ml-2 pb-4">
@@ -1507,10 +2100,8 @@
                           </button>
                         </div>
                         
-                        <div id="coMakersAttachment_alerts"></div>
-
-                        <div class="modal-body" >
-                          <div id="cmViewLoanAppModalBody"></div>                          
+                        <div class="modal-body" id="cmViewLoanAppModalBody">
+                          
                         </div>
 
                         <div class="modal-footer">
@@ -1544,7 +2135,7 @@
                             <input type="hidden" name="loanapp-remarks" id="loanapp_remarks" class="form-control" value="New">
                           </div>
                           <div class="form-group">
-                            <input type="text" name="loanapp-id-no" id="loanapp_id_no" class="form-control" value="">
+                            <input type="hidden" name="loanapp-id-no" id="loanapp_id_no" class="form-control" value="">
                           </div>
                           <div class="form-group">
                             <input type="hidden" name="loanapp-user-id" id="loanapp_user_id" class="form-control">
@@ -1561,10 +2152,7 @@
                             <div class="invalid-feedback" id="loan_selector_invalid"></div>
                           </div>
                           <div class="input-group mb-3" id="loanapp-amount">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text">&#8369;</span>
-                            </div>
-                            <input type="text" maxlength="13" class="form-control" name="loan-amount" id="loan-amount" placeholder="Input loan amount..">
+                            <input type="number" maxlength="10" class="form-control" name="loan-amount" id="loan-amount" placeholder="Input loan amount..">
                             <div class="invalid-feedback" id="loan_amount_invalid"></div>
                           </div>
                           <div class="form-group">
@@ -1808,7 +2396,7 @@
 
                 <!-- EDIT PROFILE MODAL -->
                 <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog">
-                  <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
                         <h2 class="modal-title">Edit Account</h2>
@@ -1836,18 +2424,19 @@
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
-                      <div class="modal-body" style="max-height: 65vh; overflow-y: auto;">
+                      <div class="modal-body" style="max-height: 80%; overflow-y: auto;">
                         <div class="custom-sm ml-2">
-                          <span id="loanType"></span><br>
+                          <!-- <span id="loanType"></span><br>
                           <span id="loanTerm"></span><br>
                           <span id="loanAmt"></span><br>
                           <span id="loanInt"></span><br>
                           <span id="loanGross"></span><br>
                           <span id="loanMoDed"></span><br>
-                          <div id="loan_type_deductions"></div>
-                          <span id="loanOutstandingBal"></span><br>
+                          <span id="loanRetensionFee"></span><br>
+                          <span id="loanServiceFee"></span><br>
+                          <span id="loanOutstandingBal"></span><br> -->
 
-                          <!-- <div class="table-responsive">
+                          <div class="table-responsive">
                             <table class="table table-bordered">
                               <tbody>
                                 <tr>
@@ -1857,7 +2446,8 @@
                                     <span>Loan Receivable - </span><span id="loanType"></span><br>
                                     <span>Loan Interest - </span><span id="loanTerm"></span><br>
                                     <span>Deferred Interest Income </span><br>
-                                    <div id="loan_type_deductions"></div>
+                                    <span>Retention Fee 3%</span><br>
+                                    <span>Service Fee 1%</span><br>
                                     <span>Outstanding Balance of </span><br>
                                     <span>Cash in Bank</span>
                                   </td>
@@ -1875,7 +2465,8 @@
                                     <br>
                                     <br>
                                     <span id="loanDefIntInc"></span><br>
-                                    <div id="loan_type_deductions_val"></div>
+                                    <span id="loanRetensionFee"></span><br>
+                                    <span id="loanServiceFee"></span><br>
                                     <span id="loanOutstandingBal"></span><br>
                                     <span id="loanCiB"></span>
                                   </td>
@@ -1893,7 +2484,7 @@
                                 </tr>
                               </tbody>
                             </table>
-                          </div> -->
+                          </div>
                           
                           <div id="loanCms" class="mt-3"></div>
                         </div>
@@ -1936,7 +2527,6 @@
         searchLoan();
         getActiveLoans();
         getApprovedLoans();
-        getDisapprovedLoans();
         getPendingLoans();
         get_latest_date();
         search_user();
@@ -1944,35 +2534,9 @@
         get_infos();
         Comakers();
         Check();
+        $('[data-toggle="tooltip"]').tooltip()
 
         // DataTables CODES
-        var memberDataTbl = $('#memberListTbl').DataTable({
-          "dom": 'lBfrtip',
-          buttons: [
-            {
-            extend: 'pdf',
-            text: 'Export PDF'
-            },
-            {
-            extend: 'excel',
-            text: 'Export Excel'
-            },
-            {
-            extend: 'print',
-            text: 'Print table',
-            exportOptions: {
-              columns: [0, 1, 2, 3]
-            }
-            },
-          ],
-          "pagingType": "simple_numbers",
-          "language": { search: "", searchPlaceholder: "Search user.." },
-          "columnDefs": [
-            { "orderable": false, "targets": 4 }
-          ]
-        });
-
-        $('#memberListTbl_info').addClass('text-muted font-italic');
 
         var pendingLoansDataTbl = $('#pendingLoansTbl').DataTable({
           "dom": 'lBfrtip',
@@ -2083,17 +2647,6 @@
           placeholder: months[month.getMonth()],
           closeAfterSelect: true
         });
-        $('#viewLedgerYearSelect').html(yrOptions).selectize({
-          create: false,
-          placeholder: "Year..",
-          closeAfterSelect: true
-        });
-        $('#viewLedgerMonthSelect').selectize({
-          create: false,
-          maxOptions: 12,
-          placeholder: months[month.getMonth()],
-          closeAfterSelect: true
-        });
         $('#updateLedgerYearSelect').html(yrOptions).selectize({
           create: false,
           placeholder: "Year..",
@@ -2106,8 +2659,6 @@
           closeAfterSelect: true
         });
         $('#college').selectize({
-          create: true,
-          maxOptions: 5,
           placeholder: "Select College..",
           closeAfterSelect: true
         });
@@ -2116,7 +2667,7 @@
           $('#shareCapRecTbl input[type="checkbox"]:enabled').prop('checked', this.checked);
         });
         $('#selectAllLedger').click( function () {
-          $('#viewUpdateLedgerTbl input[type="checkbox"]').prop('checked', this.checked);
+          $('#viewUpdateLedgerTbl input[type="checkbox"]:enabled').prop('checked', this.checked);
         });
         $('#ledgerTab').click(function(){
           $('#ledgerShareCapBtn').hide();
@@ -2142,43 +2693,6 @@
         });
         
 
-        // All loan related scripts
-        $('#searchPendingLoanApp').keyup(function() {
-          var input = $(this).val();
-          if(input != '') {
-            getPendingLoans(input);
-          } else {
-            getPendingLoans();
-          }
-        });
-
-        $('#searchApprovedLoanApp').keyup(function() {
-          var input = $(this).val();
-          if(input != '') {
-            getApprovedLoans(input);
-          } else {
-            getApprovedLoans();
-          }
-        });
-
-        $('#searchActiveLoanApp').keyup(function() {
-          var input = $(this).val();
-          if(input != '') {
-            getActiveLoans(input);
-          } else {
-            getActiveLoans();
-          }
-        });
-
-        $('#searchDisapprovedLoanApp').keyup(function() {
-          var input = $(this).val();
-          if(input != '') {
-            getDisapprovedLoans(input);
-          } else {
-            getDisapprovedLoans();
-          }
-        });
-
         function getPendingLoans(query){
           var ccUsername = '<?php echo $this->session->userdata('username'); ?>';
           $.ajax({
@@ -2191,6 +2705,7 @@
             success: function(data) {
               if(data.length > 0) {
                 $('#pendingNotif').html(data.length);
+                var c = 0;
                 var row = '';
                 var txtCol1 = '';
                 var txtCol2 = '';
@@ -2201,6 +2716,7 @@
                 var verifiedThp = '';
                 var takeHomePay = '';
                 for(var i = 0; i < data.length; i++){
+                  c++;
                   if(data[i].cc_approval_1 == ccUsername) {
                     status = 'verified';
                     if(data[i].take_home_pay > 0) {
@@ -2277,7 +2793,9 @@
                       col = data[i].college; 
                   }
 
-                  row +=  '<tr class="text-secondary" status="' + status + '" verifiedThp="' + verifiedThp + '" payslip="' + takeHomePay + '" verifiedBy="' + verifiedBy + '" monthlyDeduc="' + data[i].monthly_deduc + '" data="' + data[i].loanapp_id + '" style="cursor: pointer">' +
+                  row +=  '<tr class="text-secondary" name="' + data[i].name + '" status="' + status + '" verifiedThp="' + verifiedThp + '" payslip="' + takeHomePay + '" verifiedBy="' + verifiedBy + '" monthlyDeduc="' + data[i].monthly_deduc + '" data="' + data[i].loanapp_id + '" style="cursor: pointer">' +
+                            '<td style="vertical-align: middle">' + c + '</td>' +
+                            '<td style="vertical-align: middle">' + data[i].loanapp_id + '</td>' +
                             '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span><i class="' + verifiedIcon + ' ml-1"></i></td>' +
                             '<td style="vertical-align: middle">' + col + '</td>' +
                             '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
@@ -2289,7 +2807,10 @@
                           '</tr>'; 
                 }  
                   $('#returnPendingLoan').html(row);  
-                  $('#dashboardPendingLoans').load(location.href + " #dashboardPendingLoans"); 
+                  $('#CHpendingDash').load(location.href + " #CHpendingDash"); 
+                  $('#MNGpendingDash').load(location.href + " #MNGpendingDash"); 
+                  $('#CCpendingDash').load(location.href + " #CCpendingDash"); 
+                  $('#TRpendingDash').load(location.href + " #TRpendingDash"); 
                 } else {
                   if(query != null) {
                     $('#pendingNotif').html('0');
@@ -2328,8 +2849,9 @@
               var approvedLoanNote = '';
               if(data.length > 0) {
                 $('#approvedNotif').html(data.length);
-                var row = ''; 
+                var c = 0, row = ''; 
                 for(var i = 0; i < data.length; i++){
+                  c++;
                   var dateIssued = new Date(Date.parse(data[i].date_approved.replace('-','/','g')));
                   dateIssued = dateIssued.toUTCString();
                   dateIssued = dateIssued.split(' ').slice(0, 4).join(' ');
@@ -2366,7 +2888,9 @@
                       col = data[i].college; 
                   }
 
-                  row +=  '<tr class="text-secondary" status="' + status + '" data="' + data[i].loanapp_id + '"payslip="' + data[i].take_home_pay + '" verifiedBy="' + data[i].thp_verified_by + '" chequeNo="' + data[i].cheque_no + '" dateIssued="' + dateIssued + '" style="cursor: pointer">' +
+                  row +=  '<tr class="text-secondary" username="' + data[i].username + '" name="' + data[i].name + '" status="' + status + '" data="' + data[i].loanapp_id + '"payslip="' + data[i].take_home_pay + '" verifiedBy="' + data[i].thp_verified_by + '" chequeNo="' + data[i].cheque_no + '" dateIssued="' + dateIssued + '" style="cursor: pointer">' +
+                            '<td style="vertical-align: middle">' + c + '</td>' +
+                            '<td style="vertical-align: middle">' + data[i].loanapp_id + '</td>' +
                             '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
                             '<td style="vertical-align: middle">' + col + '</td>' +
                             '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
@@ -2374,7 +2898,10 @@
                           '</tr>'; 
                 }
                 $('#returnApprovedLoans').html(row);
-                $('#dashboardApprovedLoans').load(location.href + " #dashboardApprovedLoans"); 
+                $('#CHapprovedDash').load(location.href + " #CHapprovedDash"); 
+                $('#MNGapprovedDash').load(location.href + " #MNGapprovedDash"); 
+                $('#CCapprovedDash').load(location.href + " #CCapprovedDash"); 
+                $('#TRapprovedDash').load(location.href + " #TRapprovedDash"); 
               } else {
                 if(query != null) {
                   $('#approvedNotif').html('0');
@@ -2394,52 +2921,11 @@
           });
         }
 
-        function getDisapprovedLoans(query){
-          $.ajax({
-            type: 'ajax',
-            method: 'get',
-            url: '<?php echo base_url() ?>loans/getDisapprovedLoans',
-            data: {query: query},
-            async: false,
-            dataType: 'json',
-            success: function(data){
-              if(data.length > 0) {
-                $('#disapprovedNotif').html(data.length);
-                var row = '';
-                for(var i = 0; i < data.length; i++){
-                  row += '<li class="list-group-item" data-toggle="modal" data-target="#openLoanAppForm" data="' + data[i].loanapp_id + '" style="cursor: pointer">' +
-                            '<img src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img +'" class="rounded-circle member-icon">' +
-                              '<span class=" badge badge-primary p-2 mr-2 w-15 float-right">' + data[i].date_created + '</span>' +
-                              '<h2 class="member-name">' + data[i].name + '</h2>' +
-                            '<p class="text-muted"><small>' + data[i].loan_name + '</small></p>' +
-                          '</li>';   
-                }
-                $('#returnDisapprovedLoans').html(row);
-              } else {
-                if(query != null) {
-                  $('#disapprovedNotif').html('0');
-                  $('#returnDisapprovedLoans').html('<div class="ml-4">' +
-                                       '<h4 class="mt-5"><strong class="text-danger">No results for ' + query + '</h4>' +
-                                       '<h7 style="color: #66757f; font-weight: light; padding-top: 20px">The term you entered did not bring up any results.</h7>' +
-                                     '</div>');
-                } else {
-                  $('#disapprovedNotif').html('0');
-                  $('#returnDisapprovedLoans').html('<div class="ml-4"><h4 class="mt-5"><strong class="text-success">Looks good!</h4><h7 style="color: #66757f; font-weight: light; padding-top: 20px">Nothing to display.</h7></div>');
-                }
-              } 
-            }, 
-            error: function(){
-              alert('ERROR');
-            }
-          });
-        }
-
-        function getActiveLoans(query){
+        function getActiveLoans(){
           $.ajax({
             type: 'ajax',
             method: 'get',
             url: '<?php echo base_url() ?>loans/getActiveLoans',
-            data: {query: query},
             async: false,
             dataType: 'json',
             success: function(data){
@@ -2450,8 +2936,9 @@
               var approvedLoanNote = '';
               if(data.length > 0) {
                 $('#activeNotif').html(data.length);
-                var row = ''; 
+                var c = 0, row = ''; 
                 for(var i = 0; i < data.length; i++){
+                  c++;
                   var dateActive = new Date(Date.parse(data[i].payment_date.replace('-','/','g')));
                   dateActive = dateActive.toUTCString();
                   dateActive = dateActive.split(' ').slice(0, 4).join(' ');
@@ -2479,26 +2966,24 @@
                       col = data[i].college; 
                   }
 
-                  row +=  '<tr class="text-secondary" remarks="' + data[i].remarks + '" data="' + data[i].loanapp_id + '" activeLoanID="' + data[i].id + '" payslip="' + data[i].take_home_pay + '" balance="' + data[i].balance + '" dateActive="' + dateActive + '" style="cursor: pointer">' +
+                  row +=  '<tr class="text-secondary" name="' + data[i].name + '" remarks="' + data[i].remarks + '" data="' + data[i].loanapp_id + '" activeLoanID="' + data[i].id + '" payslip="' + data[i].take_home_pay + '" balance="' + data[i].balance + '" dateActive="' + dateActive + '" style="cursor: pointer">' +
+                            '<td style="vertical-align: middle">' + c + '</td>' +
+                            '<td style="vertical-align: middle">' + data[i].loanapp_id + '</td>' +
                             '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
                             '<td style="vertical-align: middle">' + col + '</td>' +
                             '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
                             '<td style="vertical-align: middle">' + Math.round(data[i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                            '<td style="vertical-align: middle">' + data[i].cheque_no + '</td>' +
+                            '<td style="vertical-align: middle">' + data[i].disbursement_no + '</td>' +
                           '</tr>'; 
                 }
                 $('#returnActiveLoans').html(row);
-                $('#dashboardActiveLoans').load(location.href + " #dashboardActiveLoans"); 
+                $('#CHactiveDash').load(location.href + " #CHactiveDash"); 
+                $('#MNGactiveDash').load(location.href + " #MNGactiveDash"); 
+                $('#CCactiveDash').load(location.href + " #CCactiveDash"); 
+                $('#TRactiveDash').load(location.href + " #TRactiveDash"); 
               } else {
-                if(query != null) {
                   $('#activeNotif').html('0');
-                  $('#returnActiveLoans').html('<div class="ml-4">' +
-                                       '<h4 class="mt-5"><strong class="text-danger">No results for ' + query + '</h4>' +
-                                       '<h7 style="color: #66757f; font-weight: light; padding-top: 20px">The term you entered did not bring up any results.</h7>' +
-                                     '</div>');
-                } else {
-                  $('#activeNotif').html('0');
-                  $('#returnActiveLoans').html('<div class="ml-4"><h4 class="mt-5"><strong class="text-success">Looks good!</h4><h7 style="color: #66757f; font-weight: light; padding-top: 20px">Nothing to display.</h7></div>');
-                }
               } 
             }, 
             error: function(){
@@ -2550,12 +3035,14 @@
           var verifiedBy = $(this).attr('verifiedBy');
           var verifiedThp = $(this).attr('verifiedThp');
           var takeHomePay = $(this).attr('payslip');
+          takeHomePay = Math.round(takeHomePay).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           var cheque = $(this).attr('chequeNo');
-          var name = $(this).find('h2').text();
+          var name = $(this).attr('name');
+          var uname = $(this).attr('username');
           var img = $(this).find('img').attr('src');
           $('#openLoanApp').attr('selectedname', name);
+          $('#openLoanApp').attr('username', uname);
           $('#openLoanApp').attr('selectedid', id);
-          $('#openLoanApp').modal('show');
           if(selectedTab == 'returnPendingLoan') {
             $('#thpInfo').hide();
             $('#cnInfo').hide();
@@ -2568,25 +3055,25 @@
             }
             if(verifiedThp == 'verified') {
               $('#thpInfo').show();
-              $('span[name=loan_thp]').html('&#8369;' + Math.round(takeHomePay).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+              $('span[name=loan_thp]').html('&#8369;' + takeHomePay);
               $('span[name=loan_thp_verified]').html(verifiedBy);
               if(role == 'Credit Officer') {
-                $('#loanAppPayslipAmt').prop('disabled', true).val(Math.round(takeHomePay).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " — reviewed by: " + verifiedBy);
-              } else {
-                $('#approve-cancel-PL').hide();
+                $('#approve-cancel-PL').show();
+                $('#openLoanApp').modal('show');
+                $('#loanAppPayslipAmt').prop('disabled', true).val(takeHomePay + " — reviewed by: " + verifiedBy);
               }
             } else {
               if(role == 'Credit Officer') {
+                $('#approve-cancel-PL').show();
+                $('#openLoanApp').modal('show');
                 $('#loanAppPayslipAmt').prop('disabled', false).attr('placeholder', 'Input the payslip amount..');
-              } else {
-                $('#approve-cancel-PL').hide();
               }
             }
           } else if(selectedTab == 'returnApprovedLoans') {
             $('#openLoanApp').find('.modal-title').html("<a class='text-primary'>Approved</a> - Application #" + id);
             $('#thpInfo').show();
             $('#cnInfo').hide();
-            $('span[name=loan_thp]').html('&#8369;' + Math.round(takeHomePay).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+            $('span[name=loan_thp]').html('&#8369;' + takeHomePay);
             $('span[name=loan_thp_verified]').html(verifiedBy);
             $('#openLoanApp').find('.modal-footer').html('<div class="input-group input-group-sm"><input type="text" class="form-control form-control-sm mr-2" placeholder="Enter cheque number.." id="chequeNumberInput" name="cheque_number" maxlength="8"><button type="button" class="btn btn-outline-success btn-sm float-right px-2" id="chequeLoanAppBtn"><i class="fas fa-arrow-circle-right fa-sm mr-1"></i> Submit cheque</button></div>').attr('id', 'issue-cheque-AL');
             if(status == 'verified') {
@@ -2594,25 +3081,25 @@
               $('span[name=loan_cn]').html(cheque);
               $('span[name=loan_cn_verified]').html(dateIssued);
               if(role == 'Treasurer') {
+                $('#openLoanApp').modal('show');
                 $('#chequeLoanAppBtn').prop('disabled', true).html('<i class="far fa-check-circle"></i> Cheque Issued!');
                 $('#chequeNumberInput').prop('disabled', true).val(cheque + " — cheque issued on: " + dateIssued);
-              } else if(role == 'Administrator') {
+              } else if(role == 'Manager') {
+                $('#openLoanApp').modal('show');
                 $('#openLoanApp').find('.modal-footer').html('<button type="button" class="btn btn-outline-success btn-sm float-right px-2" id="voucherLoanAppBtn"><i class="fas fa-arrow-circle-right fa-sm mr-1"></i>Create voucher</button>');
-                $('#chequeNumberInput').hide();
-              } else {
-                $('#issue-cheque-AL').hide();
               }
             } else {
               if(role == 'Treasurer') {
+                $('#openLoanApp').modal('show');
+                $('#chequeNumberInput').show();
                 $('#chequeNumberInput').prop('disabled', false).attr('placeholder', 'Enter cheque number..');
-              } else if(role == 'Administrator') {
-                $('#openLoanApp').find('.modal-footer').html('<div class="text-center"><em>Pending cheque number</em></div>');
-              } else {
-                $('#cnInfo').hide();
-                $('#issue-cheque-AL').hide();
+              } else if(role == 'Manager') {
+                $('#openLoanApp').modal('show');
+                $('#openLoanApp').find('.modal-footer').html('<div class="mx-auto"><em>Pending cheque number</em></div>');
               }
             }
-          } else if(selectedTab == 'returnActiveLoans') {
+          }  else if(selectedTab == 'returnActiveLoans') {
+
             }
             $.ajax({
               type    : 'ajax',
@@ -2631,6 +3118,8 @@
                 $('a[name=loanApplicantContact]').text(data.contact_no);
                 $('a[name=loanApplicantAddress]').text(data.address);
                 $('a[name=loanApplicantZip]').text(' — ' + data.zipcode);
+                $('img[id=loan_payslip]').attr('src', '<?php echo base_url() ?>assets/img/payslips/' + data.user_payslip);
+                $('#applicant-payslip').html('<p id="applicantPayslipBackBtn" class="fas fa-chevron-left mr-4" style="font-size: 15px; color: gray; cursor: pointer"></p><span style="font-weight: normal">Payslip of</span> ' + data.name);
                 $('td[name=loan_id]').text(data.loanapp_id);
                 $('td[name=loan_type]').text(data.loan_name);
                 $('td[name=loan_amt]').html('&#8369;' + Math.round(data.loan_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
@@ -2676,6 +3165,7 @@
 
         $('#openLoanApp').on('click', '#voucherLoanAppBtn', function(){
           var id = $('#openLoanApp').attr('selectedid');
+          var uname = $('#openLoanApp').attr('username');
           var name = $('#openLoanApp').attr('selectedname');
           var loan = '';
           var loanAmt = '';
@@ -2704,9 +3194,8 @@
               loanInterest = data[0][2];
               monthlyDeduc = data[0][3];
               cheque = data[0][4];
-              APLid = data[0][5];
+              APLid = data[0][5].concat(new Date().getFullYear());
               loan = data[0][6];
-              remarks = data[0][7];
               dii = loanInterest * loanAmt;
               serviceFee = 0.01 * loanAmt;
               retentionFee = 0.03 * loanAmt;
@@ -2724,27 +3213,20 @@
             $('#confirmationLoanAppModal').modal('show');
             $('#confirmationLoanAppModal').find('.modal-title').html('<p id="confirmationLoanAppBackBtn" class="fas fa-chevron-left mr-4" style="font-size: 15px; color: gray; cursor: pointer"></p>Disbursement voucher');
             $('#confirmationLoanAppModal').find('.modal-body').html(
-              '<div class="row">' +
-                '<div class="col-md-3">' +
-                  '<span class="font-weight-bold custom-sm">Date: </span><br>' +
-                  '<span class="font-weight-bold custom-sm">DV No.: </span><br>' +
-                  '<span class="font-weight-bold custom-sm">Cheque No.: </span><br>' +
-                '</div>' +
-                '<div class="col-md-3">' +
-                  '<span class="custom-sm"><?php date_default_timezone_set("Asia/Manila"); echo date("Y-m-d"); ?></span><br>' +
-                  '<span class="custom-sm">' + APLid + '</span><br>' +
-                  '<span class="custom-sm">' + cheque + '</span><br>' +
-                '</div>' +
-              '</div>' +
-              '<table class="table table-striped table-bordered table-sm mt-3" style="border: 1px solid lightgray;">' +
-                '<tbody id="calcBody" style="height: auto; max-height: 400px; overflow-y: auto">' +
+              '<div class="mb-5"><span class="h4 float-left">NET AMOUNT: </span><span class="h3 float-right text-success">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></div>' +
+              '<table class="table table-striped table-bordered table-hover table-sm">' +
+                '<tbody id="calcBody" style="height: auto; max-height: 400px; overflow-y: auto; font-size: 90%">' +
+                  '<tr>' +
+                    '<td colspan="2"><strong>DATE: <?php date_default_timezone_set("Asia/Manila"); echo date("Y/m/d"); ?></strong></td>' +
+                    '<td name="APLid" value="'+APLid+'"><strong>VOUCHER: ' + APLid + '</strong></td>' +
+                    '<td name="id" value="'+id+'"><strong>CHEQUE: ' + cheque + '</strong></td>' +
                   '<tr>' +
                     '<td colspan="2">Payee</td>' +
-                    '<td colspan="2">' + name + '</td>' +
+                    '<td name="uname" value="'+uname+'" colspan="2">' + name + '</td>' +
                   '</tr>' +
                   '<tr>' +
-                    '<td colspan="2">' + loan + '</td>' +
-                    '<td colspan="2">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="loan" value="'+loan+'" colspan="2">' + loan + '</td>' +
+                    '<td name="APLid" value="'+cashInBank+'" colspan="2">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2"></td>' +
@@ -2767,14 +3249,14 @@
                     '<td colspan="1">&#8369;' + dii.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr>' +
-                    '<td colspan="2">Retention Fee 3%</td>' +
+                    '<td name="retentionFee" colspan="2">Retention Fee 3%</td>' +
                     '<td colspan="1">-</td>' +
                     '<td colspan="1">-</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2">Service Fee 1%</td>' +
                     '<td colspan="1">-</td>' +
-                    '<td colspan="1">&#8369;' + serviceFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="serviceFee" value="'+serviceFee+'" colspan="1">&#8369;' + serviceFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2">Outstanding balance of</td>' +
@@ -2784,62 +3266,140 @@
                   '<tr>' +
                     '<td colspan="2">Cash in bank</td>' +
                     '<td colspan="1">-</td>' +
-                    '<td colspan="1">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="APLid" colspan="1">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr><td colspan="4">-</td></tr>' +
                   '<tr>' +
                     '<td colspan="2">TOTAL</td>' +
-                    '<td colspan="1">&#8369;' + totalDebit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                    '<td colspan="1">&#8369;' + totalCredit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="totalDebit" value="'+totalDebit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1">&#8369;' + totalDebit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="totalCredit" value="'+totalCredit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1">&#8369;' + totalCredit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2" class="h5">NET AMOUNT DUE</td>' +
-                    '<td colspan="1"></td>' +
-                    '<td colspan="1" class="h4">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="totalBalance" value="'+totalBalance+'" colspan="1"></td>' +
+                    '<td name="cashInBank" value="'+cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1" class="h4"><span class="text-success">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></td>' +
                   '</tr>' +
                 '</tbody>' +
               '</table>');
             $('#confirmationLoanAppModal').find('.modal-footer').html('<button type="button" class="btn btn-outline-success btn-sm mr-1" id="submitVoucherBtn"><i class="fas fa-check fa-sm mr-1"></i>Submit</button>');
 
-            $('#confirmationLoanAppModal').on('click', '#submitVoucherBtn', function(){
-              var apostrophe = "'s";
-              var data = '&loanapp_id=' + id + '&dvNo=' + APLid + '&retFee=' + retentionFee + '&serFee=' + serviceFee + '&debit=' + totalDebit +'&credit=' + totalCredit +'&netAmt=' + cashInBank + '&balance=' + totalBalance + '&remarks=' + remarks;
-              $.ajax({
-                type    : 'ajax',
-                method  : 'post',
-                url     : '<?php echo base_url() ?>loans/insertLoanVoucher',
-                data    : data,
-                async   : false,
-                dataType: 'json',
-                success : function(data){
-                  if(data) {
-                    $('#confirmationLoanAppModal').modal('hide');
-                    $('#loanAppMsg').html('<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, ' + name + apostrophe + ' loan has started.</a>' +
-                                '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
-                                  '<span aria-hidden="true">&times;</span>' +
-                                '</button>' +
-                              '</p>').fadeIn().delay(3000).fadeOut('fast');
-                    getApprovedLoans();
-                    getActiveLoans();
-                  } else {
-                    $('#confirmationLoanAppModal').modal('hide');
-                    $('#loanAppMsg').html('<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Oops, something went wrong!</a>' +
-                                '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
-                                  '<span aria-hidden="true">&times;</span>' +
-                                '</button>' +
-                              '</p>').fadeIn().delay(3000).fadeOut('fast');
-                    getApprovedLoans();
-                    getActiveLoans();
-                  }
-                },
-                error : function(){
-                  alert('ERROR!');
-                }
-              });
-            });
         });
 
+        $('#confirmationLoanAppModal').on('click', '#submitVoucherBtn', function(){
+          var apostrophe = "'s";
+          var id = $('#confirmationLoanAppModal').find('td[name=id]').attr('value');
+          var uname = $('#confirmationLoanAppModal').find('td[name=uname]').attr('value');
+          var loan = $('#confirmationLoanAppModal').find('td[name=loan]').attr('value');
+          var APLid = $('#confirmationLoanAppModal').find('td[name=APLid]').attr('value');
+          var retentionFee = $('#confirmationLoanAppModal').find('td[name=retentionFee]').attr('value');
+          var serviceFee = $('#confirmationLoanAppModal').find('td[name=serviceFee]').attr('value');
+          var totalDebit = $('#confirmationLoanAppModal').find('td[name=totalDebit]').attr('value');
+          var totalCredit = $('#confirmationLoanAppModal').find('td[name=totalCredit]').attr('value');
+          var cashInBank = $('#confirmationLoanAppModal').find('td[name=cashInBank]').attr('value');
+          var totalBalance = $('#confirmationLoanAppModal').find('td[name=totalBalance]').attr('value');
 
+          var data = '&uname=' + uname + '&loanapp_id=' + id + '&dvNo=' + APLid + '&retFee=' + retentionFee + '&serFee=' + serviceFee + '&debit=' + totalDebit +'&credit=' + totalCredit +'&netAmt=' + cashInBank + '&balance=' + totalBalance;
+          alert(data);
+          $.ajax({
+            type    : 'ajax',
+            method  : 'post',
+            url     : '<?php echo base_url() ?>loans/insertLoanVoucher',
+            data    : data,
+            async   : false,
+            dataType: 'json',
+            success : function(data){
+              if(data) {
+                $('#confirmationLoanAppModal').modal('hide');
+                $('#loanAppMsg').html('<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, ' + name + apostrophe + ' loan has started.</a>' +
+                            '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
+                              '<span aria-hidden="true">&times;</span>' +
+                            '</button>' +
+                          '</p>').fadeIn().delay(3000).fadeOut('fast');
+                getApprovedLoans();
+                getActiveLoans();
+              } else {
+                $('#confirmationLoanAppModal').modal('hide');
+                $('#loanAppMsg').html('<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Oops, something went wrong!</a>' +
+                            '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
+                              '<span aria-hidden="true">&times;</span>' +
+                            '</button>' +
+                          '</p>').fadeIn().delay(3000).fadeOut('fast');
+                getApprovedLoans();
+                getActiveLoans();
+              }
+            },
+            error : function(){
+              alert('ERROR!');
+            }
+          });
+        });
+
+        if('<?php echo $this->session->userdata('roleID'); ?>' == '2') {
+          setInterval(function() {
+            checkNotif();
+          }, 1000);
+        }
+
+        function checkNotif() {
+          var uname = '<?php echo $this->session->userdata('username'); ?>';
+          $.ajax({
+            type    : 'ajax',
+            method  : 'get',
+            url     : '<?php echo base_url() ?>users/checkNotif',
+            data    : {username:uname},
+            async   : false,
+            dataType: 'json',
+            success : function(data){
+              if(data.length) {
+                var c = 0;
+                var row = '';
+                for(var i = 0; i < data.length; i++) {
+                  var myDate = new Date(Date.parse(data[i].noti_date.replace('-','/','g')));
+                  myDate = myDate.toUTCString();
+                  myDate = myDate.split(' ').slice(0, 4).join(' ');
+                  row += '<a class="dropdown-item text-info" href="#">'+data[i].noti_desc+'<br><span class="float-left py-2" style="font-size: 85%">Click to view voucher</span><span class="text-secondary float-right py-2" style="font-size: 80%">' + myDate + '</span></a>';
+                  if(data[i].noti_status == 1) {
+                    c++;
+                  } else {
+                    $('#returnNotifIndicator').html('');
+                  }
+                }
+                    $('#returnNotifications').html(row);
+                    $('#returnNotifIndicator').html(c);
+              } else {
+                $('#returnNotifIndicator').html('');
+                $('#returnNotifications').html('<a class="dropdown-item text-muted" href="#">'+data[i].noti_desc+'<br><span class="float-left py-2" style="font-size: 85%">Click to view voucher</span><span class="text-secondary float-right py-2" style="font-size: 80%">' + myDate + '</span></a>');
+              }
+            },
+            error : function(){
+              alert('ERROR!');
+            }
+          });
+        }
+
+        function notified() {
+          var uname = '<?php echo $this->session->userdata('username'); ?>';
+          $.ajax({
+            type   : 'ajax',
+            method : 'get',
+            url    : '<?php echo base_url() ?>users/notified',
+            data   : {username: uname},
+            async  : false,
+            dataType : 'json',
+            success  : function(data){
+              if(data) {
+                $('#returnNotifIndicator').html('');
+              }
+            },
+            error : function(){
+              alert('Error!');
+            }
+          });
+        }
+
+        $('#notificationBar').click(function(){
+          notified();
+        });
 
         function checkInputPayslipAmt() {
           if($('#loanAppPayslipAmt').val() == '') {
@@ -2847,6 +3407,7 @@
             $('#loanAppPayslipAmt').attr('placeholder', 'Please input the payslip amount..');
           } else {
             $('#loanAppPayslipAmt').removeClass('is-invalid');
+            $('#approveLoanAppBtn').unbind().html('<i class="fas fa-arrow-circle-right"></i> Approve');
           }
         }
 
@@ -2856,21 +3417,6 @@
 
         // Change content of modal when aproving a loan - CC UI
         $('#openLoanApp').on('click', '#approveLoanAppBtn', function(){
-          var name = $('#openLoanApp').attr('selectedname');
-          if($('#loanAppPayslipAmt').val() != '') {
-            $('#openLoanApp').modal('hide');
-            $('#confirmationLoanAppModal').modal('show');
-            $('#confirmationLoanAppModal').find('.modal-title').html('<p id="confirmationLoanAppBackBtn" class="fas fa-chevron-left mr-4" style="font-size: 15px; color: gray; cursor: pointer"></p>Confirmation');
-            $('#confirmationLoanAppModal').find('.modal-body').html("Accept <strong>"+ name +"</strong>'s application?");
-            $('#confirmationLoanAppModal').find('.modal-footer').html('<button type="button" class="btn btn-success btn-sm mr-1" id="acceptLoanAppBtn"><i class="fas fa-check fa-sm mr-1"></i>  I am sure</button>');
-          } else {
-            $('#loanAppPayslipAmt').addClass('is-invalid');
-            $('#loanAppPayslipAmt').attr('placeholder', 'Please input the payslip amount..');
-          }
-        });
-
-        // Approve loan app - insert data to db
-        $('#confirmationLoanAppModal').on('click', '#acceptLoanAppBtn', function(){
           var apostrophe = "'s";
           var id = $('#openLoanApp').attr('selectedid');
           var name = $('#openLoanApp').attr('selectedname');
@@ -2878,72 +3424,81 @@
           var payslip = $('#loanAppPayslipAmt').val().replace(/\D/g, "");
           var monthlyDeduc = $('input[name=loan_deduc_hidden]').text();
           var thp = payslip - monthlyDeduc;
-          $.ajax({
-            type    : 'ajax',
-            method  : 'get',
-            url     : '<?php echo base_url() ?>loan_applications/checkCreditCommiteeApprovals',
-            data    : {id:id},
-            async   : false,
-            dataType: 'json',
-            success : function(data) {
-              // check cc columns are filled - approved
-              var ccCheck;
-              var cc1 = data.cc_approval_1;
-              var cc2 = data.cc_approval_2;
-              var cc3 = data.cc_approval_3;
-              if((cc1 == null) && (cc2 == null) && (cc3 == null)) {
-                ccCheck = 0;
-              } else if(cc1 == null) {
-                ccCheck = 1;
-              } else if(cc2 == null) {
-                ccCheck = 2;
-              } else if(cc3 == null) {
-                ccCheck = 3;
-              } else {
-                ccCheck = 4;
-              }
+            if($('#loanAppPayslipAmt').val() != '') {
+              $('#loanAppPayslipAmt').removeClass('is-invalid');
+              $(this).text('Are you sure?');
+              $(this).click(function(){
+                $.ajax({
+                  type    : 'ajax',
+                  method  : 'get',
+                  url     : '<?php echo base_url() ?>loan_applications/checkCreditCommiteeApprovals',
+                  data    : {id:id},
+                  async   : false,
+                  dataType: 'json',
+                  success : function(data) {
+                    // check cc columns are filled - approved
+                    var ccCheck;
+                    var cc1 = data.cc_approval_1;
+                    var cc2 = data.cc_approval_2;
+                    var cc3 = data.cc_approval_3;
+                    if((cc1 == null) && (cc2 == null) && (cc3 == null)) {
+                      ccCheck = 0;
+                    } else if(cc1 == null) {
+                      ccCheck = 1;
+                    } else if(cc2 == null) {
+                      ccCheck = 2;
+                    } else if(cc3 == null) {
+                      ccCheck = 3;
+                    } else {
+                      ccCheck = 4;
+                    }
 
-              $.ajax({
-                // verifying you accepted a loan app
-                type    : 'ajax',
-                method  : 'get',
-                url     : '<?php echo base_url() ?>administrators/manageLoanApps',
-                data    : {id:id, cc:ccUsername, check:ccCheck, thp:thp},
-                async   : false,
-                dataType: 'json',
-                success : function(data) {
-                  if(data == true) {
-                    $('#confirmationLoanAppModal').modal('hide');
-                    $('#loanAppMsg').html('<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, you approved ' + name + apostrophe + ' application.</a>' +
-                                '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
-                                  '<span aria-hidden="true">&times;</span>' +
-                                '</button>' +
-                              '</p>').fadeIn().delay(3000).fadeOut('fast');
-                    getPendingLoans();
-                    getApprovedLoans();
-                    getDisapprovedLoans();
-                  } else {
-                    $('#confirmationLoanAppModal').modal('hide');
-                    $('#loanAppMsg').html('<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, ' + name + apostrophe + ' application has been approved.</a>' +
-                                '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
-                                  '<span aria-hidden="true">&times;</span>' +
-                                '</button>' +
-                              '</p>').fadeIn().delay(3000).fadeOut('fast');
-                    getPendingLoans();
-                    getApprovedLoans();
-                    getDisapprovedLoans();
+                    $.ajax({
+                      // verifying you accepted a loan app
+                      type    : 'ajax',
+                      method  : 'get',
+                      url     : '<?php echo base_url() ?>administrators/manageLoanApps',
+                      data    : {id:id, cc:ccUsername, check:ccCheck, thp:thp},
+                      async   : false,
+                      dataType: 'json',
+                      success : function(data) {
+                        if(data == true) {
+                          $('#confirmationLoanAppModal').modal('hide');
+                          $('#loanAppMsg').html('<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, you approved ' + name + apostrophe + ' application.</a>' +
+                                      '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
+                                        '<span aria-hidden="true">&times;</span>' +
+                                      '</button>' +
+                                    '</p>').fadeIn().delay(3000).fadeOut('fast');
+                          getPendingLoans();
+                          getApprovedLoans();
+                          getDisapprovedLoans();
+                        } else {
+                          $('#confirmationLoanAppModal').modal('hide');
+                          $('#loanAppMsg').html('<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, ' + name + apostrophe + ' application has been approved.</a>' +
+                                      '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
+                                        '<span aria-hidden="true">&times;</span>' +
+                                      '</button>' +
+                                    '</p>').fadeIn().delay(3000).fadeOut('fast');
+                          getPendingLoans();
+                          getApprovedLoans();
+                          getDisapprovedLoans();
+                        }
+                      },
+                      error: function() {
+                        alert('Error!');
+                      }
+                    });
+                  },
+                  error: function() {
+                    alert('Error!');
                   }
-                },
-                error: function() {
-                  alert('Error!');
-                }
+                });
+                $('#openLoanApp').modal('hide');
               });
-            },
-            error: function() {
-              alert('Error!');
+            } else {
+              $('#loanAppPayslipAmt').addClass('is-invalid');
+              $('#loanAppPayslipAmt').attr('placeholder', 'Please input the payslip amount..');
             }
-          });
-          
         });
 
         // Back button in loan application approve conf
@@ -3008,6 +3563,7 @@
             $('#chequeNumberInput').attr('placeholder', 'Please enter cheque number..');
           } else {
             $('#chequeNumberInput').removeClass('is-invalid');
+            $('#chequeLoanAppBtn').unbind().html('<i class="fas fa-arrow-circle-right fa-sm mr-1"></i> Submit cheque');
           }
         }
 
@@ -3017,12 +3573,12 @@
 
         $('#openLoanApp').on('click', '#chequeLoanAppBtn', function(){
           if($('#chequeNumberInput').val() != '') {
+            var id = $('#openLoanApp').attr('selectedid');
+            var name = $('#openLoanApp').attr('selectedname');
+            var cheque = $('#chequeNumberInput').val();
+            var apostrophe = "'s";
             $(this).text('Are you sure?');
             $(this).click(function(){
-              var id = $('#openLoanApp').attr('selectedid');
-              var name = $('#openLoanApp').attr('selectedname');
-              var cheque = $('#chequeNumberInput').val();
-              var apostrophe = "'s";
               $.ajax({
                 type    : 'ajax',
                 method  : 'get',
@@ -3062,6 +3618,14 @@
             });
           });
         $('input[name=loan_max_amt]').keyup(function(){
+          $(this).val(function(index, value) {
+            return value
+            .replace(/\D/g, "")
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+        });
+        $('input[name=subscribeShare]').keyup(function(){
           $(this).val(function(index, value) {
             return value
             .replace(/\D/g, "")
@@ -3111,7 +3675,6 @@
             }
           });
           $('#addMemberModal').modal('show');
-          $('#membershipDate').hide();
           $('#addMemberForm').attr('action', '<?php echo base_url() ?>administrators/add_member');
         });
 
@@ -3126,6 +3689,7 @@
           var username = $('input[name=Uname]');
           var email = $('input[name=email]');
           var phone = $('input[name=phone]');
+          var college = $('input[id=college-selectized]');
           var password = $('input[name=password]');
           var password2 = $('input[name=password2]');
           var city = $('input[name=city]');
@@ -3134,7 +3698,10 @@
           var birthday = $('input[id=birthday]');
           var sharecap = $('input[name=sharecap]');
           var startingShareCap = $('input[name=startingShareCap]');
-          var orno = $('input[name=orNum]');
+          var membershipDate = $('input[id=membershipDate]');
+          var subscribeShare = $('input[id=subscribeShare]');
+          var orno = $('input[id=orNum]');
+          var orda = $('input[id=orDate]');
           var result = '';
 
           if(fname.val() == ''){
@@ -3229,16 +3796,56 @@
             $('#invalidPhone').html('');
             result += '11';
           }
+          if(membershipDate.val() == ''){
+            membershipDate.addClass('is-invalid');
+            $('#invalidMembership').html('Please fill out this field.');
+          } else {
+            membershipDate.removeClass('is-invalid');
+            $('#invalidMembership').html('');
+            result += '12';
+          }
           if(sharecap.val() == ''){
             sharecap.addClass('is-invalid');
             $('#invalidShareCapital').html('Please fill out this field.');
           } else {
             sharecap.removeClass('is-invalid');
             $('#invalidShareCapital').html('');
-            result += '12';
+            result += '13';
+          }
+          if(startingShareCap.val() == ''){
+            startingShareCap.addClass('is-invalid');
+            $('#invalidStarting').html('Please fill out this field.');
+          } else {
+            startingShareCap.removeClass('is-invalid');
+            $('#invalidStarting').html('');
+            result += '14';
+          }
+          if(subscribeShare.val() == ''){
+            subscribeShare.addClass('is-invalid');
+            $('#invalidSubscribeShare').html('Please fill out this field.');
+          } else {
+            subscribeShare.removeClass('is-invalid');
+            $('#invalidSubscribeShare').html('');
+            result += '15';
+          }
+          if(orno.val() == ''){
+            orno.addClass('is-invalid');
+            $('#invalidOR').html('Please fill out this field.');
+          } else {
+            orno.removeClass('is-invalid');
+            $('#invalidOR').html('');
+            result += '16';
+          }
+          if(orda.val() == ''){
+            orda.addClass('is-invalid');
+            $('#invalidORDate').html('Please fill out this field.');
+          } else {
+            orda.removeClass('is-invalid');
+            $('#invalidORDate').html('');
+            result += '17';
           }
 
-          if(result == '123456789101112') {
+          if(result == '1234567891011121314151617') {
             var name = fname.val()+' '+mname.val()+' '+lname.val();
             var filteredShareCap = sharecap.val().replace(/\D/g, "");
             var filteredStarting = startingShareCap.val().replace(/\D/g, "");
@@ -3263,7 +3870,10 @@
                   getMember_latest_date();
                   refreshShareCapRec();
                   $('#membersTab .card-body').animate({scrollTop: 0}, 'fast');
-                  $('#dashboardTotalMembers').load(location.href + " #dashboardTotalMembers");
+                  $('#CHmembersDash').load(location.href + " #CHmembersDash");
+                  $('#MNGmembersDash').load(location.href + " #MNGmembersDash");
+                  $('#CCmembersDash').load(location.href + " #CCmembersDash");
+                  $('#TRmembersDash').load(location.href + " #TRmembersDash");
                 } else {
                   alert('Error');
                 }
@@ -3341,13 +3951,13 @@
         });
 
         // Search members 
-        function search_user(query) {
+        function search_user() {
+          $("#memberListTbl").DataTable().destroy();
           $.ajax({
             type    : 'ajax',
-            method  : 'post',
+            method  : 'get',
             url     : '<?php echo base_url() ?>administrators/search_user',
             async   : false,
-            data    : {query : query},
             dataType: 'json',
             success: function(data) {
               var row = '';
@@ -3359,9 +3969,8 @@
                 if(data[i].last_login == '0000-00-00 00:00:00') {
                   last_login = 'New user';
                 } else {
-                  last_login = new Date(Date.parse(data[i].last_login.replace('-','/','g')));
-                  last_login = last_login.toUTCString();
-                  last_login = last_login.split(' ').slice(0, 4).join(' ');
+                  last_login = new Date(data[i].last_login);
+                  last_login = last_login.toLocaleDateString("en-US");
                 }
                 switch(data[i].college) {
                   case 'College of Science':
@@ -3389,7 +3998,7 @@
                           '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
                           '<td style="vertical-align: middle">' + col + '</td>' +
                           '<td style="vertical-align: middle">' + data[i].role_name + '</td>' +
-                          '<td style="vertical-align: middle">' + last_login + '</td>' +
+                          '<td style="vertical-align: middle"><span style="display: none">' + data[i].register_date +'</span>'+last_login + '</td>' +
                           '<td style="vertical-align: middle"><button href="javascript:;" class="btn btn-outline-success btn-sm viewuser-perm4" user-id="' + data[i].user_id + '" user-name="' + data[i].name + '" user-position ="' + data[i].role_name + '" user-college="' + data[i].college + '" user-address="' + data[i].address + '" user-img="' + data[i].user_img + '" user-sharecap="' + data[i].total_share_capital + '" since="'+ data[i].register_date +'">More info</button></td>' +
                         '</tr>'; 
               }  
@@ -3406,6 +4015,35 @@
               alert('A database error occured!');
             }
           });
+
+          var memberDataTbl = $('#memberListTbl').DataTable({
+          "dom": 'lBfrtip',
+          "order": [[ 3, "desc" ]],
+          buttons: [
+            {
+            extend: 'pdf',
+            text: 'Export PDF'
+            },
+            {
+            extend: 'excel',
+            text: 'Export Excel'
+            },
+            {
+            extend: 'print',
+            text: 'Print table',
+            exportOptions: {
+              columns: [0, 1, 2, 3]
+            }
+            },
+          ],
+          "pagingType": "simple_numbers",
+          "language": { search: "", searchPlaceholder: "Search user.." },
+          "columnDefs": [
+            { "orderable": false, "targets": 4 }
+          ]
+        });
+
+        $('#memberListTbl_info').addClass('text-muted font-italic');
         }
 
         // Wait for user search input..
@@ -3448,7 +4086,7 @@
                               '</div>' + 
                             '</div>' + 
                           '</div>';
-              }  
+              }
               $('#returnLoans').html(card);
             } else {
               card  =  '<div class="ml-5">' +
@@ -3462,6 +4100,27 @@
               alert('A database error occured!');
             }
           });
+          var role = '<?php echo $this->session->userdata('roleID'); ?>';
+                switch(role){
+                  case '3':
+                  $('.edit-loan').show();
+                  $('#viewuser-perm4, #returnMemberLatestDate').show();
+                  $('#loanRecordsText, #loanRecordsTabText').show();
+                  break;
+                  case '4':
+                  $('#returnLatestDate').show();
+                  $('#view-ledgers').show();
+                  break;
+                  case '5':
+                  $('#loanRecordsText, #loanRecordsTabText').show();
+                  $('#view-ledgers, #update-ledgers, #update-share-capitals').show();
+                  break;
+                  case '6':
+                  $('#add-loan, .edit-loan, .archive-loan').show();
+                  $('#adduser-perm2, #viewuser-perm4').show();
+                  $('#loanRecordsText, #loanRecordsTabText, #comakersText, #comakersTabText').show();
+                  break;
+                }
         }
 
         // Retrieve latest date
@@ -3610,6 +4269,7 @@
                                         '</button>' +
                                       '</p>').fadeIn(); 
                 searchLoan();
+                refreshCollections();
                 get_latest_date();
                 $('#loansTab .card-body').animate({scrollTop: 0}, 'fast');
               } else {
@@ -4083,63 +4743,86 @@
         }
 
         // VIEW LEDGER CODES 
-        refreshViewLedger();
+        getCollectionMembers();
+        viewCollections();
+        var id = '';
 
-        function refreshViewLedger() {
-          var months  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-          var year = new Date().getFullYear();
-          var month = new Date().getMonth()+1;
-          viewLedger(month, year);
+        function getCollectionMembers() {
+          $.ajax({
+            type    : 'ajax',
+            url     : '<?php echo base_url() ?>administrators/getCollectionMembers',
+            async   : false,
+            dataType: 'json',
+            success: function(data) {
+              var names = '<option></option>';
+              for(var i = 0; i < data.length; i++) {
+                names += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
+              }
+              $('#collectionsNameSelect').html(names);
+            },
+            error: function() {
+              alert('A database error occured!');
+            } 
+          });
         }
 
-        $('#viewLedgerMonthSelect').change(function(){
-          month = $('#viewLedgerMonthSelect').val();
-          year = $('#viewLedgerYearSelect').val();
-          viewLedger(month, year);
+        $('#collectionsNameSelect').selectize({
+          create: false,
+          placeholder: "Please select a user..",
+          closeAfterSelect: true
         });
 
-        $('#viewLedgerYearSelect').change(function(){
-          month = $('#viewLedgerMonthSelect').val();
-          year = $('#viewLedgerYearSelect').val();
-          viewLedger(month, year);
+        $('#collectionsNameSelect').change(function(){
+          id = $('#collectionsNameSelect').val();
+          if($(this).val() != '') {
+            viewCollections(id);
+          } else {
+            viewCollections();
+          }
         });
 
-        function viewLedger(month, year){
-          $("#viewLedgerTbl").DataTable().destroy();
+        function viewCollections(id){
+          $("#collectionsTbl").DataTable().destroy();
           $.ajax({
           type    : 'ajax',
           method  : 'GET',
-          url     : '<?php echo base_url() ?>administrators/viewLedger',
-          data    : {mo: month, yr: year},
+          url     : '<?php echo base_url() ?>administrators/viewCollections',
+          data    : {id: id},
           async   : false,
           dataType: 'json',
           success : function(data) {
-            if(data.length > 0){
-            var row, rowFoot, opts, totalMonthly = '', totalBalance = '';
+            if(data){
+            var row = '', foot = '', total = 0, or = 0;
             for(var i = 0; i < data.length; i++){
-              totalMonthly = Number(totalMonthly) + Number(data[i].monthly_deduc);
-              totalBalance = Number(totalBalance) + Number(data[i].balance);
-              row +=  '<tr class="text-secondary">' +
-                        '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
-                        '<td style="vertical-align: middle">' + data[i].or_number + '</td>' +
+              total = Number(total) + Number(data[i].balance);
+              if(data[i].payment_date == '0000-00-00') {
+                lastUp = 'Pending';
+              } else {
+                lastUp = new Date(data[i].payment_date);
+                lastUp = lastUp.toLocaleDateString("en-US");
+              } if(data[i].or_number == '') {
+                or = 'Pending';
+              } else {
+                or = data[i].or_number;
+              }
+              row  += '<tr class="text-secondary">' +
+                        '<td style="vertical-align: middle">' + lastUp + '</td>' +
+                        '<td style="vertical-align: middle">' + or + '</td>' +
                         '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
-                        '<td style="vertical-align: middle">' + Math.round(data[i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                        '<td style="vertical-align: middle">' + Math.round(data[i].monthly_deduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                      '</tr>'; 
+                        '<td style="vertical-align: middle">' + Math.round(data[i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>';
+                      '</tr>';  
             }
-              rowFoot +=  '<tr>' +
+              foot = '<tr>' +
                         '<th style="vertical-align: middle">Total</th>' +
                         '<th style="vertical-align: middle"></th>' +
                         '<th style="vertical-align: middle"></th>' +
-                        '<th style="vertical-align: middle">&#8369;' + Math.round(totalBalance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
-                        '<th style="vertical-align: middle">&#8369;' + Math.round(totalMonthly).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
+                        '<th style="vertical-align: middle">' + Math.round(total).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
                       '</tr>';
-
-              $('#returnViewLedgerBody').html(row);
-              $('#returnViewLedgerFoot').html(rowFoot);
+              $('#returnCollectionsBody').html(row);
+              $('#returnCollectionsFooter').html(foot);
             } else {
-              $('#returnViewLedgerBody').html('');
-              $('#returnViewLedgerFoot').html('');
+              $('#returnCollectionsBody').html('');
+              $('#returnCollectionsFooter').html('');
             }
           },
           error: function() {
@@ -4147,7 +4830,55 @@
           }
           });
 
-          var viewLedgerDataTbl = $('#viewLedgerTbl').DataTable({
+          /* if(data){
+            var head, row, rowFoot, opts, totalMonthly = '', totalBalance = '', or = '';
+            head = '<th style="vertical-align: middle">Month</th>' +
+                   '<th style="vertical-align: middle">OR No.</th>';
+            for(var a = 0; a < data['numcols'].length; a++){
+              head += '<th style="vertical-align: middle">' + data['numcols'][a].loan_name + ' (&#8369;)</th>';
+            }
+            for(var i = 0; i < data['result'].length; i++){
+              if(data['result'][i].payment_date == '0000-00-00') {
+                lastUp = 'Pending';
+              } else {
+                lastUp = new Date(data['result'][i].payment_date);
+                lastUp = lastUp.toLocaleDateString("en-US");
+              } if(data['result'][i].or_number == '') {
+                or = 'Pending';
+              } else {
+                or = data['result'][i].or_number;
+              }
+
+
+              row  += '<tr class="text-secondary">' +
+                        '<td style="vertical-align: middle">' + lastUp + '</td>' +
+                        '<td style="vertical-align: middle">' + or + '</td>';
+              for(var loans = 0; loans < data['numcols'].length; loans++){
+                if(data['result'][i].loan_name == data['numcols'][loans].loan_name) {
+                  var totalInRow = 0;
+                  row += '<td style="vertical-align: middle">' + Math.round(data['result'][i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>';
+                  totalInRow = Number(totalInRow) + Number(data['result'][i].balance);
+                } else {
+                  row += '<td style="vertical-align: middle">0</td>';
+                }
+              }
+              row  += '<td style="vertical-align: middle">0</td>' +
+                      '<td style="vertical-align: middle">' + Math.round(totalInRow).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                      '</tr>';  
+            }
+
+              head += '<th style="vertical-align: middle">Others</th>' +
+                      '<th style="vertical-align: middle">Total (&#8369;)</th>';
+
+              $('#returnCollectionsHeader').html(head);
+              $('#returnCollectionsBody').html(row);
+            } else {
+              $('#returnCollectionsBody').html('');
+              $('#returnCollectionsFooter').html('');
+            }
+          },
+*/
+          var collectionsDataTbl = $('#collectionsTbl').DataTable({
             "dom": 'lBfrtip',
             buttons: [
               {
@@ -4164,16 +4895,13 @@
               },
             ],
             "pagingType": "simple_numbers",
-            "language": { search: "", searchPlaceholder: "Search.." },
-            "columnDefs": [
-              { "orderable": false, "targets": 0 }
-            ]
+            "language": { search: "", searchPlaceholder: "Search.." }
           });
 
-          $('#viewLedgerInfo').html($('#viewLedgerTbl_info').clone());
-          $('#viewLedgerPaginate').html($('#viewLedgerTbl_paginate').clone());
-          $('#viewLedgerTbl_info').remove();
-          $('#viewLedgerTbl_paginate').remove();
+          $('#viewLedgerInfo').html($('#collectionsTbl_info').clone());
+          $('#viewLedgerPaginate').html($('#collectionsTbl_paginate').clone());
+          $('#collectionsTbl_info').remove();
+          $('#collectionsTbl_paginate').remove();
         }
 
         // VIEW LEDGER CODES END
@@ -4265,10 +4993,10 @@
           dataType: 'json',
           success : function(data) {
             if(data.length > 0){
-            var row, rowFoot, opts, totalMonthly = '', totalBalance = '', count = 0;
+            var row, rowFoot, opts, totalMonthly = '', totalBalance = '', count = 0, lock = '';
             for(var i = 0; i < data.length; i++){
               or = data[0].or_number;
-              if(data[i].status == 'paid') {
+              if(data[i].payment_status == 'paid') {
                 cond = 'far fa-check-circle text-success';
                 lock = 'disabled';
               } else {
@@ -4276,7 +5004,7 @@
                 lock = '';
                 count++;
               }
-              if(data[i].date_updated == '0000-00-00') {
+              if(data[i].payment_date == '0000-00-00') {
                 lastUp = 'Pending';
               } else {
                 lastUp = new Date(data[i].payment_date).toUTCString();
@@ -4550,9 +5278,6 @@
           $('#loan_selector_data').val('');
           $('#user_attachment_image').text('');
           $('#cm_attachment_image').text('');
-          $('input[name=calc_loan_term]').val('-');
-          $('input[name=calc_loan_grossamt]').val('-');
-          $('input[name=calc_loan_monthlydeduc]').val('-');
 
           interest= '';
           loan = '';
@@ -4605,15 +5330,14 @@
                       success: function(data) {
                         var user_data_sc = data[0].total_share_capital * 2;
 
-                        $('#loan-amount').val(Math.round(user_data_sc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-
+                        $('#loan-amount').val(user_data_sc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                       }, error: function() {
                         alert('Error cannot find user share capital');
                       }
                     });
 
-                    checkLoanAmount();
                     passInterest(interest);
+
                     agik(interest);
                   }, error: function() {
                     alert('New User function returned false');
@@ -4656,11 +5380,6 @@
 
                         $('#loan_selector').html(loan_type_list);
 
-                        $('#loan-amount').attr('disabled', true);
-                        $('#loan_term').attr('disabled', true);
-                        $('#user_attachment').attr('disabled', true);
-
-
                         $('#loan_selector').change(function() {
                           $('#calc_loan_term').attr('placeholder', '');
                           $('#calc_loan_grossamt').attr('placeholder', '');
@@ -4671,10 +5390,6 @@
                           interest = $('#loan_selector').find(':selected').attr('loan_interest');
                           loan_id_no = $('#loan_selector').find(':selected').attr('loan_id');
                           user_id_no = '<?php echo $this->session->userdata('user_id'); ?>';
-
-                          $('#loan-amount').removeAttr('disabled');
-                          $('#loan_term').removeAttr('disabled');
-                          $('#user_attachment').removeAttr('disabled');
 
 
                           getLoanTerm(loan_id_no);
@@ -4694,26 +5409,25 @@
                             dataType: 'json',
                             success: function(data) {
                               var sharecap = data[0].total_share_capital;
-
                               sharecap = sharecap * 3;
+                              if(sharecap < max_amt){
+                                var loanable = sharecap;
+                              } else {
+                                loanable = max_amt;
+                              }
+                              $('#loanapp_alerts').html('<p class="alert bg-info alert-dismissable fade show" role="alert"><a class="h7 text-white">Tip: The max loanable amount of '+name+' is &#8369;'+Math.round(max_amt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. Your total share capital is &#8369;'+Math.round(sharecap).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. <br>You can only loan a MAX amount of &#8369;'+Math.round(loanable).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. Thank you!</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" style="position: relative">&times;</span></button></p>');
 
-                              $('#loanapp_alerts').html('<p class="alert bg-info alert-dismissable fade show" role="alert"><a class="h7 text-white">Tip: The max loanable amount of '+name+' is &#8369;'+Math.round(max_amt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. Your total share capital is &#8369;'+Math.round(sharecap).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. <br>You can only loan a MAX amount of &#8369;'+Math.round(max_amt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. Thank you!</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" style="position: relative">&times;</span></button></p>');
-
-                                $('#loan-amount').val(Math.round(sharecap).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));   
-
-                                agik(interest);
+                            agik(interest);
                             }, error: function(data) {
                               alert('Error cannot find user share capital');
                             }
                           });
 
                           passInterest(interest);
+
                           agik(interest);
 
                           $('#loanapp-cm-application').html('');
-                        
-
-                          checkLoanAmount();
                         });
                       }, error: function() {
                         alert('Old User function returned false');
@@ -4789,83 +5503,62 @@
 
 
         // amount and co maker dependency start
-        function checkLoanAmount() {
-            loanapp_amt = Number($('#loan-amount').val().replace(/[^0-9\.]+/g,""));
-
-            if(loanapp_amt == 0) {
-              $('#loan-amount').val('');
-            }
+        if(($('#loan_amount').val() != '') || ($('#loan_amount').val() != 0)) {
+            loanapp_amt = $(this).val();
 
             var cm = '';
 
             var store = max_comakers - loanapp_amt;
 
-            if(store >= 0) {
-              var store = '';
-              var z;
-                
-                $('#loan-amount').removeClass('is-invalid');
-                $('#loan_amount_invalid').text('');
-                $('#loanapp_alerts').html(store);
+            if((loanapp_amt != '') || (loanapp_amt != 0)){
+              if(store >= 0) {
+                var store = '';
+                var z;
 
-               if((loanapp_amt <= max_comakers) && (loanapp_amt >= 100000)) 
-                {
-                      a = 3;
-                }
-                else if((loanapp_amt <=  99999) && (loanapp_amt >= 0)) 
-                {
-                      a = 2;
+                 $('#loanapp_alerts').html(store);
+
+                 if((loanapp_amt <= max_comakers) && (loanapp_amt >= 100000)) 
+                  {
+                        a = 3;
+                  }
+                  else if((loanapp_amt <=  99999) && (loanapp_amt >= 0)) 
+                  {
+                        a = 2;
+                  }
+
+                for(z = 1; z <= a; z++){
+                  cm += '<div class="form-group">'+ '<input type="hidden" name="user_username'+ z +'" id="user_username'+ z +'" value="">' +'<input type="text" autocomplete="off" user-username="user_username'+ z +'" cmlist="cmList' + z + ' " class="form-control dropdown-toggle" data-toggle="dropdown" placeholder="Input Co-Maker'+ z +' Name" name="co-maker'+ z +'" id="co-maker'+ z +'" cmk-uname=""><div class="invalid-feedback" id="co-makerinvalid'+ z +'"></div><div class="dropdown-menu cmList' + z + '"></div></div>';
                 }
 
-              for(z = 1; z <= a; z++){
-                cm += '<div class="form-group">'+ '<input type="hidden" name="user_username'+ z +'" id="user_username'+ z +'" value="">' +'<input type="text" autocomplete="off" user-username="user_username'+ z +'" cmlist="cmList' + z + ' " class="form-control dropdown-toggle" data-toggle="dropdown" placeholder="Input Co-Maker'+ z +' Name" name="co-maker'+ z +'" id="co-maker'+ z +'" cmk-uname=""><div class="invalid-feedback" id="co-makerinvalid'+ z +'"></div><div class="dropdown-menu cmList' + z + '"></div></div>';
+                CMSearch(z);
+                getLoanTerm(loanapp_amt);
+
+                $('#loanapp-cm-application').html(cm);
+                $('#comakerCount').val(z-1);
+              } else {
+                 var store = '<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Invalid input! Please try again.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>';
+
+                 $('#loanapp_alerts').html(store);
               }
-
-
-              CMSearch(z);
-              getLoanTerm(loanapp_amt);
-
-              // not working 
-              $('#loanapp-cm-application').html(cm);
-              $('#comakerCount').val(z-1);
             } else {
-               $('#loan-amount').addClass('is-invalid');
-               $('#loan_amount_invalid').text('Please change the Loan Amount you Entered!');
+                cm = '';
 
-               var store = '<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Invalid input! Please try again.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>';
-
-               $('#loanapp_alerts').html(store);
+               $('#loanapp-cm-application').html(cm);
             }
         }
 
-        $('input[name=loan-amount]').keyup(function(){
-          $(this).val(function(index, value) {
-            return value
-            .replace(/\D/g, "")
-            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-            ;
-          });
-        });
-
         $('#loan-amount').keyup(function() {
-          loanapp_amt = Number($(this).val().replace(/[^0-9\.]+/g,""));
-
-          if(loanapp_amt == 0) {
-            $('#loan-amount').val('');
-          }
+          loanapp_amt = $(this).val();
 
           var cm = '';
 
           var store = max_comakers - loanapp_amt;
-
 
           if((loanapp_amt != '') || (loanapp_amt != 0)){
             if(store >= 0) {
               var store = '';
               var z;
 
-               $('#loan-amount').removeClass('is-invalid');
-               $('#loan_amount_invalid').text('');
                $('#loanapp_alerts').html(store);
 
                if((loanapp_amt <= max_comakers) && (loanapp_amt >= 100000)) 
@@ -4887,10 +5580,7 @@
               $('#loanapp-cm-application').html(cm);
               $('#comakerCount').val(z-1);
             } else {
-              $('#loan-amount').addClass('is-invalid');
-              $('#loan_amount_invalid').text('Please change the Loan Amount you Entered!');
-
-               var store = '<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">The Loan Amount Entered exceeded the Maximum Amount for that Type of Loan.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>';
+               var store = '<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Please select your desired loan first.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>';
 
                $('#loanapp_alerts').html(store);
             }
@@ -4984,6 +5674,42 @@
         function searchCoMaker(query, id, cmk1, cmk2, cmk3, cmk4) {
             var url = '<?php echo base_url(); ?>loan_applications/searchCoMaker';
             get_username = '<?php echo $this->session->userdata('user_id'); ?>';
+            var test = [];
+            var userlimit = [];
+
+            $.ajax({
+              type: 'ajax',
+              url: '<?php echo base_url(); ?>loan_applications/fetchAllMembers',
+              async: false,
+              dataType: 'json',
+              success: function(data) {
+                 for(var i=0; i < data.length; i++) {
+                    test.push(data[i].id);
+                 }
+              }, error: function() {
+                alert('Error found fetching all members');
+              }
+            });
+
+            // alert(test);
+
+            // $.ajax({
+            //   type: 'ajax',
+            //   method: 'get',
+            //   url: '<?php echo base_url(); ?>loan_applications/MemberLimit',
+            //   data: {memberlimit: test},
+            //   async: false,
+            //   dataType: 'json',
+            //   success: function(data) {
+            //     for(var i=0; i < data.length; i++) {
+            //       userlimit.push(data[i].member_id);
+            //     }
+            //   }, error: function() {
+            //     alert('Error on Member Limits');
+            //   }
+            // });
+
+            // alert(userlimit);
  
           $.ajax({
             type: 'ajax',
@@ -4999,7 +5725,7 @@
                 if(data.length > 0) {  
                   for (i=0; i < data.length; i++) {
                     row += '<a role="button" class="dropdown-item w-100 cm_user" value="' + data[i].name + '" User-uname="' + 
-        data[i].id + '">'  
+        data[i].id + '">' 
                           + '<h5>' + data[i].name + '</h5>' 
                           + '<p>' + data[i].username + '</p>'
                           +'</a>'; 
@@ -5034,7 +5760,7 @@
         function agik(interest){
           var calcInterest;
           var calcTerm = $('#loan_term').val();
-          var calcAmount =  Number($('#loan-amount').val().replace(/[^0-9\.]+/g,""));
+          var calcAmount = $('#loan-amount').val();
           var max_amount = $('#loan-amount').attr('max_amount');
           calcInterest = interest/12;
 
@@ -5047,9 +5773,6 @@
         }
 
         // insert loan data to db start
-
-          var loanInterests = '';
-
          $('#loanapp_submit').click(function() {
           var data = loan;
           var cmCount = $('#comakerCount').val();
@@ -5058,13 +5781,14 @@
           var tableBody = '';
           var returnLoanCms = '';
           var loanType = '';
+          var loanInterest = '';
           var loanTerm = $('#loan_term').val();
-          var loanAmount = Number($('#loan-amount').val().replace(/[^0-9\.]+/g,""));
+          var loanAmount = $('#loan-amount').val();
           var max_amount = $('#loan-amount').attr('max_amount');
 
           if($('#loanapp_user_id').attr('status') == 'newUser') {
             loanType = $('#loan_type').val();
-            loanInterests = $('#loan_type').attr('loan_interest');
+            loanInterest = $('#loan_type').attr('loan_interest');
             if($('#loan_term').val() == null) {
               $('#loan_term').addClass('is-invalid');
               $('#loan_term_invalid').html("Please select your loan's term.");
@@ -5086,20 +5810,12 @@
                   count += '4';
                   $('#user_attachment').removeClass('is-invalid');
                   $('#user_attachment_invalid').text('');
-                  if (loanAmount > max_amount) {
-                      $('#loan-amount').addClass('is-invalid');
-                      $('#loan_amount_invalid').text('Please change the Loan Amount you Entered!');
-                    } else {
-                      count += '5';
-                      $('#loan-amount').removeClass('is-invalid');
-                      $('#loan_amount_invalid').text('');
-                    }
                 } 
               }
             }
           } else {
             loanType = $('#loan_selector').val();
-            loanInterests = $('.loanOptions:selected').attr('loan_interest');
+            loanInterest = $('.loanOptions:selected').attr('loan_interest');
             if($('#loan_selector_data').val() == null) {
               $('#loan_selector').addClass('is-invalid');
               $('#loan_selector_invalid').html('Please select your desired loan.');
@@ -5128,14 +5844,6 @@
                     count += '4';
                     $('#user_attachment').removeClass('is-invalid');
                     $('#user_attachment_invalid').text('');
-                    if (loanAmount > max_amount) {
-                      $('#loan-amount').addClass('is-invalid');
-                      $('#loan_amount_invalid').text('Please change the Loan Amount you Entered!');
-                    } else {
-                      count += '5';
-                      $('#loan-amount').removeClass('is-invalid');
-                      $('#loan_amount_invalid').text('');
-                    }
                   } 
                 }
               }
@@ -5173,7 +5881,7 @@
             }
           });
 
-          if($('#user_attachment').get(0).files.length === 0) {
+          if ($('#user_attachment').get(0).files.length === 0) {
             $('#user_attachment').addClass('is-invalid');
             $('#user_attachment_invalid').html('No files selected! Please kindly attach your payslip.');
           } else {
@@ -5181,7 +5889,7 @@
             $('#user_attachment_invalid').text('');
           }          
 
-          if(count == '12345') {
+          if(count == '1234') {
             for(var i = 1; i <= cmCount; i++) {
               if($('#co-maker'+i).val() == ''){
                 $('#co-maker'+i).addClass('is-invalid');
@@ -5204,56 +5912,20 @@
           }
 
           if(cmCount == cms.length) {
-            var typeLoaned = $('#loan_selector_data').val();
-            var total_deductions = 0; 
-
-            $.ajax({
-              type: 'ajax',
-              method: 'get',
-              url: '<?php echo base_url();?>loan_applications/getLoanDeductions',
-              data: {loan_type: typeLoaned},
-              async: false,
-              dataType: 'json',
-              success: function(data) {
-                var loan_deduc_name = '';
-                var loan_deduc_amount = '';         
-
-                for(var i=0; i < data.length; i++) {
-                  if(data[i].deduc_type == 'percentage'){
-                    var amount = '';
-                    
-                    amount = data[i].deduc_val / 100 ;
-
-                    calc_amount = Number(loanAmount) * amount;
-                    
-                    loan_deduc_name += '<span>'+ data[i].deduc_name +' '+ Number(data[i].deduc_val).toFixed(0) +'%: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(calc_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></span><br>';
-                  } else if(data[i].deduc_type == 'amount'){
-                    var amount = data[i].deduc_val;
-
-                    loan_deduc_name +='<span>'+ data[i].deduc_name + ': <span class="font-weight-bold float-right ml-auto">&#8369;'+ Math.round(amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</span></span><br>';
-                  }
-                }
-
-                $('#loan_type_deductions').html(loan_deduc_name);
-              }, error: function() {
-                alert('Error on finding deductions for the type of loan');
-              }
-            });
-
             var loanTerm = $('#loan_term').val();
-            var interest = loanInterests / 12;
+            var interest = loanInterest / 12;
             var grossAmt = interest * loanTerm * Number(loanAmount) ;
             var calcTotal =  Number(loanAmount) + Number(calcGrossAmt);
             var monthlyDeduc = calcTotal/ loanTerm;
             var balance = calcTotal - monthlyDeduc;
-            // var RetentionFee = 0;
+            var RetentionFee = 0;
             var OutstandingBal = 0;
-            // var servFee = loanAmount * 0.01; 
-            var loanNetAmt = loanAmount;
+            var servFee = loanAmount * 0.01; 
+            var loanNetAmt = loanAmount - servFee;
 
             var loanDebitTotal = Number(loanAmount)+ Number(grossAmt);
 
-            var loanCreditTotal = grossAmt + total_deductions + OutstandingBal + loanNetAmt;
+            var loanCreditTotal = grossAmt + RetentionFee + servFee + OutstandingBal + loanNetAmt;
 
             for(var i = 1; i <= loanTerm; i++) {
               var int = interest / loanTerm;
@@ -5261,33 +5933,27 @@
               bal = balance - bal;
               tableBody +=  '<tr>' +
                               '<th scope="row">' + i + '</th>' +
-                              '<td>&#8369;' + Math.round(grossAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                              '<td>&#8369;' + Math.round(monthlyDeduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                              '<td>&#8369;' + Math.round(bal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                              '<td>&#8369;' + grossAmt.toFixed(0) + 'pesos</td>' +
+                              '<td>&#8369;' + monthlyDeduc.toFixed(0) + '</td>' +
+                              '<td>&#8369;' + bal.toFixed(0) + '</td>' +
                             '</tr>';
             }
 
             $('#calcBody').html(tableBody);
-            $('#loanType').html('Type of Loan: <span class="font-weight-bold float-right ml-auto">' + loanType + '</span>');
-            $('#loanTerm').html('Term of Loan: <span class="font-weight-bold float-right ml-auto">' + loanTerm + ' months</span>');
-            $('#loanAmt').html('Amount of Loan: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(loanAmount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
-            $('#loanInt').html('Loan Interest: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(grossAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
-            $('#loanGross').html('Gross Loan: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(calcTotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
-            $('#loanMoDed').html('Monthly Amortizations: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(monthlyDeduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
-
-
-            // $('#loanType').html('<span class="font-weight-bold">' + loanType + '</span>');
-            // $('#loanTerm').html('<span class="font-weight-bold">' + loanTerm + ' months</span>');
-            // $('#loanAmt').html('<span class="font-weight-bold">' + Number(loanAmount).toFixed(2) + '</span>');
-            // $('#loanInt').html('<span class="font-weight-bold">' + grossAmt.toFixed(2) + '</span>');
-            // $('#loanDefIntInc').html('<span class="font-weight-bold">' + grossAmt.toFixed(2) + '</span>');
-            // $('#loanGross').html('<span class="font-weight-bold">' + calcTotal.toFixed(2) + '</span>');
-            // $('#loanMoDed').html('<span class="font-weight-bold">' + monthlyDeduc.toFixed(0) + '</span>');
-            // $('#loanOutstandingBal').html('<span class="font-weight-bold">' + OutstandingBal + '</span>');
-            // $('#loanCiB').html('<span class="font-weight-bold">' + loanNetAmt.toFixed(2) + '</span>');
-            // $('#loanNetAmt').html('<span class="font-weight-bold">' + loanNetAmt.toFixed(2) + '</span>');
-            // $('#debitTotal').html('<span class="font-weight-bold">' + loanDebitTotal.toFixed(2) + '</span>');
-            // $('#creditTotal').html('<span class="font-weight-bold">' + loanCreditTotal.toFixed(2) + '</span>');
+            $('#loanType').html('<span class="font-weight-bold">' + loanType + '</span>');
+            $('#loanTerm').html('<span class="font-weight-bold">' + loanTerm + ' months</span>');
+            $('#loanAmt').html('<span class="font-weight-bold">' + Number(loanAmount).toFixed(2) + '</span>');
+            $('#loanInt').html('<span class="font-weight-bold">' + grossAmt.toFixed(2) + '</span>');
+            $('#loanDefIntInc').html('<span class="font-weight-bold">' + grossAmt.toFixed(2) + '</span>');
+            $('#loanGross').html('<span class="font-weight-bold">' + calcTotal.toFixed(2) + '</span>');
+            $('#loanMoDed').html('<span class="font-weight-bold">' + monthlyDeduc.toFixed(0) + '</span>');
+            $('#loanOutstandingBal').html('<span class="font-weight-bold">' + OutstandingBal + '</span>');
+            $('#loanRetensionFee').html('<span class="font-weight-bold">' + RetentionFee + '</span>');
+            $('#loanServiceFee').html('<span class="font-weight-bold">' + servFee.toFixed(2) + '</span>');
+            $('#loanCiB').html('<span class="font-weight-bold">' + loanNetAmt.toFixed(2) + '</span>');
+            $('#loanNetAmt').html('<span class="font-weight-bold">' + loanNetAmt.toFixed(2) + '</span>');
+            $('#debitTotal').html('<span class="font-weight-bold">' + loanDebitTotal.toFixed(2) + '</span>');
+            $('#creditTotal').html('<span class="font-weight-bold">' + loanCreditTotal.toFixed(2) + '</span>');
 
             $('#loanCms').html(returnLoanCms);
             $('#loanAppCalculations').modal('show');
@@ -5301,20 +5967,7 @@
         });              
 
         $('#submitLoan').click(function(){
-          var loanTerm = $('#loan_term').val();
-          var loanAmount = Number($('#loan-amount').val().replace(/[^0-9\.]+/g,""));
-          var interest = loanInterests / 12;
-          var grossAmt = interest * loanTerm * Number(loanAmount) ;
-          var calcTotal =  Number(loanAmount) + Number(calcGrossAmt);
-          var monthlyDeduc = calcTotal/ loanTerm;
-
           var newFormData = new FormData($('#loanAppForm')[0]);
-
-          newFormData.set('loan-amount', loanAmount);
-          newFormData.append('loan_int', grossAmt.toFixed(0));
-          newFormData.append('monthly_deduc', monthlyDeduc.toFixed(0));
-
-
 
           $.ajax({
             type:     'ajax',
@@ -5364,7 +6017,7 @@
 
                 for(i=0; i < data.length; i++){
                   rows += '<li class="list-group-item d-flex">' +
-                            '<div class="p-3"><img src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>" class="rounded-circle member-icon"></div>' +
+                            '<div class="p-3"><img src="assets/img/team/ian.jpg" class="rounded-circle member-icon"></div>' +
                             '<div class="p-3"><h5 class="member-name font-weight-bold">' + data[i].name + '</h5>' +
                             '<p class="text-muted"><small>' + data[i].username + '</small></p>' +
                             '<p class="text-muted"><small>' + data[i].loan_name + '</small></p></div>' +
@@ -5388,9 +6041,6 @@
             for(var i = 0; i < y; i++) {
               $('#return_cm_applications').on('click', '#cmCheckLoan'+ i, function() {
                 $('#cmViewLoanAppModal').modal('show'); 
-                var store = '';
-
-                $('#coMakersAttachment_alerts').html(store);
 
                 var loanapp_data = $(this).attr('data');
 
@@ -5407,23 +6057,21 @@
                     var cmCount = 0;
                     var cnt = '';
                     var cm = '';
-                    var cm_uploads = '';
-                    cm_uploads =  '<form id="cmAttachmentForm" enctype="multipart/form-data">' +
-                                    '<div class="form-group">'+
-                                      '<input type="hidden" class="form-control" id="cm_id" name="cm_id" value="'+ get_username +'">' +
-                                      '<input type="hidden" class="form-control" id="loan_App_id" name="loan_App_id" value="'+ result[0].loanapp_id +'">' +
-                                      '<div class="form-group">' +
-                                        '<div class="row mx-auto">' +
-                                            '<label for="cmimg" class="btn btn-secondary btn-sm">' +
-                                              'Upload image <input type="file" id="cmimg" name="userfile" hidden>' +
-                                            '</label>' +
-                                          '<p id="cmAttachmentImg" class="small ml-2 mt-2"></p>' +
-                                          '<div class="invalid-feedback" id="cm_attachment_invalid"></div>' +
+                    var cm_uploads =  '<form id="cmAttachmentForm" enctype="multipart/form-data">' +
+                                        '<div class="form-group">'+
+                                        '<input type="hidden" class="form-control" id="cm_id" name="cm_id" value="'+ get_username +'">' +
+                                        '<input type="hidden" class="form-control" id="loan_App_id" name="loan_App_id" value="'+ result[0].loanapp_id +'">' +
+                                        '<div class="form-group">' +
+                                          '<div class="row mx-auto">' +
+                                              '<label for="cmimg" class="btn btn-secondary btn-sm">' +
+                                                'Upload image <input type="file" id="cmimg" name="userfile" hidden>' +
+                                              '</label>' +
+                                            '<p id="cmAttachmentImg" class="small ml-2 mt-2"></p>' +
+                                          '</div>' +
                                         '</div>' +
-                                      '</div>' +
-                                    '</div>' +
-                                  '</form>';
-
+                                        '<div class="invalid-feedback" id="cm_attachment_invalid"></div>' +
+                                        '</div>' +
+                                      '</form>'; 
                     var cm_id_data = '';
 
                     if(result[0].comaker_1 != null) {
@@ -5466,7 +6114,7 @@
 
                     var cm_loandata_head = '<span class="font-weight-bold">Loan Application Details</span>';
                     var cm_loandata_body = '<div class="row d-flex">' + 
-                                          '<div class="p-3"><img class="rounded-circle member-icon d-block mx-auto m-2" src="<?php echo base_url(); ?>assets/img/profile_img/' + result[0].user_img + '?>"><h6 class="text-center d-block">'+ result[0].name +'</h6><small class="text-muted text-center d-block">'+ result[0].username +'</small><small class="text-muted text-center d-block">'+ result[0].email +'</small></div>' + 
+                                          '<div class="p-3"><img src="assets/img/team/ian.jpg" class="rounded-circle member-icon d-block mx-auto m-2"><h6 class="text-center d-block">'+ result[0].name +'</h6><small class="text-muted text-center d-block">'+ result[0].username +'</small><small class="text-muted text-center d-block">'+ result[0].email +'</small></div>' + 
                                           '<div class="d-block p-3"><p><span class="font-weight-bold">Loan Application ID: </span><span class="text-muted">'+ result[0].loanapp_id +'</span></p>'+
                                           '<p><span class="font-weight-bold">Loan Type: </span><span class="text-muted">'+ result[0].loan_name +'</span></p>'+
                                           '<p><span class="font-weight-bold">Loan Term: </span><span class="text-muted">'+ result[0].loan_term +'</span></p>'+
@@ -5493,21 +6141,15 @@
           });  
 
           $('#cmViewLoanAppModal').on('click', '#submit_cm_attachment', function() {
-              if($('#cmimg').get(0).files.length != 0) {
+              if($('#cmimg').val() != null) {
                 $('#cmimg').removeClass('is-invalid');
                 $('#cm_attachment_invalid').text('');
-                var store = '';
-
-                $('#coMakersAttachment_alerts').html(store);
 
                 $(this).text('Are you sure?');
                 $(this).click(function() {
                   var cm_id = $('#cm_id').val();
                   var lapp_id = $('#loan_App_id').val(); 
                   var cmdata = new FormData($('#cmAttachmentForm')[0]);
-
-                  cmdata.append('loan_App_id', lapp_id);
-                  cmdata.append('cm_id', cm_id);
 
                   $.ajax({
                     type: 'ajax',
@@ -5522,13 +6164,8 @@
                     dataType: 'json',
                     success: function(data) {
                       if(data == true) {
-                        $('#cmViewLoanAppModal').modal('hide');
-
-                        var store = '<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, Your attachment was sent!.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>';
-
-                        $('#coMakers_alerts').html(store);
-
-                        Comakers();
+                        alert('Your attachment has successfully sent');
+                        $('cmViewLoanAppModal').modal('hide');
                       } else {
                         alert('Comaker uploading attachment failed');
                       }
@@ -5536,14 +6173,11 @@
                       alert('Error updating Co-Makers Attachment');
                     }
                   });
+
                 });
               } else {
                 $('#cmimg').addClass('is-invalid');
                 $('#cm_attachment_invalid').html('Please attach your payslip.');
-
-                var store = '<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Please attach your payslip before submitting. Thank you!</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>';
-
-                $('#coMakersAttachment_alerts').html(store);
               }
           });
         // comakers tab end
@@ -5648,7 +6282,7 @@
 
           var defaultEditProfileFooter =  '<button type="submit" class="btn btn-success btn-sm float-right" id="editProfileSaveBtn">Save changes</button>' +
                                           '<button type="button" class="btn btn-secondary btn-sm float-right" data-dismiss="modal">Cancel</button>';
-                                            
+          $('#editProfileModal').find('.modal-title').html('Edit Account');
           $("#returnEditProfileBody").html(defaultEditProfileBody);
           $("#editProfileModal").find(".modal-footer").html(defaultEditProfileFooter);                   
         }
@@ -5980,27 +6614,56 @@
     </script>
 
     <script type="text/javascript">
-      var role = '<?php echo $this->session->userdata('roleID'); ?>';
-      switch(role){
-        case '1':
-        $('#dashboardTab').addClass('active');
-        break;
-        case '2':
-        $('#dashboardTab').addClass('active');
-        break;
-        case '3':
-        $('#dashboardTab').addClass('active');
-        break;
-        case '4':
-        $('#dashboardTab').addClass('active');
-        break;
-        case '5':
-        $('#dashboardTab').addClass('active');
-        break;
-        case '6':
-        $('#membersTab').addClass('active');
-        break;
-      }
+      $(function(){
+        checkPerms();
+        function checkPerms(){
+          var role = '<?php echo $this->session->userdata('roleID'); ?>';
+          switch(role){
+            case '1':
+            $('#websettings-tab').show();
+            $('#websiteSettings').addClass('active');
+            break;
+            case '2':
+            $('#notificationBar').show();
+            $('#memberDash').show();
+            $('#dashboardTab').addClass('active');
+            $('#loans-tab').show();
+            $('#myloanrecords-tab').show();
+            $('#applyloan-tab').show();
+            break;
+            case '3':
+            $('#creditDash').show();
+            $('#dashboardTab').addClass('active');
+            $('#loans-tab, #loans-deduction, #returnLatestDate, #add-loan, .edit-loan').show();
+            $('#members-tab, #viewuser-perm4, #returnMemberLatestDate').show();
+            $('#loanapps-tab').show();
+            $('#records-comakers-tab, #loanrecords-tab, #loanRecordsText, #loanRecordsTabText').show();
+            break;
+            case '4':
+            $('#treasurerDash').show();
+            $('#dashboardTab').addClass('active');
+            $('#loans-tab, #returnLatestDate').show();
+            $('#loanapps-tab').show();
+            $('#sharecap-ledger-tab, #view-ledgers').show();
+            break;
+            case '5':
+            $('#managerDash').show();
+            $('#dashboardTab').addClass('active');
+            $('#loans-tab, #returnLatestDate').show();
+            $('#loanapps-tab').show();
+            $('#records-comakers-tab, #loanrecords-tab, #loanRecordsText, #loanRecordsTabText').show();
+            $('#sharecap-ledger-tab, #view-ledgers, #update-ledgers, #update-share-capitals').show();
+            break;
+            case '6':
+            $('#chairmanDash').show();
+            $('#dashboardTab').addClass('active');
+            $('#loans-tab, #loans-deduction, #loans-archive, #returnLatestDate, #add-loan, .edit-loan, .archive-loan').show();
+            $('#members-tab, #adduser-perm2, #viewuser-perm4').show();
+            $('#records-comakers-tab, #loanrecords-tab, #comakers-tab, #loanRecordsText, #loanRecordsTabText, #comakersText, #comakersTabText').show();
+            break;
+          }
+        }
+      });
     </script>
 
     
