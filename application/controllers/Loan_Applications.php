@@ -115,27 +115,7 @@
  	}
 
  	public function cmAttachment() {
- 		$config = array(
- 			'upload_path' => './assets/img/payslip_uploads',
- 			'allowed_types' => 'gif|jpg|png|jpeg',
- 			'max_size' => 5000,
-			'max_width' => 0,
-			'max_height' => 0
- 		);
-
- 		$this->load->library('upload', $config);
-
- 		if(!$this->upload->do_upload()) {
- 			$error = array('error' => $this->upload->display_errors());
- 			$user_image = 'noimage.jpg';
-
- 			echo $error['error'];
- 		} else {
- 			$data = array('upload_data' => $this->upload->data());
- 			$user_image = $_FILES['userfile']['name'];
- 		}
-
- 		$data_result = $this->loan_application_model->cmUpdateAttachment($user_image);
+ 		$data_result = $this->loan_application_model->cmUpdateAttachment();
  		echo json_encode($data_result);
  	}
 
