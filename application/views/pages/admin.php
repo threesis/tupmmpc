@@ -215,11 +215,6 @@
                                   <div class="row">
                                     <div class="col-10">
                                       <h6 id="CHpaymentsDash" class="mb-0 text-success" style="font-size: 2rem"></h6>
-                                      <script type="text/javascript">
-                                        var totalPayments = '<?php echo $totalPayments; ?>';
-                                        totalPayments = Math.round(totalPayments).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                        $('#CHpaymentsDash').html('&#8369;'+totalPayments);
-                                      </script>
                                       <footer class="text-muted" style="font-size: 0.8rem">Total Loan <cite>Payments</cite></footer>
                                     </div>
                                     <div class="col-2">
@@ -254,11 +249,6 @@
                                   <div class="row">
                                     <div class="col-6">
                                       <h6 id="CHsharecapDash" class="mb-0 text-warning" style="font-size: 2rem"></h6>
-                                      <script type="text/javascript">
-                                        var totalShare = '<?php echo $totalShareCapital; ?>';
-                                        totalShare = Math.round(totalShare).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                        $('#CHsharecapDash').html('&#8369;'+totalShare);
-                                      </script>
                                       <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Share Capital</cite></footer>
                                     </div>
                                     <div class="col-6">
@@ -484,7 +474,7 @@
                                 <div class="card-body p-3">
                                   <div class="row">
                                     <div class="col-6">
-                                      <h6 id="CCloanPaymentsDash" class="mb-0 text-success" style="font-size: 2rem">&#8369;0</h6>
+                                      <h6 id="CCloanPaymentsDash" class="mb-0 text-success" style="font-size: 2rem"></h6>
                                       <footer class="text-muted" style="font-size: 0.8rem">Total Loan <cite>Payments</cite></footer>
                                     </div>
                                     <div class="col-6">
@@ -518,7 +508,7 @@
                                 <div class="card-body p-3">
                                   <div class="row">
                                     <div class="col-6">
-                                      <h6 id="CCsharecapDash" class="mb-0 text-warning" style="font-size: 2rem">&#8369;0</h6>
+                                      <h6 id="CCsharecapDash" class="mb-0 text-warning" style="font-size: 2rem"></h6>
                                       <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Share Capital</cite></footer>
                                     </div>
                                     <div class="col-6">
@@ -643,7 +633,7 @@
                                 <div class="card-body p-3">
                                   <div class="row">
                                     <div class="col-6">
-                                      <h6 id="MNGpaymentsDash" class="mb-0 text-success" style="font-size: 2rem">&#8369;0</h6>
+                                      <h6 id="MNGpaymentsDash" class="mb-0 text-success" style="font-size: 2rem"></h6>
                                       <footer class="text-muted" style="font-size: 0.8rem">Total Loan <cite>Payments</cite></footer>
                                     </div>
                                     <div class="col-6">
@@ -677,7 +667,7 @@
                                 <div class="card-body p-3">
                                   <div class="row">
                                     <div class="col-6">
-                                      <h6 id="MNGsharecapDash" class="mb-0 text-warning" style="font-size: 2rem">&#8369;0</h6>
+                                      <h6 id="MNGsharecapDash" class="mb-0 text-warning" style="font-size: 2rem"></h6>
                                       <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Share Capital</cite></footer>
                                     </div>
                                     <div class="col-6">
@@ -802,7 +792,7 @@
                                 <div class="card-body p-3">
                                   <div class="row">
                                     <div class="col-6">
-                                      <h6 id="TRpaymentsDash" class="mb-0 text-success" style="font-size: 2rem">&#8369;65,250</h6>
+                                      <h6 id="TRpaymentsDash" class="mb-0 text-success" style="font-size: 2rem"></h6>
                                       <footer class="text-muted" style="font-size: 0.8rem">Total Loan <cite>Payments</cite></footer>
                                     </div>
                                     <div class="col-6">
@@ -819,7 +809,7 @@
                                 <div class="card-body p-3">
                                   <div class="row">
                                     <div class="col-6">
-                                      <h6 id="TRmissedPaymentsDash" class="mb-0 text-danger" style="font-size: 2rem">&#8369;27,500</h6>
+                                      <h6 id="TRmissedPaymentsDash" class="mb-0 text-danger" style="font-size: 2rem">&#8369;0</h6>
                                       <footer class="text-muted" style="font-size: 0.8rem">Total Missed <cite>Payments</cite></footer>
                                     </div>
                                     <div class="col-6">
@@ -836,7 +826,7 @@
                                 <div class="card-body p-3">
                                   <div class="row">
                                     <div class="col-6">
-                                      <h6 id="TRsharecapDash" class="mb-0 text-warning" style="font-size: 2rem">&#8369;82,900</h6>
+                                      <h6 id="TRsharecapDash" class="mb-0 text-warning" style="font-size: 2rem"></h6>
                                       <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Share Capital</cite></footer>
                                     </div>
                                     <div class="col-6">
@@ -860,6 +850,20 @@
                       </div>
                     </div>
                   </div>
+                  <script type="text/javascript">
+                    var totalShare = '<?php echo $totalShareCapital; ?>';
+                    totalShare = Math.round(totalShare).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    $('#CCsharecapDash').html('&#8369;'+totalShare);
+                    $('#MNGsharecapDash').html('&#8369;'+totalShare);
+                    $('#CHsharecapDash').html('&#8369;'+totalShare);
+                    $('#TRsharecapDash').html('&#8369;'+totalShare);
+                    var totalPayments = '<?php echo $totalPayments; ?>';
+                    totalPayments = Math.round(totalPayments).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    $('#CCloanPaymentsDash').html('&#8369;'+totalPayments);
+                    $('#MNGpaymentsDash').html('&#8369;'+totalPayments);
+                    $('#CHpaymentsDash').html('&#8369;'+totalPayments);
+                    $('#TRpaymentsDash').html('&#8369;'+totalPayments);
+                  </script>
                   <div class="card-footer" style="min-height: 60px"></div>
                 </div>
 
@@ -3231,7 +3235,7 @@
                     '<td name="APLid" value="'+APLid+'"><strong>VOUCHER: ' + APLid + '</strong></td>' +
                     '<td name="id" value="'+id+'"><strong>CHEQUE: ' + cheque + '</strong></td>' +
                   '<tr>' +
-                    '<td colspan="2">Payee</td>' +
+                    '<td name="name" value="'+name+'" colspan="2">Payee</td>' +
                     '<td name="uname" value="'+uname+'" colspan="2">' + name + '</td>' +
                   '</tr>' +
                   '<tr>' +
@@ -3298,6 +3302,7 @@
         $('#confirmationLoanAppModal').on('click', '#submitVoucherBtn', function(){
           var apostrophe = "'s";
           var id = $('#confirmationLoanAppModal').find('td[name=id]').attr('value');
+          var name = $('#confirmationLoanAppModal').find('td[name=name]').attr('value');
           var uname = $('#confirmationLoanAppModal').find('td[name=uname]').attr('value');
           var loan = $('#confirmationLoanAppModal').find('td[name=loan]').attr('value');
           var APLid = $('#confirmationLoanAppModal').find('td[name=APLid]').attr('value');
@@ -3309,7 +3314,6 @@
           var totalBalance = $('#confirmationLoanAppModal').find('td[name=totalBalance]').attr('value');
 
           var data = '&uname=' + uname + '&loanapp_id=' + id + '&dvNo=' + APLid + '&retFee=' + retentionFee + '&serFee=' + serviceFee + '&debit=' + totalDebit +'&credit=' + totalCredit +'&netAmt=' + cashInBank + '&balance=' + totalBalance;
-          alert(data);
           $.ajax({
             type    : 'ajax',
             method  : 'post',
@@ -4000,6 +4004,12 @@
                     break;
                   case 'College of Industrial Education':
                     col = 'CIE';
+                    break;
+                  case 'Research and Extension':
+                    col = 'RES';
+                    break;
+                  case 'Admin Sector':
+                    col = 'ADM';
                     break;
                   default: 
                     col = data[i].college; 
