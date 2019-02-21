@@ -98,7 +98,7 @@
                 <a class="list-group-item list-group-item-action" id="loanapps-tab" data-toggle="list" href="#loanAppTab" role="tab" aria-controls="settings"> Loan Applications<i class="fas fa-poll mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="myloanrecords-tab" data-toggle="list" href="#myloanrecordsTab" role="tab" aria-controls="messages">My Loan Records<i class="fas fa-folder-open mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="records-comakers-tab" data-toggle="list" href="#loanRecordsCoMakersTab" role="tab" aria-controls="settings"><span id="loanRecordsTabText">Loan Records</span> <span id="comakersTabText">& Co-Makers</span><i class="fas fa-poll-h mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
-                <a class="list-group-item list-group-item-action" id="sharecap-ledger-tab" data-toggle="list" href="#ledgerShareCapTab" role="tab" aria-controls="messages">Ledger & Share Capital<i class="fas fa-users mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
+                <a class="list-group-item list-group-item-action" id="sharecap-ledger-tab" data-toggle="list" href="#ledgerShareCapTab" role="tab" aria-controls="messages">Remittances and Collections<i class="fas fa-users mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="applyloan-tab" data-toggle="list" href="#applyLoanTab" role="tab" aria-controls="messages">Apply Loan<i class="far fa-file-alt mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="websettings-tab" data-toggle="list" href="#websiteSettings" role="tab" aria-controls="messages">Settings<i class="fas fa-cog mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
               </div>
@@ -121,7 +121,7 @@
                             <div class="card-body p-3">
                               <div class="row">
                                 <div class="col-6">
-                                  <h6 id="dashboardTotalMembers" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $members; ?></h6>
+                                  <h6 id="CHmembersDash" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $members; ?></h6>
                                   <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Members</cite></footer>
                                 </div>
                                 <div class="col-6">
@@ -136,7 +136,7 @@
                             <div class="card-body p-3">
                               <div class="row">
                                 <div class="col-6">
-                                  <h6 id="dashboardLoansApplied" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $loansApplied; ?></h6>
+                                  <h6 id="CHloansAppliedDash" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $loansApplied; ?></h6>
                                   <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Applied</cite></footer>
                                 </div>
                                 <div class="col-6">
@@ -153,7 +153,7 @@
                             <div class="card-body p-3">
                               <div class="row">
                                 <div class="col-6">
-                                  <h6 id="dashboardPendingLoans" class="mb-0 text-warning" style="font-size: 2rem"><?php echo $pendingLoans; ?></h6>
+                                  <h6 id="CHpendingDash" class="mb-0 text-warning" style="font-size: 2rem"><?php echo $pendingLoans; ?></h6>
                                   <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Pending</cite></footer>
                                 </div>
                                 <div class="col-6">
@@ -172,7 +172,7 @@
                             <div class="card-body p-3">
                               <div class="row">
                                 <div class="col-6">
-                                  <h6 id="dashboardApprovedLoans" class="mb-0 text-info" style="font-size: 2rem"><?php echo $approvedLoans; ?></h6>
+                                  <h6 id="CHapprovedDash" class="mb-0 text-info" style="font-size: 2rem"><?php echo $approvedLoans; ?></h6>
                                   <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Approved</cite></footer>
                                 </div>
                                 <div class="col-6">
@@ -191,7 +191,7 @@
                             <div class="card-body p-3">
                               <div class="row">
                                 <div class="col-6">
-                                  <h6 id="dashboardActiveLoans" class="mb-0 text-primary" style="font-size: 2rem"><?php echo $ongoingLoans; ?></h6>
+                                  <h6 id="CHactiveDash" class="mb-0 text-primary" style="font-size: 2rem"><?php echo $ongoingLoans; ?></h6>
                                   <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Active</cite></footer>
                                 </div>
                                 <div class="col-6">
@@ -214,7 +214,7 @@
                                 <div class="card-body p-3">
                                   <div class="row">
                                     <div class="col-6">
-                                      <h6 id="dashboardPayments" class="mb-0 text-success" style="font-size: 2rem">&#8369;65,250</h6>
+                                      <h6 id="CHpaymentsDash" class="mb-0 text-success" style="font-size: 2rem">&#8369;0</h6>
                                       <footer class="text-muted" style="font-size: 0.8rem">Total Loan <cite>Payments</cite></footer>
                                     </div>
                                     <div class="col-6">
@@ -231,7 +231,7 @@
                                 <div class="card-body p-3">
                                   <div class="row">
                                     <div class="col-6">
-                                      <h6 id="dashboardMissedPayments" class="mb-0 text-danger" style="font-size: 2rem">&#8369;27,500</h6>
+                                      <h6 id="CHmissedPaymentsDash" class="mb-0 text-danger" style="font-size: 2rem">&#8369;0</h6>
                                       <footer class="text-muted" style="font-size: 0.8rem">Total Missed <cite>Payments</cite></footer>
                                     </div>
                                     <div class="col-6">
@@ -248,7 +248,7 @@
                                 <div class="card-body p-3">
                                   <div class="row">
                                     <div class="col-6">
-                                      <h6 id="dashboardMissedPayments" class="mb-0 text-warning" style="font-size: 2rem">&#8369;82,900</h6>
+                                      <h6 id="CHsharecapDash" class="mb-0 text-warning" style="font-size: 2rem">&#8369;0</h6>
                                       <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Share Capital</cite></footer>
                                     </div>
                                     <div class="col-6">
@@ -374,13 +374,481 @@
                     </div>
                   </div>
                   <div id="creditDash">
-                    CREDIT OFFICER DASHBOARD
+                    <div class="card-body card-body-mh">
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="CCmembersDash" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $members; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Members</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-user-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="CCloansAppliedDash" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $loansApplied; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Applied</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-file-alt text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="CCpendingDash" class="mb-0 text-warning" style="font-size: 2rem"><?php echo $pendingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Pending</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-pause-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-warning p-1">
+                              <small class="text-white ml-2">Pending</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="CCapprovedDash" class="mb-0 text-info" style="font-size: 2rem"><?php echo $approvedLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Approved</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-check-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-info p-1">
+                              <small class="text-white ml-2">Accepted</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="CCactiveDash" class="mb-0 text-primary" style="font-size: 2rem"><?php echo $ongoingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Active</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-primary p-1">
+                              <small class="text-white ml-2">On-going</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="row mb-3">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="CCloanPaymentsDash" class="mb-0 text-success" style="font-size: 2rem">&#8369;0</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total Loan <cite>Payments</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="CCmissedPaymentsDash" class="mb-0 text-danger" style="font-size: 2rem">&#8369;0</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total Missed <cite>Payments</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="CCsharecapDash" class="mb-0 text-warning" style="font-size: 2rem">&#8369;0</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Share Capital</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-7">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <h6 class="mb-0 text-primary" style="font-size: 1.2rem">Monthly Loan Track</h6>
+                              <footer class="text-muted" style="font-size: 0.8rem"><cite>in 2018-2019</cite></footer>
+                              <canvas id="line-chart"></canvas>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <div id="managerDash">
-                    MANAGER DASHBOARD
+                   <div class="card-body card-body-mh">
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="MNGmembersDash" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $members; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Members</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-user-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="MNGloansAppliedDash" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $loansApplied; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Applied</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-file-alt text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="MNGpendingDash" class="mb-0 text-warning" style="font-size: 2rem"><?php echo $pendingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Pending</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-pause-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-warning p-1">
+                              <small class="text-white ml-2">Pending</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="MNGapprovedDash" class="mb-0 text-info" style="font-size: 2rem"><?php echo $approvedLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Approved</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-check-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-info p-1">
+                              <small class="text-white ml-2">Accepted</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="MNGactiveDash" class="mb-0 text-primary" style="font-size: 2rem"><?php echo $ongoingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Active</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-primary p-1">
+                              <small class="text-white ml-2">On-going</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="row mb-3">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="MNGpaymentsDash" class="mb-0 text-success" style="font-size: 2rem">&#8369;0</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total Loan <cite>Payments</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="MNGmissedPaymentsDash" class="mb-0 text-danger" style="font-size: 2rem">&#8369;0</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total Missed <cite>Payments</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="MNGsharecapDash" class="mb-0 text-warning" style="font-size: 2rem">&#8369;0</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Share Capital</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-7">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <h6 class="mb-0 text-primary" style="font-size: 1.2rem">Monthly Loan Track</h6>
+                              <footer class="text-muted" style="font-size: 0.8rem"><cite>in 2018-2019</cite></footer>
+                              <canvas id="line-chart"></canvas>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <div id="treasurerDash">
-                    TREASURER DASHBOARD
+                    <div class="card-body card-body-mh">
+                      <div class="row mb-3">
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="TRmembersDash" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $members; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Members</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-user-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="TRloansAppliedDash" class="mb-0 text-dark" style="font-size: 2rem"><?php echo $loansApplied; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Applied</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-file-alt text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row mb-3">
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="TRpendingDash" class="mb-0 text-warning" style="font-size: 2rem"><?php echo $pendingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Pending</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-pause-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-warning p-1">
+                              <small class="text-white ml-2">Pending</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="TRapprovedDash" class="mb-0 text-info" style="font-size: 2rem"><?php echo $approvedLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Approved</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-check-circle text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-info p-1">
+                              <small class="text-white ml-2">Accepted</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-4">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <div class="row">
+                                <div class="col-6">
+                                  <h6 id="TRactiveDash" class="mb-0 text-primary" style="font-size: 2rem"><?php echo $ongoingLoans; ?></h6>
+                                  <footer class="text-muted" style="font-size: 0.8rem">Loans <cite>Active</cite></footer>
+                                </div>
+                                <div class="col-6">
+                                  <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="card-footer bg-primary p-1">
+                              <small class="text-white ml-2">On-going</small>
+                              <i class="fas fa-chart-bar text-white float-right mr-2 mt-1"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-5">
+                          <div class="row mb-3">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="TRpaymentsDash" class="mb-0 text-success" style="font-size: 2rem">&#8369;65,250</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total Loan <cite>Payments</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="TRmissedPaymentsDash" class="mb-0 text-danger" style="font-size: 2rem">&#8369;27,500</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total Missed <cite>Payments</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="card rounded shadow-sm">
+                                <div class="card-body p-3">
+                                  <div class="row">
+                                    <div class="col-6">
+                                      <h6 id="TRsharecapDash" class="mb-0 text-warning" style="font-size: 2rem">&#8369;82,900</h6>
+                                      <footer class="text-muted" style="font-size: 0.8rem">Total <cite>Share Capital</cite></footer>
+                                    </div>
+                                    <div class="col-6">
+                                      <i class="far fa-arrow-alt-circle-right text-secondary float-right" style="font-size: 2.5rem"></i>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-7">
+                          <div class="card rounded shadow-sm">
+                            <div class="card-body p-3">
+                              <h6 class="mb-0 text-primary" style="font-size: 1.2rem">Monthly Loan Track</h6>
+                              <footer class="text-muted" style="font-size: 0.8rem"><cite>in 2018-2019</cite></footer>
+                              <canvas id="line-chart"></canvas>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   <div class="card-footer" style="min-height: 60px"></div>
                 </div>
@@ -823,9 +1291,11 @@
                               </div>
 
                               <div class="form-group col-md-6" id="selectizeCollege">
-                                <label for="college" class="custom-sm h6">College:</label>
+                                <label for="college" class="custom-sm h6">Office/Sector:</label>
                                 <select id="college" name="college" style="cursor: pointer;">
                                   <option></option>
+                                  <option>Admin Sector</option>
+                                  <option>Research and Extension</option>
                                   <option>College of Science</option>
                                   <option>College of Industrial Technology</option>
                                   <option>College of Liberal Arts</option>
@@ -864,35 +1334,35 @@
 
                               <div class="col-12"><hr></div>
 
-                              <div class="form-group col-md-6">
+                              <div class="form-group col-md-4">
                                 <label for="subscribeShare" class="custom-sm h6">Subscribe Share:</label>
                                 <div class="input-group input-group-sm mb-2">
                                   <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">&#8369;</span>
                                   </div>
-                                  <input type="text" class="form-control form-control-sm" placeholder="Enter Subscribe Share.." aria-describedby="Subscribeshare" id="subscribeShare" name="subscribeShare" maxlength="9">
+                                  <input type="text" class="form-control form-control-sm" placeholder="Enter Subscribe Share.." aria-describedby="Subscribeshare" id="subscribeShare" name="subscribeShare" maxlength="12">
                                   <div class="invalid-feedback" id="invalidSubscribeShare"></div>
                                 </div>
                               </div> 
 
-                              <div class="form-group col-md-6">
-                                <label for="sharecap" class="custom-sm h6">Share Capital:</label>
+                              <div class="form-group col-md-4">
+                                <label for="sharecap" class="custom-sm h6" style="font-size: 90%">Forced Monthly Savings:</label>
                                 <div class="input-group input-group-sm mb-2">
                                   <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">&#8369;</span>
                                   </div>
-                                  <input type="text" class="form-control form-control-sm" placeholder="Enter Share Capital.." aria-describedby="Sharecap" id="sharecap" name="sharecap" maxlength="9">
+                                  <input type="text" class="form-control form-control-sm" placeholder="Enter Forced Monthly Savings.." aria-describedby="Sharecap" id="sharecap" name="sharecap" maxlength="12">
                                   <div class="invalid-feedback" id="invalidShareCapital"></div>
                                 </div>
                               </div> 
 
-                              <div class="form-group col-md-6">
+                              <div class="form-group col-md-4">
                                 <label for="startingShareCap" class="custom-sm h6">Starting Share Capital:</label>
                                 <div class="input-group input-group-sm mb-2">
                                   <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">&#8369;</span>
                                   </div>
-                                  <input type="text" class="form-control form-control-sm" placeholder="Enter Staring Capital.." aria-describedby="Ewan" id="startingShareCap" name="startingShareCap" maxlength="9">
+                                  <input type="text" class="form-control form-control-sm" placeholder="Enter Staring Capital.." aria-describedby="Ewan" id="startingShareCap" name="startingShareCap" maxlength="12">
                                   <div class="invalid-feedback" id="invalidStarting"></div>
                                 </div>
                               </div> 
@@ -904,6 +1374,12 @@
                                   <div class="invalid-feedback" id="invalidOR"></div>
                                 </div>
                               </div> 
+
+                              <div class="form-group col-md-6">
+                                <label for="orDate" class="custom-sm h6">OR Date:</label>
+                                <input type="date" class="form-control form-control-sm" placeholder="Date" id="orDate" name="orDate">
+                                <div class="invalid-feedback" id="invalidORDate"></div>
+                              </div>
                             </div>
                           </div> 
                         </form>     
@@ -941,6 +1417,7 @@
                         <thead>
                           <tr>
                             <th>#</th>
+                            <th>App ID</th>
                             <th>Name</th>
                             <th>Location</th>
                             <th>Loan Applied</th>
@@ -958,6 +1435,7 @@
                         <thead>
                           <tr>
                             <th>#</th>
+                            <th>App ID</th>
                             <th>Name</th>
                             <th>Location</th>
                             <th>Loan Applied</th>
@@ -975,6 +1453,7 @@
                         <thead>
                           <tr>
                             <th>#</th>
+                            <th>App ID</th>
                             <th>Name</th>
                             <th>Location</th>
                             <th>Loan Applied</th>
@@ -1147,6 +1626,7 @@
                     <table id="myLoanRecordTbl" class="table table-striped table-hover table-responsive table-md nowrap">
                       <thead>
                         <tr>
+                          <th>#</th>
                           <th>Date Applied</th>
                           <th>Loan Applied</th>
                           <th>Loan Interest (&#8369;)</th>
@@ -1181,12 +1661,14 @@
                         async   : false,
                         dataType: 'json',
                         success: function(data) {
+                          var c = '';
                           if(data.length) {
                             var tbl = '';
                             var cm1 = '';
                             var cm2 = '';
                             var cm3 = '';
                             for(var i = 0; i < data.length; i++) {
+                              c++;
                               var myDate  = new Date(data[i].date_applied);
                               if(data[i].comaker_1 == null) {
                                 cm1 = '';
@@ -1203,6 +1685,7 @@
                               }
 
                               tbl +=  '<tr class="text-secondary">' +
+                                        '<td style="vertical-align: middle">' + c + '</td>' +
                                         '<td style="vertical-align: middle">' + myDate.toLocaleDateString("en-US") + '</td>' +
                                         '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].loan_name + '</span></td>' +
                                         '<td style="vertical-align: middle">' + Math.round(data[i].loan_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
@@ -1431,6 +1914,7 @@
                     <table id="loanRecordTbl" class="table table-striped table-hover table-responsive table-md text-nowrap">
                       <thead>
                         <tr>
+                          <th>#</th>
                           <th>Date</th>
                           <th>Name</th>
                           <th>Take Home Pay (&#8369;)</th>
@@ -1491,9 +1975,10 @@
                             dataType: 'json',
                             success : function(data) {
                               var tbl, loanRecFoot, nameCount;
-                              var totalLoanAmt = 0, totalGrossAmt = 0;
+                              var c = 0, totalLoanAmt = 0, totalGrossAmt = 0;
                               if(data.length > 0) {
                                 for(var i = 0; i < data.length; i++) {
+                                  c++;
                                   var cm1 = data[i].comaker_1;
                                   var cm2 = data[i].comaker_2;
                                   var cm3 = data[i].comaker_3;
@@ -1518,6 +2003,7 @@
                                   grossAmt = Math.round(grossAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
                                 tbl +=  '<tr class="text-secondary">' +
+                                          '<td style="vertical-align: middle">' + c + '</td>' +
                                           '<td style="vertical-align: middle">' + myDate.toLocaleDateString("en-US") + '</td>' +
                                           '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
                                           '<td style="vertical-align: middle">' + takehomepay + '</td>' +
@@ -1528,8 +2014,9 @@
                                         '</tr>';                       
                                 }
                                 loanRecFoot =  '<tr>' +
-                                                  '<th>Total</th>' +
                                                   '<th>' + i + '</th>' +
+                                                  '<th></th>' +
+                                                  '<th></th>' +
                                                   '<th></th>' +
                                                   '<th>&#8369;' + Math.round(totalLoanAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
                                                   '<th>&#8369;' + Math.round(totalGrossAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
@@ -2172,8 +2659,6 @@
           closeAfterSelect: true
         });
         $('#college').selectize({
-          create: true,
-          maxOptions: 5,
           placeholder: "Select College..",
           closeAfterSelect: true
         });
@@ -2310,6 +2795,7 @@
 
                   row +=  '<tr class="text-secondary" name="' + data[i].name + '" status="' + status + '" verifiedThp="' + verifiedThp + '" payslip="' + takeHomePay + '" verifiedBy="' + verifiedBy + '" monthlyDeduc="' + data[i].monthly_deduc + '" data="' + data[i].loanapp_id + '" style="cursor: pointer">' +
                             '<td style="vertical-align: middle">' + c + '</td>' +
+                            '<td style="vertical-align: middle">' + data[i].loanapp_id + '</td>' +
                             '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span><i class="' + verifiedIcon + ' ml-1"></i></td>' +
                             '<td style="vertical-align: middle">' + col + '</td>' +
                             '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
@@ -2321,7 +2807,10 @@
                           '</tr>'; 
                 }  
                   $('#returnPendingLoan').html(row);  
-                  $('#dashboardPendingLoans').load(location.href + " #dashboardPendingLoans"); 
+                  $('#CHpendingDash').load(location.href + " #CHpendingDash"); 
+                  $('#MNGpendingDash').load(location.href + " #MNGpendingDash"); 
+                  $('#CCpendingDash').load(location.href + " #CCpendingDash"); 
+                  $('#TRpendingDash').load(location.href + " #TRpendingDash"); 
                 } else {
                   if(query != null) {
                     $('#pendingNotif').html('0');
@@ -2401,6 +2890,7 @@
 
                   row +=  '<tr class="text-secondary" username="' + data[i].username + '" name="' + data[i].name + '" status="' + status + '" data="' + data[i].loanapp_id + '"payslip="' + data[i].take_home_pay + '" verifiedBy="' + data[i].thp_verified_by + '" chequeNo="' + data[i].cheque_no + '" dateIssued="' + dateIssued + '" style="cursor: pointer">' +
                             '<td style="vertical-align: middle">' + c + '</td>' +
+                            '<td style="vertical-align: middle">' + data[i].loanapp_id + '</td>' +
                             '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
                             '<td style="vertical-align: middle">' + col + '</td>' +
                             '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
@@ -2408,7 +2898,10 @@
                           '</tr>'; 
                 }
                 $('#returnApprovedLoans').html(row);
-                $('#dashboardApprovedLoans').load(location.href + " #dashboardApprovedLoans"); 
+                $('#CHapprovedDash').load(location.href + " #CHapprovedDash"); 
+                $('#MNGapprovedDash').load(location.href + " #MNGapprovedDash"); 
+                $('#CCapprovedDash').load(location.href + " #CCapprovedDash"); 
+                $('#TRapprovedDash').load(location.href + " #TRapprovedDash"); 
               } else {
                 if(query != null) {
                   $('#approvedNotif').html('0');
@@ -2475,6 +2968,7 @@
 
                   row +=  '<tr class="text-secondary" name="' + data[i].name + '" remarks="' + data[i].remarks + '" data="' + data[i].loanapp_id + '" activeLoanID="' + data[i].id + '" payslip="' + data[i].take_home_pay + '" balance="' + data[i].balance + '" dateActive="' + dateActive + '" style="cursor: pointer">' +
                             '<td style="vertical-align: middle">' + c + '</td>' +
+                            '<td style="vertical-align: middle">' + data[i].loanapp_id + '</td>' +
                             '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
                             '<td style="vertical-align: middle">' + col + '</td>' +
                             '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
@@ -2484,7 +2978,10 @@
                           '</tr>'; 
                 }
                 $('#returnActiveLoans').html(row);
-                $('#dashboardActiveLoans').load(location.href + " #dashboardActiveLoans"); 
+                $('#CHactiveDash').load(location.href + " #CHactiveDash"); 
+                $('#MNGactiveDash').load(location.href + " #MNGactiveDash"); 
+                $('#CCactiveDash').load(location.href + " #CCactiveDash"); 
+                $('#TRactiveDash').load(location.href + " #TRactiveDash"); 
               } else {
                   $('#activeNotif').html('0');
               } 
@@ -2854,7 +3351,7 @@
             dataType: 'json',
             success : function(data){
               if(data.length) {
-                var c = '';
+                var c = 0;
                 var row = '';
                 for(var i = 0; i < data.length; i++) {
                   var myDate = new Date(Date.parse(data[i].noti_date.replace('-','/','g')));
@@ -3204,6 +3701,7 @@
           var membershipDate = $('input[id=membershipDate]');
           var subscribeShare = $('input[id=subscribeShare]');
           var orno = $('input[id=orNum]');
+          var orda = $('input[id=orDate]');
           var result = '';
 
           if(fname.val() == ''){
@@ -3338,8 +3836,16 @@
             $('#invalidOR').html('');
             result += '16';
           }
+          if(orda.val() == ''){
+            orda.addClass('is-invalid');
+            $('#invalidORDate').html('Please fill out this field.');
+          } else {
+            orda.removeClass('is-invalid');
+            $('#invalidORDate').html('');
+            result += '17';
+          }
 
-          if(result == '12345678910111213141516') {
+          if(result == '1234567891011121314151617') {
             var name = fname.val()+' '+mname.val()+' '+lname.val();
             var filteredShareCap = sharecap.val().replace(/\D/g, "");
             var filteredStarting = startingShareCap.val().replace(/\D/g, "");
@@ -3364,7 +3870,10 @@
                   getMember_latest_date();
                   refreshShareCapRec();
                   $('#membersTab .card-body').animate({scrollTop: 0}, 'fast');
-                  $('#dashboardTotalMembers').load(location.href + " #dashboardTotalMembers");
+                  $('#CHmembersDash').load(location.href + " #CHmembersDash");
+                  $('#MNGmembersDash').load(location.href + " #MNGmembersDash");
+                  $('#CCmembersDash').load(location.href + " #CCmembersDash");
+                  $('#TRmembersDash').load(location.href + " #TRmembersDash");
                 } else {
                   alert('Error');
                 }

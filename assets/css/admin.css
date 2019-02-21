@@ -288,6 +288,9 @@ div.dataTables_length{
   margin: 0;
 }
 
+.selectize-dropdown-content {
+    max-height: 115px;
+ }
 
 
 /** Scrollbar style **/
