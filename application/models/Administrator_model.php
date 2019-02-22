@@ -399,20 +399,14 @@
 
 		public function viewCollections(){
 			$id = $this->input->get('id');
-			/*$loans = $this->db->select('loan_name')->get('loan_types')->result();
 
-			foreach ($loans as $loan) {
-				$new = $loan->loan_name;
-				$this->db->select("or_number, payment_date, CASE WHEN loan_name = '$new' THEN balance END '$new'");
-			}*/
 			$this->db->select('payment_date, or_number, loan_name, balance')->from('active_loan_apps a');
 			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
 			$this->db->join('loan_types c', 'c.id = b.loan_applied');
 			$this->db->where('payment_status', 'paid');
 			$this->db->where('member_id', $id);
 			$query = $this->db->get();
-			return $query->result();
-			/*return array('result' => $query->result(), 'numcols' => $this->db->select('loan_name')->get('loan_types')->result());*/
+			return array('result' => $query->result(), 'numcols' => $this->db->select('loan_name')->get('loan_types')->result());
 		}
 
 		public function updateLedger(){

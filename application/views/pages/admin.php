@@ -1777,9 +1777,9 @@
                             </select>
                           </div>
                         </div>
-                        <table id="collectionsTbl" class="table table-striped table-hover table-responsive-sm table-md text-nowrap">
+                        <table id="collectionsTbl" class="table table-striped table-hover table-responsive table-md text-nowrap">
                           <thead>
-                            <tr>
+                            <tr id="returnCollectionsHeader"> 
                               <th>Date</th>
                               <th>OR No.</th>
                               <th>Loan Applied</th>
@@ -4812,92 +4812,73 @@
           dataType: 'json',
           success : function(data) {
             if(data){
-            var row = '', foot = '', total = 0, or = 0;
-            for(var i = 0; i < data.length; i++){
-              total = Number(total) + Number(data[i].balance);
-              if(data[i].payment_date == '0000-00-00') {
-                lastUp = 'Pending';
-              } else {
-                lastUp = new Date(data[i].payment_date);
-                lastUp = lastUp.toLocaleDateString("en-US");
-              } if(data[i].or_number == '') {
-                or = 'Pending';
-              } else {
-                or = data[i].or_number;
+              var head, row, rowFoot, opts, totalMonthly = '', totalBalance = '', or = '';
+              head = '<th style="vertical-align: middle">Month</th>' +
+                     '<th style="vertical-align: middle">OR No.</th>';
+              for(var a = 0; a < data['numcols'].length; a++){
+                head += '<th style="vertical-align: middle">' + data['numcols'][a].loan_name + ' (&#8369;)</th>';
               }
-              row  += '<tr class="text-secondary">' +
-                        '<td style="vertical-align: middle">' + lastUp + '</td>' +
-                        '<td style="vertical-align: middle">' + or + '</td>' +
-                        '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
-                        '<td style="vertical-align: middle">' + Math.round(data[i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>';
-                      '</tr>';  
+              for(var i = 0; i < data['result'].length; i++){
+                if(data['result'][i].payment_date == '0000-00-00') {
+                  lastUp = 'Pending';
+                } else {
+                  lastUp = new Date(data['result'][i].payment_date);
+                  lastUp = lastUp.toLocaleDateString("en-US");
+                } if(data['result'][i].or_number == '') {
+                  or = 'Pending';
+                } else {
+                  or = data['result'][i].or_number;
+                }
+
+                row  += '<tr class="text-secondary">' +
+                          '<td style="vertical-align: middle">' + lastUp + '</td>' +
+                          '<td style="vertical-align: middle">' + or + '</td>';
+                for(var loans = 0; loans < data['numcols'].length; loans++){
+                  if(data['result'][i].loan_name == data['numcols'][loans].loan_name) {
+                    var totalInRow = 0;
+                    row += '<td style="vertical-align: middle">' + Math.round(data['result'][i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>';
+                    totalInRow = Number(totalInRow) + Number(data['result'][i].balance);
+                  } else {
+                    if(i+1 == data['result'].length) {
+                      i = data['result'].length-1;
+                      if(data['result'][i].loan_name == data['numcols'][loans].loan_name){
+                        row += '<td style="vertical-align: middle">' + Math.round(data['result'][i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>';
+                      } else {
+                        row += '<td style="vertical-align: middle">0</td>';
+                      }
+                    } else {
+                      if(data['result'][i].or_number == data['result'][i+1].or_number){
+                        if(data['result'][i+1].loan_name == data['numcols'][loans].loan_name){
+                          row += '<td style="vertical-align: middle">' + Math.round(data['result'][i+1].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>';
+                        } else {
+                          row += '<td style="vertical-align: middle">0</td>';
+                        }
+                      }
+                    }
+                  }
+                }
+                i++;
+
+                row  += '<td style="vertical-align: middle">0</td>' +
+                        '<td style="vertical-align: middle">' + Math.round(totalInRow).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                        '</tr>';  
+              }
+
+                head += '<th style="vertical-align: middle">Others</th>' +
+                        '<th style="vertical-align: middle">Total (&#8369;)</th>';
+
+                $('#returnCollectionsHeader').html(head);
+                $('#returnCollectionsBody').html(row);
+              } else {
+                $('#returnCollectionsBody').html('');
+                $('#returnCollectionsFooter').html('');
+              }
+            },
+            error: function() {
+              alert('Error!');
             }
-              foot = '<tr>' +
-                        '<th style="vertical-align: middle">Total</th>' +
-                        '<th style="vertical-align: middle"></th>' +
-                        '<th style="vertical-align: middle"></th>' +
-                        '<th style="vertical-align: middle">' + Math.round(total).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
-                      '</tr>';
-              $('#returnCollectionsBody').html(row);
-              $('#returnCollectionsFooter').html(foot);
-            } else {
-              $('#returnCollectionsBody').html('');
-              $('#returnCollectionsFooter').html('');
-            }
-          },
-          error: function() {
-            alert('Error!');
-          }
           });
 
-          /* if(data){
-            var head, row, rowFoot, opts, totalMonthly = '', totalBalance = '', or = '';
-            head = '<th style="vertical-align: middle">Month</th>' +
-                   '<th style="vertical-align: middle">OR No.</th>';
-            for(var a = 0; a < data['numcols'].length; a++){
-              head += '<th style="vertical-align: middle">' + data['numcols'][a].loan_name + ' (&#8369;)</th>';
-            }
-            for(var i = 0; i < data['result'].length; i++){
-              if(data['result'][i].payment_date == '0000-00-00') {
-                lastUp = 'Pending';
-              } else {
-                lastUp = new Date(data['result'][i].payment_date);
-                lastUp = lastUp.toLocaleDateString("en-US");
-              } if(data['result'][i].or_number == '') {
-                or = 'Pending';
-              } else {
-                or = data['result'][i].or_number;
-              }
-
-
-              row  += '<tr class="text-secondary">' +
-                        '<td style="vertical-align: middle">' + lastUp + '</td>' +
-                        '<td style="vertical-align: middle">' + or + '</td>';
-              for(var loans = 0; loans < data['numcols'].length; loans++){
-                if(data['result'][i].loan_name == data['numcols'][loans].loan_name) {
-                  var totalInRow = 0;
-                  row += '<td style="vertical-align: middle">' + Math.round(data['result'][i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>';
-                  totalInRow = Number(totalInRow) + Number(data['result'][i].balance);
-                } else {
-                  row += '<td style="vertical-align: middle">0</td>';
-                }
-              }
-              row  += '<td style="vertical-align: middle">0</td>' +
-                      '<td style="vertical-align: middle">' + Math.round(totalInRow).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                      '</tr>';  
-            }
-
-              head += '<th style="vertical-align: middle">Others</th>' +
-                      '<th style="vertical-align: middle">Total (&#8369;)</th>';
-
-              $('#returnCollectionsHeader').html(head);
-              $('#returnCollectionsBody').html(row);
-            } else {
-              $('#returnCollectionsBody').html('');
-              $('#returnCollectionsFooter').html('');
-            }
-          },
-*/
           var collectionsDataTbl = $('#collectionsTbl').DataTable({
             "dom": 'lBfrtip',
             buttons: [
