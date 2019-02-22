@@ -28,7 +28,6 @@
 						'roleID' => $user_info[0]['position'],
 						'position' => $user_info[0]['role_name'],
 						'name' => $user_info[0]['name'],
-						'user_id' => $user_info[0]['id'],
 						'username' => $username,
 						'user_id' => $user_info[0]['id'],
 						'signed_in' => true
@@ -60,6 +59,16 @@
 			}
 		}
 
+		public function checkNotif() {		
+			$result = $this->user_model->checkNotif();			
+			echo json_encode($result);				
+		}			
+		
+ 		public function notified() {		
+			$result = $this->user_model->notified();			
+			echo json_encode($result);				
+		}
+
 		public function getMyLoanRecords(){
 			$result = $this->user_model->getMyLoanRecords();
 			echo json_encode($result);
@@ -81,5 +90,4 @@
 			// Redirect to the home page
 			redirect(base_url());
 		}
-
 	}

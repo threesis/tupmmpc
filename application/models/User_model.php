@@ -38,11 +38,12 @@
 
 		public function getMyLoanRecords(){
 			$id = $this->input->get('id');
-			$this->db->select('*')->from('loan_applications a');
+			$this->db->select('*')->select_max('b.balance')->from('loan_applications a');
 			$this->db->join('active_loan_apps b', 'b.loanapp_id = a.loanapp_id', 'left');
 			$this->db->join('loan_types c', 'c.id = a.loan_applied');
 			$this->db->join('members d', 'd.id = a.member_id');
 			$this->db->where('a.member_id', $id);
+			$this->db->group_by('a.loanapp_id');
 			$this->db->order_by('a.loanapp_id', 'DESC');
 			$query = $this->db->get();
 			return $query->result();
@@ -68,4 +69,24 @@
 			return $query->result();
 		}
 
+		public function checkNotif(){	
+			$username = $this->input->get('username');	
+			$this->db->select('*')->from('notifications a');	
+			$this->db->join('members b', 'b.username = a.noti_for');	
+			$this->db->where('noti_for', $username);	
+			$query = $this->db->get();	
+			return $query->result();	
+		}	
+		
+ 		public function notified() {	
+			$username = $this->input->get('username');	
+			$this->db->set('noti_status', 0);	
+			$this->db->where('noti_for', $username);	
+			$this->db->update('notifications');	
+			if($this->db->affected_rows() > 0) {	
+				return true;	
+			} else {	
+				return false;	
+			}	
+		}
 	}
