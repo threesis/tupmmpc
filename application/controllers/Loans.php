@@ -136,7 +136,6 @@
 			$result = $this->loan_model->deleteLoan();
 			echo json_encode($result);
 		}
-
 		
 		
 	}

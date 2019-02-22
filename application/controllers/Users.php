@@ -90,5 +90,4 @@
 			// Redirect to the home page
 			redirect(base_url());
 		}
-
 	}

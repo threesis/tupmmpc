@@ -153,5 +153,4 @@
 		$data_result = $this->loan_model->insertChequeNo();
  		echo json_encode($data_result);	
 	}
-	
  }
