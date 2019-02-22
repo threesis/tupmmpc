@@ -1,0 +1,393 @@
+html, body {
+  overflow: auto;
+  font-family: "Segoe UI", Rambla, Arial, sans-serif;
+  background-image: linear-gradient(to top, #dfe9ec 0%, #dfe9ec 100%);
+}
+
+.wrapper {
+  margin-top: 4.5rem;
+}
+
+/* Navbar */
+.navbar {
+  border-bottom: 1px solid rgba(0,0,0,0.25);
+}
+
+.navbar-brand img {
+  width: 50px;
+  margin: -10px 5px -8px 0;
+  height: auto;
+}
+
+.navbar-brand {
+  color: rgba(0, 0, 0, 0.75);
+  font-size: 20px;
+  letter-spacing: 0.5px;
+}
+
+.navbar-nav .nav-link {
+  font-size: 13px;
+  font-weight: bold;
+  color: #66757f !important;
+}
+
+.navbar-nav .nav-link:hover, .nav-link:focus {
+  color: #006600 !important;
+  text-decoration: none;
+}
+
+.dropdown-menu {
+  font-size: 13px;
+}
+
+.dropdown-divider {
+  height: 0;
+  margin: 1rem 0 0.5rem 0;
+  overflow: hidden;
+  border-top: 1px solid #e9ecef;
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  padding: 0.50rem 1.25rem 0.75rem;
+  clear: both;
+  font-weight: 400;
+  color: #66757f;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+}
+
+.dropdown-item:hover, .dropdown-item:focus {
+  color: #28a745;
+  text-decoration: none;
+  background-color: #f8f9fa;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  color: #fff;
+  text-decoration: none;
+  background-color: #007bff;
+}
+
+.dropdown-item.disabled, .dropdown-item:disabled {
+  color: #6c757d;
+  background-color: transparent;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+  color: #006600;
+  text-decoration: none;
+  background-color: #f8f9fa;
+}
+/* /Navbar */
+
+
+.card-body-mh {
+  min-height: 67.5vh;
+  max-height: 67.5vh;
+  overflow-y: auto;
+}
+
+.card-body small {
+  font-size: 85%;
+}
+
+.addLoan-sm {
+  font-size: 90%;
+}
+
+.card-text .admin-name {
+  color: #14171a;
+  margin-top: 30px;
+  font-size: 17px;
+}
+
+.info-text {
+  font-size: 14px;
+}
+
+.card-text .info-text {
+  margin-top: -6px;
+}
+
+.custom-sm {
+  font-size: 15px;
+}
+
+.custom-xs {
+  font-size: 0.9rem;
+}
+
+.card-title {
+  margin-bottom: -90px;
+}
+
+.rounded-circle {
+  width: 105px;
+  height: 105px;
+  background-size: cover;
+  border-radius: 50% 50% 50% 50%;
+}
+
+.member-icon-modal {
+  width: 45px;
+  height: auto;
+  position: absolute;
+  border-radius: 50%;
+}
+
+.img-thumbnail {
+  padding: 2px;
+}
+
+.profile-header{
+  height: 140px;
+}
+
+.modal-text .memberprofile-name {
+  margin-top: 20px;
+  margin-left: 35px;
+  font-size: 18px;
+}
+
+.modal-text .profile-text {
+  margin-top: -5px;
+  font-size: 15px;
+}
+
+.profile-menu .list-group-item {
+  font-size: 14px;
+  padding: 10px 15px;
+  border-top: 0.5px solid rgba(0, 0, 0, 0.125);
+}
+
+.list-group-item.active {
+  z-index: 2;
+  color: #000;
+  font-weight: bold;
+}
+/** /Profile Interface **/
+
+
+/** Members List **/
+tr .member-icon {
+  width: 30px;
+  height: 30px;
+  background-size: cover;
+  border-radius: 50% 50% 50% 50%;
+}
+
+tr .member-name {
+  font-size: 15px;
+  font-weight: 400;
+  margin-left: 4rem;
+  margin-top: 5px;
+}
+
+.list-group-item p {
+  margin-top: -10px;
+  margin-bottom: 5px;
+  margin-left: 4rem;
+}
+
+.list-group-item-loanapp {
+  margin-bottom: 25px;
+}
+
+
+/** Loans Tab **/
+.userLoanInfo {
+  font-weight: normal;
+}
+
+.btn-green {
+  color: #28a745;
+  background-color: #fff;
+  border-color: #28a745;
+}
+
+.btn-green:hover {
+  background-color: #c1f0cc;
+}
+
+.btn-green:focus, .btn-green.focus {
+  box-shadow: 0 0 0 0.1rem rgba(40, 167, 69, 0.3);
+}
+
+
+
+/** Edit Position Module **/
+.module-position-list {
+  width: 20%;
+}
+
+
+/** Make Post Interface **/
+.h-post {
+  height: 31% !important;
+}
+
+.card-title .form-group {
+  position: relative;
+}
+
+.card-title textarea {
+  border: none;
+  overflow: auto;
+  font-size: 15px;
+  padding: 1.2rem 1rem 0 4rem;
+  resize: none;
+
+}
+
+.form-group .rounded-circle {
+  position: absolute;
+  width: 45px;
+  height: auto;
+}
+
+.card-title .img-thumbnail {
+	padding: 0.12rem;
+}
+/** /Announcement Interface **/
+
+
+/** Statistics Interface **/
+.h-stats {
+  height: 50% !important;
+}
+/** /Statistics Interface **/
+
+div.dt-buttons{
+  position:relative;
+  float:left;
+  margin-left: 1rem;
+}
+
+div.dataTables_length{
+  position:relative;
+  float:left;
+}
+
+.dataTables_info {
+  position:relative;
+  float:left; 
+  font-size: 90%;
+}
+
+.dataTables_paginate {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  border-radius: 0.2rem;
+}
+
+.dataTables_paginate .pagination {
+  margin: 0;
+}
+
+.selectize-dropdown-content {
+    max-height: 115px;
+ }
+
+
+/** Scrollbar style **/
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: lightgray; 
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: gray; 
+}
+
+
+/*Columns*/
+
+.col-sm-padding {
+  padding-right: 5px;
+  padding-left: 5px;
+}
+
+/*Wrapper Settings*/
+
+h2 {
+  color: #14171a;
+  font-weight: bold;
+  font-size: 22px;
+}
+
+
+/* Media queries */
+@media (max-width: 1200px) {
+  body {
+    overflow-y: scroll;
+  }
+}
+
+@media (max-width: 992px) {
+  #admin-loans .col-md-12 {
+    margin-bottom: 30px;
+  }
+}
+
+.selectize-input {
+  font-size: 90%;
+}
+
+/* hidden elements for role perm */
+#notificationBar {
+  display: none;
+}
+
+#loans-tab, #loans-deduction, #loans-archive, #add-loan, .edit-loan, .archive-loan,  #returnLatestDate {
+  display: none;
+}
+
+#members-tab, #adduser-perm2, #viewuser-perm4, #returnMemberLatestDate {
+  display: none;
+}
+
+#loanapps-tab {
+  display: none;
+}
+
+#myloanrecords-tab {
+  display: none;
+}
+
+#records-comakers-tab, #loanrecords-tab, #comakers-tab, #loanRecordsText, #comakersText, #loanRecordsTabText, #comakersTabText {
+  display: none;
+}
+
+#sharecap-ledger-tab, #view-ledgers, #update-ledgers, #update-share-capitals {
+  display: none;
+}
+
+#applyloan-tab {
+  display: none;
+}
+
+#websettings-tab {
+  display: none;
+}
+
+#memberDash, #managerDash, #treasurerDash, #creditDash, #chairmanDash {
+  display: none;
+}
+
+
+
+
+
+
