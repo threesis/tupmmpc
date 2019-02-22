@@ -320,7 +320,6 @@
 			} else {
 				return false;
 			}
-
 		}
 
 		public function updateLedgers() {
