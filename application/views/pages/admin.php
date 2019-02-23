@@ -5461,17 +5461,21 @@
                 var i;
 
                 for(i=0; i < data.length; i++){
-                  rows += '<li class="list-group-item d-flex">' +
-                            '<div class="p-3"><img src="assets/img/team/ian.jpg" class="rounded-circle member-icon"></div>' +
-                            '<div class="p-3"><h5 class="member-name font-weight-bold">' + data[i].name + '</h5>' +
-                            '<p class="text-muted"><small>' + data[i].username + '</small></p>' +
-                            '<p class="text-muted"><small>' + data[i].loan_name + '</small></p></div>' +
-                            '<div class="float-right my-2 ml-auto p-3"><button href="javascript:;" class="btn btn-info btn-sm float-right" id="cmCheckLoan'+ i +'" data="' + data[i].loanapp_id + '">View Application</button></div>'
-                            '</li>';
+                  rows += '<tr class="text-secondary">' +
+                            '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
+                            '<td style="vertical-align: middle">' + '<small>' + data[i].loan_name + '</small>' + '</td>' +
+                            '<td style="vertical-align: middle">' + '<button href="javascript:;" class="btn btn-info btn-sm float-right" id="cmCheckLoan'+ i +'" data="' + data[i].loanapp_id + '">View Application</button>' + '</td>' +
+                          '</tr>';
                 }
 
                 $('#return_cm_applications').html(rows);
-                $('#cm_pending_badge').text(i);
+
+                if(i == 0) {
+                  $('#cm_pending_badge').hide();
+                } else {
+                  $('#cm_pending_badge').show();
+                  $('#cm_pending_badge').text(i);
+                }
 
                 cmApplyCount(i);
               }, error: function() {
@@ -5485,7 +5489,12 @@
 
             for(var i = 0; i < y; i++) {
               $('#return_cm_applications').on('click', '#cmCheckLoan'+ i, function() {
-                $('#cmViewLoanAppModal').modal('show'); 
+                $('#cmViewLoanAppModal').modal('show');
+                $('#cancel_cm_approval').hide(); 
+                $('#submit_cm_approval').text('Approve');
+                var store = '';
+
+                $('#coMakersAttachment_alerts').html(store);
 
                 var loanapp_data = $(this).attr('data');
 
@@ -5497,26 +5506,22 @@
                   async: false,
                   dataType: 'json',
                   success: function(result) {
-                     get_username = '<?php echo $this->session->userdata('user_id'); ?>';
+                    get_username = '<?php echo $this->session->userdata('user_id'); ?>';
 
                     var cmCount = 0;
                     var cnt = '';
                     var cm = '';
-                    var cm_uploads =  '<form id="cmAttachmentForm" enctype="multipart/form-data">' +
-                                        '<div class="form-group">'+
-                                        '<input type="hidden" class="form-control" id="cm_id" name="cm_id" value="'+ get_username +'">' +
-                                        '<input type="hidden" class="form-control" id="loan_App_id" name="loan_App_id" value="'+ result[0].loanapp_id +'">' +
-                                        '<div class="form-group">' +
-                                          '<div class="row mx-auto">' +
-                                              '<label for="cmimg" class="btn btn-secondary btn-sm">' +
-                                                'Upload image <input type="file" id="cmimg" name="userfile" hidden>' +
-                                              '</label>' +
-                                            '<p id="cmAttachmentImg" class="small ml-2 mt-2"></p>' +
-                                          '</div>' +
-                                        '</div>' +
-                                        '<div class="invalid-feedback" id="cm_attachment_invalid"></div>' +
-                                        '</div>' +
-                                      '</form>'; 
+                    var cm_approve = '';
+                    cm_approve =  '<form id="cmApprovalForm">' +
+                                    '<div class="form-group">'+
+                                      '<input type="hidden" class="form-control" id="cm_id" name="cm_id" value="'+ get_username +'">' +
+                                      '<input type="hidden" class="form-control" id="loan_App_id" name="loan_App_id" value="'+ result[0].loanapp_id +'">' +
+                                    '</div>' +
+                                    '<div class="form-group">' +
+                                      '<input type="hidden" class="form-control" id="cm_Approval" name="cm_Approval" value="">' +
+                                    '</div>' +
+                                  '</form>';
+
                     var cm_id_data = '';
 
                     if(result[0].comaker_1 != null) {
@@ -5544,12 +5549,12 @@
                         async: false, 
                         dataType: 'json',
                         success: function(data) {
-                          cnt += '<p><span class="font-weight-bold">Co-Maker'+ i +': </span><span class="text-muted">'+ data[0].name +'</span></p><div cm_id="'+ data[0].id +'" id="cm_attachment_button'+ i +'"></div>';
+                          cnt += '<p><span class="font-weight-bold">Co-Maker'+ i +': </span><span class="text-muted">'+ data[0].name +'</span></p><div cm_id="'+ data[0].id +'" id="cm_approval_form'+ i +'"></div>';
 
                           get_username = '<?php echo $this->session->userdata('user_id'); ?>';
 
                           if(data[0].id == get_username) {
-                              cm_id_data = '#cm_attachment_button'+i;
+                              cm_id_data = '#cm_approval_form'+i;
                           }
                         }, error: function() {
                           alert('Error on findCmName');
@@ -5559,7 +5564,7 @@
 
                     var cm_loandata_head = '<span class="font-weight-bold">Loan Application Details</span>';
                     var cm_loandata_body = '<div class="row d-flex">' + 
-                                          '<div class="p-3"><img src="assets/img/team/ian.jpg" class="rounded-circle member-icon d-block mx-auto m-2"><h6 class="text-center d-block">'+ result[0].name +'</h6><small class="text-muted text-center d-block">'+ result[0].username +'</small><small class="text-muted text-center d-block">'+ result[0].email +'</small></div>' + 
+                                          '<div class="p-3"><img class="rounded-circle member-icon d-block mx-auto m-2" src="<?php echo base_url(); ?>assets/img/profile_img/' + result[0].user_img + '?>"><h6 class="text-center d-block">'+ result[0].name +'</h6><small class="text-muted text-center d-block">'+ result[0].username +'</small><small class="text-muted text-center d-block">'+ result[0].email +'</small></div>' + 
                                           '<div class="d-block p-3"><p><span class="font-weight-bold">Loan Application ID: </span><span class="text-muted">'+ result[0].loanapp_id +'</span></p>'+
                                           '<p><span class="font-weight-bold">Loan Type: </span><span class="text-muted">'+ result[0].loan_name +'</span></p>'+
                                           '<p><span class="font-weight-bold">Loan Term: </span><span class="text-muted">'+ result[0].loan_term +'</span></p>'+
@@ -5571,7 +5576,8 @@
                     $('#cmViewLoanAppModalBody').html(cm_loandata_body);
                     $('#comaker-count').html(cnt);
 
-                    $(cm_id_data).html(cm_uploads);
+                    $(cm_id_data).html(cm_approve);
+
                   }, error: function() {
                     alert('Error finding Loan application Data');
                   }
@@ -5580,50 +5586,56 @@
             }
           }
 
-
-          $('#cmViewLoanAppModal').on('change', '#cmimg', function() {
-            $('#cmAttachmentImg').text($('#cmimg')[0].files[0].name);
-          });  
-
-          $('#cmViewLoanAppModal').on('click', '#submit_cm_attachment', function() {
-              if($('#cmimg').val() != null) {
-                $('#cmimg').removeClass('is-invalid');
-                $('#cm_attachment_invalid').text('');
+          $('#cmViewLoanAppModal').on('click', '.submit_cm_approval', function() {
+                $(this).attr('id', 'submit2');
+                $('#cm_Approval').val('Approve');
+                $('#cancel_cm_approval').show();
+                $('#cancel_cm_approval').click(function() {
+                  $('#cancel_cm_approval').hide();
+                  $('#cm_Approval').val('');
+                  $('#submit2').text('Approve');
+                  $('#submit2').unbind();
+                  $('#submit2').attr('id', '');
+                });
 
                 $(this).text('Are you sure?');
-                $(this).click(function() {
-                  var cm_id = $('#cm_id').val();
-                  var lapp_id = $('#loan_App_id').val(); 
-                  var cmdata = new FormData($('#cmAttachmentForm')[0]);
+          });
 
-                  $.ajax({
-                    type: 'ajax',
-                    method: 'post',
-                    enctype: 'multipart/form-data',
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    url: '<?php echo base_url(); ?>loan_applications/cmAttachment',
-                    data: cmdata,
-                    async: false,
-                    dataType: 'json',
-                    success: function(data) {
-                      if(data == true) {
-                        alert('Your attachment has successfully sent');
-                        $('cmViewLoanAppModal').modal('hide');
-                      } else {
-                        alert('Comaker uploading attachment failed');
-                      }
-                    }, error: function(data) {
-                      alert('Error updating Co-Makers Attachment');
-                    }
-                  });
 
-                });
-              } else {
-                $('#cmimg').addClass('is-invalid');
-                $('#cm_attachment_invalid').html('Please attach your payslip.');
+          $('#cmViewLoanAppModal').on('click', '#submit2', function() {
+            var cm_get_approval = $('#cm_Approval').val();
+            var cm_id = $('#cm_id').val();
+            var lapp_id = $('#loan_App_id').val(); 
+
+            alert(lapp_id + ', '+cm_id);
+            $.ajax({
+              type: 'ajax',
+              method: 'get',
+              url: '<?php echo base_url(); ?>loan_applications/cmAttachment',
+              data: {id: cm_id, lid: lapp_id},
+              async: false,
+              dataType: 'json',
+              success: function(data) {
+                if(data == true) {
+                  $('#cmViewLoanAppModal').modal('hide');
+
+                  var store = '<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, Your attachment was sent!.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>';
+
+                  $('#coMakers_alerts').html(store);
+
+                  Comakers();
+                } else {
+                  alert('Comaker Approval failed');
+                }
+              }, error: function() {
+                alert('Error updating Co-Makers Approval');
               }
+            });
+            $('#submit2').attr('id', '');
+          });
+
+          $(document).on('hidden.bs.modal', '#cmViewLoanAppModal', function(){
+            $('#cmViewLoanAppModal').find('#submit2').attr('id', '');
           });
         // comakers tab end
 
