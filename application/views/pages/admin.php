@@ -5479,14 +5479,55 @@
                     }
 
                     var cm_loandata_head = '<span class="font-weight-bold">Loan Application Details</span>';
-                    var cm_loandata_body = '<div class="row d-flex">' + 
-                                          '<div class="p-3"><img class="rounded-circle member-icon d-block mx-auto m-2" src="<?php echo base_url(); ?>assets/img/profile_img/' + result[0].user_img + '?>"><h6 class="text-center d-block">'+ result[0].name +'</h6><small class="text-muted text-center d-block">'+ result[0].username +'</small><small class="text-muted text-center d-block">'+ result[0].email +'</small></div>' + 
-                                          '<div class="d-block p-3"><p><span class="font-weight-bold">Loan Application ID: </span><span class="text-muted">'+ result[0].loanapp_id +'</span></p>'+
-                                          '<p><span class="font-weight-bold">Loan Type: </span><span class="text-muted">'+ result[0].loan_name +'</span></p>'+
-                                          '<p><span class="font-weight-bold">Loan Term: </span><span class="text-muted">'+ result[0].loan_term +'</span></p>'+
-                                          '<p><span class="font-weight-bold">Amount Loaned: </span><span class="text-muted">'+ result[0].loan_amount +'</span></p></div>' +
-                                          '<div class="d-block p-3" id="comaker-count"></div></form>'+
-                                          '</div>';
+                    var cm_loandata_body = '<div class="row">' + 
+                                          '<div class="d-flex p-3 mx-5">'+
+                                            '<img id="loanAppFormImg" class="rounded w-25 h-100 ml-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + result[0].user_img + '?>">'+
+                                            '<div class="d-block mx-3">' +
+                                              '<h5 class="text-left d-block">'+ result[0].name +'</h5>'+
+                                              '<h6 class="text-muted text-left d-block">'+ result[0].username +'</h6>'+
+                                              '<h6 class="text-primary text-left d-block">'+ result[0].email  +'</h6>'+
+                                              '<h6 class="text-muted text-left d-block">'+ result[0].contact_no+'</h6>'+
+                                              '<h6 class="text-muted text-left d-block">'+ result[0].address+' - '+ result[0].zipcode +'</h6>'+
+                                            '</div>'+
+                                          '</div>' + 
+                                          '<div class="d-block mx-auto p-3">' +
+                                            '<table class="table table-responsive-sm table-bordered table-md nowrap">' +
+                                              '<thead>'+
+                                                '<tr>' +
+                                                  '<th colspan="2" class="text-center">Information</th>'+
+                                                  '<th class="text-center">Co-Makers</th>' +
+                                                '</tr>' +
+                                              '</thead>'+
+                                              '<tbody>'+
+                                                '<tr>'+
+                                                  '<td>Loan Application ID:</td>' +
+                                                  '<td>'+ result[0].loanapp_id +'</td>' +
+                                                  '<td rowspan="6"><div class="d-block p-3" id="comaker-count"></div></td>'+
+                                                '</tr>'+
+                                                '<tr>'+
+                                                  '<td>Type of Loan: </td>' +
+                                                  '<td>'+ result[0].loan_name +'</td>' +
+                                                '</tr>'+
+                                                '<tr>'+
+                                                  '<td>Loan Term: </td>' +
+                                                  '<td>'+ result[0].loan_term +'</td>' +
+                                                '</tr>'+
+                                                '<tr>'+
+                                                  '<td>Amount Loaned: </td>' +
+                                                  '<td>'+ result[0].loan_amount +'</td>' +
+                                                '</tr>'+
+                                                '<tr>'+
+                                                  '<td>Interest on Loan: </td>' +
+                                                  '<td>'+ result[0].loan_int +'</td>' +
+                                                '</tr>'+
+                                                '<tr>'+
+                                                  '<td>Monthly Amortization: </td>' +
+                                                  '<td>'+ result[0].monthly_deduc +'</td>' +
+                                                '</tr>'+
+                                              '</tbody>'+
+                                            '</table>'
+                                          '</div>' +
+                                        '</div>';
 
                     $('#cmViewLoanAppModalTitle').html(cm_loandata_head);
                     $('#cmViewLoanAppModalBody').html(cm_loandata_body);
@@ -5523,7 +5564,6 @@
             var cm_id = $('#cm_id').val();
             var lapp_id = $('#loan_App_id').val(); 
 
-            alert(lapp_id + ', '+cm_id);
             $.ajax({
               type: 'ajax',
               method: 'get',
