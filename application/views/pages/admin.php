@@ -97,7 +97,8 @@
                 <a class="list-group-item list-group-item-action" id="members-tab" data-toggle="list" href="#membersTab" role="tab" aria-controls="messages">Members<i class="fas fa-users mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="loanapps-tab" data-toggle="list" href="#loanAppTab" role="tab" aria-controls="settings"> Loan Applications<i class="fas fa-poll mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="myloanrecords-tab" data-toggle="list" href="#myloanrecordsTab" role="tab" aria-controls="messages">My Loan Records<i class="fas fa-folder-open mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
-                <a class="list-group-item list-group-item-action" id="records-comakers-tab" data-toggle="list" href="#loanRecordsCoMakersTab" role="tab" aria-controls="settings"><span id="loanRecordsTabText">Loan Records</span> <span id="comakersTabText">& Co-Makers</span><i class="fas fa-poll-h mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
+                <a class="list-group-item list-group-item-action" id="records-tab" data-toggle="list" href="#loanRecordsTab" role="tab" aria-controls="settings">Loan Records<i class="fas fa-poll-h mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
+                <a class="list-group-item list-group-item-action" id="comakers-tab" data-toggle="list" href="#comakersTab" role="tab" aria-controls="settings">Co-Makers<i class="fas fa-poll-h mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="sharecap-ledger-tab" data-toggle="list" href="#ledgerShareCapTab" role="tab" aria-controls="messages">Remittances and Collections<i class="fas fa-users mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="applyloan-tab" data-toggle="list" href="#applyLoanTab" role="tab" aria-controls="messages">Apply Loan<i class="far fa-file-alt mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="websettings-tab" data-toggle="list" href="#websiteSettings" role="tab" aria-controls="messages">Settings<i class="fas fa-cog mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
@@ -2079,54 +2080,6 @@
                       });
                     </script>
                     </div>
-
-                    <div class="tab-pane" id="comakersSubTab">
-                      <!-- CoMakers Part  -->
-                  <div class="tab-pane fade show" id="coMakersTab" role="tabpanel" aria-labelledby="home-tab">
-                    <div class="card-header">
-                      <ul class="nav nav-tabs card-header-tabs">
-                        <li class="ml-2 pb-4">
-                          <h2 class="card-title">
-                            <span>Co-Makers Application</span>
-                          </h2>
-                        </li>
-                        <li class="nav-item ml-auto">
-                          <a class="nav-link active" data-toggle="tab" href="#pending_cm_applications">Pending<span class="badge badge-danger badge-pill ml-2" id="cm_pending_badge"></span></a>
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="card-body" style="height: 70vh; overflow-y: auto;">
-                      <div class="tab-pane list-group active" id="pending_cm_applications">
-                        <div id="return_cm_applications">
-                          <!-- insert comakers application list group -->
-                        </div>
-                      </div>            
-                    </div>
-                  </div>
-
-                  <div class="modal fade" id="cmViewLoanAppModal" tabindex="-1" role="dialog">
-                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h6 class="modal-title" id="cmViewLoanAppModalTitle"></h6>
-                          <button type="button" class="close" data-dismiss="modal" aria-label="close">
-                            <span aria-hidden="true">&times;</span>
-                          </button>
-                        </div>
-                        
-                        <div class="modal-body" id="cmViewLoanAppModalBody">
-                          
-                        </div>
-
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-outline-success" id="submit_cm_attachment">Submit Attachment</button>
-                        </div>
-                      </div>
-                      
-                    </div>                  
-                  </div>
-                <!-- end CoMakers Part -->
-                    </div>
                   </div>
                   <div class="card-footer" style="min-height: 60px">
                     <p class="card-text text-muted float-left mt-2"><em id="loanRecordsInfo"></em><em id="comakersInfo" style="display: none"></em></p>
@@ -2134,6 +2087,52 @@
                     <div id="comakersPaginate" class="float-right" style="display: none"></div>
                   </div>
                 </div>
+
+                <!-- CoMakers Part  -->
+                <div class="tab-pane fade show" id="comakersTab" role="tabpanel" aria-labelledby="home-tab">
+                  <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs">
+                      <li class="ml-2 pb-4">
+                        <h2 class="card-title">
+                          <span>Co-Makers Application</span>
+                        </h2>
+                      </li>
+                      <li class="nav-item ml-auto">
+                        <a class="nav-link active" data-toggle="tab" href="#pending_cm_applications">Pending<span class="badge badge-danger badge-pill ml-2" id="cm_pending_badge"></span></a>
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="card-body" style="height: 70vh; overflow-y: auto;">
+                    <div class="tab-pane list-group active" id="pending_cm_applications">
+                      <div id="return_cm_applications">
+                        <!-- insert comakers application list group -->
+                      </div>
+                    </div>            
+                  </div>
+                </div>
+
+                <div class="modal fade" id="cmViewLoanAppModal" tabindex="-1" role="dialog">
+                  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h6 class="modal-title" id="cmViewLoanAppModalTitle"></h6>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      
+                      <div class="modal-body" id="cmViewLoanAppModalBody">
+                        
+                      </div>
+
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-success" id="submit_cm_attachment">Submit Attachment</button>
+                      </div>
+                    </div>
+                    
+                  </div>                  
+                </div>
+                <!-- end CoMakers Part -->
 
 
                 <!-- Loan Application part -->
@@ -6631,6 +6630,7 @@
             $('#loans-tab').show();
             $('#myloanrecords-tab').show();
             $('#applyloan-tab').show();
+            $('#comakers-tab').show();
             break;
             case '3':
             $('#creditDash').show();
@@ -6638,7 +6638,7 @@
             $('#loans-tab, #loans-deduction, #returnLatestDate, #add-loan, .edit-loan').show();
             $('#members-tab, #viewuser-perm4, #returnMemberLatestDate').show();
             $('#loanapps-tab').show();
-            $('#records-comakers-tab, #loanrecords-tab, #loanRecordsText, #loanRecordsTabText').show();
+            $('#records-tab, #loanrecords-tab').show();
             break;
             case '4':
             $('#treasurerDash').show();
@@ -6652,7 +6652,7 @@
             $('#dashboardTab').addClass('active');
             $('#loans-tab, #returnLatestDate').show();
             $('#loanapps-tab').show();
-            $('#records-comakers-tab, #loanrecords-tab, #loanRecordsText, #loanRecordsTabText').show();
+            $('#records-tab, #loanrecords-tab').show();
             $('#sharecap-ledger-tab, #view-ledgers, #update-ledgers, #update-share-capitals').show();
             break;
             case '6':
@@ -6660,7 +6660,7 @@
             $('#dashboardTab').addClass('active');
             $('#loans-tab, #loans-deduction, #loans-archive, #returnLatestDate, #add-loan, .edit-loan, .archive-loan').show();
             $('#members-tab, #adduser-perm2, #viewuser-perm4').show();
-            $('#records-comakers-tab, #loanrecords-tab, #comakers-tab, #loanRecordsText, #loanRecordsTabText, #comakersText, #comakersTabText').show();
+            $('#records-tab, #loanrecords-tab, #comakers-tab').show();
             break;
           }
         }

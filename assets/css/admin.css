@@ -382,9 +382,9 @@ h2 {
   display: none;
 }
 
-#records-comakers-tab, #loanrecords-tab, #comakers-tab, #loanRecordsText, #comakersText, #loanRecordsTabText, #comakersTabText {
-  display: none;
-}
+#records-tab, #loanrecords-tab, #comakers-tab {
+  display: none;   
+} 
 
 #sharecap-ledger-tab, #view-ledgers, #update-ledgers, #update-share-capitals {
   display: none;
