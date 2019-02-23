@@ -203,7 +203,7 @@
 		public function editLoan() {
 			$id = $this->input->get('id');
 			$this->db->select('*')->from('loan_type_deducs a');
-			$this->db->join('loan_types b', 'b.id = a.loan_name');
+			$this->db->join('loan_types b', 'b.id = a.loan_type_name');
 			$this->db->join('loan_deductions c', 'c.deduc_id = a.loan_deduc');
 			$this->db->where('b.id', $id);
 			$query = $this->db->get();
@@ -227,19 +227,19 @@
 			$this->db->where('id', $id);
 			$this->db->update('loan_types', $loan_update_data);
 			if($this->db->affected_rows() > 0) {
-				$this->db->where('loan_name', $id);
+				$this->db->where('loan_type_name', $id);
 				$this->db->delete('loan_type_deducs');
 				if($deduc_ids){
 					foreach($deduc_ids as $up_id) {
 						$deduc_data = array(
-							'loan_name' => $id,
+							'loan_type_name' => $id,
 							'loan_deduc' => $up_id
 						);
 						$this->db->insert('loan_type_deducs', $deduc_data);
 					}
 				} else {
 					$deduc_data = array(
-							'loan_name' => $id,
+							'loan_type_name' => $id,
 							'loan_deduc' => 1
 					);
 					$this->db->insert('loan_type_deducs', $deduc_data);

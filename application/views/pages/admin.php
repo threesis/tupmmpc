@@ -2143,7 +2143,7 @@
                 <!-- end CoMakers Part -->
 
 
-                <!-- Loan Application part -->
+                 <!-- Loan Application part -->
                 <div class="tab-pane fade show" id="applyLoanTab" role="tabpanel" aria-labelledby="home-tab">
                   <h2 class="card-header">Apply Loan</h2>
                   <div class="card-body card-body-mh">
@@ -2173,7 +2173,10 @@
                             <div class="invalid-feedback" id="loan_selector_invalid"></div>
                           </div>
                           <div class="input-group mb-3" id="loanapp-amount">
-                            <input type="number" maxlength="10" class="form-control" name="loan-amount" id="loan-amount" placeholder="Input loan amount..">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">&#8369;</span>
+                            </div>
+                            <input type="text" maxlength="13" class="form-control" name="loan-amount" id="loan-amount" placeholder="Input loan amount..">
                             <div class="invalid-feedback" id="loan_amount_invalid"></div>
                           </div>
                           <div class="form-group">
@@ -2445,19 +2448,18 @@
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
-                      <div class="modal-body" style="max-height: 80%; overflow-y: auto;">
+                      <div class="modal-body" style="max-height: 65vh; overflow-y: auto;">
                         <div class="custom-sm ml-2">
-                          <!-- <span id="loanType"></span><br>
+                          <span id="loanType"></span><br>
                           <span id="loanTerm"></span><br>
                           <span id="loanAmt"></span><br>
                           <span id="loanInt"></span><br>
                           <span id="loanGross"></span><br>
                           <span id="loanMoDed"></span><br>
-                          <span id="loanRetensionFee"></span><br>
-                          <span id="loanServiceFee"></span><br>
-                          <span id="loanOutstandingBal"></span><br> -->
+                          <div id="loan_type_deductions"></div>
+                          <span id="loanOutstandingBal"></span><br>
 
-                          <div class="table-responsive">
+                         <!--  <div class="table-responsive">
                             <table class="table table-bordered">
                               <tbody>
                                 <tr>
@@ -2505,7 +2507,7 @@
                                 </tr>
                               </tbody>
                             </table>
-                          </div>
+                          </div> -->
                           
                           <div id="loanCms" class="mt-3"></div>
                         </div>
@@ -5259,7 +5261,6 @@
 
         $('#loanapp_user_id').attr('value', '<?php echo $this->session->userdata('user_id'); ?>').hide();
         $('#loanapp_name').attr('value', '<?php echo $this->session->userdata('name'); ?>').hide();
-
         var get_username = '';
         var get_name =  '';
         var user_id_no = '';
@@ -5275,22 +5276,20 @@
         var loan_id_no = '';
         var loanapp_id = '';
         var interest = '';
-
         // User Checking for past loan applications start
         function Check() {
           var get_username = '<?php echo $this->session->userdata('username'); ?>';
           var get_name =  '<?php echo $this->session->userdata('name'); ?>';
           var user_id_no = '<?php echo $this->session->userdata('user_id')?>';
-
           $('#loanapp-cm-application').html('');
           $('#loan_selector_data').val('');
           $('#user_attachment_image').text('');
-          $('#cm_attachment_image').text('');
-
+          $('input[name=calc_loan_term]').val('-');
+          $('input[name=calc_loan_grossamt]').val('-');
+          $('input[name=calc_loan_monthlydeduc]').val('-');
           interest= '';
           loan = '';
           z = 0;
-
           $.ajax({
             type    : 'ajax',
             method  : 'get',
@@ -5303,7 +5302,6 @@
                 $('#loan_selector').attr('style', 'display: none');
                 $('#loanapp_user_id').attr('status', 'newUser');
                 var url = '<?php echo base_url(); ?>loan_applications/newUser';
-
                 $.ajax({
                   type    : 'ajax',
                   url     : url,
@@ -5316,18 +5314,14 @@
                       value: result[0].loan_name,
                       placeholder: result[0].loan_name
                     });
-
                     loan = $('#loan_type').val();
                     loan_id_no = $('#loan_type').attr('loan_id');
                     interest = $('#loan_type').attr('loan_interest');
                     user_id_no = '<?php echo $this->session->userdata('user_id'); ?>';
-
                     $('#loan_selector_data').val(loan_id_no);
-
                     getLoanTerm(loan_id_no);
                     getLoanAmount(loan_id_no);
                     generateLoanAppId(user_id_no, loan_id_no);
-
                     $.ajax({
                       type: 'ajax',
                       method: 'get',
@@ -5337,15 +5331,13 @@
                       dataType: 'json',
                       success: function(data) {
                         var user_data_sc = data[0].total_share_capital * 2;
-
-                        $('#loan-amount').val(user_data_sc.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                        $('#loan-amount').val(Math.round(user_data_sc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                       }, error: function() {
                         alert('Error cannot find user share capital');
                       }
                     });
-
+                    checkLoanAmount();
                     passInterest(interest);
-
                     agik(interest);
                   }, error: function() {
                     alert('New User function returned false');
@@ -5355,7 +5347,6 @@
                 $('#loan_type').attr('style', 'display: none');
                 $('#loan_selector').attr('style', 'display: block');
                 $('#loanapp_user_id').attr('status', 'oldUser');
-
                 $.ajax({
                   type    : 'ajax',
                   method  : 'get',
@@ -5366,11 +5357,9 @@
                   success: function(query) {
                     var i;
                     var test = [];
-
                     for(i=0;i<query.length;i++) {
                       test.push(query[i].loan_applied);
                     }
-
                     $.ajax({
                       type: 'ajax',
                       method: 'get',
@@ -5381,13 +5370,13 @@
                       success: function(result) {
                         var loan_type_list = '<option value="" disabled selected hidden>Select loan type..</option>';
                         var i;
-
                         for(i=0; i<result.length; i++ ) {
                             loan_type_list += '<option class="loanOptions" loan_id="'+ result[i].id +'" loan_interest="' + result[i].loan_interest + '" value="'+ result[i].loan_name +'" max_amt="'+result[i].loan_max_amt+'">'+ result[i].loan_name +'</option>'
                         }
-
                         $('#loan_selector').html(loan_type_list);
-
+                        $('#loan-amount').attr('disabled', true);
+                        $('#loan_term').attr('disabled', true);
+                        $('#user_attachment').attr('disabled', true);
                         $('#loan_selector').change(function() {
                           $('#calc_loan_term').attr('placeholder', '');
                           $('#calc_loan_grossamt').attr('placeholder', '');
@@ -5398,16 +5387,14 @@
                           interest = $('#loan_selector').find(':selected').attr('loan_interest');
                           loan_id_no = $('#loan_selector').find(':selected').attr('loan_id');
                           user_id_no = '<?php echo $this->session->userdata('user_id'); ?>';
-
-
+                          $('#loan-amount').removeAttr('disabled');
+                          $('#loan_term').removeAttr('disabled');
+                          $('#user_attachment').removeAttr('disabled');
                           getLoanTerm(loan_id_no);
                           getLoanAmount(loan_id_no);
                           generateLoanAppId(user_id_no, loan_id_no);
-
                           $('#loan_selector_data').val(loan_id_no);
-
                           $('#loan-amount').val('');
-
                           $.ajax({
                             type: 'ajax',
                             method: 'get',
@@ -5418,30 +5405,23 @@
                             success: function(data) {
                               var sharecap = data[0].total_share_capital;
                               sharecap = sharecap * 3;
-                              if(sharecap < max_amt){
-                                var loanable = sharecap;
-                              } else {
-                                loanable = max_amt;
-                              }
-                              $('#loanapp_alerts').html('<p class="alert bg-info alert-dismissable fade show" role="alert"><a class="h7 text-white">Tip: The max loanable amount of '+name+' is &#8369;'+Math.round(max_amt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. Your total share capital is &#8369;'+Math.round(sharecap).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. <br>You can only loan a MAX amount of &#8369;'+Math.round(loanable).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. Thank you!</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" style="position: relative">&times;</span></button></p>');
-
-                            agik(interest);
+                              $('#loanapp_alerts').html('<p class="alert bg-info alert-dismissable fade show" role="alert"><a class="h7 text-white">Tip: The max loanable amount of '+name+' is &#8369;'+Math.round(max_amt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. Your total share capital is &#8369;'+Math.round(sharecap).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. <br>You can only loan a MAX amount of &#8369;'+Math.round(max_amt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. Thank you!</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" style="position: relative">&times;</span></button></p>');
+                                $('#loan-amount').val(Math.round(sharecap).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));   
+                                agik(interest);
                             }, error: function(data) {
                               alert('Error cannot find user share capital');
                             }
                           });
-
                           passInterest(interest);
-
                           agik(interest);
-
                           $('#loanapp-cm-application').html('');
+                        
+                          checkLoanAmount();
                         });
                       }, error: function() {
                         alert('Old User function returned false');
                       }
                     });
-
                   }, error: function(query) {
                     alert(query);
                     alert('Error on Check Function');
@@ -5455,12 +5435,9 @@
           });
         }
         // user checking for past loan  applications 
-
-
         //loan amount function start
         function getLoanAmount(data) {
           var url = '<?php echo base_url(); ?>loan_applications/getLoanAmount';
-
           $.ajax({
             type    : 'ajax',
             method  : 'get',
@@ -5470,7 +5447,6 @@
             dataType: 'json',
             success: function(result) {
               max_comakers = result[0].loan_max_amt;
-
               $('#loan-amount').attr({
                 max_amount: max_comakers
               });
@@ -5480,11 +5456,9 @@
           });
         } 
         //loan amount function end 
-
         // generate loan app id start : uncomplete
         function generateLoanAppId(user_id, loan_id){
           loanapp_id = user_id +  loan_id;
-
           $.ajax({
             type: 'ajax',
             data: {loanapp_id: loanapp_id},
@@ -5508,67 +5482,21 @@
           });
         }
         // generate loan app id end
-
-
         // amount and co maker dependency start
-        if(($('#loan_amount').val() != '') || ($('#loan_amount').val() != 0)) {
-            loanapp_amt = $(this).val();
-
-            var cm = '';
-
-            var store = max_comakers - loanapp_amt;
-
-            if((loanapp_amt != '') || (loanapp_amt != 0)){
-              if(store >= 0) {
-                var store = '';
-                var z;
-
-                 $('#loanapp_alerts').html(store);
-
-                 if((loanapp_amt <= max_comakers) && (loanapp_amt >= 100000)) 
-                  {
-                        a = 3;
-                  }
-                  else if((loanapp_amt <=  99999) && (loanapp_amt >= 0)) 
-                  {
-                        a = 2;
-                  }
-
-                for(z = 1; z <= a; z++){
-                  cm += '<div class="form-group">'+ '<input type="hidden" name="user_username'+ z +'" id="user_username'+ z +'" value="">' +'<input type="text" autocomplete="off" user-username="user_username'+ z +'" cmlist="cmList' + z + ' " class="form-control dropdown-toggle" data-toggle="dropdown" placeholder="Input Co-Maker'+ z +' Name" name="co-maker'+ z +'" id="co-maker'+ z +'" cmk-uname=""><div class="invalid-feedback" id="co-makerinvalid'+ z +'"></div><div class="dropdown-menu cmList' + z + '"></div></div>';
-                }
-
-                CMSearch(z);
-                getLoanTerm(loanapp_amt);
-
-                $('#loanapp-cm-application').html(cm);
-                $('#comakerCount').val(z-1);
-              } else {
-                 var store = '<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Invalid input! Please try again.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>';
-
-                 $('#loanapp_alerts').html(store);
-              }
-            } else {
-                cm = '';
-
-               $('#loanapp-cm-application').html(cm);
+        function checkLoanAmount() {
+            loanapp_amt = Number($('#loan-amount').val().replace(/[^0-9\.]+/g,""));
+            if(loanapp_amt == 0) {
+              $('#loan-amount').val('');
             }
-        }
-
-        $('#loan-amount').keyup(function() {
-          loanapp_amt = $(this).val();
-
-          var cm = '';
-
-          var store = max_comakers - loanapp_amt;
-
-          if((loanapp_amt != '') || (loanapp_amt != 0)){
+            var cm = '';
+            var store = max_comakers - loanapp_amt;
             if(store >= 0) {
               var store = '';
               var z;
-
-               $('#loanapp_alerts').html(store);
-
+                
+                $('#loan-amount').removeClass('is-invalid');
+                $('#loan_amount_invalid').text('');
+                $('#loanapp_alerts').html(store);
                if((loanapp_amt <= max_comakers) && (loanapp_amt >= 100000)) 
                 {
                       a = 3;
@@ -5577,56 +5505,91 @@
                 {
                       a = 2;
                 }
-
               for(z = 1; z <= a; z++){
                 cm += '<div class="form-group">'+ '<input type="hidden" name="user_username'+ z +'" id="user_username'+ z +'" value="">' +'<input type="text" autocomplete="off" user-username="user_username'+ z +'" cmlist="cmList' + z + ' " class="form-control dropdown-toggle" data-toggle="dropdown" placeholder="Input Co-Maker'+ z +' Name" name="co-maker'+ z +'" id="co-maker'+ z +'" cmk-uname=""><div class="invalid-feedback" id="co-makerinvalid'+ z +'"></div><div class="dropdown-menu cmList' + z + '"></div></div>';
               }
-
               CMSearch(z);
               getLoanTerm(loanapp_amt);
-
+              // not working 
               $('#loanapp-cm-application').html(cm);
               $('#comakerCount').val(z-1);
             } else {
-               var store = '<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Please select your desired loan first.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>';
-
+               $('#loan-amount').addClass('is-invalid');
+               $('#loan_amount_invalid').text('Please change the Loan Amount you Entered!');
+               var store = '<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Invalid input! Please try again.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>';
+               $('#loanapp_alerts').html(store);
+            }
+        }
+        $('input[name=loan-amount]').keyup(function(){
+          $(this).val(function(index, value) {
+            return value
+            .replace(/\D/g, "")
+            .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+            ;
+          });
+        });
+        $('#loan-amount').keyup(function() {
+          loanapp_amt = Number($(this).val().replace(/[^0-9\.]+/g,""));
+          if(loanapp_amt == 0) {
+            $('#loan-amount').val('');
+          }
+          var cm = '';
+          var store = max_comakers - loanapp_amt;
+          if((loanapp_amt != '') || (loanapp_amt != 0)){
+            if(store >= 0) {
+              var store = '';
+              var z;
+               $('#loan-amount').removeClass('is-invalid');
+               $('#loan_amount_invalid').text('');
+               $('#loanapp_alerts').html(store);
+               if((loanapp_amt <= max_comakers) && (loanapp_amt >= 100000)) 
+                {
+                      a = 3;
+                }
+                else if((loanapp_amt <=  99999) && (loanapp_amt >= 0)) 
+                {
+                      a = 2;
+                }
+              for(z = 1; z <= a; z++){
+                cm += '<div class="form-group">'+ '<input type="hidden" name="user_username'+ z +'" id="user_username'+ z +'" value="">' +'<input type="text" autocomplete="off" user-username="user_username'+ z +'" cmlist="cmList' + z + ' " class="form-control dropdown-toggle" data-toggle="dropdown" placeholder="Input Co-Maker'+ z +' Name" name="co-maker'+ z +'" id="co-maker'+ z +'" cmk-uname=""><div class="invalid-feedback" id="co-makerinvalid'+ z +'"></div><div class="dropdown-menu cmList' + z + '"></div></div>';
+              }
+              CMSearch(z);
+              getLoanTerm(loanapp_amt);
+              $('#loanapp-cm-application').html(cm);
+              $('#comakerCount').val(z-1);
+            } else {
+              $('#loan-amount').addClass('is-invalid');
+              $('#loan_amount_invalid').text('Please change the Loan Amount you Entered!');
+               var store = '<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">The Loan Amount Entered exceeded the Maximum Amount for that Type of Loan.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>';
                $('#loanapp_alerts').html(store);
             }
           } else {
               cm = '';
-
              $('#loanapp-cm-application').html(cm);
           }
         });
         // amount and co maker dependecy end
-
-
         // Application loan terms start 
         function getLoanTerm(data) {
           terms = '<option value="" disabled selected hidden>Select Loan Term..</option>';
-
           if (data <= 99999) {
              for(var i=1; i <= 24; i++) {
                 terms += '<option value="'+ i +'">'+ i +' month/s</option>';
               }
-
               $('#loan_term').html(terms);
           } else if(data >= 100000) {
              for(var i=1; i <= 36; i++) {
                 terms += '<option value="'+ i +'">'+ i +' month/s</option>';
               }
-
               $('#loan_term').html(terms);
           }
         }
         // Application loan terms end
-
          // upload start
         $('#loanAppForm').on('change', '#user_attachment', function() {
           $('#user_attachment_image').text($('#user_attachment')[0].files[0].name);
         });      
         // upload end
-
         // comaker on search dropdown start
         function CMSearch(z) {
           var y =  z-1;
@@ -5641,18 +5604,15 @@
           var cmk2 = '';
           var cmk3 = '';
           var cmk4 = '';
-
           for(x = 1; x <= y; x++){            
             $('#loanapp-cm-application').on('keyup','#co-maker'+ x, function() {
               data_val = $(this).val();
               data_id = $(this).attr('cmlist');
               data = $(this).attr('id');
               data2 = $(this).attr('user-username');
-
               cmk1 = $('#co-maker1').attr('cmk-uname');
               cmk2 = $('#co-maker2').attr('cmk-uname');
               cmk3 = $('#co-maker3').attr('cmk-uname');
-
              if(data_val != '') 
              {               
                 searchCoMaker(data_val, data_id, cmk1, cmk2, cmk3); 
@@ -5660,64 +5620,23 @@
              {
                 searchCoMaker();
              }
-
               $(this).click(function() {
                 data = $(this).attr('id');
                 data2 = $(this).attr('user-username');        
               });
-
               $('.cm_user').click(function() {
                 clicked_data1 = $(this).attr('value');
                 clicked_data2 = $(this).attr('User-uname');
-
                 $('#'+ data).val(clicked_data1);
                 $('#'+ data).attr('cmk-uname', clicked_data2);
                 $('#'+ data2).val(clicked_data2);
               });
             });
           }
-
         }
-
         function searchCoMaker(query, id, cmk1, cmk2, cmk3, cmk4) {
             var url = '<?php echo base_url(); ?>loan_applications/searchCoMaker';
             get_username = '<?php echo $this->session->userdata('user_id'); ?>';
-            var test = [];
-            var userlimit = [];
-
-            $.ajax({
-              type: 'ajax',
-              url: '<?php echo base_url(); ?>loan_applications/fetchAllMembers',
-              async: false,
-              dataType: 'json',
-              success: function(data) {
-                 for(var i=0; i < data.length; i++) {
-                    test.push(data[i].id);
-                 }
-              }, error: function() {
-                alert('Error found fetching all members');
-              }
-            });
-
-            // alert(test);
-
-            // $.ajax({
-            //   type: 'ajax',
-            //   method: 'get',
-            //   url: '<?php echo base_url(); ?>loan_applications/MemberLimit',
-            //   data: {memberlimit: test},
-            //   async: false,
-            //   dataType: 'json',
-            //   success: function(data) {
-            //     for(var i=0; i < data.length; i++) {
-            //       userlimit.push(data[i].member_id);
-            //     }
-            //   }, error: function() {
-            //     alert('Error on Member Limits');
-            //   }
-            // });
-
-            // alert(userlimit);
  
           $.ajax({
             type: 'ajax',
@@ -5729,20 +5648,17 @@
             success: function(data) {
                 var row = '';
                 var i;
-
                 if(data.length > 0) {  
                   for (i=0; i < data.length; i++) {
                     row += '<a role="button" class="dropdown-item w-100 cm_user" value="' + data[i].name + '" User-uname="' + 
-        data[i].id + '">' 
+        data[i].id + '">'  
                           + '<h5>' + data[i].name + '</h5>' 
                           + '<p>' + data[i].username + '</p>'
                           +'</a>'; 
                   }
-
                   $('#loanapp-cm-application').find('.' + id).html(row);
                 } else {
                   row = '<a class="list-group-item list-group-item-action"><h5>No Result Found</h5><p>No User Exist</p></a>';
-
                   $('#loanapp-cm-application').find('.' + id).html(row);
                 }
             }, error: function() {
@@ -5751,36 +5667,29 @@
           });
         }
         // comaker on search dropdown end
-
         // apply loan side calculator
         function passInterest(interest) {
           $('#loan_term').change(function(){
             $('input[name="calc_loan_term"]').val($('#loan_term').val() + ' month/s');
             agik(interest);
           });
-
-
           $('#loan-amount').keyup(function(){
             agik(interest);
           });
         }
-
         function agik(interest){
           var calcInterest;
           var calcTerm = $('#loan_term').val();
-          var calcAmount = $('#loan-amount').val();
+          var calcAmount =  Number($('#loan-amount').val().replace(/[^0-9\.]+/g,""));
           var max_amount = $('#loan-amount').attr('max_amount');
           calcInterest = interest/12;
-
           calcGrossAmt = calcInterest * calcTerm * Number(calcAmount);
-
           var calcTotal =  Number(calcAmount) + Number(calcGrossAmt);
-
           $('input[name=calc_loan_grossamt]').val(Math.round(calcTotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
           $('input[name=calc_loan_monthlydeduc]').val(Math.round(calcTotal / calcTerm).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
         }
-
         // insert loan data to db start
+          var loanInterests = '';
          $('#loanapp_submit').click(function() {
           var data = loan;
           var cmCount = $('#comakerCount').val();
@@ -5789,14 +5698,12 @@
           var tableBody = '';
           var returnLoanCms = '';
           var loanType = '';
-          var loanInterest = '';
           var loanTerm = $('#loan_term').val();
-          var loanAmount = $('#loan-amount').val();
+          var loanAmount = Number($('#loan-amount').val().replace(/[^0-9\.]+/g,""));
           var max_amount = $('#loan-amount').attr('max_amount');
-
           if($('#loanapp_user_id').attr('status') == 'newUser') {
             loanType = $('#loan_type').val();
-            loanInterest = $('#loan_type').attr('loan_interest');
+            loanInterests = $('#loan_type').attr('loan_interest');
             if($('#loan_term').val() == null) {
               $('#loan_term').addClass('is-invalid');
               $('#loan_term_invalid').html("Please select your loan's term.");
@@ -5818,12 +5725,20 @@
                   count += '4';
                   $('#user_attachment').removeClass('is-invalid');
                   $('#user_attachment_invalid').text('');
+                  if (loanAmount > max_amount) {
+                      $('#loan-amount').addClass('is-invalid');
+                      $('#loan_amount_invalid').text('Please change the Loan Amount you Entered!');
+                    } else {
+                      count += '5';
+                      $('#loan-amount').removeClass('is-invalid');
+                      $('#loan_amount_invalid').text('');
+                    }
                 } 
               }
             }
           } else {
             loanType = $('#loan_selector').val();
-            loanInterest = $('.loanOptions:selected').attr('loan_interest');
+            loanInterests = $('.loanOptions:selected').attr('loan_interest');
             if($('#loan_selector_data').val() == null) {
               $('#loan_selector').addClass('is-invalid');
               $('#loan_selector_invalid').html('Please select your desired loan.');
@@ -5852,13 +5767,20 @@
                     count += '4';
                     $('#user_attachment').removeClass('is-invalid');
                     $('#user_attachment_invalid').text('');
+                    if (loanAmount > max_amount) {
+                      $('#loan-amount').addClass('is-invalid');
+                      $('#loan_amount_invalid').text('Please change the Loan Amount you Entered!');
+                    } else {
+                      count += '5';
+                      $('#loan-amount').removeClass('is-invalid');
+                      $('#loan_amount_invalid').text('');
+                    }
                   } 
                 }
               }
             }
           }
           
-
           $('#loan_selector').change(function() {
             if($('#loan_selector_data').val() != null) {
               $('#loan_selector').removeClass('is-invalid');
@@ -5868,7 +5790,6 @@
               $('#loan_selector_invalid').html('Please select your desired loan.');
             }
           });
-
           $('#loan_term').change(function() {
             if($(this).val() != null) {
               $('#loan_term').removeClass('is-invalid');
@@ -5878,7 +5799,6 @@
               $('#loan_term_invalid').html("Please select your loan's term.");
             }
           });
-
           $('#loan-amount').keyup(function() {
             if($(this).val() != '') {
               $('#loan-amount').removeClass('is-invalid');
@@ -5888,16 +5808,14 @@
               $('#loan_amount_invalid').html('Please type your desired loan amount.');
             }
           });
-
-          if ($('#user_attachment').get(0).files.length === 0) {
+          if($('#user_attachment').get(0).files.length === 0) {
             $('#user_attachment').addClass('is-invalid');
             $('#user_attachment_invalid').html('No files selected! Please kindly attach your payslip.');
           } else {
              $('#user_attachment').removeClass('is-invalid');
             $('#user_attachment_invalid').text('');
           }          
-
-          if(count == '1234') {
+          if(count == '12345') {
             for(var i = 1; i <= cmCount; i++) {
               if($('#co-maker'+i).val() == ''){
                 $('#co-maker'+i).addClass('is-invalid');
@@ -5908,7 +5826,6 @@
                 cms += i;
               } 
             }
-
           if(cmCount == 1) {
             returnLoanCms = "Your co-maker is <span class='font-weight-bold'>" +$('#co-maker1').val()+ "</span>.";
           } else if(cmCount == 2) {
@@ -5918,51 +5835,79 @@
           } else {
             returnLoanCms = "Your co-makers are <span class='font-weight-bold'>" +$('#co-maker1').val()+ "</span>, <span class='font-weight-bold'>" +$('#co-maker2').val()+ "</span>, <span class='font-weight-bold'>" +$('#co-maker3').val()+ "</span> and <span class='font-weight-bold'>" +$('#co-maker4').val()+ "</span>.";
           }
-
           if(cmCount == cms.length) {
+            var typeLoaned = $('#loan_selector_data').val();
+            var total_deductions = 0; 
+            $.ajax({
+              type: 'ajax',
+              method: 'get',
+              url: '<?php echo base_url();?>loan_applications/getLoanDeductions',
+              data: {loan_type: typeLoaned},
+              async: false,
+              dataType: 'json',
+              success: function(data) {
+                var loan_deduc_name = '';
+                var loan_deduc_amount = '';         
+                for(var i=0; i < data.length; i++) {
+                  if(data[i].deduc_type == 'percentage'){
+                    var amount = '';
+                    
+                    amount = data[i].deduc_val / 100 ;
+                    calc_amount = Number(loanAmount) * amount;
+                    
+                    loan_deduc_name += '<span>'+ data[i].deduc_name +' '+ Number(data[i].deduc_val).toFixed(0) +'%: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(calc_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></span><br>';
+                  } else if(data[i].deduc_type == 'amount'){
+                    var amount = data[i].deduc_val;
+                    loan_deduc_name +='<span>'+ data[i].deduc_name + ': <span class="font-weight-bold float-right ml-auto">&#8369;'+ Math.round(amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</span></span><br>';
+                  }
+                }
+                $('#loan_type_deductions').html(loan_deduc_name);
+              }, error: function() {
+                alert('Error on finding deductions for the type of loan');
+              }
+            });
             var loanTerm = $('#loan_term').val();
-            var interest = loanInterest / 12;
+            var interest = loanInterests / 12;
             var grossAmt = interest * loanTerm * Number(loanAmount) ;
             var calcTotal =  Number(loanAmount) + Number(calcGrossAmt);
             var monthlyDeduc = calcTotal/ loanTerm;
             var balance = calcTotal - monthlyDeduc;
-            var RetentionFee = 0;
+            // var RetentionFee = 0;
             var OutstandingBal = 0;
-            var servFee = loanAmount * 0.01; 
-            var loanNetAmt = loanAmount - servFee;
-
+            // var servFee = loanAmount * 0.01; 
+            var loanNetAmt = loanAmount;
             var loanDebitTotal = Number(loanAmount)+ Number(grossAmt);
-
-            var loanCreditTotal = grossAmt + RetentionFee + servFee + OutstandingBal + loanNetAmt;
-
+            var loanCreditTotal = grossAmt + total_deductions + OutstandingBal + loanNetAmt;
             for(var i = 1; i <= loanTerm; i++) {
               var int = interest / loanTerm;
               var bal = monthlyDeduc * (i-2);
               bal = balance - bal;
               tableBody +=  '<tr>' +
                               '<th scope="row">' + i + '</th>' +
-                              '<td>&#8369;' + grossAmt.toFixed(0) + 'pesos</td>' +
-                              '<td>&#8369;' + monthlyDeduc.toFixed(0) + '</td>' +
-                              '<td>&#8369;' + bal.toFixed(0) + '</td>' +
+                              '<td>&#8369;' + Math.round(grossAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                              '<td>&#8369;' + Math.round(monthlyDeduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                              '<td>&#8369;' + Math.round(bal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                             '</tr>';
             }
-
             $('#calcBody').html(tableBody);
-            $('#loanType').html('<span class="font-weight-bold">' + loanType + '</span>');
-            $('#loanTerm').html('<span class="font-weight-bold">' + loanTerm + ' months</span>');
-            $('#loanAmt').html('<span class="font-weight-bold">' + Number(loanAmount).toFixed(2) + '</span>');
-            $('#loanInt').html('<span class="font-weight-bold">' + grossAmt.toFixed(2) + '</span>');
-            $('#loanDefIntInc').html('<span class="font-weight-bold">' + grossAmt.toFixed(2) + '</span>');
-            $('#loanGross').html('<span class="font-weight-bold">' + calcTotal.toFixed(2) + '</span>');
-            $('#loanMoDed').html('<span class="font-weight-bold">' + monthlyDeduc.toFixed(0) + '</span>');
-            $('#loanOutstandingBal').html('<span class="font-weight-bold">' + OutstandingBal + '</span>');
-            $('#loanRetensionFee').html('<span class="font-weight-bold">' + RetentionFee + '</span>');
-            $('#loanServiceFee').html('<span class="font-weight-bold">' + servFee.toFixed(2) + '</span>');
-            $('#loanCiB').html('<span class="font-weight-bold">' + loanNetAmt.toFixed(2) + '</span>');
-            $('#loanNetAmt').html('<span class="font-weight-bold">' + loanNetAmt.toFixed(2) + '</span>');
-            $('#debitTotal').html('<span class="font-weight-bold">' + loanDebitTotal.toFixed(2) + '</span>');
-            $('#creditTotal').html('<span class="font-weight-bold">' + loanCreditTotal.toFixed(2) + '</span>');
-
+            $('#loanType').html('Type of Loan: <span class="font-weight-bold float-right ml-auto">' + loanType + '</span>');
+            $('#loanTerm').html('Term of Loan: <span class="font-weight-bold float-right ml-auto">' + loanTerm + ' months</span>');
+            $('#loanAmt').html('Amount of Loan: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(loanAmount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
+            $('#loanInt').html('Loan Interest: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(grossAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
+            $('#loanGross').html('Gross Loan: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(calcTotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
+            $('#loanMoDed').html('Monthly Amortizations: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(monthlyDeduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
+            // $('#loanType').html('<span class="font-weight-bold">' + loanType + '</span>');
+            // $('#loanTerm').html('<span class="font-weight-bold">' + loanTerm + ' months</span>');
+            // $('#loanAmt').html('<span class="font-weight-bold">' + Number(loanAmount).toFixed(2) + '</span>');
+            // $('#loanInt').html('<span class="font-weight-bold">' + grossAmt.toFixed(2) + '</span>');
+            // $('#loanDefIntInc').html('<span class="font-weight-bold">' + grossAmt.toFixed(2) + '</span>');
+            // $('#loanGross').html('<span class="font-weight-bold">' + calcTotal.toFixed(2) + '</span>');
+            // $('#loanMoDed').html('<span class="font-weight-bold">' + monthlyDeduc.toFixed(0) + '</span>');
+            // $('#loanOutstandingBal').html('<span class="font-weight-bold">' + OutstandingBal + '</span>');
+            // $('#loanCiB').html('<span class="font-weight-bold">' + loanNetAmt.toFixed(2) + '</span>');
+            // $('#loanNetAmt').html('<span class="font-weight-bold">' + loanNetAmt.toFixed(2) + '</span>');
+            // $('#debitTotal').html('<span class="font-weight-bold">' + loanDebitTotal.toFixed(2) + '</span>');
+            // $('#creditTotal').html('<span class="font-weight-bold">' + loanCreditTotal.toFixed(2) + '</span>');
             $('#loanCms').html(returnLoanCms);
             $('#loanAppCalculations').modal('show');
           } else {
@@ -5972,11 +5917,19 @@
           } else {
             $('#loanapp_alerts').html('<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Notice, please make sure all fields and attachment are filled-out before submitting.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>');
           }   
-        });              
+        });   
 
         $('#submitLoan').click(function(){
+          var loanTerm = $('#loan_term').val();
+          var loanAmount = Number($('#loan-amount').val().replace(/[^0-9\.]+/g,""));
+          var interest = loanInterests / 12;
+          var grossAmt = interest * loanTerm * Number(loanAmount) ;
+          var calcTotal =  Number(loanAmount) + Number(calcGrossAmt);
+          var monthlyDeduc = calcTotal/ loanTerm;
           var newFormData = new FormData($('#loanAppForm')[0]);
-
+          newFormData.set('loan-amount', loanAmount);
+          newFormData.append('loan_int', grossAmt.toFixed(0));
+          newFormData.append('monthly_deduc', monthlyDeduc.toFixed(0));
           $.ajax({
             type:     'ajax',
             method:   'post',
@@ -5991,7 +5944,6 @@
             success: function(data) {
               if (data == true) {
                 var store = '<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, wait for further updates about your application.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>';
-
                 $('#loanapp_alerts').html(store);
                 $('#loanAppForm')[0].reset();
                 Check();
@@ -6004,7 +5956,7 @@
             }
           });
           $('#loanAppCalculations').modal('hide');
-        });          
+        });  
         // insert loan data to db end
 
         // comakers tab start
@@ -6126,14 +6078,55 @@
                     }
 
                     var cm_loandata_head = '<span class="font-weight-bold">Loan Application Details</span>';
-                    var cm_loandata_body = '<div class="row d-flex">' + 
-                                          '<div class="p-3"><img class="rounded-circle member-icon d-block mx-auto m-2" src="<?php echo base_url(); ?>assets/img/profile_img/' + result[0].user_img + '?>"><h6 class="text-center d-block">'+ result[0].name +'</h6><small class="text-muted text-center d-block">'+ result[0].username +'</small><small class="text-muted text-center d-block">'+ result[0].email +'</small></div>' + 
-                                          '<div class="d-block p-3"><p><span class="font-weight-bold">Loan Application ID: </span><span class="text-muted">'+ result[0].loanapp_id +'</span></p>'+
-                                          '<p><span class="font-weight-bold">Loan Type: </span><span class="text-muted">'+ result[0].loan_name +'</span></p>'+
-                                          '<p><span class="font-weight-bold">Loan Term: </span><span class="text-muted">'+ result[0].loan_term +'</span></p>'+
-                                          '<p><span class="font-weight-bold">Amount Loaned: </span><span class="text-muted">'+ result[0].loan_amount +'</span></p></div>' +
-                                          '<div class="d-block p-3" id="comaker-count"></div></form>'+
-                                          '</div>';
+                     var cm_loandata_body = '<div class="row">' + 
+                                          '<div class="d-flex p-3 mx-5">'+
+                                            '<img id="loanAppFormImg" class="rounded w-25 h-100 ml-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + result[0].user_img + '?>">'+
+                                            '<div class="d-block mx-3">' +
+                                              '<h5 class="text-left d-block">'+ result[0].name +'</h5>'+
+                                              '<h6 class="text-muted text-left d-block">'+ result[0].username +'</h6>'+
+                                              '<h6 class="text-primary text-left d-block">'+ result[0].email  +'</h6>'+
+                                              '<h6 class="text-muted text-left d-block">'+ result[0].contact_no+'</h6>'+
+                                              '<h6 class="text-muted text-left d-block">'+ result[0].address+' - '+ result[0].zipcode +'</h6>'+
+                                            '</div>'+
+                                          '</div>' + 
+                                          '<div class="d-block mx-auto p-3">' +
+                                            '<table class="table table-responsive-sm table-bordered table-md nowrap">' +
+                                              '<thead>'+
+                                                '<tr>' +
+                                                  '<th colspan="2" class="text-center">Information</th>'+
+                                                  '<th class="text-center">Co-Makers</th>' +
+                                                '</tr>' +
+                                              '</thead>'+
+                                              '<tbody>'+
+                                                '<tr>'+
+                                                  '<td>Loan Application ID:</td>' +
+                                                  '<td>'+ result[0].loanapp_id +'</td>' +
+                                                  '<td rowspan="6"><div class="d-block p-3" id="comaker-count"></div></td>'+
+                                                '</tr>'+
+                                                '<tr>'+
+                                                  '<td>Type of Loan: </td>' +
+                                                  '<td>'+ result[0].loan_name +'</td>' +
+                                                '</tr>'+
+                                                '<tr>'+
+                                                  '<td>Loan Term: </td>' +
+                                                  '<td>'+ result[0].loan_term +'</td>' +
+                                                '</tr>'+
+                                                '<tr>'+
+                                                  '<td>Amount Loaned: </td>' +
+                                                  '<td>'+ result[0].loan_amount +'</td>' +
+                                                '</tr>'+
+                                                '<tr>'+
+                                                  '<td>Interest on Loan: </td>' +
+                                                  '<td>'+ result[0].loan_int +'</td>' +
+                                                '</tr>'+
+                                                '<tr>'+
+                                                  '<td>Monthly Amortization: </td>' +
+                                                  '<td>'+ result[0].monthly_deduc +'</td>' +
+                                                '</tr>'+
+                                              '</tbody>'+
+                                            '</table>'
+                                          '</div>' +
+                                        '</div>';
 
                     $('#cmViewLoanAppModalTitle').html(cm_loandata_head);
                     $('#cmViewLoanAppModalBody').html(cm_loandata_body);
@@ -6170,7 +6163,6 @@
             var cm_id = $('#cm_id').val();
             var lapp_id = $('#loan_App_id').val(); 
 
-            alert(lapp_id + ', '+cm_id);
             $.ajax({
               type: 'ajax',
               method: 'get',
