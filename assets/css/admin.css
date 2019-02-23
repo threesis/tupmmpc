@@ -403,6 +403,23 @@ h2 {
 }
 
 
+/* Loading image */
+#loading {
+   z-index: 99;
+}
+
+#loading-image {
+  height: 100%;
+  width: 100%;
+  z-index: 100;
+  position: fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+
 
 
 

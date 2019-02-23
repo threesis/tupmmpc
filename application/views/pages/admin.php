@@ -36,6 +36,9 @@
   </head>
 
   <body id="page-top">
+    <div id="loading">
+      <img id="loading-image" src="<?php echo base_url() ?>assets/img/loader6.gif" alt="Loading..." />
+    </div>
     <?php foreach($user_image as $image) : ?>
     <!-- Navigation Bar -->
     <nav class="navbar fixed-top navbar-expand-sm navbar-light bg-white navbar-color">
@@ -1902,21 +1905,9 @@
 
                 
 
-              <!-- RECORDS AND COMAKERS TAB -->
-              <div class="tab-pane fade show" id="loanRecordsCoMakersTab" role="tabpanel" aria-labelledby="home-tab">
-                <div class="card-header shadow-sm">
-                  <ul class="nav nav-tabs card-header-tabs">
-                    <li class="ml-2 pb-4" style="min-height: 40px">
-                      <h2 class="card-title"><span id="loanRecordsText">Loan Records</span> <span id="comakersText">& Co-Makers</span></h2>
-                    </li>
-                    <li id="loanrecords-tab" class="nav-item ml-auto loan-apps">
-                      <a class="nav-link active" data-toggle="tab" href="#loanRecordsSubTab">Loan Records<span id="pendingNotif" class="badge badge-secondary ml-1"></span></a>
-                    </li>
-                    <li id="comakers-tab" class="nav-item loan-apps">
-                      <a class="nav-link" data-toggle="tab" href="#comakersSubTab">Co-Makers<span id="approvedNotif" class="badge badge-secondary ml-1"></span></a>
-                    </li>
-                  </ul>
-                </div>
+              <!-- RECORDS TAB -->
+              <div class="tab-pane fade show" id="loanRecordsTab" role="tabpanel" aria-labelledby="home-tab">
+                <h2 class="card-header">Loan Records</h2>
                   <div class="tab-content card-body card-body-mh">
                     <div id="loanAppMsg" class="no-padding"></div>
                     <div class="tab-pane active" id="loanRecordsSubTab">
@@ -1929,7 +1920,6 @@
                     <table id="loanRecordTbl" class="table table-striped table-hover table-responsive table-md text-nowrap">
                       <thead>
                         <tr>
-                          <th>#</th>
                           <th>Date</th>
                           <th>Name</th>
                           <th>Take Home Pay (&#8369;)</th>
@@ -1937,6 +1927,7 @@
                           <th>Gross Amount of Loan (&#8369;)</th>
                           <th>Monthly Amortization (&#8369;)</th>
                           <th>Term of Payments</th>
+                          <th>Remarks</th>
                         </tr>
                       </thead>
                       <tbody id="returnLoanRecords">
@@ -1990,10 +1981,9 @@
                             dataType: 'json',
                             success : function(data) {
                               var tbl, loanRecFoot, nameCount;
-                              var c = 0, totalLoanAmt = 0, totalGrossAmt = 0;
+                              var totalLoanAmt = 0, totalGrossAmt = 0;
                               if(data.length > 0) {
                                 for(var i = 0; i < data.length; i++) {
-                                  c++;
                                   var cm1 = data[i].comaker_1;
                                   var cm2 = data[i].comaker_2;
                                   var cm3 = data[i].comaker_3;
@@ -2018,7 +2008,6 @@
                                   grossAmt = Math.round(grossAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
                                 tbl +=  '<tr class="text-secondary">' +
-                                          '<td style="vertical-align: middle">' + c + '</td>' +
                                           '<td style="vertical-align: middle">' + myDate.toLocaleDateString("en-US") + '</td>' +
                                           '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
                                           '<td style="vertical-align: middle">' + takehomepay + '</td>' +
@@ -2026,15 +2015,16 @@
                                           '<td style="vertical-align: middle">' + grossAmt + '</td>' +
                                           '<td style="vertical-align: middle">' + monthlydeduc + '</td>' +
                                           '<td style="vertical-align: middle">' + data[i].loan_term + ' month/s</td>' +
+                                          '<td style="vertical-align: middle">' + data[i].status + '</td>' +
                                         '</tr>';                       
                                 }
                                 loanRecFoot =  '<tr>' +
+                                                  '<th>Total</th>' +
                                                   '<th>' + i + '</th>' +
-                                                  '<th></th>' +
-                                                  '<th></th>' +
                                                   '<th></th>' +
                                                   '<th>&#8369;' + Math.round(totalLoanAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
                                                   '<th>&#8369;' + Math.round(totalGrossAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
+                                                  '<th></th>' +
                                                   '<th></th>' +
                                                   '<th></th>' +
                                                 '</tr>'; 
@@ -2088,50 +2078,68 @@
                   </div>
                 </div>
 
-                <!-- CoMakers Part  -->
+                      <!-- CoMakers Part  -->
                 <div class="tab-pane fade show" id="comakersTab" role="tabpanel" aria-labelledby="home-tab">
-                  <div class="card-header">
-                    <ul class="nav nav-tabs card-header-tabs">
-                      <li class="ml-2 pb-4">
-                        <h2 class="card-title">
-                          <span>Co-Makers Application</span>
-                        </h2>
-                      </li>
-                      <li class="nav-item ml-auto">
-                        <a class="nav-link active" data-toggle="tab" href="#pending_cm_applications">Pending<span class="badge badge-danger badge-pill ml-2" id="cm_pending_badge"></span></a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="card-body" style="height: 70vh; overflow-y: auto;">
-                    <div class="tab-pane list-group active" id="pending_cm_applications">
-                      <div id="return_cm_applications">
-                        <!-- insert comakers application list group -->
-                      </div>
-                    </div>            
-                  </div>
-                </div>
+                  <div class="no-padding" id="coMakers_alerts"></div>
+                    <div class="card-header">
+                      <ul class="nav nav-tabs card-header-tabs">
+                        <li class="ml-2 pb-4">
+                          <h2 class="card-title">
+                            <span>Co-Makers Application</span>
+                          </h2>
+                        </li>
+                        <li class="nav-item ml-auto">
+                          <a class="nav-link active" data-toggle="tab" href="#pending_cm_applications">Pending<span class="badge badge-danger badge-pill ml-2" id="cm_pending_badge"></span></a>
+                        </li>
+                      </ul>
+                    </div>
+                    <div class="card-body" style="height: 70vh; overflow-y: auto;">
+                      <div class="tab-pane list-group active" id="pending_cm_applications">
+                        <div> 
+                          <table class="table table-striped table-hover table-responsive-md table-sm">
+                            <thead>
+                              <tr>
+                                <th>Loan Applicant Name</th>
+                                <th>Loan Type</th>
+                                <th></th>
+                              </tr>
+                            </thead>
 
-                <div class="modal fade" id="cmViewLoanAppModal" tabindex="-1" role="dialog">
-                  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h6 class="modal-title" id="cmViewLoanAppModalTitle"></h6>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
+                            <tbody id="return_cm_applications">
+                              
+                            </tbody>
+                          </table>
+
+                          <!-- insert comakers application list group -->
+                        </div>
+                      </div>            
+                    </div>
+                  </div>
+
+                  <div class="modal fade" id="cmViewLoanAppModal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h6 class="modal-title" id="cmViewLoanAppModalTitle"></h6>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        
+                        <div id="coMakersAttachment_alerts"></div>
+
+                        <div class="modal-body" >
+                          <div id="cmViewLoanAppModalBody"></div>                          
+                        </div>
+
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-outline-success submit_cm_approval">Approve</button>
+                          <button type="button" class="btn btn-outline-danger" id="cancel_cm_approval">Cancel</button>
+                        </div>
                       </div>
                       
-                      <div class="modal-body" id="cmViewLoanAppModalBody">
-                        
-                      </div>
-
-                      <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-success" id="submit_cm_attachment">Submit Attachment</button>
-                      </div>
-                    </div>
-                    
-                  </div>                  
-                </div>
+                    </div>                  
+                  </div>
                 <!-- end CoMakers Part -->
 
 
@@ -6672,7 +6680,7 @@
             $('#dashboardTab').addClass('active');
             $('#loans-tab, #loans-deduction, #loans-archive, #returnLatestDate, #add-loan, .edit-loan, .archive-loan').show();
             $('#members-tab, #adduser-perm2, #viewuser-perm4').show();
-            $('#records-tab, #loanrecords-tab, #comakers-tab').show();
+            $('#records-tab, #loanrecords-tab').show();
             break;
           }
         }
@@ -6740,5 +6748,11 @@
 
 
     <?php endforeach; ?>
+    <script>
+      $(document).ready(function(){
+        $('#loading').fadeOut("slow");
+        $('#loading').fadeOut(3000);
+      });
+    </script>
   </body>
 </html>
