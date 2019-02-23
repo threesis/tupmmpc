@@ -382,7 +382,7 @@ h2 {
   display: none;
 }
 
-#records-comakers-tab, #loanrecords-tab, #comakers-tab, #loanRecordsText, #comakersText, #loanRecordsTabText, #comakersTabText {
+#records-tab, #loanrecords-tab, #comakers-tab {
   display: none;
 }
 

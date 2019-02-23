@@ -97,7 +97,8 @@
                 <a class="list-group-item list-group-item-action" id="members-tab" data-toggle="list" href="#membersTab" role="tab" aria-controls="messages">Members<i class="fas fa-users mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="loanapps-tab" data-toggle="list" href="#loanAppTab" role="tab" aria-controls="settings"> Loan Applications<i class="fas fa-poll mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="myloanrecords-tab" data-toggle="list" href="#myloanrecordsTab" role="tab" aria-controls="messages">My Loan Records<i class="fas fa-folder-open mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
-                <a class="list-group-item list-group-item-action" id="records-comakers-tab" data-toggle="list" href="#loanRecordsCoMakersTab" role="tab" aria-controls="settings"><span id="loanRecordsTabText">Loan Records</span> <span id="comakersTabText">& Co-Makers</span><i class="fas fa-poll-h mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
+                <a class="list-group-item list-group-item-action" id="records-tab" data-toggle="list" href="#loanRecordsTab" role="tab" aria-controls="settings">Loan Records<i class="fas fa-poll-h mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
+                <a class="list-group-item list-group-item-action" id="comakers-tab" data-toggle="list" href="#comakersTab" role="tab" aria-controls="settings">Co-Makers<i class="fas fa-poll-h mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="sharecap-ledger-tab" data-toggle="list" href="#ledgerShareCapTab" role="tab" aria-controls="messages">Ledger & Share Capital<i class="fas fa-users mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="applyloan-tab" data-toggle="list" href="#applyLoanTab" role="tab" aria-controls="messages">Apply Loan<i class="far fa-file-alt mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="websettings-tab" data-toggle="list" href="#websiteSettings" role="tab" aria-controls="messages">Settings<i class="fas fa-cog mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
@@ -1419,21 +1420,9 @@
 
                 
 
-              <!-- RECORDS AND COMAKERS TAB -->
-              <div class="tab-pane fade show" id="loanRecordsCoMakersTab" role="tabpanel" aria-labelledby="home-tab">
-                <div class="card-header shadow-sm">
-                  <ul class="nav nav-tabs card-header-tabs">
-                    <li class="ml-2 pb-4" style="min-height: 40px">
-                      <h2 class="card-title"><span id="loanRecordsText">Loan Records</span> <span id="comakersText">& Co-Makers</span></h2>
-                    </li>
-                    <li id="loanrecords-tab" class="nav-item ml-auto loan-apps">
-                      <a class="nav-link active" data-toggle="tab" href="#loanRecordsSubTab">Loan Records<span id="pendingNotif" class="badge badge-secondary ml-1"></span></a>
-                    </li>
-                    <li id="comakers-tab" class="nav-item loan-apps">
-                      <a class="nav-link" data-toggle="tab" href="#comakersSubTab">Co-Makers<span id="approvedNotif" class="badge badge-secondary ml-1"></span></a>
-                    </li>
-                  </ul>
-                </div>
+              <!-- RECORDS TAB -->
+              <div class="tab-pane fade show" id="loanRecordsTab" role="tabpanel" aria-labelledby="home-tab">
+                <h2 class="card-header">Loan Records</h2>
                   <div class="tab-content card-body card-body-mh">
                     <div id="loanAppMsg" class="no-padding"></div>
                     <div class="tab-pane active" id="loanRecordsSubTab">
@@ -1596,10 +1585,17 @@
                       });
                     </script>
                     </div>
+                  </div>
+                  <div class="card-footer" style="min-height: 60px">
+                    <p class="card-text text-muted float-left mt-2"><em id="loanRecordsInfo"></em><em id="comakersInfo" style="display: none"></em></p>
+                    <div id="loanRecordsPaginate" class="float-right"></div>
+                    <div id="comakersPaginate" class="float-right" style="display: none"></div>
+                  </div>
+                </div>
 
-                    <div class="tab-pane" id="comakersSubTab">
                       <!-- CoMakers Part  -->
-                  <div class="tab-pane fade show" id="coMakersTab" role="tabpanel" aria-labelledby="home-tab">
+                <div class="tab-pane fade show" id="comakersTab" role="tabpanel" aria-labelledby="home-tab">
+                  <div class="no-padding" id="coMakers_alerts"></div>
                     <div class="card-header">
                       <ul class="nav nav-tabs card-header-tabs">
                         <li class="ml-2 pb-4">
@@ -1614,7 +1610,21 @@
                     </div>
                     <div class="card-body" style="height: 70vh; overflow-y: auto;">
                       <div class="tab-pane list-group active" id="pending_cm_applications">
-                        <div id="return_cm_applications">
+                        <div> 
+                          <table class="table table-striped table-hover table-responsive-md table-sm">
+                            <thead>
+                              <tr>
+                                <th>Loan Applicant Name</th>
+                                <th>Loan Type</th>
+                                <th></th>
+                              </tr>
+                            </thead>
+
+                            <tbody id="return_cm_applications">
+                              
+                            </tbody>
+                          </table>
+
                           <!-- insert comakers application list group -->
                         </div>
                       </div>            
@@ -1631,26 +1641,21 @@
                           </button>
                         </div>
                         
-                        <div class="modal-body" id="cmViewLoanAppModalBody">
-                          
+                        <div id="coMakersAttachment_alerts"></div>
+
+                        <div class="modal-body" >
+                          <div id="cmViewLoanAppModalBody"></div>                          
                         </div>
 
                         <div class="modal-footer">
-                          <button type="button" class="btn btn-outline-success" id="submit_cm_attachment">Submit Attachment</button>
+                          <button type="button" class="btn btn-outline-success submit_cm_approval">Approve</button>
+                          <button type="button" class="btn btn-outline-danger" id="cancel_cm_approval">Cancel</button>
                         </div>
                       </div>
                       
                     </div>                  
                   </div>
                 <!-- end CoMakers Part -->
-                    </div>
-                  </div>
-                  <div class="card-footer" style="min-height: 60px">
-                    <p class="card-text text-muted float-left mt-2"><em id="loanRecordsInfo"></em><em id="comakersInfo" style="display: none"></em></p>
-                    <div id="loanRecordsPaginate" class="float-right"></div>
-                    <div id="comakersPaginate" class="float-right" style="display: none"></div>
-                  </div>
-                </div>
 
 
                 <!-- Loan Application part -->
@@ -3555,20 +3560,18 @@
                   case '3':
                   $('.edit-loan').show();
                   $('#viewuser-perm4, #returnMemberLatestDate').show();
-                  $('#loanRecordsText, #loanRecordsTabText').show();
                   break;
                   case '4':
                   $('#returnLatestDate').show();
                   $('#view-ledgers').show();
                   break;
                   case '5':
-                  $('#loanRecordsText, #loanRecordsTabText').show();
+                  $('#loanRecordsText').show();
                   $('#view-ledgers, #update-ledgers, #update-share-capitals').show();
                   break;
                   case '6':
                   $('#add-loan, .edit-loan, .archive-loan').show();
                   $('#adduser-perm2, #viewuser-perm4').show();
-                  $('#loanRecordsText, #loanRecordsTabText, #comakersText, #comakersTabText').show();
                   break;
                 }
         }
@@ -6086,6 +6089,7 @@
             $('#loans-tab').show();
             $('#myloanrecords-tab').show();
             $('#applyloan-tab').show();
+            $('#loanrecords-tab, #comakers-tab').show();
             break;
             case '3':
             $('#creditDash').show();
@@ -6093,7 +6097,7 @@
             $('#loans-tab, #loans-deduction, #returnLatestDate, #add-loan, .edit-loan').show();
             $('#members-tab, #viewuser-perm4, #returnMemberLatestDate').show();
             $('#loanapps-tab').show();
-            $('#records-comakers-tab, #loanrecords-tab, #loanRecordsText, #loanRecordsTabText').show();
+            $('#records-tab, #loanrecords-tab').show();
             break;
             case '4':
             $('#treasurerDash').show();
@@ -6107,7 +6111,7 @@
             $('#dashboardTab').addClass('active');
             $('#loans-tab').show();
             $('#loanapps-tab').show();
-            $('#records-comakers-tab, #loanrecords-tab, #loanRecordsText, #loanRecordsTabText').show();
+            $('#records-tab, #loanrecords-tab').show();
             $('#sharecap-ledger-tab, #view-ledgers, #update-ledgers, #update-share-capitals').show();
             break;
             case '6':
@@ -6115,7 +6119,7 @@
             $('#dashboardTab').addClass('active');
             $('#loans-tab, #loans-deduction, #loans-archive, #returnLatestDate, #add-loan, .edit-loan, .archive-loan').show();
             $('#members-tab, #adduser-perm2, #viewuser-perm4').show();
-            $('#records-comakers-tab, #loanrecords-tab, #comakers-tab, #loanRecordsText, #loanRecordsTabText, #comakersText, #comakersTabText').show();
+            $('#records-tab, #loanrecords-tab, #comakers-tab').show();
             break;
           }
         }
