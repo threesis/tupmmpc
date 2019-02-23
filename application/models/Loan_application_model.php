@@ -73,8 +73,9 @@
 		{
 			$userSC = $this->input->get('member_id');
 
-			$data = "Select total_share_capital from share_capital where user_id = '$userSC' order by date_updated ASC limit 1";
-			$query = $this->db->query($data);
+			$this->db->order_by('date_updated', 'ASC limit 1');
+			$this->db->where('user_id', $userSC);
+			$query = $this->db->get('share_capital');
 
 			if ($query->num_rows() > 0) {
 				return $query->result();
@@ -274,20 +275,25 @@
 			}
 		}
 
-		public function cmUpdateAttachment($user_image) {
-			$id = $this->input->post('cm_id');
-			$lid = $this->input->post('loan_App_id');
+		public function cmUpdateAttachment() {
+			$id = $this->input->get('id');
+			$lid = $this->input->get('lid');
+			$approval = 'Approve';
+
+			$val1 = $this->db->query("SELECT comaker_1 as cm1 FROM loan_applications WHERE loanapp_id = $lid")->row()->{'cm1'};
+			$val2 = $this->db->query("SELECT comaker_2 as cm2 FROM loan_applications WHERE loanapp_id = $lid")->row()->{'cm2'};
+			$val3 = $this->db->query("SELECT comaker_3 as cm3 FROM loan_applications WHERE loanapp_id = $lid")->row()->{'cm3'};
 
 			$this->db->where('loanapp_id', $lid);
 
-			if($this->db->where('comaker_1', $id)) {
-				$this->db->set('cm_payslip_1', $user_image);
+			if($val1 == $id) {
+				$this->db->set('cm_payslip_1', $approval);
 			} 
-			else if($this->db->where('comaker_2', $id)) {
-				$this->db->set('cm_payslip_2', $user_image);
+			elseif($val2 == $id) {
+				$this->db->set('cm_payslip_2', $approval);
 			}
 			else {
-				$this->db->set('cm_payslip_3', $user_image);
+				$this->db->set('cm_payslip_3', $approval);
 			} 
 
 			$this->db->update('loan_applications'); 

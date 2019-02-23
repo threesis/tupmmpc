@@ -15,6 +15,4 @@
 			$result = $this->loan_model->getDisapprovedLoans();
 			echo json_encode($result);
 		}
-
-		
 	}
