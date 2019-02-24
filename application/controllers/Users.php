@@ -69,6 +69,11 @@
 			echo json_encode($result);				
 		}
 
+		public function viewVoucher() {		
+			$result = $this->user_model->viewVoucher();			
+			echo json_encode($result);				
+		}
+
 		public function getMyLoanRecords(){
 			$result = $this->user_model->getMyLoanRecords();
 			echo json_encode($result);

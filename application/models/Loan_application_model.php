@@ -186,13 +186,12 @@
 				return false;
 			}
 		}
-		public function getLoanDeductions() 
+		public function getLoanDeductions($loan) 
 		{
-			$loan_type = $this->input->get('loan_type');
-			$this->db->where('loan_type_name', $loan_type);
-			$query = $this->db->from('loan_type_deducs')->join('loan_types', 'loan_types.id=loan_type_deducs.loan_type_name')->join('loan_deductions', 'loan_deductions.deduc_id=loan_type_deducs.loan_deduc')->get();
+			$this->db->where('loan_type_name', $loan);
+			$query = $this->db->select('deduc_id, deduc_name, deduc_type, deduc_val')->from('loan_type_deducs')->join('loan_types', 'loan_types.id = loan_type_deducs.loan_type_name')->join('loan_deductions', 'loan_deductions.deduc_id = loan_type_deducs.loan_deduc')->get();
 			if($query->num_rows() > 0) {
-				return $query->result();
+				return $query;
 			} else {
 				return false;
 			}

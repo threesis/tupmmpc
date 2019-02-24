@@ -1467,7 +1467,7 @@
                     </div>
 
                     <div class="tab-pane list-group" id="active_loans">
-                      <table id="activeLoansTbl" class="table table-striped table-hover table-responsive nowrap">
+                      <table id="activeLoansTbl" class="table table-striped table-hover table-responsive table-md nowrap">
                         <thead>
                           <tr>
                             <th>#</th>
@@ -2089,14 +2089,14 @@
                           </h2>
                         </li>
                         <li class="nav-item ml-auto">
-                          <a class="nav-link active" data-toggle="tab" href="#pending_cm_applications">Pending<span class="badge badge-danger badge-pill ml-2" id="cm_pending_badge"></span></a>
+                          <a class="nav-link active" data-toggle="tab" href="#pending_cm_applications">Pending<span class="badge badge-secondary badge-pill ml-2" id="cm_pending_badge"></span></a>
                         </li>
                       </ul>
                     </div>
-                    <div class="card-body" style="height: 70vh; overflow-y: auto;">
+                    <div class="card-body card-body-mh">
                       <div class="tab-pane list-group active" id="pending_cm_applications">
                         <div> 
-                          <table class="table table-striped table-hover table-responsive-md table-sm">
+                          <table id="comakersTbl" class="table table-striped table-hover table-responsive-md table-sm">
                             <thead>
                               <tr>
                                 <th>Loan Applicant Name</th>
@@ -2114,10 +2114,13 @@
                         </div>
                       </div>            
                     </div>
+                    <div class="card-footer" style="min-height: 60px">
+                      <p class="text-muted float-left mt-2"><em id="comakersTblInfo"></em><div id="comakersTblPaginate" class="float-right"></div>
+                    </div>
                   </div>
 
                   <div class="modal fade" id="cmViewLoanAppModal" tabindex="-1" role="dialog">
-                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
                       <div class="modal-content">
                         <div class="modal-header">
                           <h6 class="modal-title" id="cmViewLoanAppModalTitle"></h6>
@@ -2128,13 +2131,13 @@
                         
                         <div id="coMakersAttachment_alerts"></div>
 
-                        <div class="modal-body" >
+                        <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
                           <div id="cmViewLoanAppModalBody"></div>                          
                         </div>
 
                         <div class="modal-footer">
-                          <button type="button" class="btn btn-outline-success submit_cm_approval">Approve</button>
-                          <button type="button" class="btn btn-outline-danger" id="cancel_cm_approval">Cancel</button>
+                          <button type="button" class="btn btn-outline-success btn-sm submit_cm_approval"><i class="far fa-check-circle"></i> Approve</button>
+                          <button type="button" class="btn btn-outline-danger btn-sm" id="cancel_cm_approval">Cancel</button>
                         </div>
                       </div>
                       
@@ -2291,6 +2294,35 @@
                 </div>
 
                 <!-- ALL MODAL UI ARE HERE -->
+                <div class="modal fade" id="viewVoucherModal" tabindex="-1" role="dialog" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h2 class="modal-title"></h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body" style="max-height: 400px; overflow-y: auto">
+                        <table id="viewVoucherTbl" class="table table-striped table-bordered table-hover table-responsive-sm table-sm text-nowrap">
+                          <thead style="display: none;">
+                            <tr>
+                              <th>My</th>
+                              <th>Loan</th>
+                              <th>Voucher</th>
+                            </tr>
+                          </thead>
+                          <tbody id="viewVoucherBody" style="font-size: 90%">
+                            
+                          </tbody>
+                        </table>
+                      </div>
+                      <div class="modal-footer">
+                        <div id="viewVoucherBtns"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <!-- Archive Loan Modal -->
                 <div class="modal fade" id="loanArchiveModal" tabindex="-1" role="dialog">
                   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -2456,7 +2488,6 @@
                           <span id="loanInt"></span><br>
                           <span id="loanGross"></span><br>
                           <span id="loanMoDed"></span><br>
-                          <div id="loan_type_deductions"></div>
                           <span id="loanOutstandingBal"></span><br>
 
                          <!--  <div class="table-responsive">
@@ -3186,10 +3217,14 @@
           });
         }
 
+          var allDeducs = [];
+          var allDeducAmt = [];
         $('#openLoanApp').on('click', '#voucherLoanAppBtn', function(){
           var id = $('#openLoanApp').attr('selectedid');
           var uname = $('#openLoanApp').attr('username');
           var name = $('#openLoanApp').attr('selectedname');
+          var deduc = '';
+          var APLid = '';
           var loan = '';
           var loanAmt = '';
           var loanTerm = '';
@@ -3203,7 +3238,7 @@
           var totalDebit = '';
           var totalCredit = '';
           var totalBalance = '';
-          var remarks = '';
+          var voucher = '';
           $.ajax({
             type    : 'ajax',
             method  : 'get',
@@ -3217,15 +3252,42 @@
               loanInterest = data[0][2];
               monthlyDeduc = data[0][3];
               cheque = data[0][4];
+              voucher = data[0][5];
               APLid = data[0][5].concat(new Date().getFullYear());
               loan = data[0][6];
-              dii = loanInterest * loanAmt;
+              dii = ((loanInterest / 12) * loanTerm) * loanAmt;
               serviceFee = 0.01 * loanAmt;
               retentionFee = 0.03 * loanAmt;
-              cashInBank = loanAmt - serviceFee;
               totalDebit = Number(loanAmt) + Number(dii);
-              totalCredit = Number(cashInBank) + Number(dii) + Number(serviceFee);
               totalBalance = loanAmt - monthlyDeduc;
+              var amt = 0, perc = 0;
+              for(var i = 0; i < data[1].length; i++){
+                if(data[1][i].deduc_type == 'percentage'){
+                  perc = data[1][i].deduc_val / 100;
+                  amt = loanAmt * perc;
+                  deduc += '<tr deducType="' + data[1][i].deduc_type + '">' +
+                              '<td colspan="2">' + data[1][i].deduc_name + '</td>' +
+                              '<td colspan="1">-</td>' +
+                              '<td colspan="1">&#8369;' + Math.round(amt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                            '</tr>';
+                  cashInBank = loanAmt - amt;
+                  totalCredit = Number(cashInBank) + Number(dii) + Number(amt);
+                  allDeducs.push(data[1][i].deduc_id);
+                  allDeducAmt.push(amt);
+                } else if(data[1][i].deduc_type == 'amount'){
+                  amt = data[1][i].deduc_val;
+                  deduc +=  '<tr deducType="' + data[1][i].deduc_type + '">' +
+                              '<td colspan="2">' + data[1][i].deduc_name + '</td>' +
+                              '<td colspan="1">-</td>' +
+                              '<td colspan="1">&#8369;' + Math.round(amt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                            '</tr>';
+                  cashInBank = loanAmt - amt;
+                  totalCredit = Number(cashInBank) + Number(dii) + Number(amt);
+                  allDeducs.push(data[1][i].deduc_id);
+                  allDeducAmt.push(amt);
+                }
+              }
+              console.log(totalCredit + ", " + totalDebit);
             },
             error : function(){
               alert('ERROR!');
@@ -3234,7 +3296,7 @@
             $('#openLoanApp').modal('hide');
             $('#confirmationLoanAppModal').find('.modal-dialog').removeClass('modal-md');
             $('#confirmationLoanAppModal').modal('show');
-            $('#confirmationLoanAppModal').find('.modal-title').html('<p id="confirmationLoanAppBackBtn" class="fas fa-chevron-left mr-4" style="font-size: 15px; color: gray; cursor: pointer"></p>Disbursement voucher');
+            $('#confirmationLoanAppModal').find('.modal-title').html('<p id="confirmationLoanAppBackBtn" class="fas fa-chevron-left mr-4" style="font-size: 15px; color: gray; cursor: pointer"></p>Disbursement Voucher');
             $('#confirmationLoanAppModal').find('.modal-body').html(
               '<div class="mb-5"><span class="h4 float-left">NET AMOUNT: </span><span class="h3 float-right text-success">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></div>' +
               '<table class="table table-striped table-bordered table-hover table-sm">' +
@@ -3252,7 +3314,7 @@
                     '<td name="APLid" value="'+cashInBank+'" colspan="2">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr>' +
-                    '<td colspan="2"></td>' +
+                    '<td name="voucher" value="'+voucher+'" colspan="2"></td>' +
                     '<td colspan="1"><strong>DEBIT</strong></td>' +
                     '<td colspan="1"><strong>CREDIT</strong></td>' +
                   '</tr>' +
@@ -3263,7 +3325,7 @@
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2">Loan Interest * ' + loanTerm + ' month/s</td>' +
-                    '<td colspan="1">&#8369;' + dii.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="dii" value="'+dii+'" colspan="1">&#8369;' + dii.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                     '<td colspan="1">-</td>' +
                   '</tr>' +
                   '<tr>' +
@@ -3271,16 +3333,7 @@
                     '<td colspan="1">-</td>' +
                     '<td colspan="1">&#8369;' + dii.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
-                  '<tr>' +
-                    '<td name="retentionFee" colspan="2">Retention Fee 3%</td>' +
-                    '<td colspan="1">-</td>' +
-                    '<td colspan="1">-</td>' +
-                  '</tr>' +
-                  '<tr>' +
-                    '<td colspan="2">Service Fee 1%</td>' +
-                    '<td colspan="1">-</td>' +
-                    '<td name="serviceFee" value="'+serviceFee+'" colspan="1">&#8369;' + serviceFee.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                  '</tr>' +
+                  '<div>' + deduc + '</div>'+
                   '<tr>' +
                     '<td colspan="2">Outstanding balance of</td>' +
                     '<td colspan="1">-</td>' +
@@ -3294,13 +3347,13 @@
                   '<tr><td colspan="4">-</td></tr>' +
                   '<tr>' +
                     '<td colspan="2">TOTAL</td>' +
-                    '<td name="totalDebit" value="'+totalDebit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1">&#8369;' + totalDebit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                    '<td name="totalCredit" value="'+totalCredit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1">&#8369;' + totalCredit.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="totalDebit" value="'+Math.round(totalDebit).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1">&#8369;' + Math.round(totalDebit).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="totalCredit" value="'+Math.round(totalCredit).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1">&#8369;' + Math.round(totalCredit).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2" class="h5">NET AMOUNT DUE</td>' +
-                    '<td name="totalBalance" value="'+totalBalance+'" colspan="1"></td>' +
-                    '<td name="cashInBank" value="'+cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1" class="h4"><span class="text-success">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></td>' +
+                    '<td name="totalBalance" value="'+Math.round(totalBalance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1"></td>' +
+                    '<td name="cashInBank" value="'+Math.round(cashInBank).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1" class="h4"><span class="text-success">&#8369;' + Math.round(cashInBank).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></td>' +
                   '</tr>' +
                 '</tbody>' +
               '</table>');
@@ -3311,18 +3364,18 @@
         $('#confirmationLoanAppModal').on('click', '#submitVoucherBtn', function(){
           var apostrophe = "'s";
           var id = $('#confirmationLoanAppModal').find('td[name=id]').attr('value');
+          var dii = $('#confirmationLoanAppModal').find('td[name=dii]').attr('value');
           var name = $('#confirmationLoanAppModal').find('td[name=name]').attr('value');
           var uname = $('#confirmationLoanAppModal').find('td[name=uname]').attr('value');
           var loan = $('#confirmationLoanAppModal').find('td[name=loan]').attr('value');
+          var voucher = $('#confirmationLoanAppModal').find('td[name=voucher]').attr('value');
           var APLid = $('#confirmationLoanAppModal').find('td[name=APLid]').attr('value');
-          var retentionFee = $('#confirmationLoanAppModal').find('td[name=retentionFee]').attr('value');
-          var serviceFee = $('#confirmationLoanAppModal').find('td[name=serviceFee]').attr('value');
-          var totalDebit = $('#confirmationLoanAppModal').find('td[name=totalDebit]').attr('value');
-          var totalCredit = $('#confirmationLoanAppModal').find('td[name=totalCredit]').attr('value');
-          var cashInBank = $('#confirmationLoanAppModal').find('td[name=cashInBank]').attr('value');
-          var totalBalance = $('#confirmationLoanAppModal').find('td[name=totalBalance]').attr('value');
+          var totalDebit = $('#confirmationLoanAppModal').find('td[name=totalDebit]').attr('value').replace(/\D/g, "");
+          var totalCredit = $('#confirmationLoanAppModal').find('td[name=totalCredit]').attr('value').replace(/\D/g, "");
+          var cashInBank = $('#confirmationLoanAppModal').find('td[name=cashInBank]').attr('value').replace(/\D/g, "");
+          var totalBalance = $('#confirmationLoanAppModal').find('td[name=totalBalance]').attr('value').replace(/\D/g, "");
 
-          var data = '&uname=' + uname + '&loanapp_id=' + id + '&dvNo=' + APLid + '&retFee=' + retentionFee + '&serFee=' + serviceFee + '&debit=' + totalDebit +'&credit=' + totalCredit +'&netAmt=' + cashInBank + '&balance=' + totalBalance;
+          var data = '&uname=' + uname + '&voucher=' + voucher + '&loanapp_id=' + id + '&dvNo=' + APLid + '&dii=' + dii + '&debit=' + totalDebit + '&credit=' + totalCredit + '&netAmt=' + cashInBank + '&balance=' + totalBalance + '&deduc=' + JSON.stringify(allDeducs) + '&deducAmt=' + JSON.stringify(allDeducAmt);
           $.ajax({
             type    : 'ajax',
             method  : 'post',
@@ -3380,7 +3433,7 @@
                   var myDate = new Date(Date.parse(data[i].noti_date.replace('-','/','g')));
                   myDate = myDate.toUTCString();
                   myDate = myDate.split(' ').slice(0, 4).join(' ');
-                  row += '<a class="dropdown-item text-info" href="#">'+data[i].noti_desc+'<br><span class="float-left py-2" style="font-size: 85%">Click to view voucher</span><span class="text-secondary float-right py-2" style="font-size: 80%">' + myDate + '</span></a>';
+                  row += '<a id="'+data[i].noti_voucher+'" class="dropdown-item text-info noti" href="#">'+data[i].noti_desc+'<br><span class="float-left py-2" style="font-size: 85%">Click to view voucher</span><span class="text-secondary float-right py-2" style="font-size: 80%">' + myDate + '</span></a>';
                   if(data[i].noti_status == 1) {
                     c++;
                   } else {
@@ -3422,6 +3475,99 @@
 
         $('#notificationBar').click(function(){
           notified();
+        });
+
+        $('#returnNotifications').on('click', ".noti", function(){
+          var voucherID = $(this).attr('id');
+          $.ajax({
+            type     : 'ajax',
+            method   : 'get',
+            url      : '<?php echo base_url() ?>users/viewVoucher',
+            data     : {voucher: voucherID},
+            async    : false,
+            dataType : 'json',
+            success  : function(data){
+              for(var i = 0; i < data.length; i++) {
+                var deducs += '<tr>' +
+                                '<td>' + data[i].deduc_name + '</td>' +
+                              '</tr>';
+              }
+              table =     '<tr>' +
+                            '<td colspan="1"><strong>DATE ISSUED: ' + data[0].date_accepted + '</strong></td>' +
+                            '<td colspan="1"><strong>VOUCHER: ' + data[0].disbursement_no + '</strong></td>' +
+                            '<td colspan="1"><strong>CHEQUE: ' + data[0].cheque_no + '</strong></td>' +
+                          '<tr>' +
+                            '<td colspan="1">' + data[0].loan_name + '</td>' +
+                            '<td colspan="1">&#8369;' + Math.round(data[0].net_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                            '<td colspan="1"></td>' +
+                          '</tr>' +
+                          '<tr>' +
+                            '<td colspan="1"></td>' +
+                            '<td colspan="1"><strong>DEBIT</strong></td>' +
+                            '<td colspan="1"><strong>CREDIT</strong></td>' +
+                          '</tr>' +
+                          '<tr>' +
+                            '<td colspan="1">Loan Receivable - ' + data[0].loan_name + '</td>' +
+                            '<td colspan="1">&#8369;' + Math.round(data[0].loan_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                            '<td colspan="1">-</td>' +
+                          '</tr>' +
+                          '<tr>' +
+                            '<td colspan="1">Loan Interest * ' + data[0].loan_term + ' month/s</td>' +
+                            '<td colspan="1">&#8369;' + Math.round(data[0].deferred_int).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                            '<td colspan="1">-</td>' +
+                          '</tr>' +
+                          '<tr>' +
+                            '<td colspan="1">Deferred Intereset Income</td>' +
+                            '<td colspan="1">-</td>' +
+                            '<td colspan="1">&#8369;' + Math.round(data[0].deferred_int).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                          '</tr>' +
+                          '<div>' + deducs + '</div>' +
+                          '<tr>' +
+                            '<td colspan="1">Outstanding balance of</td>' +
+                            '<td colspan="1">-</td>' +
+                            '<td colspan="1">-</td>' +
+                          '</tr>' +
+                          '<tr>' +
+                            '<td colspan="1">Cash in bank</td>' +
+                            '<td colspan="1">-</td>' +
+                            '<td colspan="1">&#8369;' + Math.round(data[0].net_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                          '</tr>' +
+                          '<tr>' +
+                            '<td colspan="1">TOTAL</td>' +
+                            '<td colspan="1">&#8369;' + Math.round(data[0].debit).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                            '<td colspan="1">&#8369;' + Math.round(data[0].credit).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                          '</tr>' +
+                          '<tr>' +
+                            '<td colspan="1" class="h5">NET AMOUNT DUE</td>' +
+                            '<td colspan="1"></td>' +
+                            '<td colspan="1" class="h4"><span class="text-success">&#8369;' + Math.round(data[0].net_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></td>' +
+                          '</tr>';
+
+                $('#viewVoucherModal').find('.modal-title').text(data[0].loan_name + ' (' + data[0].loanapp_id + ') voucher');
+                $('#viewVoucherBody').html(table);
+            },
+            error : function(){
+              alert('Error!');
+            }
+          });
+            var viewVoucherDataTbl = $('#viewVoucherTbl').DataTable({
+              "dom": 'B',
+              "ordering": false,
+              buttons: [
+                {
+                extend: 'pdf',
+                text: 'Export PDF'
+                },
+                {
+                extend: 'print',
+                text: 'Print'
+                },
+              ]
+            });
+
+            $('#viewVoucherTbl_wrapper .dt-buttons').detach().appendTo('#viewVoucherBtns');
+            $('#viewVoucherTbl_wrapper .dt-buttons .btn').addClass('btn-sm');
+            $('#viewVoucherModal').modal('show');
         });
 
         function checkInputPayslipAmt() {
@@ -4299,7 +4445,6 @@
                                       '</p>').fadeIn(); 
                 $('#loansTab .card-body').animate({scrollTop: 0}, 'fast');
                 searchLoan();
-                refreshCollections();
                 get_latest_date();
               } else {
                 alert('You did not made any changes! Please close it properly.');
@@ -5838,7 +5983,7 @@
           if(cmCount == cms.length) {
             var typeLoaned = $('#loan_selector_data').val();
             var total_deductions = 0; 
-            $.ajax({
+            /*$.ajax({
               type: 'ajax',
               method: 'get',
               url: '<?php echo base_url();?>loan_applications/getLoanDeductions',
@@ -5850,22 +5995,22 @@
                 var loan_deduc_amount = '';         
                 for(var i=0; i < data.length; i++) {
                   if(data[i].deduc_type == 'percentage'){
-                    var amount = '';
-                    
-                    amount = data[i].deduc_val / 100 ;
-                    calc_amount = Number(loanAmount) * amount;
-                    
-                    loan_deduc_name += '<span>'+ data[i].deduc_name +' '+ Number(data[i].deduc_val).toFixed(0) +'%: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(calc_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></span><br>';
+                    var perc = '';
+                    perc = data[i].deduc_val / 100 ;
+                    calc_amount = Number(loanAmount) * perc;
+                    loan_deduc_name += '<span id="'+data[i].deduc_name+'" val="'+calc_amount+'"></span>';
+                    console.log(loan_deduc_name);
                   } else if(data[i].deduc_type == 'amount'){
-                    var amount = data[i].deduc_val;
-                    loan_deduc_name +='<span>'+ data[i].deduc_name + ': <span class="font-weight-bold float-right ml-auto">&#8369;'+ Math.round(amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</span></span><br>';
+                    var amount = '';
+                    amount = data[i].deduc_val;
+                    loan_deduc_name += '<span id="'+data[i].deduc_name+'" val="'+amount+'"></span>';
                   }
                 }
                 $('#loan_type_deductions').html(loan_deduc_name);
               }, error: function() {
                 alert('Error on finding deductions for the type of loan');
               }
-            });
+            });*/
             var loanTerm = $('#loan_term').val();
             var interest = loanInterests / 12;
             var grossAmt = interest * loanTerm * Number(loanAmount) ;
@@ -5962,6 +6107,7 @@
         // comakers tab start
           // fix upload button for co maker attachment and design
           function Comakers() {
+            $('#comakersTbl').DataTable().destroy();
             var user_id = '<?php echo $this->session->userdata('user_id'); ?>';
             
             $.ajax({
@@ -5978,8 +6124,8 @@
                 for(i=0; i < data.length; i++){
                   rows += '<tr class="text-secondary">' +
                             '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
-                            '<td style="vertical-align: middle">' + '<small>' + data[i].loan_name + '</small>' + '</td>' +
-                            '<td style="vertical-align: middle">' + '<button href="javascript:;" class="btn btn-info btn-sm float-right" id="cmCheckLoan'+ i +'" data="' + data[i].loanapp_id + '">View Application</button>' + '</td>' +
+                            '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
+                            '<td style="vertical-align: middle">' + '<button href="javascript:;" class="btn btn-info btn-sm" id="cmCheckLoan'+ i +'" data="' + data[i].loanapp_id + '">View Application</button>' + '</td>' +
                           '</tr>';
                 }
 
@@ -5997,6 +6143,19 @@
                 alert('Something went wrong on checking for co-makers');
               }
             });
+
+            var comakersDataTbl = $('#comakersTbl').DataTable({
+              "dom": 'lfrtip',
+              "pagingType": "simple_numbers",
+              "language": { search: "", searchPlaceholder: "Search.." },
+              "columnDefs": [
+                { "orderable": false, "targets": 2 }
+              ]
+            });
+
+            $('#comakersTbl_info').addClass('text-muted font-italic');
+            $('#comakersTbl_info').detach().appendTo('#comakersTblInfo');
+            $('#comakersTbl_paginate').detach().appendTo('#comakersTblPaginate');
           }
 
           function cmApplyCount(y) {
@@ -6064,7 +6223,7 @@
                         async: false, 
                         dataType: 'json',
                         success: function(data) {
-                          cnt += '<p><span class="font-weight-bold">Co-Maker'+ i +': </span><span class="text-muted">'+ data[0].name +'</span></p><div cm_id="'+ data[0].id +'" id="cm_approval_form'+ i +'"></div>';
+                          cnt += '<p><span class="font-weight-bold">'+ i +'. </span><span class="text-muted">'+ data[0].name +'</span></p><div cm_id="'+ data[0].id +'" id="cm_approval_form'+ i +'"></div>';
 
                           get_username = '<?php echo $this->session->userdata('user_id'); ?>';
 
@@ -6077,31 +6236,26 @@
                       });
                     }
 
-                    var cm_loandata_head = '<span class="font-weight-bold">Loan Application Details</span>';
-                     var cm_loandata_body = '<div class="row">' + 
-                                          '<div class="d-flex p-3 mx-5">'+
-                                            '<img id="loanAppFormImg" class="rounded w-25 h-100 ml-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + result[0].user_img + '?>">'+
-                                            '<div class="d-block mx-3">' +
-                                              '<h5 class="text-left d-block">'+ result[0].name +'</h5>'+
-                                              '<h6 class="text-muted text-left d-block">'+ result[0].username +'</h6>'+
-                                              '<h6 class="text-primary text-left d-block">'+ result[0].email  +'</h6>'+
-                                              '<h6 class="text-muted text-left d-block">'+ result[0].contact_no+'</h6>'+
-                                              '<h6 class="text-muted text-left d-block">'+ result[0].address+' - '+ result[0].zipcode +'</h6>'+
-                                            '</div>'+
-                                          '</div>' + 
-                                          '<div class="d-block mx-auto p-3">' +
-                                            '<table class="table table-responsive-sm table-bordered table-md nowrap">' +
+                    var cm_loandata_head = '<h2>Loan Application Details</h2>';
+                     var cm_loandata_body = '<div class="row ml-1 mr-1">' + 
+                                            '<img id="loanAppFormImg" class="rounded w-25 h-25" src="<?php echo base_url(); ?>assets/img/profile_img/' + result[0].user_img + '?>">'+
+                                              '<div class="col align-self-start">'+
+                                                '<h5 class="text-left d-block">'+ result[0].name +'</h5>'+
+                                                '<h6 class="text-muted text-left d-block">'+ result[0].username +'</h6>'+
+                                                '<h6 class="text-primary text-left d-block">'+ result[0].email  +'</h6>'+
+                                                '<h6 class="text-muted text-left d-block">'+ result[0].contact_no+'</h6>'+
+                                                '<h6 class="text-muted text-left d-block">'+ result[0].address+' - '+ result[0].zipcode +'</h6>'+
+                                              '</div>' +
+                                            '<table class="table table-striped table-hover table-bordered table-sm mt-3">' +
                                               '<thead>'+
                                                 '<tr>' +
                                                   '<th colspan="2" class="text-center">Information</th>'+
-                                                  '<th class="text-center">Co-Makers</th>' +
                                                 '</tr>' +
                                               '</thead>'+
-                                              '<tbody>'+
+                                              '<tbody style="font-size: 90%">'+
                                                 '<tr>'+
                                                   '<td>Loan Application ID:</td>' +
                                                   '<td>'+ result[0].loanapp_id +'</td>' +
-                                                  '<td rowspan="6"><div class="d-block p-3" id="comaker-count"></div></td>'+
                                                 '</tr>'+
                                                 '<tr>'+
                                                   '<td>Type of Loan: </td>' +
@@ -6109,24 +6263,33 @@
                                                 '</tr>'+
                                                 '<tr>'+
                                                   '<td>Loan Term: </td>' +
-                                                  '<td>'+ result[0].loan_term +'</td>' +
+                                                  '<td>'+ result[0].loan_term +' month/s</td>' +
                                                 '</tr>'+
                                                 '<tr>'+
                                                   '<td>Amount Loaned: </td>' +
-                                                  '<td>'+ result[0].loan_amount +'</td>' +
+                                                  '<td>&#8369;'+ Math.round(result[0].loan_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</td>' +
                                                 '</tr>'+
                                                 '<tr>'+
                                                   '<td>Interest on Loan: </td>' +
-                                                  '<td>'+ result[0].loan_int +'</td>' +
+                                                  '<td>&#8369;'+ Math.round(result[0].loan_int).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</td>' +
                                                 '</tr>'+
                                                 '<tr>'+
                                                   '<td>Monthly Amortization: </td>' +
-                                                  '<td>'+ result[0].monthly_deduc +'</td>' +
+                                                  '<td>&#8369;'+ Math.round(result[0].monthly_deduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</td>' +
                                                 '</tr>'+
+                                                '<thead>'+
+                                                  '<tr>' +
+                                                    '<th colspan="2" class="text-center">Co-Makers</th>'+
+                                                  '</tr>' +
+                                                '</thead>'+
+                                                '<tbody style="font-size: 90%">'+
+                                                  '<tr class="text-center">'+
+                                                    '<td colspan="2" id="comaker-count"></td>'+
+                                                  '</tr>'+
+                                                '</tbody>'+
                                               '</tbody>'+
-                                            '</table>'
-                                          '</div>' +
-                                        '</div>';
+                                            '</table>'+
+                                          '</div>';
 
                     $('#cmViewLoanAppModalTitle').html(cm_loandata_head);
                     $('#cmViewLoanAppModalBody').html(cm_loandata_body);

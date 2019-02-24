@@ -112,23 +112,24 @@
 
 		public function insertLoanVoucher(){				
 			date_default_timezone_set('Asia/Manila');				
-			$id = $this->input->post('loanapp_id');			
+			$id = $this->input->post('loanapp_id');	
+			$last_id = $this->input->post('voucher');
+			$deducs = json_decode($this->input->post('deduc'));
+			$deducAmt = json_decode($this->input->post('deducAmt'));	
 			$noti = "Your Loan Application ".$this->input->post('loanapp_id')." has been approved!";				
 
 			$data = array(			
-				'disbursement_no' => $this->input->post('dvNo'),				
-				'retention_fee' => $this->input->post('retFee'),				
-				'service_fee' => $this->input->post('serFee'),		
+				'disbursement_no' => $this->input->post('dvNo'),	
 				'debit' => $this->input->post('debit'),				
 				'credit' => $this->input->post('credit'),			
+				'deferred_int' => $this->input->post('dii'),			
 				'net_amount' => $this->input->post('netAmt'),			
 				'status' => 'Active',	
 				'date_accepted' => date('Y-m-d H:i:s')			
-			);			
+			);	
 
 			$this->db->where('loanapp_id', $id);				
-			$this->db->update('approved_loan_apps', $data);		
-
+			$this->db->update('approved_loan_apps', $data);
 			if($this->db->affected_rows() > 0) {				
 				$this->db->set('status', 'Active');			
 				$this->db->where('loanapp_id', $id);		
@@ -139,19 +140,33 @@
 				'balance' => $this->input->post('balance'),	
 				'payment_status' => 'unpaid',				
 				'payment_for' => date('Y-m-d', strtotime('+1 month'))					
-				);				
-				
-				$noti = array(					
-					'noti_for' => $this->input->post('uname'),					
-					'noti_desc' => $noti,				
-					'noti_status' => 1,				
-					'noti_date' =>  date('Y-m-d')		
-				);				
+				);		
+
+				foreach($deducs as $index => $d) {
+					$deduc = array(
+						'voucher_id' => $last_id,
+						'loan_deduc' => $d,
+						'loan_deduc_amt' => $deducAmt[$index]
+					);	
+					$this->db->insert('loan_app_deducs', $deduc);
+				}		
 
  				$this->db->insert('active_loan_apps', $data);			
-				$this->db->insert('notifications', $noti);				
-				if($this->db->affected_rows() > 0){			
-					return true;				
+				if($this->db->affected_rows() > 0){
+					$noti = array(					
+						'noti_for' => $this->input->post('uname'),	
+						'noti_voucher' => $last_id,			
+						'noti_desc' => $noti,				
+						'noti_status' => 1,				
+						'noti_date' =>  date('Y-m-d')		
+					);
+								
+					$this->db->insert('notifications', $noti);	
+					if($this->db->affected_rows() > 0) {
+						return true;
+					} else {
+						return false;
+					}				
 				} else {				
 					return false;				
 				}	
@@ -180,7 +195,7 @@
 				if($deduc_ids){
 					foreach($deduc_ids as $id) {
 						$deduc_data = array(
-							'loan_name' => $last_id,
+							'loan_type_name' => $last_id,
 							'loan_deduc' => $id
 						);
 						$this->db->insert('loan_type_deducs', $deduc_data);
@@ -188,7 +203,7 @@
 					return true; 
 				} else {
 					$deduc_data = array(
-							'loan_name' => $last_id,
+							'loan_type_name' => $last_id,
 							'loan_deduc' => 1
 					);
 					$this->db->insert('loan_type_deducs', $deduc_data);
