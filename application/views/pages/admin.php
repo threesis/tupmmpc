@@ -49,9 +49,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item active mr-2">
+            <!-- <li class="nav-item active mr-2">
               <a class="nav-link" href="#"><span class="far fa-envelope fa-lg mr-2"></span>Messages</a>
-            </li>
+            </li> -->
             <li id="notificationBar" class="nav-item dropdown mr-2">
               <a class="nav-link" href="#" id="navbarDropdownNoti" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="far fa-bell fa-lg mr-2"></i><span id="returnNotifIndicator" class="badge badge-pill badge-danger p-1" style="position: absolute; left: 3px; top: 3px"></span>Notifications</a>
               <div id="returnNotifications" class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownNoti">
@@ -890,7 +890,15 @@
                     <div class="card-footer" style="min-height: 60px">
                       <div id="returnLatestDate"></div>
                       <button id="add-loan" class="btn btn-outline-success float-right mb-2"><i class="fas fa-plus-circle mr-2"></i>Add Loan</button>
-
+                      <button type="button" class="btn btn-success float-right" onclick="applyLoanRedirect();"><i class="fas fa-arrow-down mr-2"></i>Apply now!</button>
+                      <script type="text/javascript">
+                        function applyLoanRedirect() {
+                          $('#loans-tab').removeClass('active show');
+                          $('#loansTab').removeClass('active show');
+                          $('#applyloan-tab').addClass('active show');
+                          $('#applyLoanTab').addClass('active show');
+                        }
+                      </script>
                       <!-- Add Loan Modal -->
                       <div class="modal fade" id="addLoanModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -1680,37 +1688,37 @@
                         dataType: 'json',
                         success: function(data) {
                           var c = 0;
-                          if(data.length) {
+                          if(data['result'].length) {
                             var tbl = '';
                             var cm1 = '';
                             var cm2 = '';
                             var cm3 = '';
-                            for(var i = 0; i < data.length; i++) {
+                            for(var i = 0; i < data['result'].length; i++) {
                               c++;
-                              var myDate  = new Date(data[i].date_applied);
-                              if(data[i].comaker_1 == null) {
+                              var myDate  = new Date(data['result'][i].date_applied);
+                              if(data['comakers'][i].comaker_1 == "null") {
                                 cm1 = '';
                               } else {
-                                cm1 = data[i].comaker_1 + ', ';
-                              } if(data[i].comaker_2 == null) {
+                                cm1 = data['comakers'][i].comaker_1 + ', ';
+                              } if(data['comakers'][i].comaker_2 == "null") {
                                 cm2 = '';
                               } else {
-                                cm2 = data[i].comaker_2;
-                              } if(data[i].comaker_3 == null) {
+                                cm2 = data['comakers'][i].comaker_2;
+                              } if(data['comakers'][i].comaker_3 == "null") {
                                 cm3 = '';
                               } else {
-                                cm3 = ', ' + data[i].comaker_3;
+                                cm3 = ', ' + data['comakers'][i].comaker_3;
                               }
 
                               tbl +=  '<tr class="text-secondary">' +
                                         '<td style="vertical-align: middle">' + c + '</td>' +
                                         '<td style="vertical-align: middle">' + myDate.toLocaleDateString("en-US") + '</td>' +
-                                        '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].loan_name + '</span></td>' +
-                                        '<td style="vertical-align: middle">' + Math.round(data[i].loan_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                                        '<td style="vertical-align: middle">' + Math.round(data[i].loan_int).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                                        '<td style="vertical-align: middle">' + data[i].loan_term + ' month/s</td>' +
-                                        '<td style="vertical-align: middle">' + Math.round(data[i].monthly_deduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                                        '<td style="vertical-align: middle">' + data[i].status + '</td>' +
+                                        '<td style="vertical-align: middle">' + data['result'][i].loan_name + '</td>' +
+                                        '<td style="vertical-align: middle">' + Math.round(data['result'][i].loan_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                                        '<td style="vertical-align: middle">' + Math.round(data['result'][i].loan_int).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                                        '<td style="vertical-align: middle">' + data['result'][i].loan_term + ' month/s</td>' +
+                                        '<td style="vertical-align: middle">' + Math.round(data['result'][i].monthly_deduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                                        '<td style="vertical-align: middle">' + data['result'][i].status + '</td>' +
                                         '<td style="vertical-align: middle">' + cm1 + cm2 + cm3 + '</td>' +
                                       '</tr>'; 
                             }
@@ -3260,13 +3268,15 @@
               retentionFee = 0.03 * loanAmt;
               totalDebit = Number(loanAmt) + Number(dii);
               totalBalance = loanAmt - monthlyDeduc;
-              var amt = 0, perc = 0;
+              var amt = 0, perc = 0, a = '', p = '';
               for(var i = 0; i < data[1].length; i++){
                 if(data[1][i].deduc_type == 'percentage'){
+                  a = '';
+                  p = '%';
                   perc = data[1][i].deduc_val / 100;
                   amt = loanAmt * perc;
                   deduc += '<tr deducType="' + data[1][i].deduc_type + '">' +
-                              '<td colspan="2">' + data[1][i].deduc_name + '</td>' +
+                              '<td colspan="2">' + data[1][i].deduc_name + ' <span>(' + Math.round(data[1][i].deduc_val).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + p + ')</span></td>' +
                               '<td colspan="1">-</td>' +
                               '<td colspan="1">&#8369;' + Math.round(amt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                             '</tr>';
@@ -3275,9 +3285,11 @@
                   allDeducs.push(data[1][i].deduc_id);
                   allDeducAmt.push(amt);
                 } else if(data[1][i].deduc_type == 'amount'){
+                  a = '&#8369;';
+                  p = '';
                   amt = data[1][i].deduc_val;
                   deduc +=  '<tr deducType="' + data[1][i].deduc_type + '">' +
-                              '<td colspan="2">' + data[1][i].deduc_name + '</td>' +
+                              '<td colspan="2">' + data[1][i].deduc_name + ' <span>(' + a + Math.round(data[1][i].deduc_val).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')</span></td>' +
                               '<td colspan="1">-</td>' +
                               '<td colspan="1">&#8369;' + Math.round(amt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                             '</tr>';
@@ -3478,6 +3490,7 @@
         });
 
         $('#returnNotifications').on('click', ".noti", function(){
+          $('#viewVoucherTbl').DataTable().destroy();
           var voucherID = $(this).attr('id');
           $.ajax({
             type     : 'ajax',
@@ -3487,10 +3500,20 @@
             async    : false,
             dataType : 'json',
             success  : function(data){
+              var deducs = '', perc = '', amt = '';
               for(var i = 0; i < data.length; i++) {
-                var deducs += '<tr>' +
-                                '<td>' + data[i].deduc_name + '</td>' +
-                              '</tr>';
+                if(data[i].deduc_type == 'percentage') {
+                  perc = '%';
+                  amt = '';
+                } else {
+                  perc = '';
+                  amt = '&#8369;';
+                }
+                deducs += '<tr>' +
+                            '<td>' + data[i].deduc_name + ' <span>(' + amt + Math.round(data[i].deduc_val).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + perc + ')</span></td>' +
+                            '<td>-</td>' +
+                            '<td>&#8369;' + Math.round(data[i].loan_deduc_amt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                          '</tr>';
               }
               table =     '<tr>' +
                             '<td colspan="1"><strong>DATE ISSUED: ' + data[0].date_accepted + '</strong></td>' +
@@ -3521,7 +3544,7 @@
                             '<td colspan="1">-</td>' +
                             '<td colspan="1">&#8369;' + Math.round(data[0].deferred_int).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                           '</tr>' +
-                          '<div>' + deducs + '</div>' +
+                          deducs + 
                           '<tr>' +
                             '<td colspan="1">Outstanding balance of</td>' +
                             '<td colspan="1">-</td>' +
@@ -3543,16 +3566,18 @@
                             '<td colspan="1" class="h4"><span class="text-success">&#8369;' + Math.round(data[0].net_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></td>' +
                           '</tr>';
 
-                $('#viewVoucherModal').find('.modal-title').text(data[0].loan_name + ' (' + data[0].loanapp_id + ') voucher');
+                $('#viewVoucherModal').find('.modal-title').text('Disbursement Voucher (' + data[0].loanapp_id + ')');
                 $('#viewVoucherBody').html(table);
             },
             error : function(){
               alert('Error!');
             }
           });
-            var viewVoucherDataTbl = $('#viewVoucherTbl').DataTable({
+
+            $('#viewVoucherTbl').DataTable({
               "dom": 'B',
               "ordering": false,
+              "pageLength": 50,
               buttons: [
                 {
                 extend: 'pdf',
@@ -3568,6 +3593,7 @@
             $('#viewVoucherTbl_wrapper .dt-buttons').detach().appendTo('#viewVoucherBtns');
             $('#viewVoucherTbl_wrapper .dt-buttons .btn').addClass('btn-sm');
             $('#viewVoucherModal').modal('show');
+            
         });
 
         function checkInputPayslipAmt() {

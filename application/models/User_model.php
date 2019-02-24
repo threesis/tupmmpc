@@ -46,7 +46,32 @@
 			$this->db->group_by('a.loanapp_id');
 			$this->db->order_by('a.loanapp_id', 'DESC');
 			$query = $this->db->get();
-			return $query->result();
+			
+			foreach ($query->result() as $r) {
+				if($r->comaker_1 == '') {
+					$cm1 = "null";
+				} else {
+					$cm1 = $this->db->query("SELECT name AS cm1 FROM members WHERE id = $r->comaker_1")->row()->{'cm1'};
+				}
+				if($r->comaker_2 == '') {
+					$cm2 = "null";
+				} else {
+					$cm2 = $this->db->query("SELECT name AS cm2 FROM members WHERE id = $r->comaker_2")->row()->{'cm2'};
+				} 
+				if($r->comaker_3 == '') {
+					$cm3 = "null";
+				} else {
+					$cm3 = $this->db->query("SELECT name AS cm3 FROM members WHERE id = $r->comaker_3")->row()->{'cm3'};
+				}
+
+				$res[] = array(
+					'comaker_1' => $cm1,
+					'comaker_2' => $cm2,
+					'comaker_3' => $cm3
+				);
+			}
+
+			return array('result' => $query->result(), 'comakers' => $res);
 		}
 
 		public function getUserShareCap(){
@@ -75,6 +100,7 @@
 			$this->db->join('members b', 'b.username = a.noti_for');
 			$this->db->join('approved_loan_apps c', 'c.id = a.noti_voucher');
 			$this->db->join('loan_app_deducs d', 'd.voucher_id = a.noti_voucher');	
+			$this->db->group_by('d.voucher_id');
 			$this->db->where('noti_for', $username);	
 			$query = $this->db->get();	
 			return $query->result();	
