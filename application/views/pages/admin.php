@@ -2100,8 +2100,8 @@
                             <thead>
                               <tr>
                                 <th>Loan Applicant Name</th>
-                                <th>Loan Type</th>
-                                <th></th>
+                                <th>Type of Loan</th>
+                                <th>Action</th>
                               </tr>
                             </thead>
 
