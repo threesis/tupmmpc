@@ -137,7 +137,7 @@
 
 				$data = array(				
 				'loanapp_id' => $id,			
-				'balance' => $this->input->post('balance'),	
+				'balance' => $this->input->post('loanAmt'),	
 				'payment_status' => 'unpaid',				
 				'payment_for' => date('Y-m-d', strtotime('+1 month'))					
 				);		

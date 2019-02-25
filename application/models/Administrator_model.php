@@ -399,7 +399,7 @@
 		public function viewCollections(){
 			$id = $this->input->get('id');
 
-			$this->db->select('payment_date, or_number, loan_name, balance')->from('active_loan_apps a');
+			$this->db->select('payment_date, or_number, loan_name, balance_paid, sharecap_paid')->from('active_loan_apps a');
 			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
 			$this->db->join('loan_types c', 'c.id = b.loan_applied');
 			$this->db->where('payment_status', 'paid');

@@ -873,7 +873,7 @@
                     <div class="card-footer" style="min-height: 60px">
                       <div id="returnLatestDate"></div>
                       <button id="add-loan" class="btn btn-outline-success float-right mb-2"><i class="fas fa-plus-circle mr-2"></i>Add Loan</button>
-                      <button type="button" class="btn btn-success float-right" onclick="applyLoanRedirect();"><i class="fas fa-arrow-down mr-2"></i>Apply now!</button>
+                      <button id="applyNowBtn" type="button" class="btn btn-success float-right" onclick="applyLoanRedirect();" style="display: none"><i class="fas fa-arrow-down mr-2"></i>Apply now!</button>
                       <script type="text/javascript">
                         function applyLoanRedirect() {
                           $('#loans-tab').removeClass('active show');
@@ -3306,7 +3306,7 @@
                   '</tr>' +
                   '<tr>' +
                     '<td name="loan" value="'+loan+'" colspan="2">' + loan + '</td>' +
-                    '<td name="APLid" value="'+cashInBank+'" colspan="2">&#8369;' + cashInBank.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="APLid" value="'+cashInBank+'" colspan="2">&#8369;' + Math.round(cashInBank).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td name="voucher" value="'+voucher+'" colspan="2"></td>' +
@@ -3315,18 +3315,18 @@
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2">Loan Receivable - ' + loan + '</td>' +
-                    '<td colspan="1">&#8369;' + loanAmt.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="loanAmt" value="'+loanAmt+'" colspan="1">&#8369;' + Math.round(loanAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                     '<td colspan="1">-</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2">Loan Interest * ' + loanTerm + ' month/s</td>' +
-                    '<td name="dii" value="'+dii+'" colspan="1">&#8369;' + dii.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="dii" value="'+dii+'" colspan="1">&#8369;' + Math.round(dii).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                     '<td colspan="1">-</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2">Deferred Intereset Income</td>' +
                     '<td colspan="1">-</td>' +
-                    '<td colspan="1">&#8369;' + dii.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td colspan="1">&#8369;' + Math.round(dii).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<div>' + deduc + '</div>'+
                   '<tr>' +
@@ -3369,6 +3369,7 @@
           var totalCredit = $('#confirmationLoanAppModal').find('td[name=totalCredit]').attr('value').replace(/\D/g, "");
           var cashInBank = $('#confirmationLoanAppModal').find('td[name=cashInBank]').attr('value').replace(/\D/g, "");
           var totalBalance = $('#confirmationLoanAppModal').find('td[name=totalBalance]').attr('value').replace(/\D/g, "");
+          var loanAmt = $('#confirmationLoanAppModal').find('td[name=loanAmt]').attr('value');
 
           var data = '&uname=' + uname + '&voucher=' + voucher + '&loanapp_id=' + id + '&dvNo=' + APLid + '&dii=' + dii + '&debit=' + totalDebit + '&credit=' + totalCredit + '&netAmt=' + cashInBank + '&balance=' + totalBalance + '&deduc=' + JSON.stringify(allDeducs) + '&deducAmt=' + JSON.stringify(allDeducAmt);
           $.ajax({
@@ -6810,6 +6811,7 @@
             break;
             case '2':
             $('#notificationBar').show();
+            $('#applyNowBtn').show();
             $('#memberDash').show();
             $('#dashboardTab').addClass('active');
             $('#loans-tab').show();

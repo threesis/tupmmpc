@@ -46,7 +46,7 @@
 			$this->db->group_by('a.loanapp_id');
 			$this->db->order_by('a.loanapp_id', 'DESC');
 			$query = $this->db->get();
-			$res = 0;
+			$res = [];
 			foreach ($query->result() as $r) {
 				if($r->comaker_1 == '') {
 					$cm1 = "null";
