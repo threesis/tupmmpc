@@ -396,16 +396,21 @@
 			}
 		}
 
-		public function viewCollections(){
-			$id = $this->input->get('id');
-
-			$this->db->select('payment_date, or_number, loan_name, balance_paid, sharecap_paid')->from('active_loan_apps a');
+		public function viewLedger(){
+			$month = $this->input->get('mo');
+			$year = $this->input->get('yr');
+			if(($month || $year) != ''){
+				$this->db->like('MONTH(payment_for)', $month);
+				$this->db->like('YEAR(payment_for)', $year);
+			}
+			$this->db->select('*')->select_min('balance')->from('active_loan_apps a', 'left');
 			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
-			$this->db->join('loan_types c', 'c.id = b.loan_applied');
-			$this->db->where('payment_status', 'paid');
-			$this->db->where('member_id', $id);
+			$this->db->join('members c', 'c.id = b.member_id');
+			$this->db->join('loan_types d', 'd.id = b.loan_applied');
+			$this->db->group_by('a.loanapp_id');
+			$this->db->order_by('payment_status', 'DESC');
 			$query = $this->db->get();
-			return array('result' => $query->result(), 'numcols' => $this->db->select('loan_name')->get('loan_types')->result());
+			return $query->result();
 		}
 
 		public function updateLedger(){

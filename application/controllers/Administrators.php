@@ -221,8 +221,8 @@
 			echo json_encode($result);
 		}
 
-		public function viewCollections(){
-			$result = $this->administrator_model->viewCollections();
+		public function viewLedger(){
+			$result = $this->administrator_model->viewLedger();
 			echo json_encode($result);
 		}
 

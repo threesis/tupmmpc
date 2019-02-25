@@ -4926,125 +4926,89 @@
           });
         }
 
-        // VIEW LEDGER CODES 
-        getCollectionMembers();
-        viewCollections();
-        var id = '';
+                // VIEW LEDGER CODES 
+        refreshViewLedger();
 
-        function getCollectionMembers() {
-          $.ajax({
-            type    : 'ajax',
-            url     : '<?php echo base_url() ?>administrators/getCollectionMembers',
-            async   : false,
-            dataType: 'json',
-            success: function(data) {
-              var names = '<option></option>';
-              for(var i = 0; i < data.length; i++) {
-                names += '<option value="' + data[i].id + '">' + data[i].name + '</option>';
-              }
-              $('#collectionsNameSelect').html(names);
-            },
-            error: function() {
-              alert('A database error occured!');
-            } 
-          });
+        function refreshViewLedger() {
+          var months  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+          var year = new Date().getFullYear();
+          var month = new Date().getMonth()+1;
+          viewLedger(month, year);
         }
 
-        $('#collectionsNameSelect').selectize({
-          create: false,
-          placeholder: "Please select a user..",
-          closeAfterSelect: true
+        $('#viewLedgerMonthSelect').change(function(){
+          month = $('#viewLedgerMonthSelect').val();
+          year = $('#viewLedgerYearSelect').val();
+          viewLedger(month, year);
         });
 
-        $('#collectionsNameSelect').change(function(){
-          id = $('#collectionsNameSelect').val();
-          if($(this).val() != '') {
-            viewCollections(id);
-          } else {
-            viewCollections();
-          }
+        $('#viewLedgerYearSelect').change(function(){
+          month = $('#viewLedgerMonthSelect').val();
+          year = $('#viewLedgerYearSelect').val();
+          viewLedger(month, year);
         });
 
-        function viewCollections(id){
+        function viewLedger(month, year){
+          $("#viewLedgerTbl").DataTable().destroy();
           $.ajax({
           type    : 'ajax',
           method  : 'GET',
-          url     : '<?php echo base_url() ?>administrators/viewCollections',
-          data    : {id: id},
+          url     : '<?php echo base_url() ?>administrators/viewLedger',
+          data    : {mo: month, yr: year},
           async   : false,
           dataType: 'json',
           success : function(data) {
-            if(data){
-              $("#collectionsTbl").DataTable().destroy();
-              var head, row, rowFoot, opts, totalMonthly = '', totalBalance = '', or = '';
-              head = '<th style="vertical-align: middle">Month</th>' +
-                     '<th style="vertical-align: middle">OR No.</th>';
-              for(var a = 0; a < data['numcols'].length; a++){
-                head += '<th style="vertical-align: middle">' + data['numcols'][a].loan_name + ' (&#8369;)</th>';
-              }
-              for(var i = 0; i < data['result'].length; i++){
-                if(data['result'][i].payment_date == '0000-00-00') {
-                  lastUp = 'Pending';
-                } else {
-                  lastUp = new Date(data['result'][i].payment_date);
-                  lastUp = lastUp.toLocaleDateString("en-US");
-                } if(data['result'][i].or_number == '') {
-                  or = 'Pending';
-                } else {
-                  or = data['result'][i].or_number;
-                }
-
-                row  += '<tr class="text-secondary">' +
-                          '<td style="vertical-align: middle">' + lastUp + '</td>' +
-                          '<td style="vertical-align: middle">' + or + '</td>';
-                for(var loans = 0; loans < data['numcols'].length; loans++){
-                  if(data['result'][i].loan_name == data['numcols'][loans].loan_name) {
-                    var totalInRow = 0;
-                    row += '<td style="vertical-align: middle">' + Math.round(data['result'][i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>';
-                    totalInRow = Number(totalInRow) + Number(data['result'][i].balance);
-                  } else {
-                    if(i+1 == data['result'].length) {
-                      i = data['result'].length-1;
-                      if(data['result'][i].loan_name == data['numcols'][loans].loan_name){
-                        row += '<td style="vertical-align: middle">' + Math.round(data['result'][i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>';
-                      } else {
-                        row += '<td style="vertical-align: middle">0</td>';
-                      }
-                    } else {
-                      if(data['result'][i].or_number == data['result'][i+1].or_number){
-                        if(data['result'][i+1].loan_name == data['numcols'][loans].loan_name){
-                          row += '<td style="vertical-align: middle">' + Math.round(data['result'][i+1].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>';
-                        } else {
-                          row += '<td style="vertical-align: middle">0</td>';
-                        }
-                      }
-                    }
-                  }
-                }
-                i++;
-
-                row  += '<td style="vertical-align: middle">0</td>' +
-                        '<td style="vertical-align: middle">' + Math.round(totalInRow).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                        '</tr>';  
-              }
-
-                head += '<th style="vertical-align: middle">Others</th>' +
-                        '<th style="vertical-align: middle">Total (&#8369;)</th>';
-
-                $('#returnCollectionsHeader').html(head);
-                $('#returnCollectionsBody').html(row);
+            if(data.length > 0){
+            var row, rowFoot, opts, totalMonthly = '', totalBalance = '', or = '';
+            for(var i = 0; i < data.length; i++){
+              if(data[i].payment_date == '0000-00-00') {
+                lastUp = 'Pending';
               } else {
-                $("#collectionsTbl").DataTable().destroy();
-                $('#returnCollectionsBody').html('');
-                $('#returnCollectionsFooter').html('');
+                lastUp = new Date(data[i].payment_date).toUTCString();
+                lastUp = lastUp.split(' ').slice(0, 4).join(' ');
+              } if(data[i].or_number == '') {
+                or = 'Pending';
+              } else {
+                or = data[i].or_number;
               }
-            },
-            error: function() {
-              alert('Error!');
+              totalMonthly = Number(totalMonthly) + Number(data[i].monthly_deduc);
+              totalBalance = Number(totalBalance) + Number(data[i].balance);
+              row +=  '<tr class="text-secondary">' +
+                        '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
+                        '<td style="vertical-align: middle">' + or + '</td>' +
+                        '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
+                        '<td style="vertical-align: middle">' + Math.round(data[i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                        '<td style="vertical-align: middle">' + Math.round(data[i].monthly_deduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                        '<td style="vertical-align: middle">' + lastUp + '</td>' +
+                      '</tr>'; 
             }
+              rowFoot +=  '<tr>' +
+                        '<th style="vertical-align: middle">Member..</th>' +
+                        '<th style="vertical-align: middle">OR..</th>' +
+                        '<th style="vertical-align: middle">Loan Type..</th>' +
+                        '<th style="vertical-align: middle">&#8369;' + Math.round(totalBalance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
+                        '<th style="vertical-align: middle">&#8369;' + Math.round(totalMonthly).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
+                        '<th style="vertical-align: middle">Date..</th>' +
+                      '</tr>';
+
+              $('#returnViewLedgerBody').html(row);
+              $('#returnViewLedgerFoot').html(rowFoot);
+            } else {
+              $('#returnViewLedgerBody').html('');
+              $('#returnViewLedgerFoot').html('');
+            }
+          },
+          error: function() {
+            alert('Error!');
+          }
           });
 
-          var collectionsDataTbl = $('#collectionsTbl').DataTable({
+          $('#viewLedgerTbl tfoot th').each( function () {
+              var title = $(this).text();
+              $(this).html( '<input type="text" class="form-control form-control-sm" placeholder="Search '+title+'" />' );
+          });
+
+          var viewLedgerDataTbl = $('#viewLedgerTbl').DataTable({
             "dom": 'lBfrtip',
             buttons: [
               {
@@ -5061,13 +5025,62 @@
               },
             ],
             "pagingType": "simple_numbers",
-            "language": { search: "", searchPlaceholder: "Search.." }
+            "language": { search: "", searchPlaceholder: "Search anything.." },
+            "columnDefs": [
+              { "orderable": false, "targets": 0 }
+            ],
+
+            "footerCallback": function ( row, data, start, end, display ) {
+              var api = this.api(), data;
+   
+              // Remove the formatting to get integer data for summation
+              var intVal = function ( i ) {
+                  return typeof i === 'string' ?
+                      i.replace(/[\$,]/g, '')*1 :
+                      typeof i === 'number' ?
+                          i : 0;
+              };
+   
+              for(var i = 3; i <= 4; i++) {
+                // Total over all pages
+                total = api
+                    .column( i )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+     
+                // Total over this page
+                pageTotal = api
+                    .column( i, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+     
+                // Update footer
+                $( api.column( i ).footer() ).html(
+                    '&#8369;' + Math.round(pageTotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+              }
+            }
           });
 
-          $('#viewLedgerInfo').html($('#collectionsTbl_info').clone());
-          $('#viewLedgerPaginate').html($('#collectionsTbl_paginate').clone());
-          $('#collectionsTbl_info').remove();
-          $('#collectionsTbl_paginate').remove();
+          viewLedgerDataTbl.columns().every( function () {
+            var that = this;
+            $('input', this.footer() ).on( 'keyup change', function () {
+              if(that.search() !== this.value){
+                that
+                .search(this.value)
+                .draw();
+              }
+            });
+          });
+
+          $('#viewLedgerInfo').html($('#viewLedgerTbl_info').clone());
+          $('#viewLedgerPaginate').html($('#viewLedgerTbl_paginate').clone());
+          $('#viewLedgerTbl_info').remove();
+          $('#viewLedgerTbl_paginate').remove();
         }
 
         // VIEW LEDGER CODES END
@@ -5188,13 +5201,13 @@
                       '</tr>'; 
             }
               rowFoot +=  '<tr>' +
-                        '<th style="vertical-align: middle">Total</th>' +
-                        '<th style="vertical-align: middle"></th>' +
-                        '<th style="vertical-align: middle"></th>' +
-                        '<th style="vertical-align: middle">&#8369;' + Math.round(totalBalance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
-                        '<th style="vertical-align: middle">&#8369;' + Math.round(totalMonthly).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
-                        '<th style="vertical-align: middle"></th>' +
-                      '</tr>';
+                            '<td style="vertical-align: middle"></td>' +
+                            '<th style="vertical-align: middle">Member..</th>' +
+                            '<th style="vertical-align: middle">Loan Type..</th>' +
+                            '<th style="vertical-align: middle">&#8369;' + Math.round(totalBalance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
+                            '<th style="vertical-align: middle">&#8369;' + Math.round(totalMonthly).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
+                            '<th style="vertical-align: middle">Date..</th>' +
+                          '</tr>';
 
               $('#returnViewUpdateLedgerBody').html(row);
               $('#returnViewUpdateLedgerFoot').html(rowFoot);
@@ -5217,6 +5230,11 @@
           }
           });
 
+          $('#viewUpdateLedgerTbl tfoot th').each(function () {
+            var title = $(this).text();
+            $(this).html( '<input type="text" class="form-control form-control-sm" placeholder="Search '+title+'" />' );
+          });
+
           var updateLedgerDataTbl = $('#viewUpdateLedgerTbl').DataTable({
             "dom": 'lBfrtip',
             buttons: [
@@ -5237,7 +5255,53 @@
             "language": { search: "", searchPlaceholder: "Search.." },
             "columnDefs": [
               { "orderable": false, "targets": 0 }
-            ]
+            ],
+            
+            "footerCallback": function ( row, data, start, end, display ) {
+              var api = this.api(), data;
+   
+              // Remove the formatting to get integer data for summation
+              var intVal = function ( i ) {
+                  return typeof i === 'string' ?
+                      i.replace(/[\$,]/g, '')*1 :
+                      typeof i === 'number' ?
+                          i : 0;
+              };
+   
+              for(var i = 3; i <= 4; i++) {
+                // Total over all pages
+                total = api
+                    .column( i )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+     
+                // Total over this page
+                pageTotal = api
+                    .column( i, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return intVal(a) + intVal(b);
+                    }, 0 );
+     
+                // Update footer
+                $( api.column( i ).footer() ).html(
+                    '&#8369;' + Math.round(pageTotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                );
+              }
+            }
+          });
+
+          updateLedgerDataTbl.columns().every( function () {
+            var that = this;
+            $('input', this.footer() ).on( 'keyup change', function () {
+              if(that.search() !== this.value){
+                that
+                .search(this.value)
+                .draw();
+              }
+            });
           });
 
           $('#updateLedgerInfo').html($('#viewUpdateLedgerTbl_info').clone());
