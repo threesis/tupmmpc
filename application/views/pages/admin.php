@@ -358,23 +358,6 @@
                           </div>
                         </div>
                       </div>
-                      <div class="row">
-                        <div class="col-md-12">
-                          <div class="card rounded shadow-sm">
-                            <div class="card-body p-3">
-                              <div class="row">
-                                <div class="col-5">
-                                  <h6 class="mb-0 text-primary" style="font-size: 1.2rem">Monthly Loan Track</h6>
-                                  <footer class="text-muted" style="font-size: 0.8rem"><cite>in 2018-2019</cite></footer>
-                                </div>
-                                <div class="col-7">
-                                  <canvas id="line-chart"></canvas>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </div>
                   </div>
                   <div id="creditDash">
@@ -1483,7 +1466,7 @@
                             <th>Name</th>
                             <th>Location</th>
                             <th>Loan Applied</th>
-                            <th>Loan Amount</th>
+                            <th>Loan Amount (&#8369;)</th>
                             <th>Cheque No.</th>
                             <th>Disbursement No.</th>
                           </tr>
@@ -1655,11 +1638,11 @@
                           <th>#</th>
                           <th>Date Applied</th>
                           <th>Loan Applied</th>
-                          <th>Loan Interest (&#8369;)</th>
                           <th>Loan Amount (&#8369;)</th>
                           <th>Loan Term</th>
                           <th>Monthly Amortization (&#8369;)</th>
                           <th>Status</th>
+                          <th>Balance (&#8369;)</th>
                           <th>Comakers</th>
                         </tr>
                       </thead>
@@ -1715,10 +1698,10 @@
                                         '<td style="vertical-align: middle">' + myDate.toLocaleDateString("en-US") + '</td>' +
                                         '<td style="vertical-align: middle">' + data['result'][i].loan_name + '</td>' +
                                         '<td style="vertical-align: middle">' + Math.round(data['result'][i].loan_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                                        '<td style="vertical-align: middle">' + Math.round(data['result'][i].loan_int).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                                         '<td style="vertical-align: middle">' + data['result'][i].loan_term + ' month/s</td>' +
                                         '<td style="vertical-align: middle">' + Math.round(data['result'][i].monthly_deduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                                         '<td style="vertical-align: middle">' + data['result'][i].status + '</td>' +
+                                        '<td style="vertical-align: middle">' + Math.round(data['result'][i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                                         '<td style="vertical-align: middle">' + cm1 + cm2 + cm3 + '</td>' +
                                       '</tr>'; 
                             }
@@ -2104,7 +2087,7 @@
                     <div class="card-body card-body-mh">
                       <div class="tab-pane list-group active" id="pending_cm_applications">
                         <div> 
-                          <table id="comakersTbl" class="table table-striped table-hover table-responsive-md table-sm">
+                          <table id="comakersTbl" class="table table-striped table-hover table-responsive-sm table-md text-nowrap">
                             <thead>
                               <tr>
                                 <th>Loan Applicant Name</th>
@@ -4982,7 +4965,6 @@
         });
 
         function viewCollections(id){
-          $("#collectionsTbl").DataTable().destroy();
           $.ajax({
           type    : 'ajax',
           method  : 'GET',
@@ -4992,6 +4974,7 @@
           dataType: 'json',
           success : function(data) {
             if(data){
+              $("#collectionsTbl").DataTable().destroy();
               var head, row, rowFoot, opts, totalMonthly = '', totalBalance = '', or = '';
               head = '<th style="vertical-align: middle">Month</th>' +
                      '<th style="vertical-align: middle">OR No.</th>';
@@ -5050,6 +5033,7 @@
                 $('#returnCollectionsHeader').html(head);
                 $('#returnCollectionsBody').html(row);
               } else {
+                $("#collectionsTbl").DataTable().destroy();
                 $('#returnCollectionsBody').html('');
                 $('#returnCollectionsFooter').html('');
               }
