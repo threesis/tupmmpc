@@ -94,7 +94,7 @@
                 <a class="list-group-item list-group-item-action" id="myloanrecords-tab" data-toggle="list" href="#myloanrecordsTab" role="tab" aria-controls="messages">My Loan Records<i class="fas fa-folder-open mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="records-comakers-tab" data-toggle="list" href="#loanRecordsCoMakersTab" role="tab" aria-controls="settings">Loan Records & Co-Makers<i class="fas fa-poll-h mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="sharecap-ledger-tab" data-toggle="list" href="#ledgerShareCapTab" role="tab" aria-controls="messages">Ledger & Share Capital<i class="fas fa-users mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
-                <a class="list-group-item list-group-item-action" id="applyloan-tab" data-toggle="list" href="#applyLoanTab" role="tab" aria-controls="messages">Apply Loan<i class="far fa-file-alt mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
+                <a class="list-group-item list-group-item-action" id="applyloan-tab" name="applyloan-tab" data-toggle="list" href="#applyLoanTab" role="tab" aria-controls="messages">Apply Loan<i class="far fa-file-alt mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="websettings-tab" data-toggle="list" href="#websiteSettings" role="tab" aria-controls="messages">Settings<i class="fas fa-cog mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
               </div>
             </div>
@@ -1040,6 +1040,7 @@
                     $(function(){
                     getMyLoanRecords();
 
+                    // added renewal button 
                     function getMyLoanRecords() {
                       var id = '<?php echo $this->session->userdata('user_id'); ?>';
                       $.ajax({
@@ -1055,24 +1056,52 @@
                             var cm1 = '';
                             var cm2 = '';
                             var cm3 = '';
+                            var cmname1 = '';
+                            var cmname2 = '';
+                            var cmname3 = '';
+
                             for(var i = 0; i < data.length; i++) {
+                              cm1 = data[i].comaker_1;
+                              cm2 = data[i].comaker_2;
+                              cm3 = data[i].comaker_3;
+
+                              $.ajax({
+                                type: 'ajax',
+                                url: '<?php echo base_url();?>users/comakerName',
+                                async: false,
+                                dataType: 'json',
+                                success: function(data) {
+                                   for(var a=0; a < data.length; a++) {
+                                      if(data[a].id == cm1) {
+                                        cmname1 = data[a].name;
+                                      } else if (data[a].id == cm2) {
+                                        cmname2 = data[a].name;
+                                      } else {
+                                        cmname3 = data[a].name;
+                                      } 
+                                   }
+                                }, error: function() {
+                                  alert('Something went wrong in Naming in Comakers');
+                                }
+                              });
+
                               var myDate  = new Date(data[i].date_applied);
                               if(data[i].comaker_1 == null) {
                                 cm1 = '';
                               } else {
-                                cm1 = data[i].comaker_1 + ', ';
+                                cm1 = cmname1 + ', ';
                               } if(data[i].comaker_2 == null) {
                                 cm2 = '';
                               } else {
-                                cm2 = data[i].comaker_2;
+                                cm2 = cmname2;
                               } if(data[i].comaker_3 == null) {
                                 cm3 = '';
                               } else {
-                                cm3 = ', ' + data[i].comaker_3;
+                                cm3 = ', ' + cmname3;
                               }
 
                               tbl +=  '<tr class="text-secondary">' +
-                                        '<td style="vertical-align: middle">' + '<button class="btn btn-sm btn-outline-info">Renew</button>' + '</td>' +
+                                        '<td style="vertical-align: middle">' + '<button class="btn btn-sm btn-outline-info Renewal" loanId="'+ data[i].loanapp_id +'">Renew</button>' + '</td>' +
                                         '<td style="vertical-align: middle">' + myDate.toLocaleDateString("en-US") + '</td>' +
                                         '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].loan_name + '</span></td>' +
                                         '<td style="vertical-align: middle">&#8369;' + Math.round(data[i].loan_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
@@ -1559,7 +1588,7 @@
                             <input type="hidden" name="loanapp-remarks" id="loanapp_remarks" class="form-control" value="New">
                           </div>
                           <div class="form-group">
-                            <input type="hidden" name="loanapp-id-no" id="loanapp_id_no" class="form-control" value="">
+                            <input type="text" name="loanapp-id-no" id="loanapp_id_no" class="form-control" value="">
                           </div>
                           <div class="form-group">
                             <input type="hidden" name="loanapp-user-id" id="loanapp_user_id" class="form-control">
@@ -1568,8 +1597,9 @@
                             <input type="hidden" name="loanapp-name" id="loanapp_name" class="form-control">
                           </div>
                           <div class="form-group">
-                            <input type="hidden" name="loan-selector-data" class="form-control" id="loan_selector_data" value="">
+                            <input type="text" name="loan-selector-data" class="form-control" id="loan_selector_data" value="">
                             <input type="text" name="loan-type" id="loan_type" class="form-control" style="display: block" disabled>
+                            <input type="text" name="loan-renewal" id="loan_renewal" class="form-control" style="display: block;" disabled>
                             <select class="custom-select mt-2 text-muted" name="loan_selector" id="loan_selector" style="display: block">
                                <!-- ajax insert loan types -->
                             </select>
@@ -4582,6 +4612,7 @@
             success: function(response) {
               if(response == true) {
                 $('#loan_selector').attr('style', 'display: none');
+                $('#loan_renewal').attr('style', 'display:none');
                 $('#loanapp_user_id').attr('status', 'newUser');
                 var url = '<?php echo base_url(); ?>loan_applications/newUser';
 
@@ -4635,6 +4666,7 @@
                 });
               } else {
                 $('#loan_type').attr('style', 'display: none');
+                $('#loan_renewal').attr('style', 'display:none');
                 $('#loan_selector').attr('style', 'display: block');
                 $('#loanapp_user_id').attr('status', 'oldUser');
 
@@ -4779,20 +4811,23 @@
 
           $.ajax({
             type: 'ajax',
-            data: {loanapp_id: loanapp_id},
+            method: 'get',            
             url: '<?php echo base_url(); ?>loan_applications/generateLoanAppId',
+            data: {member_id: user_id, loantype_id: loan_id},
             async: false,
             dataType: 'json',
             success: function(result) {
-              var i;
-              if (result.length == 0) {
-                loanapp_id = loanapp_id + 0 ;
-              } else {
-                for( i=0; i < result.length; i++) {
-                  i = i;
-                }
+              console.log(result);
+
+              var i = Number(result.length) + 1;
+              // if (result.length == 0) {
+              //   loanapp_id = loanapp_id + 0 ;
+              // } else {
+              //   for( i=0; i < result.length; i++) {
+              //     i = i;
+              //   }
                 loanapp_id = loanapp_id + i;               
-              }
+              // }
               $('#loanapp_id_no').val(loanapp_id);
             }, error: function() {
               alert('Error on generating Loan ID');
@@ -4992,12 +5027,11 @@
               });
             });
           }
-
         }
 
         function searchCoMaker(query, id, cmk1, cmk2, cmk3, cmk4) {
-            var url = '<?php echo base_url(); ?>loan_applications/searchCoMaker';
-            get_username = '<?php echo $this->session->userdata('user_id'); ?>';
+          var url = '<?php echo base_url(); ?>loan_applications/searchCoMaker';
+          get_username = '<?php echo $this->session->userdata('user_id'); ?>';
  
           $.ajax({
             type: 'ajax',
@@ -5012,8 +5046,7 @@
 
                 if(data.length > 0) {  
                   for (i=0; i < data.length; i++) {
-                    row += '<a role="button" class="dropdown-item w-100 cm_user" value="' + data[i].name + '" User-uname="' + 
-        data[i].id + '">'  
+                    row += '<a role="button" class="dropdown-item w-100 cm_user" value="'+ data[i].name +'" User-uname="'+ data[i].id +'">'  
                           + '<h5>' + data[i].name + '</h5>' 
                           + '<p>' + data[i].username + '</p>'
                           +'</a>'; 
@@ -5059,12 +5092,13 @@
           $('input[name=calc_loan_grossamt]').val(Math.round(calcTotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
           $('input[name=calc_loan_monthlydeduc]').val(Math.round(calcTotal / calcTerm).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
         }
-
         // insert loan data to db start
 
-          var loanInterests = '';
+        var loanInterests = '';
+        var OutstandingBal = '';
+        var recentLoanId = '';
 
-         $('#loanapp_submit').click(function() {
+        $('#loanapp_submit').click(function() {
           var data = loan;
           var cmCount = $('#comakerCount').val();
           var cms = '';
@@ -5079,6 +5113,41 @@
           if($('#loanapp_user_id').attr('status') == 'newUser') {
             loanType = $('#loan_type').val();
             loanInterests = $('#loan_type').attr('loan_interest');
+            if($('#loan_term').val() == null) {
+              $('#loan_term').addClass('is-invalid');
+              $('#loan_term_invalid').html("Please select your loan's term.");
+            } else {
+              count += '12';
+              $('#loan_term').removeClass('is-invalid');
+              $('#loan_term_invalid').text('');
+              if($('#loan-amount').val() == '') {
+                $('#loan-amount').addClass('is-invalid');
+                $('#loan_amount_invalid').html('Please type your desired loan amount.');
+              } else {
+                count += '3';
+                $('#loan-amount').removeClass('is-invalid');
+                $('#loan_amount_invalid').text('');
+                if ($('#user_attachment').get(0).files.length === 0) {
+                  $('#user_attachment').addClass('is-invalid');
+                  $('#user_attachment_invalid').html('No files selected! Please kindly attach your payslip.');
+                } else {
+                  count += '4';
+                  $('#user_attachment').removeClass('is-invalid');
+                  $('#user_attachment_invalid').text('');
+                  if (loanAmount > max_amount) {
+                      $('#loan-amount').addClass('is-invalid');
+                      $('#loan_amount_invalid').text('Please change the Loan Amount you Entered!');
+                    } else {
+                      count += '5';
+                      $('#loan-amount').removeClass('is-invalid');
+                      $('#loan_amount_invalid').text('');
+                    }
+                } 
+              }
+            }
+          } else if($('#loanapp_user_id').attr('status') == 'renewUser') {
+            loanType = $('#loan_renewal').val();
+            loanInterests = $('#loan_renewal').attr('loan_interest');
             if($('#loan_term').val() == null) {
               $('#loan_term').addClass('is-invalid');
               $('#loan_term_invalid').html("Please select your loan's term.");
@@ -5254,15 +5323,26 @@
               }
             });
 
+            $.ajax({
+              type: 'ajax',
+              method: 'get',
+              url: '<?php echo base_url(); ?>loan_applications/getOutstandingBalance',
+              data: {recentLoanId: recentLoanId},
+              async: false,
+              dataType: 'json',
+              success: function(data) {
+                OutstandingBal = data[0].balance;
+              }, error: function() {
+                alert('Error encountered while checking past Loan Outstanding Balance');
+              }
+            });
+
             var loanTerm = $('#loan_term').val();
             var interest = loanInterests / 12;
-            var grossAmt = interest * loanTerm * Number(loanAmount) ;
+            var grossAmt = interest * loanTerm * Number(loanAmount);
             var calcTotal =  Number(loanAmount) + Number(calcGrossAmt);
             var monthlyDeduc = calcTotal/ loanTerm;
             var balance = calcTotal - monthlyDeduc;
-            // var RetentionFee = 0;
-            var OutstandingBal = 0;
-            // var servFee = loanAmount * 0.01; 
             var loanNetAmt = loanAmount;
 
             var loanDebitTotal = Number(loanAmount)+ Number(grossAmt);
@@ -5287,6 +5367,8 @@
             $('#loanAmt').html('Amount of Loan: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(loanAmount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
             $('#loanInt').html('Loan Interest: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(grossAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
             $('#loanGross').html('Gross Loan: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(calcTotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
+
+            $('#loanOutstandingBal').html('Outstanding Balance of '+ loanType +'<span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(OutstandingBal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
             $('#loanMoDed').html('Monthly Amortizations: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(monthlyDeduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
 
 
@@ -5359,6 +5441,131 @@
           $('#loanAppCalculations').modal('hide');
         });          
         // insert loan data to db end
+
+        // Loan Renewal Part start
+
+           $('.list-group-item[name=applyloan-tab]').on('click', function() {
+              $('#loanAppForm')[0].reset();
+              $('#user_attachment_image').text('');
+              OutstandingBal = '';
+              recentLoanId = '';
+              store = '';
+              $('#loanapp_alerts').html(store);
+              Check();
+            })
+
+           $('.Renewal').click(function() {
+              var loanId = '';
+
+              OutstandingBal = '';
+              recentLoanId = '';
+              store = '';
+              $('#loanapp_alerts').html(store);
+              loanId = $(this).attr('loanId');
+              $('#myloanrecords-tab').removeClass('active show');
+              $('#myloanrecordsTab').removeClass('active show');
+              $('#applyloan-tab').addClass('active show');
+              $('#applyLoanTab').addClass('active show');
+              $('#loanAppForm')[0].reset();
+              $('#user_attachment_image').text('');
+              
+              RenewLoan(loanId);
+           });
+
+           function RenewLoan(loanId) {
+              var ltid = '';
+              var mid = '';
+              var lmt = '';
+              var ln = '';
+              var lint = '';
+              var msc = '';
+              var renew_Id = '';
+              var count;
+
+              $('#loan_type').attr('style', 'display: none');
+              $('#loan_renewal').attr('style', 'display:block');
+              $('#loan_selector').attr('style', 'display: none');
+              $('#loanapp_user_id').attr('status', 'renewUser');
+
+              $('#loan-amount').attr('disabled', false);
+              $('#loan_term').attr('disabled', false);
+              $('#user_attachment').attr('disabled', false);
+
+              $.ajax({
+                type: 'ajax',
+                method: 'get',
+                url: '<?php echo base_url(); ?>loan_applications/renewLoan',
+                data: {lid:loanId},
+                async: false,
+                dataType: 'json',
+                success: function(data) {
+                  
+                  mid = data[0].member_id;
+                  ltid = data[0].loan_applied;
+                  lmt = data[0].loan_max_term;
+                  ln = data[0].loan_name;
+                  lint = data[0].loan_interest;
+                  loanInterests = data[0].loan_interest;
+                  msc = data[0].starting_share_capital * 3;
+
+                  var userid = '<?php echo $this->session->userdata('user_id')?>';
+
+                  $.ajax({
+                    type: 'ajax',
+                    method: 'get',
+                    url: '<?php echo base_url();?>loan_applications/CheckRenewAvailability',                
+                    data: {user_id: userid, loantype_id: ltid},
+                    async: false,
+                    dataType: 'json',
+                    success: function(result) {
+                        recentLoanId = result[0].loanapp_id;
+                    }, error: function() {
+                      alert('Something went wrong on checking Renew Availability');
+                    }
+                  });
+
+                  $('#loan_renewal').attr({
+                      loan_id: data[0].loan_applied,
+                      loan_interest: data[0].loan_interest,
+                      value:  data[0].loan_name,
+                      placeholder:  data[0].loan_name
+                  });
+
+                  $.ajax({
+                    type: 'ajax',
+                    method: 'get',
+                    url: '<?php echo base_url();?>loan_applications/getRenewalId',
+                    data: {mid: mid, ltid: ltid},
+                    async: false,
+                    dataType: 'json',
+                    success: function(result) {
+                        count = result.length + 1 ;
+                    }, error: function() {
+                        alert('Error encountered while Renewal Id count');
+                    }
+                  });
+
+
+                  renew_Id = mid + ltid + count; 
+
+                  $('#loanapp_remarks').val('Renew');
+                  $('#loanapp_id_no').val(renew_Id);
+                  $('#loan_selector_data').val(ltid);
+                  var renew_amount = $('#loan-amount').val(Math.round(msc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+
+                  getLoanTerm(renew_amount);
+                  getLoanAmount(ltid);
+                  checkLoanAmount();
+
+                  passInterest(lint);
+                  agik(lint);
+
+                }, error: function() {
+                  alert('Error Encountered While Renewing your Loan');
+                }
+              });
+           }
+        // Loan Renewal Part End
 
         // comakers tab start
           // fix upload button for co maker attachment and design

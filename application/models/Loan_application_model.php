@@ -27,10 +27,13 @@
 		{
 			$data = $this->input->get('get_oldUser_loanData');
 
-			$this->db->select('loan_applied');
-			$this->db->order_by('loan_applied', 'ASC');
-			$this->db->where('member_id', $data);
-			$query = $this->db->get('loan_applications');
+			$check = "SELECT loan_applied FROM loan_applications WHERE loanapp_id IN ( SELECT MAX(loanapp_id) FROM loan_applications WHERE member_id = $data and status = 'Pending' or status = 'Active' GROUP BY loan_applied )";
+
+			// $this->db->select('loan_applied');
+			// $this->db->order_by('loan_applied', 'ASC');
+			// $this->db->where('member_id', $data);
+
+			$query = $this->db->query($check);
 
 			if($query->num_rows() > 0) {
 				return $query->result();
@@ -86,17 +89,22 @@
 
 		public function generateLoanAppId()
 		{
-			$id = $this->input->get('loanapp_id');	
+			$member_id = $this->input->get('member_id');
+			$loantype_id = $this->input->get('loantype_id');	
 
 			// "Select count(*) as num_of_rows from (Select * from loan_applications where loanapp_id like '$id%' order by date_created ASC) loan_applications"
 
 			// "Select * from loan_applications where loanapp_id like '$id%' order by date_created ASC"
 
-			$loanapp_id = "Select count(*) as num_of_rows from (Select * from loan_applications where loanapp_id like '$id%' order by date_applied ASC) loan_applications";
+			$loanapp_id = "SELECT * FROM loan_applications as num_rows WHERE loanapp_id IN ( SELECT loanapp_id FROM loan_applications WHERE member_id = $member_id and loan_applied = '$loantype_id' GROUP BY loan_applied)";
+
+			// $loanapp_id = "Select count(*) as num_of_rows from (Select * from loan_applications where loanapp_id like '$id%' order by date_applied ASC) loan_applications";
 			$query = $this->db->query($loanapp_id);
 
-			if($query->num_rows() >= 0) {
+			if($query->num_rows() > 0) {
 				return $query->result();
+			} else {
+				return false;
 			}
 		}
 
@@ -303,6 +311,66 @@
 			} else {
 				return false;
 			}
+		}
+
+		public function renewLoan() {
+			$loan_id = $this->input->get('lid');
+
+			$this->db->where('loanapp_id', $loan_id);
+			$this->db->order_by('date_applied', 'ASC limit 1');
+			$query = $this->db->from('loan_applications a')->join('share_capital b', 'b.user_id = a.member_id')->join('loan_types c', 'c.id=a.loan_applied')->get();
+
+			if($query->num_rows() > 0) {
+				return $query->result();
+			} else {
+				return false;
+			}
+		}
+
+		public function getRenewalId() {
+			$member_id = $this->input->get('mid');
+			$loantype_id  = $this->input->get('ltid');
+
+			$this->db->where('member_id', $member_id);
+			$this->db->where('loan_applied', $loantype_id);
+			$this->db->order_by('date_applied', 'ASC');
+			$query = $this->db->get('loan_applications');
+
+			if($query->num_rows() > 0) {
+				return $query->result();
+			} else {
+				return false;
+			}
+		}
+
+		public function CheckRenewAvailability() {
+			$uid = $this->input->get('user_id');
+			$lid = $this->input->get('loantype_id');
+
+			$check = "SELECT * FROM loan_applications as a WHERE loanapp_id IN ( SELECT MAX(loanapp_id) FROM loan_applications WHERE member_id = $uid and loan_applied = $lid GROUP BY loan_applied )";
+
+			$query = $this->db->query($check);
+
+			if($query->num_rows() > 0) {
+				return $query->result();
+			} else {
+				return false;
+			}
+		}
+
+		public function getOutstandingBalance() {
+			$recentLoanId = $this->input->get('recentLoanId');
+
+			$this->db->where('loanapp_id', $recentLoanId);
+			$this->db->where('status', 'Active');
+			$query = $this->db->from('loan_applications a')->join('active_loan_apps b', 'b.active_loanapp_id=a.loanapp_id')->order_by('payment_for', 'DESC limit 1')->get();
+			
+			if($query->num_rows() > 0) {
+				return $query->result();
+			} else {
+				return false;
+			}
+
 		}
 
 		// public function ledgerData() {

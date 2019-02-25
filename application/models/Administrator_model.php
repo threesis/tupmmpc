@@ -301,8 +301,8 @@
 
 			if($ids){
 				foreach ($ids as $id => $code) {
-					$balance = $this->db->query("select balance as bal from active_loan_apps where loanapp_id = $code")->row()->{'bal'};
-					$lastID = $this->db->query("select id as active_id from active_loan_apps where loanapp_id = $code")->row()->{'active_id'};
+					$balance = $this->db->query("select balance as bal from active_loan_apps where active_loanapp_id = $code")->row()->{'bal'};
+					$lastID = $this->db->query("select id as active_id from active_loan_apps where active_loanapp_id = $code")->row()->{'active_id'};
 					$diff = $balance - $md[$id];
 
 						$this->db->set('or_number', $or);
@@ -362,7 +362,7 @@
 				$this->db->like('YEAR(payment_date)', $year);
 			}
 			$this->db->select('*')->from('active_loan_apps a');
-			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
+			$this->db->join('loan_applications b', 'b.loanapp_id = a.active_loanapp_id');
 			$this->db->join('members c', 'c.id = b.member_id');
 			$this->db->join('loan_types d', 'd.id = b.loan_applied');
 			$this->db->order_by('a.id', 'DESC');
@@ -378,7 +378,7 @@
 				$this->db->like('YEAR(payment_date)', $year);
 			}
 			$this->db->select('*')->from('active_loan_apps a');
-			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
+			$this->db->join('loan_applications b', 'b.loanapp_id = a.active_loanapp_id');
 			$this->db->join('members c', 'c.id = b.member_id');
 			$this->db->join('loan_types d', 'd.id = b.loan_applied');
 			$this->db->order_by('a.id', 'DESC');

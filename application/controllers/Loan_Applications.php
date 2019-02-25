@@ -119,6 +119,26 @@
  		echo json_encode($data_result);
  	}
 
+ 	public function RenewLoan() {
+		$data_result = $this->loan_application_model->renewLoan();
+ 		echo json_encode($data_result);	
+	}
+
+	public function getRenewalId() {
+		$data_result = $this->loan_application_model->getRenewalId();
+		echo json_encode($data_result);
+	}
+
+	public function CheckRenewAvailability() {
+		$data_result = $this->loan_application_model->CheckRenewAvailability();
+		echo json_encode($data_result);
+	}
+		
+	public function getOutstandingBalance() {
+		$data_result = $this->loan_application_model->getOutstandingBalance();
+		echo json_encode($data_result);
+	}
+
  	// public function ledgerData() {
  	// 	$data_result = $this->loan_application_model->ledgerData();
  	// 	echo json_encode($data_result);
@@ -132,6 +152,5 @@
 	public function insertChequeNo() {
 		$data_result = $this->loan_model->insertChequeNo();
  		echo json_encode($data_result);	
-	}
-	
+	}	
  }

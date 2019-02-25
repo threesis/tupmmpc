@@ -69,7 +69,7 @@
 				$this->db->like('name', $input);
 			}
 			$this->db->select('*')->from('active_loan_apps a');
-			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
+			$this->db->join('loan_applications b', 'b.loanapp_id = a.active_loanapp_id');
 			$this->db->join('members c', 'c.id = b.member_id');
 			$this->db->join('loan_types d', 'd.id = b.loan_applied', 'left');
 			$this->db->order_by('a.payment_date', 'DESC');
@@ -90,7 +90,7 @@
 		public function getActiveLoanTbl(){
 			$id = $this->input->get('id');
 			$this->db->select('*')->from('active_loan_apps a');
-			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
+			$this->db->join('loan_applications b', 'b.loanapp_id = a.active_loanapp_id');
 			$this->db->join('members c', 'c.id = b.member_id');
 			$this->db->join('loan_types d', 'd.id = b.loan_applied', 'left');
 			$this->db->where('a.loanapp_id', $id);

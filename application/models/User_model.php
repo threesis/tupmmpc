@@ -39,7 +39,7 @@
 		public function getMyLoanRecords(){
 			$id = $this->input->get('id');
 			$this->db->select('*')->from('loan_applications a');
-			$this->db->join('active_loan_apps b', 'b.loanapp_id = a.loanapp_id', 'left');
+			$this->db->join('active_loan_apps b', 'b.active_loanapp_id = a.loanapp_id', 'left');
 			$this->db->join('loan_types c', 'c.id = a.loan_applied');
 			$this->db->join('members d', 'd.id = a.member_id');
 			$this->db->where('a.member_id', $id);
@@ -60,11 +60,19 @@
 		public function getUserLoanRecords(){
 			$id = $this->input->get('id');
 			$this->db->select('*')->from('active_loan_apps a');
-			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
+			$this->db->join('loan_applications b', 'b.loanapp_id = a.active_loanapp_id');
 			$this->db->join('loan_types c', 'c.id = b.loan_applied');
 			$this->db->where('member_id', $id);
 			$this->db->order_by('a.id', 'DESC');
 			$query = $this->db->get();
+			return $query->result();
+		}
+
+		public function comakerName() {
+			$this->db->select('*')->from('members');
+			$this->db->order_by('id', 'ASC');
+			$query = $this->db->get();
+
 			return $query->result();
 		}
 
