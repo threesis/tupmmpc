@@ -56,10 +56,15 @@
 		}
 
 		public function search_user() {
+			$input = $this->input->post('query');
+			if($input != '') {
+				$this->db->like('name', $input);
+			}
 			$this->db->select('*')->from('members a','left');
 			$this->db->join('roles b', 'b.role_id = a.position');
 			$this->db->join('share_capital c', 'c.user_id = a.id')->select_max('total_share_capital');
 			$this->db->group_by('id');
+			$this->db->order_by('register_date', 'DESC');
 			$query = $this->db->get();
 			return $query->result();
 		}
@@ -78,6 +83,10 @@
 
 		public function add_member() {
 			$memDate = $this->input->post('membershipDate');
+			if($memDate == ''){
+				$memDate = date('Y-m-d');
+			}
+
 			$member_data = array(
 				'name' => $this->input->post('name'),
 				'address' => $this->input->post('city'),
@@ -101,7 +110,6 @@
 					'user_id' => $last_id,
 					'share_capital' => $this->input->post('sharecap'),
 					'total_share_capital' => $this->input->post('startingShareCap'),
-					'subscribe_share' => $this->input->post('subscribeShare'),
 					'or_number' => $this->input->post('orNum'),
 					'status' => 'paid',
 					'updated_for' => date('Y-m-d'),
@@ -110,12 +118,11 @@
 
 				$this->db->insert('share_capital', $share_cap_data);
 				if($this->db->affected_rows() > 0) {
-					// Adds share capital to it's total
-					/*$total = $this->db->query("select sum(share_capital+total_share_capital) as tot from share_capital where user_id = $last_id group by sc_id DESC LIMIT 1")->row()->{'tot'};*/
+					$total = $this->db->query("select sum(share_capital+total_share_capital) as tot from share_capital where user_id = $last_id group by sc_id DESC LIMIT 1")->row()->{'tot'};
 					$data = array(
 						'user_id' => $last_id,
 						'share_capital' => $this->input->post('sharecap'),
-						'total_share_capital' => $this->input->post('sharecap'),
+						'total_share_capital' => $total,
 						'status' => 'unpaid',
 						'updated_for' => date('Y-m-d', strtotime('+1 month'))
 					);
@@ -207,69 +214,36 @@
 			}
 		}
 
-		public function getAllMembers($userType) {
+		public function getAllMembers() {
 			$query = $this->db->get('members');
 			return $query->num_rows();
 		}
-    
-		public function getAllAppliedLoans($userType, $userID) {
-			if ($userType == 'Member') {
-				$query = $this->db->where('member_id', $userID)->get('loan_applications');
-				return $query->num_rows();
-			} else {
-				$query = $this->db->get('loan_applications');
-				return $query->num_rows();
-			}
+
+		public function getAllAppliedLoans() {
+			$query = $this->db->get('loan_applications');
+			return $query->num_rows();
 		}
 
-		public function getAllPendingLoans($userType, $userID) {
-			if ($userType == 'Member') {
-				$this->db->where('status', 'Pending');
-				$this->db->where('member_id', $userID);
-				$query = $this->db->where('member_id', $userID)->get('loan_applications');
-				return $query->num_rows();
-			} else {
-				$this->db->where('status', 'Pending');
-				$query = $this->db->get('loan_applications');
-				return $query->num_rows();
-			}
+		public function getAllPendingLoans() {
+			$this->db->where('status', 'Pending');
+			$query = $this->db->get('loan_applications');
+			return $query->num_rows();
 		}
 
-		public function getAllApprovedLoans($userType, $userID) {
-			if($userType == 'Member') {
-				$this->db->where('status', 'Approved');
-				$this->db->where('member_id', $userID);
-				$query = $this->db->get('loan_applications');
-				return $query->num_rows();
-			} else {
-				$this->db->where('status', 'Approved');
-				$query = $this->db->get('loan_applications');
-				return $query->num_rows();
-			}
+		public function getAllApprovedLoans() {
+			$query = $this->db->get('approved_loan_apps');
+			return $query->num_rows();
 		}
 
-		public function getAllActiveLoans($userType, $userID) {
-			if($userType == 'Member') {
-				$this->db->where('status', 'Active');
-				$this->db->where('member_id', $userID);
-				$query = $this->db->get('loan_applications');
-				return $query->num_rows();
-			} else {
-				$this->db->where('status', 'Active');
-				$query = $this->db->get('loan_applications');
-				return $query->num_rows();
-			}
+		public function getAllActiveLoans() {
+			$query = $this->db->get('active_loan_apps');
+			return $query->num_rows();
 		}
 
 		public function getTotalLoanPayments() {
-			$this->db->select_max('balance')->from('active_loan_apps');
-			$this->db->group_by('loanapp_id');
-			$query = $this->db->get()->result();
-			$total = 0;
-			foreach ($query as $sum) {
-				$total += $sum->balance;
-			}
-			return $total;
+			$this->db->select_sum('balance')->from('active_loan_apps');
+			$query = $this->db->get();
+			return $query->result();
 		}
 
 		public function getAllMissedPayments() {
@@ -279,14 +253,9 @@
 		}
 
 		public function getTotalShareCapital() {
-			$this->db->select_max('total_share_capital')->from('share_capital');
-			$this->db->group_by('user_id');
-			$query = $this->db->get()->result();
-			$total = 0;
-			foreach ($query as $sum) {
-				$total += $sum->total_share_capital;
-			}
-			return $total;
+			$this->db->select_sum('total_share_capital')->from('share_capital');
+			$query = $this->db->get();
+			return $query->result();
 		}
 
 		public function updateShareCapital() {
@@ -320,6 +289,7 @@
 			} else {
 				return false;
 			}
+
 		}
 
 		public function updateLedgers() {
@@ -331,13 +301,12 @@
 
 			if($ids){
 				foreach ($ids as $id => $code) {
-					$balance = $this->db->query("select balance as bal from active_loan_apps where loanapp_id = $code")->row()->{'bal'};
-					$remark = $this->db->query("select remarks as rm from active_loan_apps where loanapp_id = $code")->row()->{'rm'};
-					$lastID = $this->db->query("select id as active_id from active_loan_apps where loanapp_id = $code")->row()->{'active_id'};
+					$balance = $this->db->query("select balance as bal from active_loan_apps where active_loanapp_id = $code")->row()->{'bal'};
+					$lastID = $this->db->query("select id as active_id from active_loan_apps where active_loanapp_id = $code")->row()->{'active_id'};
 					$diff = $balance - $md[$id];
 
 						$this->db->set('or_number', $or);
-						$this->db->set('payment_status', 'paid');
+						$this->db->set('status', 'paid');
 						$this->db->set('payment_date', date('Y-m-d'));
 						$this->db->where('id', $lastID);
 						$this->db->update('active_loan_apps');
@@ -345,8 +314,7 @@
 						$data = array(
 							'loanapp_id' => $code,
 							'balance' => $diff,
-							'remarks' => $remark,
-							'payment_status' => 'unpaid',
+							'status' => 'unpaid',
 							'payment_for' => date('Y-m-d', strtotime('+1 month'))
 						);
 						$this->db->insert('active_loan_apps', $data);
@@ -386,42 +354,36 @@
 			return $query->result();
 		}
 
-		public function getCollectionMembers(){
-			$this->db->select('name, id')->order_by('register_date', 'ASC');
-			$query = $this->db->get('members');
-			if($query->num_rows() > 0) {
-				return $query->result();
-			} else {
-				return false;
+		public function viewLedger(){
+			$month = $this->input->get('mo');
+			$year = $this->input->get('yr');
+			if(($month || $year) != ''){
+				$this->db->like('MONTH(payment_date)', $month);
+				$this->db->like('YEAR(payment_date)', $year);
 			}
-		}
-
-		public function viewCollections(){
-			$id = $this->input->get('id');
-
-			$this->db->select('payment_date, or_number, loan_name, balance')->from('active_loan_apps a');
-			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
-			$this->db->join('loan_types c', 'c.id = b.loan_applied');
-			$this->db->where('payment_status', 'paid');
-			$this->db->where('member_id', $id);
+			$this->db->select('*')->from('active_loan_apps a');
+			$this->db->join('loan_applications b', 'b.loanapp_id = a.active_loanapp_id');
+			$this->db->join('members c', 'c.id = b.member_id');
+			$this->db->join('loan_types d', 'd.id = b.loan_applied');
+			$this->db->order_by('a.id', 'DESC');
 			$query = $this->db->get();
-			return array('result' => $query->result(), 'numcols' => $this->db->select('loan_name')->get('loan_types')->result());
+			return $query->result();
 		}
 
 		public function updateLedger(){
 			$month = $this->input->get('mo');
 			$year = $this->input->get('yr');
 			if(($month || $year) != ''){
-				$this->db->like('MONTH(payment_for)', $month);
-				$this->db->like('YEAR(payment_for)', $year);
+				$this->db->like('MONTH(payment_date)', $month);
+				$this->db->like('YEAR(payment_date)', $year);
 			}
-			$this->db->select('*')->select_min('balance')->from('active_loan_apps a');
-			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
+			$this->db->select('*')->from('active_loan_apps a');
+			$this->db->join('loan_applications b', 'b.loanapp_id = a.active_loanapp_id');
 			$this->db->join('members c', 'c.id = b.member_id');
 			$this->db->join('loan_types d', 'd.id = b.loan_applied');
-			$this->db->group_by('a.loanapp_id');
-			$this->db->order_by('payment_status', 'DESC');
+			$this->db->order_by('a.id', 'DESC');
 			$query = $this->db->get();
 			return $query->result();
 		}
+		
 	}
