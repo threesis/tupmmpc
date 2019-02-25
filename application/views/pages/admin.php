@@ -1749,13 +1749,13 @@
                   <div class="card-header shadow-sm">
                     <ul class="nav nav-tabs card-header-tabs">
                       <li class="ml-2 pb-4" style="min-height: 40px;">
-                        <h2 class="card-title">Collections & Remittances</h2>
+                        <h2 class="card-title">Ledger & Share Capital</h2>
                       </li>
                       <li id="view-ledgers" class="nav-item ml-auto loan-apps">
-                        <a id="ledgerTab" class="nav-link active" data-toggle="tab" href="#ledgerSubTab">Collections<span class="badge badge-secondary ml-1"></span></a>
+                        <a id="ledgerTab" class="nav-link active" data-toggle="tab" href="#ledgerSubTab">View Ledger<span class="badge badge-secondary ml-1"></span></a>
                       </li>
                       <li id="update-ledgers" class="nav-item loan-apps">
-                        <a id="updateLedgerTab" class="nav-link" data-toggle="tab" href="#updateLedgerSubTab">Remittances<span class="badge badge-secondary ml-1"></span></a>
+                        <a id="updateLedgerTab" class="nav-link" data-toggle="tab" href="#updateLedgerSubTab">Update Ledger<span class="badge badge-secondary ml-1"></span></a>
                       </li>
                       <li id="update-share-capitals" class="nav-item loan-apps">
                         <a id="shareCapTab" class="nav-link" data-toggle="tab" href="#shareCapSubTab">Share Capital<span class="badge badge-secondary ml-1"></span></a>
@@ -1766,25 +1766,45 @@
                     <div id="ledgerShareCapMsg" class="no-padding"></div>
                       <div class="tab-pane active" id="ledgerSubTab">
                         <div class="form-row mb-1">
-                          <div class="col-sm-12 col-md-4">
-                            <select id="collectionsNameSelect">
+                          <div class="col-sm-12 col-md-6">
+                            <select id="viewLedgerMonthSelect">
+                              <option></option>
+                              <option value="1">January</option>
+                              <option value="2">February</option>
+                              <option value="3">March</option>
+                              <option value="4">April</option>
+                              <option value="5">May</option>
+                              <option value="6">June</option>
+                              <option value="7">July</option>
+                              <option value="8">August</option>
+                              <option value="9">September</option>
+                              <option value="10">October</option>
+                              <option value="11">November</option>
+                              <option value="12">December</option>
+                            </select>
+                          </div>
+
+                          <div class="col-sm-12 col-md-6">
+                            <select id="viewLedgerYearSelect">
 
                             </select>
                           </div>
                         </div>
-                        <table id="collectionsTbl" class="table table-striped table-hover table-responsive table-md text-nowrap">
+                        <table id="viewLedgerTbl" class="table table-striped table-hover table-responsive table-md text-nowrap">
                           <thead>
-                            <tr id="returnCollectionsHeader"> 
-                              <th>Date</th>
-                              <th>OR No.</th>
+                            <tr>
+                              <th>Name</th>
+                              <th>OR Number</th>
                               <th>Loan Applied</th>
                               <th>Balance (&#8369;)</th>
+                              <th>Monthly Amortization (&#8369;)</th>
+                              <th>Date Updated</th>
                             </tr>
                           </thead>
-                          <tbody id="returnCollectionsBody">
+                          <tbody id="returnViewLedgerBody">
                             
                           </tbody>
-                          <tfoot id="returnCollectionsFooter">
+                          <tfoot id="returnViewLedgerFoot">
                             
                           </tfoot>
                         </table>
