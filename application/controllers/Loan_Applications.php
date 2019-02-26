@@ -42,7 +42,7 @@
  	public function insertLoanApp() 
  	{	
  		$config = array(
- 			'upload_path' => './assets/img/payslips',
+ 			'upload_path' => './assets/img/payslip_uploads',
  			'allowed_types' => 'gif|jpg|png|jpeg',
  			'max_size' => 5000,
 			'max_width' => 0,
@@ -96,6 +96,23 @@
  		$data_result = $this->loan_application_model->cmUpdateAttachment();
  		echo json_encode($data_result);
  	}
+ 	public function RenewLoan() {
+		$data_result = $this->loan_application_model->renewLoan();
+ 		echo json_encode($data_result);	
+	}
+	public function getRenewalId() {
+		$data_result = $this->loan_application_model->getRenewalId();
+		echo json_encode($data_result);
+	}
+	public function CheckRenewAvailability() {
+		$data_result = $this->loan_application_model->CheckRenewAvailability();
+		echo json_encode($data_result);
+	}
+		
+	public function getOutstandingBalance() {
+		$data_result = $this->loan_application_model->getOutstandingBalance();
+		echo json_encode($data_result);
+	}
  	// public function ledgerData() {
  	// 	$data_result = $this->loan_application_model->ledgerData();
  	// 	echo json_encode($data_result);
@@ -107,6 +124,5 @@
 	public function insertChequeNo() {
 		$data_result = $this->loan_model->insertChequeNo();
  		echo json_encode($data_result);	
-	}
-	
+	}	
  }

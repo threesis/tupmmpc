@@ -231,6 +231,11 @@
 			echo json_encode($result);
 		}
 
+		public function updateUserLedger() {
+			$result = $this->administrator_model->updateUserLedger();
+			echo json_encode($result);
+		}
+
 		// Dashboard 
 		public function getTotalLoanPayments(){
 			$result = $this->administrator_model->getTotalLoanPayments();

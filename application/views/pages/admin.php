@@ -1796,7 +1796,7 @@
                               <th>Name</th>
                               <th>OR Number</th>
                               <th>Loan Applied</th>
-                              <th>Balance (&#8369;)</th>
+                              <th>Forced Monthly Savings (&#8369;)</th>
                               <th>Monthly Amortization (&#8369;)</th>
                               <th>Date Updated</th>
                             </tr>
@@ -1843,9 +1843,9 @@
                           <thead>
                             <tr>
                               <th style="vertical-align: middle"><input id="selectAllLedger" type="checkbox"></th>
+                              <th>Action</th>
                               <th>Name</th>
                               <th>Loan Applied</th>
-                              <th>Balance (&#8369;)</th>
                               <th>Monthly Amortization (&#8369;)</th>
                               <th>Date Updated</th>
                             </tr>
@@ -1887,12 +1887,12 @@
                           <div id="shareCapOR" class="col-sm-12 col-md-4 text-center">
                           </div>
                         </div>
-                        <table id="shareCapRecTbl" class="table table-striped table-hover table-responsive table-md text-nowrap">
+                        <table id="shareCapRecTbl" class="table table-striped table-hover table-responsive-sm table-md text-nowrap">
                           <thead>
                             <tr>
                               <th style="vertical-align: middle"><input id="selectAllShareCap" type="checkbox"></th>
                               <th>Name</th>
-                              <th>Share Capital (&#8369;)</th>
+                              <th>Forced Monthly Savings (&#8369;)</th>
                               <th>Total Share Capital (&#8369;)</th>
                               <th>Last Updated</th>
                             </tr>
@@ -1909,6 +1909,7 @@
                     <div class="card-footer" style="min-height: 60px">
                       <p class="card-text text-muted float-left mt-2"><em id="viewLedgerInfo"></em><em id="updateLedgerInfo" style="display: none"></em><em id="shareCapInfo" style="display: none"></em></p>
                       <div id="viewLedgerPaginate" class="float-right"></div>
+                      <div id="viewShareCapPaginate" class="float-right" style="display: none"></div>
                       <button id="ledgerShareCapBtn" class="btn btn-outline-success float-right" style="display: none"><i class="far fa-edit mr-1"></i>Update All</button>
                       <button id="updateLedgerBtn" class="btn btn-outline-success float-right" style="display: none"><i class="far fa-edit mr-1"></i>Update All</button>
                     </div>
@@ -2712,6 +2713,17 @@
           placeholder: months[month.getMonth()],
           closeAfterSelect: true
         });
+        $('#viewLedgerYearSelect').html(yrOptions).selectize({
+          create: false,
+          placeholder: "Year..",
+          closeAfterSelect: true
+        });
+        $('#viewLedgerMonthSelect').selectize({
+          create: false,
+          maxOptions: 12,
+          placeholder: months[month.getMonth()],
+          closeAfterSelect: true
+        });
         $('#updateLedgerYearSelect').html(yrOptions).selectize({
           create: false,
           placeholder: "Year..",
@@ -2724,6 +2736,8 @@
           closeAfterSelect: true
         });
         $('#college').selectize({
+          create: true,
+          maxOptions: 5,
           placeholder: "Select College..",
           closeAfterSelect: true
         });
@@ -2735,16 +2749,19 @@
           $('#viewUpdateLedgerTbl input[type="checkbox"]:enabled').prop('checked', this.checked);
         });
         $('#ledgerTab').click(function(){
+          $('#viewLedgerPaginate').show();
           $('#ledgerShareCapBtn').hide();
           $('#updateLedgerBtn').hide();
+          $('#viewShareCapPaginate').hide();
           $('#viewLedgerInfo').show();
           $('#updateLedgerInfo').hide();
           $('#shareCapInfo').hide();
         });
         $('#updateLedgerTab').click(function(){
-          $('#viewLedgerPaginate').hide();
-          $('#viewLedgerInfo').hide();
           $('#ledgerShareCapBtn').hide();
+          $('#viewLedgerPaginate').hide();
+          $('#viewShareCapPaginate').hide();
+          $('#viewLedgerInfo').hide();
           $('#updateLedgerBtn').show();
           $('#updateLedgerInfo').show();
           $('#shareCapInfo').hide();
@@ -2752,6 +2769,8 @@
         $('#shareCapTab').click(function(){
           $('#ledgerShareCapBtn').show();
           $('#updateLedgerBtn').hide();
+          $('#viewLedgerPaginate').hide();
+          $('#viewShareCapPaginate').show();
           $('#viewLedgerInfo').hide();
           $('#updateLedgerInfo').hide();
           $('#shareCapInfo').show();
@@ -4991,14 +5010,14 @@
               } else {
                 or = data[i].or_number;
               }
-              totalMonthly = Number(totalMonthly) + Number(data[i].monthly_deduc);
-              totalBalance = Number(totalBalance) + Number(data[i].balance);
+              totalMonthly = Number(totalMonthly) + Number(data[i].sharecap_paid);
+              totalBalance = Number(totalBalance) + Number(data[i].balance_paid);
               row +=  '<tr class="text-secondary">' +
                         '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
                         '<td style="vertical-align: middle">' + or + '</td>' +
                         '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
-                        '<td style="vertical-align: middle">' + Math.round(data[i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                        '<td style="vertical-align: middle">' + Math.round(data[i].monthly_deduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                        '<td style="vertical-align: middle">' + Math.round(data[i].sharecap_paid).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                        '<td style="vertical-align: middle">' + Math.round(data[i].balance_paid).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                         '<td style="vertical-align: middle">' + lastUp + '</td>' +
                       '</tr>'; 
             }
@@ -5045,7 +5064,7 @@
               },
             ],
             "pagingType": "simple_numbers",
-            "language": { search: "", searchPlaceholder: "Search anything.." },
+            "language": { search: "", searchPlaceholder: "Search.." },
             "columnDefs": [
               { "orderable": false, "targets": 0 }
             ],
@@ -5117,10 +5136,16 @@
 
         $('#updateLedgerBtn').click(function(){
           var checked = [];
+          var member = [];
+          var loanapp = [];
           var monthly = [];
+          var sharecap = [];
           $.each($('#returnViewUpdateLedgerBody input[type=checkbox]:checked'), function(){
+            member.push($(this).attr('user_id'));
             checked.push($(this).attr('id'));
+            loanapp.push($(this).attr('loanapp'));
             monthly.push($(this).attr('md'));
+            sharecap.push($(this).attr('sc'));
           });
           var ORinput = $('#updateLedgerOR').find('#inputLedgerOR');
           ORinput.keyup(function() {
@@ -5138,11 +5163,12 @@
             alert('Please select ledgers to update.');
           } else {
             ORinput.removeClass('is-invalid');
+            console.log(checked + " , "+loanapp+" , "+monthly+" , "+sharecap);
             $.ajax({
               type    : 'ajax',
               method  : 'get',
               url     : '<?php echo base_url() ?>administrators/updateLedgers',
-              data    : {check: JSON.stringify(checked), md: JSON.stringify(monthly), ornum: ORinput.val()},
+              data    : {check: JSON.stringify(checked), md: JSON.stringify(monthly), la: JSON.stringify(loanapp), sc: JSON.stringify(sharecap), uid: JSON.stringify(member), ornum: ORinput.val()},
               async   : false,
               dataType: 'json',
               success : function(data){
@@ -5153,6 +5179,8 @@
                                   '</button>' +
                                 '</p>').fadeIn().delay(3000).fadeOut('fast');
                   updateLedger();
+                  refreshViewLedger();
+                  refreshShareCapRec();
                 } else {
                   $('#ledgerShareCapMsg').html('<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Oops, something went wrong.</a>' +
                                   '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
@@ -5160,6 +5188,8 @@
                                   '</button>' +
                                 '</p>').fadeIn().delay(3000).fadeOut('fast');
                   updateLedger();
+                  refreshViewLedger();
+                  refreshShareCapRec();
                 }
               },
               error : function(){
@@ -5192,15 +5222,17 @@
           dataType: 'json',
           success : function(data) {
             if(data.length > 0){
-            var row, rowFoot, opts, totalMonthly = '', totalBalance = '', count = 0, lock = '';
+            var row, rowFoot, opts, totalMonthly = '', totalBalance = '', count = 0, lock = '', btnColor = '';
             for(var i = 0; i < data.length; i++){
               or = data[0].or_number;
               if(data[i].payment_status == 'paid') {
                 cond = 'far fa-check-circle text-success';
                 lock = 'disabled';
+                btnColor = 'success';
               } else {
                 cond = 'far fa-times-circle text-danger';
                 lock = '';
+                btnColor = 'danger';
                 count++;
               }
               if(data[i].payment_date == '0000-00-00') {
@@ -5209,22 +5241,22 @@
                 lastUp = new Date(data[i].payment_date).toUTCString();
                 lastUp = lastUp.split(' ').slice(0, 4).join(' ');
               }
-              totalMonthly = Number(totalMonthly) + Number(data[i].monthly_deduc);
-              totalBalance = Number(totalBalance) + Number(data[i].balance);
+              totalMonthly = Number(totalMonthly) + Number(data[i].share_capital);
+              totalBalance = Number(totalBalance) + Number(data[i].monthly_deduc);
               row +=  '<tr class="text-secondary">' +
-                        '<td style="vertical-align: middle"><input id="' + data[i].loanapp_id + '" md="' + data[i].monthly_deduc + '" type="checkbox" ' + lock + '></td>' +
+                        '<td style="vertical-align: middle"><input id="'+data[i].id+'" user_id="'+data[i].member_id+'" loanapp="' + data[i].loanapp_id + '" md="' + data[i].monthly_deduc + '" sc="' + data[i].share_capital+'" type="checkbox" ' + lock + '></td>' +
+                        '<td style="vertical-align: middle"><button class="btn btn-outline-'+btnColor+' btn-sm btn-block editUserLedger" data="'+data[i].id+'" name="'+data[i].name+'" ' + lock + '>Update</button></td>' +
                         '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + ' <i class="'+cond+'"></i></span></td>' +
                         '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
-                        '<td style="vertical-align: middle">' + Math.round(data[i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                        '<td style="vertical-align: middle">' + Math.round(data[i].monthly_deduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                        '<td class="'+data[i].id+'" style="vertical-align: middle" onkeypress="return event.charCode >= 48 && event.charCode <= 57">' + Math.round(data[i].monthly_deduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                         '<td style="vertical-align: middle">' + lastUp + '</td>' +
                       '</tr>'; 
             }
               rowFoot +=  '<tr>' +
                             '<td style="vertical-align: middle"></td>' +
+                            '<td style="vertical-align: middle"></td>' +
                             '<th style="vertical-align: middle">Member..</th>' +
                             '<th style="vertical-align: middle">Loan Type..</th>' +
-                            '<th style="vertical-align: middle">&#8369;' + Math.round(totalBalance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
                             '<th style="vertical-align: middle">&#8369;' + Math.round(totalMonthly).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
                             '<th style="vertical-align: middle">Date..</th>' +
                           '</tr>';
@@ -5241,7 +5273,7 @@
             } else {
               $('#returnViewUpdateLedgerBody').html('');
               $('#returnViewUpdateLedgerFoot').html('');
-              $('#updateLedgerOR').html('<input type="text" id="inputLedgerOR" class="form-control form-control-sm" placeholder="Input New OR Number.." disabled>');
+              $('#updateLedgerOR').html('<h3 class="text-danger">N/A..</h3>');
               $('#updateLedgerBtn').prop('disabled', true);
             }
           },
@@ -5250,7 +5282,7 @@
           }
           });
 
-          $('#viewUpdateLedgerTbl tfoot th').each(function () {
+          $('#viewUpdateLedgerTbl tfoot th').each(function(){
             var title = $(this).text();
             $(this).html( '<input type="text" class="form-control form-control-sm" placeholder="Search '+title+'" />' );
           });
@@ -5274,7 +5306,7 @@
             "pagingType": "simple_numbers",
             "language": { search: "", searchPlaceholder: "Search.." },
             "columnDefs": [
-              { "orderable": false, "targets": 0 }
+              { "orderable": false, "targets": [0,1,2] }
             ],
             
             "footerCallback": function ( row, data, start, end, display ) {
@@ -5288,10 +5320,9 @@
                           i : 0;
               };
    
-              for(var i = 3; i <= 4; i++) {
                 // Total over all pages
                 total = api
-                    .column( i )
+                    .column( 4 )
                     .data()
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);
@@ -5299,17 +5330,16 @@
      
                 // Total over this page
                 pageTotal = api
-                    .column( i, { page: 'current'} )
+                    .column( 4, { page: 'current'} )
                     .data()
                     .reduce( function (a, b) {
                         return intVal(a) + intVal(b);
                     }, 0 );
      
                 // Update footer
-                $( api.column( i ).footer() ).html(
+                $( api.column( 4 ).footer() ).html(
                     '&#8369;' + Math.round(pageTotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 );
-              }
             }
           });
 
@@ -5328,6 +5358,57 @@
           $('#viewUpdateLedgerTbl_info').remove();
 
         }
+
+          $('#returnViewUpdateLedgerBody').on('click', '.editUserLedger', function(){
+            var identify = $(this).attr('data');
+            $(this).removeClass('btn-outline-danger editUserLedger').addClass('btn-outline-primary updateUserLedger').text('Done');
+            $('#returnViewUpdateLedgerBody').find('.'+identify).attr('contenteditable', true).css('background-color', 'rgba(179,255,179,0.5)');
+          });
+
+          $('#returnViewUpdateLedgerBody').on('click', '.updateUserLedger', function(){
+            var apostrophe = "'s";
+            var id = $(this).attr('data');
+            var name = $(this).attr('name');
+            var or = $('#updateLedgerOR').find('#inputLedgerOR');
+            var fm = ($('#viewUpdateLedgerTbl .'+$(this).attr('data'))[0].innerHTML);
+            var ap = ($('#viewUpdateLedgerTbl .'+$(this).attr('data'))[1].innerHTML);
+            or.keyup(function() {
+              if(or.val() == '') {
+                or.attr('placeholder', 'Please enter the OR number!')
+                or.addClass('is-invalid');
+              } else {
+                or.removeClass('is-invalid');
+              }
+            });
+            if(or.val() == '') {
+              or.attr('placeholder', 'Please enter the OR number!')
+              or.addClass('is-invalid');
+            } else {
+              or.removeClass('is-invalid');
+              /*$.ajax({
+                type    : 'ajax',
+                method  : 'get',
+                url     : '<?php echo base_url() ?>administrators/updateUserLedger',
+                data    : {id: id, or: or, fm: fm, ap: ap},
+                async   : false,
+                dataType: 'json',
+                success: function(data) {
+                  if(data == true) {
+                    showLoanDeduc();
+                    $('.modal-body').animate({scrollTop: 0}, 'fast');
+                    $('#ledgerShareCapMsg').html('<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, "'+name+apostrophe+'" has been updated.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>').fadeIn();
+                  } else {
+                    $('#ledgerShareCapMsg').html('<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Someting happened. Please try again later.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>').fadeIn();
+                  }
+                },
+                error: function() {
+                  alert('A database error occured!');
+                }
+              });*/
+              $(this).removeClass('btn-outline-primary updateUserLedger').addClass('btn-outline-success updatedUserLedger').text('Updated');
+              $('#returnViewUpdateLedgerBody').find('.'+id).attr('contenteditable', false).css('background-color', 'transparent');
+            }
+          });
         // UPDATED LEDGER CODES END
 
         // SHARE CAPITAL CODES 
@@ -5375,14 +5456,18 @@
                                       '<span aria-hidden="true">&times;</span>' +
                                     '</button>' +
                                   '</p>').fadeIn().delay(3000).fadeOut('fast');
-                    getShareCapitalRec();
+                    updateLedger();
+                    refreshViewLedger();
+                    refreshShareCapRec();
                   } else {
                     $('#ledgerShareCapMsg').html('<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Oops, something went wrong.</a>' +
                                     '<button type="button" class="close-sm" data-dismiss="alert" aria-label="Close">' +
                                       '<span aria-hidden="true">&times;</span>' +
                                     '</button>' +
                                   '</p>').fadeIn().delay(3000).fadeOut('fast');
-                    getShareCapitalRec();
+                    updateLedger();
+                    refreshViewLedger();
+                    refreshShareCapRec();
                   }
                 },
                 error : function(){
@@ -5435,7 +5520,7 @@
                   share = Number(share) + Number(data[i].share_capital);
                   total = Number(total) + Number(data[i].total_share_capital);
                   tbl +=  '<tr class="text-secondary">' +
-                            '<td><input id="' + data[i].id + '" type="checkbox" ' + lock + '></td>' +
+                            '<td><input id="' + data[i].id + '" type="checkbox" ' + lock + '><span hidden>'+data[i].status+'</span></td>' +
                             '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + ' <i class="'+cond+'"></i></span></td>' +
                             '<td style="vertical-align: middle">' + data[i].share_capital.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                             '<td style="vertical-align: middle">' + data[i].total_share_capital.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
@@ -5443,11 +5528,11 @@
                           '</tr>'; 
                 }
                   tblFoot +=  '<tr>' +
-                                '<th>Total</th>' +
+                                '<td></td>' +
+                                '<th>Name..</th>' +
                                 '<th></th>' +
-                                '<th>&#8369;' + Math.round(share).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
-                                '<th>&#8369;' + Math.round(total).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
                                 '<th></th>' +
+                                '<th>Date..</th>' +
                               '</tr>'; 
                   $('#returnShareCapRec').html(tbl);
                   $('#returnShareCapRecFoot').html(tblFoot);
@@ -5461,7 +5546,7 @@
                 } else {
                   $('#returnShareCapRec').html('');
                   $('#returnShareCapRecFoot').html('');
-                  $('#shareCapOR').html('<input type="text" id="updateShareCapOR" class="form-control form-control-sm" placeholder="Input New OR Number.." disabled>');
+                  $('#shareCapOR').html('<h3 class="text-warning">N/A..</h3>');
                   $('#ledgerShareCapBtn').prop('disabled', true);
                 }
               },
@@ -5470,8 +5555,14 @@
               } 
             });
 
+            $('#shareCapRecTbl tfoot th').each(function(){
+              var title = $(this).text();
+              $(this).html( '<input type="text" class="form-control form-control-sm" placeholder="Search '+title+'" />' );
+            });
+
             var shareCapDataTbl = $('#shareCapRecTbl').DataTable({
               "dom": 'lBfrtip',
+              "order": [[ 0, "desc" ]],
               buttons: [
                 {
                 extend: 'pdf',
@@ -5490,7 +5581,52 @@
               "language": { search: "", searchPlaceholder: "Search.." },
               "columnDefs": [
                 { "orderable": false, "targets": 0 }
-              ]
+              ],
+                "footerCallback": function ( row, data, start, end, display ) {
+                var api = this.api(), data;
+     
+                // Remove the formatting to get integer data for summation
+                var intVal = function ( i ) {
+                    return typeof i === 'string' ?
+                        i.replace(/[\$,]/g, '')*1 :
+                        typeof i === 'number' ?
+                            i : 0;
+                };
+     
+                for(var i = 2; i <= 3; i++) {
+                  // Total over all pages
+                  total = api
+                      .column( i )
+                      .data()
+                      .reduce( function (a, b) {
+                          return intVal(a) + intVal(b);
+                      }, 0 );
+       
+                  // Total over this page
+                  pageTotal = api
+                      .column( i, { page: 'current'} )
+                      .data()
+                      .reduce( function (a, b) {
+                          return intVal(a) + intVal(b);
+                      }, 0 );
+       
+                  // Update footer
+                  $( api.column( i ).footer() ).html(
+                      '&#8369;' + Math.round(pageTotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  );
+                }
+              }
+            });
+
+            shareCapDataTbl.columns().every( function () {
+              var that = this;
+              $('input', this.footer() ).on( 'keyup change', function () {
+                if(that.search() !== this.value){
+                  that
+                  .search(this.value)
+                  .draw();
+                }
+              });
             });
 
             $('#shareCapInfo').html($('#shareCapRecTbl_info').clone());

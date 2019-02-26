@@ -314,12 +314,22 @@
 							'status' => 'unpaid',
 							'updated_for' => date('Y-m-d', strtotime('+1 month'))
 						);
+
 						$this->db->insert('share_capital', $data);
+						if($this->db->affected_rows() > 0) {
+							$this->db->set('sharecap_paid', $share);
+							$this->db->where('sc_id', $lastID);
+							$this->db->update('active_loan_apps', $sc);
+							return true;
+						} else {
+							return false;
+					}
 				}
 				return true;
 			} else {
 				return false;
 			}
+
 		}
 
 		public function updateLedgers() {
@@ -327,7 +337,120 @@
 
 			$or = $this->input->get('ornum');
 			$ids = json_decode($this->input->get('check'));
-			$md = json_decode($this->input->get('md'));
+			$uid = json_decode($this->input->get('uid'));
+			$md = json_decode($this->input->get('md'));/*
+			$sc = json_decode($this->input->get('sc'));*/
+			$loanapp = json_decode($this->input->get('la'));
+
+			if($ids){
+				foreach ($ids as $id => $code) {
+					$balance = $this->db->query("select balance as bal from active_loan_apps where loanapp_id = $loanapp[$id]")->row()->{'bal'};
+					$lastID = $this->db->query("select id as active_id from active_loan_apps where loanapp_id = $loanapp[$id]")->row()->{'active_id'};
+					$diff = $balance - $md[$id];
+
+						$this->db->set('or_number', $or);
+						$this->db->set('balance_paid', $md[$id]);/*
+						$this->db->set('sharecap_paid', $sc[$id]);*/
+						$this->db->set('payment_status', 'paid');
+						$this->db->set('payment_date', date('Y-m-d'));
+						$this->db->where('id', $lastID);
+						$this->db->update('active_loan_apps');
+
+						$data = array(
+							'loanapp_id' => $loanapp[$id],
+							'balance' => $diff,
+							'payment_status' => 'unpaid',
+							'payment_for' => date('Y-m-d', strtotime('+1 month'))
+						);
+						$this->db->insert('active_loan_apps', $data);
+				}
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+
+		public function updateUserPass() {
+			$userID = $this->input->get('userID');
+			$newPass = $this->input->get('newPass');
+			$this->db->set('password', $newPass);
+			$this->db->where('id', $userID);
+			$this->db->update('members');
+			if($this->db->affected_rows() > 0) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		public function getShareCapitalRec(){
+			$month = $this->input->get('mo');
+			$year = $this->input->get('yr');
+			if(($month || $year) != ''){
+				$this->db->like('MONTH(updated_for)', $month);
+				$this->db->like('YEAR(updated_for)', $year);
+			}
+			$this->db->select('*')->select_min('total_share_capital')->from('share_capital a');
+			$this->db->join('members b', 'b.id = a.user_id', 'left');
+			$this->db->group_by('user_id');
+			$query = $this->db->get();
+			return $query->result();
+		}
+
+		public function getCollectionMembers(){
+			$this->db->select('name, id')->order_by('register_date', 'ASC');
+			$query = $this->db->get('members');
+			if($query->num_rows() > 0) {
+				return $query->result();
+			} else {
+				return false;
+			}
+		}
+
+		public function viewLedger(){
+			$month = $this->input->get('mo');
+			$year = $this->input->get('yr');
+			if(($month || $year) != ''){
+				$this->db->like('MONTH(payment_for)', $month);
+				$this->db->like('YEAR(payment_for)', $year);
+			}
+			$this->db->select('*')->select_min('balance')->from('active_loan_apps a');
+			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
+			$this->db->join('members c', 'c.id = b.member_id');
+			$this->db->join('loan_types d', 'd.id = b.loan_applied');
+			$this->db->join('share_capital e', 'e.user_id = b.member_id');
+			$this->db->group_by('a.loanapp_id');
+			$this->db->order_by('payment_status', 'DESC');
+			$query = $this->db->get();
+			return $query->result();
+		}
+
+		public function updateLedger(){
+			$month = $this->input->get('mo');
+			$year = $this->input->get('yr');
+			if(($month || $year) != ''){
+				$this->db->like('MONTH(payment_for)', $month);
+				$this->db->like('YEAR(payment_for)', $year);
+			}
+			$this->db->select('*, a.id')->select_min('balance')->from('active_loan_apps a');
+			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
+			$this->db->join('members c', 'c.id = b.member_id');
+			$this->db->join('loan_types d', 'd.id = b.loan_applied');
+			$this->db->join('share_capital e', 'e.user_id = b.member_id');
+			$this->db->group_by('a.loanapp_id');
+			$this->db->order_by('payment_status', 'DESC');
+			$query = $this->db->get();
+			return $query->result();
+		}
+
+		public function updateUserLedger() {
+			date_default_timezone_set('Asia/Manila');
+
+			$id = $this->input->get('id');
+			$or = $this->input->get('or');
+			$fm = $this->input->get('fm');
+			$am = $this->input->get('am');
 
 			if($ids){
 				foreach ($ids as $id => $code) {
@@ -355,78 +478,5 @@
 			} else {
 				return false;
 			}
-
-		}
-
-		public function updateUserPass() {
-			$userID = $this->input->get('userID');
-			$newPass = $this->input->get('newPass');
-			$this->db->set('password', $newPass);
-			$this->db->where('id', $userID);
-			$this->db->update('members');
-			if($this->db->affected_rows() > 0) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		public function getShareCapitalRec(){
-			$month = $this->input->get('mo');
-			$year = $this->input->get('yr');
-			if(($month || $year) != ''){
-				$this->db->like('MONTH(updated_for)', $month);
-				$this->db->like('YEAR(updated_for)', $year);
-			}
-			$this->db->select('*')->select_min('total_share_capital')->from('share_capital a');
-			$this->db->join('members b', 'b.id = a.user_id', 'left');
-			$this->db->group_by('user_id');
-			$this->db->order_by('status', 'DESC');
-			$query = $this->db->get();
-			return $query->result();
-		}
-
-		public function getCollectionMembers(){
-			$this->db->select('name, id')->order_by('register_date', 'ASC');
-			$query = $this->db->get('members');
-			if($query->num_rows() > 0) {
-				return $query->result();
-			} else {
-				return false;
-			}
-		}
-
-		public function viewLedger(){
-			$month = $this->input->get('mo');
-			$year = $this->input->get('yr');
-			if(($month || $year) != ''){
-				$this->db->like('MONTH(payment_for)', $month);
-				$this->db->like('YEAR(payment_for)', $year);
-			}
-			$this->db->select('*')->select_min('balance')->from('active_loan_apps a', 'left');
-			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
-			$this->db->join('members c', 'c.id = b.member_id');
-			$this->db->join('loan_types d', 'd.id = b.loan_applied');
-			$this->db->group_by('a.loanapp_id');
-			$this->db->order_by('payment_status', 'DESC');
-			$query = $this->db->get();
-			return $query->result();
-		}
-
-		public function updateLedger(){
-			$month = $this->input->get('mo');
-			$year = $this->input->get('yr');
-			if(($month || $year) != ''){
-				$this->db->like('MONTH(payment_for)', $month);
-				$this->db->like('YEAR(payment_for)', $year);
-			}
-			$this->db->select('*')->select_min('balance')->from('active_loan_apps a');
-			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
-			$this->db->join('members c', 'c.id = b.member_id');
-			$this->db->join('loan_types d', 'd.id = b.loan_applied');
-			$this->db->group_by('a.loanapp_id');
-			$this->db->order_by('payment_status', 'DESC');
-			$query = $this->db->get();
-			return $query->result();
 		}
 	}
