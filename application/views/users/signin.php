@@ -16,15 +16,17 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto my-5">
-      <div class="card card-signin my-5">
+    <div class="col-sm-12 col-md-6 col-lg-5 mx-auto">
+      <div class="card card-signin my-4">
         <div class="card-body">
-          <h5 class="card-title text-center">Sign In</h5>
+          <div class="text-center"><img src="<?php echo base_url(); ?>assets/img/logo.png" style="width: 120px; height: auto"></div>
+          <div class="text-center"><em style="font-size: 200%">TUPMMPC</em></div>
+          <h5 class="card-title text-center mb-4">Sign In</h5>
           <?php if($this->session->flashdata('signin_failed')): ?>
-            <?php echo '<p class="alert alert-danger">'.$this->session->flashdata('signin_failed').'</p>'; ?>
+            <?php echo '<p class="alert alert-danger text-center">'.$this->session->flashdata('signin_failed').'</p>'; ?>
           <?php endif; ?>
           <?php if($this->session->flashdata('not_signedin')): ?>
-            <?php echo '<p class="alert alert-danger">'.$this->session->flashdata('not_signedin').'</p>'; ?>
+            <?php echo '<p class="alert alert-danger text-center">'.$this->session->flashdata('not_signedin').'</p>'; ?>
           <?php endif; ?>
           <form class="form-signin">
             <div class="form-label-group">
@@ -38,8 +40,8 @@
             </div>
 
             <div class="custom-control custom-checkbox mb-3">
-              <input type="checkbox" class="custom-control-input" id="customCheck1">
-              <label class="custom-control-label small" for="customCheck1">Remember password</label>
+              <input type="checkbox" class="custom-control-input" id="remember" name="remember">
+              <label class="custom-control-label small" for="remember">Remember password</label>
             </div>
             <button type="submit" class="btn btn-lg btn-success btn-block text-uppercase mt-4">Sign in</button>
           </form>

@@ -59,6 +59,21 @@
 			}
 		}
 
+		public function checkNotif() {		
+			$result = $this->user_model->checkNotif();			
+			echo json_encode($result);				
+		}			
+		
+ 		public function notified() {		
+			$result = $this->user_model->notified();			
+			echo json_encode($result);				
+		}
+
+		public function viewVoucher() {		
+			$result = $this->user_model->viewVoucher();			
+			echo json_encode($result);				
+		}
+
 		public function getMyLoanRecords(){
 			$result = $this->user_model->getMyLoanRecords();
 			echo json_encode($result);
@@ -80,10 +95,4 @@
 			// Redirect to the home page
 			redirect(base_url());
 		}
-
-		public function comakerName() {
-			$result = $this->user_model->comakerName();
-			echo json_encode($result);
-		}
-
 	}
