@@ -5013,6 +5013,14 @@
              }
 
               $(this).click(function() {
+                var row = '';
+                var lala = $(this).attr('cmlist');
+
+                if($(this).val()) {
+                  $('.'+ lala).html(row);
+
+                  console.log(lala);
+                }
                 data = $(this).attr('id');
                 data2 = $(this).attr('user-username');        
               });
@@ -6296,24 +6304,7 @@
     });
     </script>
 
-    <script>
-      var ctxP = document.getElementById("pie-chart").getContext('2d');
-    var myPieChart = new Chart(ctxP, {
-        type: 'pie',
-        data: {
-            labels: ["Approved", "Disapproved"],
-            datasets: [
-                {
-                    data: [70, 30],
-                    backgroundColor: [ "#53ff85", "#F7464A"],
-                    hoverBackgroundColor: [ "#99ffbb", "#FF5A5E"]
-                }
-            ]
-        },
-        options: {
-            responsive: true
-        }
-    });
+   
     </script>
 
 
