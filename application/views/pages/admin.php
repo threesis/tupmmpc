@@ -103,7 +103,7 @@
                 <a class="list-group-item list-group-item-action" id="records-tab" data-toggle="list" href="#loanRecordsTab" role="tab" aria-controls="settings">Loan Records<i class="fas fa-poll-h mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="comakers-tab" data-toggle="list" href="#comakersTab" role="tab" aria-controls="settings">Co-Makers<i class="fas fa-poll-h mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="sharecap-ledger-tab" data-toggle="list" href="#ledgerShareCapTab" role="tab" aria-controls="messages">Remittances and Collections<i class="fas fa-users mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
-                <a class="list-group-item list-group-item-action" id="applyloan-tab" data-toggle="list" href="#applyLoanTab" role="tab" aria-controls="messages">Apply Loan<i class="far fa-file-alt mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
+                <a class="list-group-item list-group-item-action" id="applyloan-tab" name="applyloan-tab" data-toggle="list" href="#applyLoanTab" role="tab" aria-controls="messages">Apply Loan<i class="far fa-file-alt mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
                 <a class="list-group-item list-group-item-action" id="websettings-tab" data-toggle="list" href="#websiteSettings" role="tab" aria-controls="messages">Settings<i class="fas fa-cog mr-2 mt-1 float-left"></i><i class="fas fa-chevron-right fa-sm float-right mt-1"></i></a>
               </div>
             </div>
@@ -839,13 +839,13 @@
                   </div>
                   <script type="text/javascript">
                     var totalShare = '<?php echo $totalShareCapital; ?>';
-                    totalShare = Math.round(totalShare).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    totalShare = Math.round(totalShare).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     $('#CCsharecapDash').html('&#8369;'+totalShare);
                     $('#MNGsharecapDash').html('&#8369;'+totalShare);
                     $('#CHsharecapDash').html('&#8369;'+totalShare);
                     $('#TRsharecapDash').html('&#8369;'+totalShare);
                     var totalPayments = '<?php echo $totalPayments; ?>';
-                    totalPayments = Math.round(totalPayments).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    totalPayments = Math.round(totalPayments).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     $('#CCloanPaymentsDash').html('&#8369;'+totalPayments);
                     $('#MNGpaymentsDash').html('&#8369;'+totalPayments);
                     $('#CHpaymentsDash').html('&#8369;'+totalPayments);
@@ -1051,8 +1051,8 @@
                               }
                               tbl +=  '<tr class="text-secondary">' +
                                         '<td style="vertical-align: middle">' + c + '</td>' +
-                                        '<td style="vertical-align: middle">' + Math.round(data[i].share_capital).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                                        '<td style="vertical-align: middle">' + Math.round(data[i].total_share_capital).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                                        '<td style="vertical-align: middle">' + Math.round(data[i].share_capital).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                                        '<td style="vertical-align: middle">' + Math.round(data[i].total_share_capital).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                                         '<td style="vertical-align: middle">' + or + '</td>' +
                                         '<td style="vertical-align: middle">' + myDate + '</td>' +
                                       '</tr>'; 
@@ -1129,10 +1129,10 @@
                                           '<td style="vertical-align: middle">' + c + '</td>' +
                                           '<td style="vertical-align: middle">' + myDateRec + '</td>' +
                                           '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
-                                          '<td style="vertical-align: middle">' + Math.round(data[i].loan_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                                          '<td style="vertical-align: middle">' + Math.round(data[i].loan_int).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                                          '<td style="vertical-align: middle">' + Math.round(data[i].loan_amount).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                                          '<td style="vertical-align: middle">' + Math.round(data[i].loan_int).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                                           '<td style="vertical-align: middle">' + data[i].loan_term + ' month/s</td>' +
-                                          '<td style="vertical-align: middle">' + Math.round(data[i].monthly_deduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                                          '<td style="vertical-align: middle">' + Math.round(data[i].monthly_deduc).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                                         '</tr>'; 
                             }
                             scModal.find('.modal-body #userLoanRecordsTbl').show();
@@ -1633,17 +1633,18 @@
                   <h2 class="card-header">My Loan Records</h2>
                   <div class="card-body card-body-mh">
                     <table id="myLoanRecordTbl" class="table table-striped table-hover table-responsive table-md nowrap">
-                      <thead>
+                       <thead>
                         <tr>
-                          <th>#</th>
+                          <th></th>
                           <th>Date Applied</th>
                           <th>Loan Applied</th>
+                          <th>Loan Interest (&#8369;)</th>
                           <th>Loan Amount (&#8369;)</th>
                           <th>Loan Term</th>
                           <th>Monthly Amortization (&#8369;)</th>
                           <th>Status</th>
-                          <th>Balance (&#8369;)</th>
                           <th>Comakers</th>
+                          <th>Remarks</th>
                         </tr>
                       </thead>
                       <tbody id="returnMyLoanRecords">
@@ -1670,45 +1671,68 @@
                         async   : false,
                         dataType: 'json',
                         success: function(data) {
-                          var c = 0;
-                          if(data['result'].length) {
+                          if(data.length) {
                             var tbl = '';
                             var cm1 = '';
                             var cm2 = '';
                             var cm3 = '';
-                            for(var i = 0; i < data['result'].length; i++) {
-                              c++;
-                              var myDate  = new Date(data['result'][i].date_applied);
-                              if(data['comakers'][i].comaker_1 == "null") {
+                            var cmname1 = '';
+                            var cmname2 = '';
+                            var cmname3 = '';
+                            for(var i = 0; i < data.length; i++) {
+                              cm1 = data[i].comaker_1;
+                              cm2 = data[i].comaker_2;
+                              cm3 = data[i].comaker_3;
+                              $.ajax({
+                                type: 'ajax',
+                                url: '<?php echo base_url();?>users/comakerName',
+                                async: false,
+                                dataType: 'json',
+                                success: function(data) {
+                                   for(var a=0; a < data.length; a++) {
+                                      if(data[a].id == cm1) {
+                                        cmname1 = data[a].name;
+                                      } else if (data[a].id == cm2) {
+                                        cmname2 = data[a].name;
+                                      } else {
+                                        cmname3 = data[a].name;
+                                      } 
+                                   }
+                                }, error: function() {
+                                  alert('Something went wrong in Naming in Comakers');
+                                }
+                              });
+                              var myDate  = new Date(data[i].date_applied);
+                              if(data[i].comaker_1 == null) {
                                 cm1 = '';
                               } else {
-                                cm1 = data['comakers'][i].comaker_1 + ', ';
-                              } if(data['comakers'][i].comaker_2 == "null") {
+                                cm1 = cmname1 + ', ';
+                              } if(data[i].comaker_2 == null) {
                                 cm2 = '';
                               } else {
-                                cm2 = data['comakers'][i].comaker_2;
-                              } if(data['comakers'][i].comaker_3 == "null") {
+                                cm2 = cmname2;
+                              } if(data[i].comaker_3 == null) {
                                 cm3 = '';
                               } else {
-                                cm3 = ', ' + data['comakers'][i].comaker_3;
+                                cm3 = ', ' + cmname3;
                               }
-
                               tbl +=  '<tr class="text-secondary">' +
-                                        '<td style="vertical-align: middle">' + c + '</td>' +
+                                        '<td style="vertical-align: middle">' + '<button class="btn btn-sm btn-outline-info Renewal" loanId="'+ data[i].loanapp_id +'">Renew</button>' + '</td>' +
                                         '<td style="vertical-align: middle">' + myDate.toLocaleDateString("en-US") + '</td>' +
-                                        '<td style="vertical-align: middle">' + data['result'][i].loan_name + '</td>' +
-                                        '<td style="vertical-align: middle">' + Math.round(data['result'][i].loan_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                                        '<td style="vertical-align: middle">' + data['result'][i].loan_term + ' month/s</td>' +
-                                        '<td style="vertical-align: middle">' + Math.round(data['result'][i].monthly_deduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                                        '<td style="vertical-align: middle">' + data['result'][i].status + '</td>' +
-                                        '<td style="vertical-align: middle">' + Math.round(data['result'][i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                                        '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].loan_name + '</span></td>' +
+                                        '<td style="vertical-align: middle">&#8369;' + Math.round(data[i].loan_amount).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                                        '<td style="vertical-align: middle">&#8369;' + Math.round(data[i].loan_int).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                                        '<td style="vertical-align: middle">' + data[i].loan_term + ' month/s</td>' +
+                                        '<td style="vertical-align: middle">&#8369;' + Math.round(data[i].monthly_deduc).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                                        '<td style="vertical-align: middle">' + data[i].status + '</td>' +
                                         '<td style="vertical-align: middle">' + cm1 + cm2 + cm3 + '</td>' +
+                                        '<td style="vertical-align: middle">' + data[i].remarks + '</td>' +
                                       '</tr>'; 
                             }
                             $('#returnMyLoanRecords').html(tbl);
                           } else {
                             $('#returnMyLoanRecords').html('');
-                            $('#myLoanRecApplyLoan').html('<button class="btn btn-outline-primary btn-lg" onclick="$("#applyLoanTab").addClass("active");">New here? Apply for a loan now!</button>');
+                            $('#myLoanRecApplyLoan').html('<button class="btn btn-outline-primary btn-lg">New here? Apply for a loan now!</button>');
                           }
                         },
                         error: function() {
@@ -1749,7 +1773,7 @@
                   <div class="card-header shadow-sm">
                     <ul class="nav nav-tabs card-header-tabs">
                       <li class="ml-2 pb-4" style="min-height: 40px;">
-                        <h2 class="card-title">Ledger & Share Capital</h2>
+                        <h2 class="card-title">Remittances and Collections</h2>
                       </li>
                       <li id="view-ledgers" class="nav-item ml-auto loan-apps">
                         <a id="ledgerTab" class="nav-link active" data-toggle="tab" href="#ledgerSubTab">View Ledger<span class="badge badge-secondary ml-1"></span></a>
@@ -1887,7 +1911,7 @@
                           <div id="shareCapOR" class="col-sm-12 col-md-4 text-center">
                           </div>
                         </div>
-                        <table id="shareCapRecTbl" class="table table-striped table-hover table-responsive-sm table-md text-nowrap">
+                        <table id="shareCapRecTbl" class="table table-striped table-hover table-responsive table-md text-nowrap">
                           <thead>
                             <tr>
                               <th style="vertical-align: middle"><input id="selectAllShareCap" type="checkbox"></th>
@@ -2009,15 +2033,15 @@
                                   nameCount = i;
                                   var myDate  = new Date(data[i].date_applied);
                                   totalLoanAmt = Number(totalLoanAmt) + Number(data[i].loan_amount);
-                                  var loanAmt =Math.round(data[i].loan_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                  var takehomepay = Math.round(data[i].take_home_pay).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                                  var monthlydeduc = Math.round(data[i].monthly_deduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                  var loanAmt =Math.round(data[i].loan_amount).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                  var takehomepay = Math.round(data[i].take_home_pay).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                  var monthlydeduc = Math.round(data[i].monthly_deduc).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                   var thpAfterDeduc = data[i].take_home_pay - data[i].monthly_deduc;
-                                  thpAfterDeduc = Math.round(thpAfterDeduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                  thpAfterDeduc = Math.round(thpAfterDeduc).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                                   var calcInterest = data[i].loan_amount * (data[i].loan_interest * 0.1);
                                   var grossAmt = Number(data[i].loan_amount) + Number(calcInterest);
                                   totalGrossAmt = Number(totalGrossAmt) + grossAmt;
-                                  grossAmt = Math.round(grossAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                                  grossAmt = Math.round(grossAmt).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
                                 tbl +=  '<tr class="text-secondary">' +
                                           '<td style="vertical-align: middle">' + myDate.toLocaleDateString("en-US") + '</td>' +
@@ -2034,8 +2058,8 @@
                                                   '<th>Total</th>' +
                                                   '<th>' + i + '</th>' +
                                                   '<th></th>' +
-                                                  '<th>&#8369;' + Math.round(totalLoanAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
-                                                  '<th>&#8369;' + Math.round(totalGrossAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
+                                                  '<th>&#8369;' + Math.round(totalLoanAmt).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
+                                                  '<th>&#8369;' + Math.round(totalGrossAmt).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
                                                   '<th></th>' +
                                                   '<th></th>' +
                                                   '<th></th>' +
@@ -2182,6 +2206,7 @@
                           <div class="form-group">
                             <input type="hidden" name="loan-selector-data" class="form-control" id="loan_selector_data" value="">
                             <input type="text" name="loan-type" id="loan_type" class="form-control" style="display: block" disabled>
+                            <input type="text" name="loan-renewal" id="loan_renewal" class="form-control" style="display: block;" disabled>
                             <select class="custom-select mt-2 text-muted" name="loan_selector" id="loan_selector" style="display: block">
                                <!-- ajax insert loan types -->
                             </select>
@@ -2214,9 +2239,6 @@
                           <div id="loanapp-cm-application">
                             <!--Number of Co Maker depedency insert here -->
                           </div>
-                          <div class="d-flex justify-content-end">
-                            <button type="button" id="loanapp_submit" class="btn btn-success btn-sm"><i class="fas fa-arrow-circle-right mr-1"></i> Proceed</button>
-                          </div>
                         </form>
                       </div>
                       <div class="col-md-4 col-sm-12">
@@ -2239,11 +2261,15 @@
                           </div>
                           <input type="text" class="form-control" placeholder="-" name="calc_loan_monthlydeduc">
                         </div>
+                        <div class="d-flex justify-content-end">
+                          <button type="button" id="loanapp_submit" class="btn btn-success btn-sm btn-block"><i class="fas fa-arrow-circle-right mr-1"></i> Proceed</button>
+                        </div>
                       </div>
                     </div>
                   </div>
                   <div class="card-footer" style="min-height: 60px"></div>
                 </div>
+
 
 
                 <!-- Settings Part -->
@@ -2603,6 +2629,34 @@
         $('[data-toggle="tooltip"]').tooltip()
 
         // DataTables CODES
+        var comakersDataTbl = $('#comakersTbl').DataTable({
+          "dom": 'lBfrtip',
+          buttons: [
+            {
+            extend: 'pdf',
+            text: 'Export PDF'
+            },
+            {
+            extend: 'excel',
+            text: 'Export Excel'
+            },
+            {
+            extend: 'print',
+            text: 'Print table',
+            exportOptions: {
+              columns: [0, 1, 2]
+            }
+            },
+          ],
+          "pagingType": "simple_numbers",
+          "language": { search: "", searchPlaceholder: "Search.." },
+          "columnDefs": [
+            { "orderable": false, "targets": 2 }
+          ]
+        });
+
+        $('#comakersTbl_info').detach().appendTo('#comakersTblInfo');
+        $('#comakersTbl_paginate').detach().appendTo('#comakersTblPaginate');
 
         var pendingLoansDataTbl = $('#pendingLoansTbl').DataTable({
           "dom": 'lBfrtip',
@@ -3056,7 +3110,7 @@
                             '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
                             '<td style="vertical-align: middle">' + col + '</td>' +
                             '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
-                            '<td style="vertical-align: middle">' + Math.round(data[i].balance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                            '<td style="vertical-align: middle">' + Math.round(data[i].balance).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                             '<td style="vertical-align: middle">' + data[i].cheque_no + '</td>' +
                             '<td style="vertical-align: middle">' + data[i].disbursement_no + '</td>' +
                           '</tr>'; 
@@ -3119,7 +3173,7 @@
           var verifiedBy = $(this).attr('verifiedBy');
           var verifiedThp = $(this).attr('verifiedThp');
           var takeHomePay = $(this).attr('payslip');
-          takeHomePay = Math.round(takeHomePay).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          takeHomePay = Math.round(takeHomePay).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           var cheque = $(this).attr('chequeNo');
           var name = $(this).attr('name');
           var uname = $(this).attr('username');
@@ -3159,7 +3213,7 @@
             $('#cnInfo').hide();
             $('span[name=loan_thp]').html('&#8369;' + takeHomePay);
             $('span[name=loan_thp_verified]').html(verifiedBy);
-            $('#openLoanApp').find('.modal-footer').html('<div class="input-group input-group-sm"><input type="text" class="form-control form-control-sm mr-2" placeholder="Enter cheque number.." id="chequeNumberInput" name="cheque_number" maxlength="8"><button type="button" class="btn btn-outline-success btn-sm float-right px-2" id="chequeLoanAppBtn"><i class="fas fa-arrow-circle-right fa-sm mr-1"></i> Submit cheque</button></div>').attr('id', 'issue-cheque-AL');
+            $('#openLoanApp').find('.modal-footer').html('<div class="input-group input-group-sm"><input type="text" class="form-control form-control-sm mr-2" placeholder="Enter cheque number.." id="chequeNumberInput" name="cheque_number" maxlength="15"><button type="button" class="btn btn-outline-success btn-sm float-right px-2" id="chequeLoanAppBtn"><i class="fas fa-arrow-circle-right fa-sm mr-1"></i> Submit cheque</button></div>').attr('id', 'issue-cheque-AL');
             if(status == 'verified') {
               $('#cnInfo').show();
               $('span[name=loan_cn]').html(cheque);
@@ -3202,13 +3256,13 @@
                 $('a[name=loanApplicantContact]').text(data.contact_no);
                 $('a[name=loanApplicantAddress]').text(data.address);
                 $('a[name=loanApplicantZip]').text(' — ' + data.zipcode);
-                $('img[id=loan_payslip]').attr('src', '<?php echo base_url() ?>assets/img/payslips/' + data.user_payslip);
+                $('img[id=loan_payslip]').attr('src', '<?php echo base_url() ?>assets/img/payslip_uploads/' + data.user_payslip);
                 $('#applicant-payslip').html('<p id="applicantPayslipBackBtn" class="fas fa-chevron-left mr-4" style="font-size: 15px; color: gray; cursor: pointer"></p><span style="font-weight: normal">Payslip of</span> ' + data.name);
                 $('td[name=loan_id]').text(data.loanapp_id);
                 $('td[name=loan_type]').text(data.loan_name);
-                $('td[name=loan_amt]').html('&#8369;' + Math.round(data.loan_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                $('td[name=loan_interest]').html('&#8369;' + Math.round(data.loan_int).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                $('td[name=loan_deduc]').html('&#8369;' + Math.round(data.monthly_deduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('td[name=loan_amt]').html('&#8369;' + Math.round(data.loan_amount).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('td[name=loan_interest]').html('&#8369;' + Math.round(data.loan_int).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                $('td[name=loan_deduc]').html('&#8369;' + Math.round(data.monthly_deduc).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                 $('input[name=loan_deduc_hidden]').text(data.monthly_deduc);
                 $('td[name=loan_term]').text(data.loan_term + ' month/s');
 
@@ -3298,9 +3352,9 @@
                   perc = data[1][i].deduc_val / 100;
                   amt = loanAmt * perc;
                   deduc += '<tr deducType="' + data[1][i].deduc_type + '">' +
-                              '<td colspan="2">' + data[1][i].deduc_name + ' <span>(' + Math.round(data[1][i].deduc_val).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + p + ')</span></td>' +
+                              '<td colspan="2">' + data[1][i].deduc_name + ' <span>(' + Math.round(data[1][i].deduc_val).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + p + ')</span></td>' +
                               '<td colspan="1">-</td>' +
-                              '<td colspan="1">&#8369;' + Math.round(amt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                              '<td colspan="1">&#8369;' + Math.round(amt).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                             '</tr>';
                   cashInBank = loanAmt - amt;
                   totalCredit = Number(cashInBank) + Number(dii) + Number(amt);
@@ -3311,9 +3365,9 @@
                   p = '';
                   amt = data[1][i].deduc_val;
                   deduc +=  '<tr deducType="' + data[1][i].deduc_type + '">' +
-                              '<td colspan="2">' + data[1][i].deduc_name + ' <span>(' + a + Math.round(data[1][i].deduc_val).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')</span></td>' +
+                              '<td colspan="2">' + data[1][i].deduc_name + ' <span>(' + a + Math.round(data[1][i].deduc_val).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + ')</span></td>' +
                               '<td colspan="1">-</td>' +
-                              '<td colspan="1">&#8369;' + Math.round(amt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                              '<td colspan="1">&#8369;' + Math.round(amt).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                             '</tr>';
                   cashInBank = loanAmt - amt;
                   totalCredit = Number(cashInBank) + Number(dii) + Number(amt);
@@ -3345,7 +3399,7 @@
                   '</tr>' +
                   '<tr>' +
                     '<td name="loan" value="'+loan+'" colspan="2">' + loan + '</td>' +
-                    '<td name="APLid" value="'+cashInBank+'" colspan="2">&#8369;' + Math.round(cashInBank).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="APLid" value="'+cashInBank+'" colspan="2">&#8369;' + Math.round(cashInBank).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td name="voucher" value="'+voucher+'" colspan="2"></td>' +
@@ -3354,18 +3408,18 @@
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2">Loan Receivable - ' + loan + '</td>' +
-                    '<td name="loanAmt" value="'+loanAmt+'" colspan="1">&#8369;' + Math.round(loanAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="loanAmt" value="'+loanAmt+'" colspan="1">&#8369;' + Math.round(loanAmt).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                     '<td colspan="1">-</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2">Loan Interest * ' + loanTerm + ' month/s</td>' +
-                    '<td name="dii" value="'+dii+'" colspan="1">&#8369;' + Math.round(dii).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="dii" value="'+dii+'" colspan="1">&#8369;' + Math.round(dii).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                     '<td colspan="1">-</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2">Deferred Intereset Income</td>' +
                     '<td colspan="1">-</td>' +
-                    '<td colspan="1">&#8369;' + Math.round(dii).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td colspan="1">&#8369;' + Math.round(dii).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<div>' + deduc + '</div>'+
                   '<tr>' +
@@ -3381,13 +3435,13 @@
                   '<tr><td colspan="4">-</td></tr>' +
                   '<tr>' +
                     '<td colspan="2">TOTAL</td>' +
-                    '<td name="totalDebit" value="'+Math.round(totalDebit).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1">&#8369;' + Math.round(totalDebit).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                    '<td name="totalCredit" value="'+Math.round(totalCredit).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1">&#8369;' + Math.round(totalCredit).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="totalDebit" value="'+Math.round(totalDebit).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1">&#8369;' + Math.round(totalDebit).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                    '<td name="totalCredit" value="'+Math.round(totalCredit).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1">&#8369;' + Math.round(totalCredit).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                   '</tr>' +
                   '<tr>' +
                     '<td colspan="2" class="h5">NET AMOUNT DUE</td>' +
-                    '<td name="totalBalance" value="'+Math.round(totalBalance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1"></td>' +
-                    '<td name="cashInBank" value="'+Math.round(cashInBank).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1" class="h4"><span class="text-success">&#8369;' + Math.round(cashInBank).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></td>' +
+                    '<td name="totalBalance" value="'+Math.round(totalBalance).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1"></td>' +
+                    '<td name="cashInBank" value="'+Math.round(cashInBank).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'" colspan="1" class="h4"><span class="text-success">&#8369;' + Math.round(cashInBank).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></td>' +
                   '</tr>' +
                 '</tbody>' +
               '</table>');
@@ -3410,7 +3464,8 @@
           var totalBalance = $('#confirmationLoanAppModal').find('td[name=totalBalance]').attr('value').replace(/\D/g, "");
           var loanAmt = $('#confirmationLoanAppModal').find('td[name=loanAmt]').attr('value');
 
-          var data = '&uname=' + uname + '&voucher=' + voucher + '&loanapp_id=' + id + '&dvNo=' + APLid + '&dii=' + dii + '&debit=' + totalDebit + '&credit=' + totalCredit + '&netAmt=' + cashInBank + '&balance=' + totalBalance + '&deduc=' + JSON.stringify(allDeducs) + '&deducAmt=' + JSON.stringify(allDeducAmt);
+          var data = '&uname=' + uname + '&loanAmt=' + loanAmt + '&voucher=' + voucher + '&loanapp_id=' + id + '&dvNo=' + APLid + '&dii=' + dii + '&debit=' + totalDebit + '&credit=' + totalCredit + '&netAmt=' + cashInBank + '&balance=' + totalBalance + '&deduc=' + JSON.stringify(allDeducs) + '&deducAmt=' + JSON.stringify(allDeducAmt);
+          console.log(data);
           $.ajax({
             type    : 'ajax',
             method  : 'post',
@@ -3533,9 +3588,9 @@
                   amt = '&#8369;';
                 }
                 deducs += '<tr>' +
-                            '<td>' + data[i].deduc_name + ' <span>(' + amt + Math.round(data[i].deduc_val).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + perc + ')</span></td>' +
+                            '<td>' + data[i].deduc_name + ' <span>(' + amt + Math.round(data[i].deduc_val).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + perc + ')</span></td>' +
                             '<td>-</td>' +
-                            '<td>&#8369;' + Math.round(data[i].loan_deduc_amt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                            '<td>&#8369;' + Math.round(data[i].loan_deduc_amt).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                           '</tr>';
               }
               table =     '<tr>' +
@@ -3544,7 +3599,7 @@
                             '<td colspan="1"><strong>CHEQUE: ' + data[0].cheque_no + '</strong></td>' +
                           '<tr>' +
                             '<td colspan="1">' + data[0].loan_name + '</td>' +
-                            '<td colspan="1">&#8369;' + Math.round(data[0].net_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                            '<td colspan="1">&#8369;' + Math.round(data[0].net_amount).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                             '<td colspan="1"></td>' +
                           '</tr>' +
                           '<tr>' +
@@ -3554,18 +3609,18 @@
                           '</tr>' +
                           '<tr>' +
                             '<td colspan="1">Loan Receivable - ' + data[0].loan_name + '</td>' +
-                            '<td colspan="1">&#8369;' + Math.round(data[0].loan_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                            '<td colspan="1">&#8369;' + Math.round(data[0].loan_amount).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                             '<td colspan="1">-</td>' +
                           '</tr>' +
                           '<tr>' +
                             '<td colspan="1">Loan Interest * ' + data[0].loan_term + ' month/s</td>' +
-                            '<td colspan="1">&#8369;' + Math.round(data[0].deferred_int).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                            '<td colspan="1">&#8369;' + Math.round(data[0].deferred_int).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                             '<td colspan="1">-</td>' +
                           '</tr>' +
                           '<tr>' +
                             '<td colspan="1">Deferred Intereset Income</td>' +
                             '<td colspan="1">-</td>' +
-                            '<td colspan="1">&#8369;' + Math.round(data[0].deferred_int).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                            '<td colspan="1">&#8369;' + Math.round(data[0].deferred_int).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                           '</tr>' +
                           deducs + 
                           '<tr>' +
@@ -3576,17 +3631,17 @@
                           '<tr>' +
                             '<td colspan="1">Cash in bank</td>' +
                             '<td colspan="1">-</td>' +
-                            '<td colspan="1">&#8369;' + Math.round(data[0].net_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                            '<td colspan="1">&#8369;' + Math.round(data[0].net_amount).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                           '</tr>' +
                           '<tr>' +
                             '<td colspan="1">TOTAL</td>' +
-                            '<td colspan="1">&#8369;' + Math.round(data[0].debit).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                            '<td colspan="1">&#8369;' + Math.round(data[0].credit).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                            '<td colspan="1">&#8369;' + Math.round(data[0].debit).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                            '<td colspan="1">&#8369;' + Math.round(data[0].credit).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                           '</tr>' +
                           '<tr>' +
                             '<td colspan="1" class="h5">NET AMOUNT DUE</td>' +
                             '<td colspan="1"></td>' +
-                            '<td colspan="1" class="h4"><span class="text-success">&#8369;' + Math.round(data[0].net_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></td>' +
+                            '<td colspan="1" class="h4"><span class="text-success">&#8369;' + Math.round(data[0].net_amount).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></td>' +
                           '</tr>';
 
                 $('#viewVoucherModal').find('.modal-title').text('Disbursement Voucher (' + data[0].loanapp_id + ')');
@@ -3689,7 +3744,6 @@
                                     '</p>').fadeIn().delay(3000).fadeOut('fast');
                           getPendingLoans();
                           getApprovedLoans();
-                          getDisapprovedLoans();
                         } else {
                           $('#confirmationLoanAppModal').modal('hide');
                           $('#loanAppMsg').html('<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, ' + name + apostrophe + ' application has been approved.</a>' +
@@ -3699,7 +3753,6 @@
                                     '</p>').fadeIn().delay(3000).fadeOut('fast');
                           getPendingLoans();
                           getApprovedLoans();
-                          getDisapprovedLoans();
                         }
                       },
                       error: function() {
@@ -3812,7 +3865,6 @@
                               '</button>' +
                             '</p>').fadeIn().delay(3000).fadeOut('fast'); 
                   getApprovedLoans();
-                  getDisapprovedLoans();
                   getPendingLoans();
                 },
                 error: function() {
@@ -4121,7 +4173,7 @@
             $('#viewProfileModal').find('#userPosition').text(position + ' / Member since ' + since.toLocaleDateString("en-US"));
             $('#viewProfileModal').find('#userCollege').text(college);
             $('#viewProfileModal').find('#userAddress').text(address);
-            $('#viewProfileModal').find('#userSharecap').html('Total Share Capital: <strong>&#8369;'+ Math.round(sharecap).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</strong>');
+            $('#viewProfileModal').find('#userSharecap').html('Total Share Capital: <strong>&#8369;'+ Math.round(sharecap).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</strong>');
             $('#viewProfileModal').find('#viewProfileImg').attr('src', '<?php echo base_url(); ?>assets/img/profile_img/' + img +'');
             $('#viewProfileModal').modal('show');
             $('#delete-user').click(function() {
@@ -5016,8 +5068,8 @@
                         '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
                         '<td style="vertical-align: middle">' + or + '</td>' +
                         '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
-                        '<td style="vertical-align: middle">' + Math.round(data[i].sharecap_paid).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                        '<td style="vertical-align: middle">' + Math.round(data[i].balance_paid).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                        '<td style="vertical-align: middle">' + Math.round(data[i].sharecap_paid).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                        '<td style="vertical-align: middle">' + Math.round(data[i].balance_paid).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                         '<td style="vertical-align: middle">' + lastUp + '</td>' +
                       '</tr>'; 
             }
@@ -5025,8 +5077,8 @@
                         '<th style="vertical-align: middle">Member..</th>' +
                         '<th style="vertical-align: middle">OR..</th>' +
                         '<th style="vertical-align: middle">Loan Type..</th>' +
-                        '<th style="vertical-align: middle">&#8369;' + Math.round(totalBalance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
-                        '<th style="vertical-align: middle">&#8369;' + Math.round(totalMonthly).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
+                        '<th style="vertical-align: middle">&#8369;' + Math.round(totalBalance).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
+                        '<th style="vertical-align: middle">&#8369;' + Math.round(totalMonthly).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
                         '<th style="vertical-align: middle">Date..</th>' +
                       '</tr>';
 
@@ -5099,7 +5151,7 @@
      
                 // Update footer
                 $( api.column( i ).footer() ).html(
-                    '&#8369;' + Math.round(pageTotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    '&#8369;' + Math.round(pageTotal).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 );
               }
             }
@@ -5248,7 +5300,7 @@
                         '<td style="vertical-align: middle"><button class="btn btn-outline-'+btnColor+' btn-sm btn-block editUserLedger" data="'+data[i].id+'" name="'+data[i].name+'" ' + lock + '>Update</button></td>' +
                         '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + ' <i class="'+cond+'"></i></span></td>' +
                         '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
-                        '<td class="'+data[i].id+'" style="vertical-align: middle" onkeypress="return event.charCode >= 48 && event.charCode <= 57">' + Math.round(data[i].monthly_deduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                        '<td class="'+data[i].id+'" style="vertical-align: middle" onkeypress="return event.charCode >= 48 && event.charCode <= 57">' + Math.round(data[i].monthly_deduc).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                         '<td style="vertical-align: middle">' + lastUp + '</td>' +
                       '</tr>'; 
             }
@@ -5257,7 +5309,7 @@
                             '<td style="vertical-align: middle"></td>' +
                             '<th style="vertical-align: middle">Member..</th>' +
                             '<th style="vertical-align: middle">Loan Type..</th>' +
-                            '<th style="vertical-align: middle">&#8369;' + Math.round(totalMonthly).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
+                            '<th style="vertical-align: middle">&#8369;' + Math.round(totalMonthly).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th>' +
                             '<th style="vertical-align: middle">Date..</th>' +
                           '</tr>';
 
@@ -5338,7 +5390,7 @@
      
                 // Update footer
                 $( api.column( 4 ).footer() ).html(
-                    '&#8369;' + Math.round(pageTotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                    '&#8369;' + Math.round(pageTotal).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 );
             }
           });
@@ -5612,7 +5664,7 @@
        
                   // Update footer
                   $( api.column( i ).footer() ).html(
-                      '&#8369;' + Math.round(pageTotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                      '&#8369;' + Math.round(pageTotal).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                   );
                 }
               }
@@ -5634,8 +5686,7 @@
 
           }
         // SHARE CAPITAL CODES END
-
-        $('#loanapp_user_id').attr('value', '<?php echo $this->session->userdata('user_id'); ?>').hide();
+         $('#loanapp_user_id').attr('value', '<?php echo $this->session->userdata('user_id'); ?>').hide();
         $('#loanapp_name').attr('value', '<?php echo $this->session->userdata('name'); ?>').hide();
         var get_username = '';
         var get_name =  '';
@@ -5652,6 +5703,7 @@
         var loan_id_no = '';
         var loanapp_id = '';
         var interest = '';
+        var multiply = 0;
         // User Checking for past loan applications start
         function Check() {
           var get_username = '<?php echo $this->session->userdata('username'); ?>';
@@ -5676,6 +5728,7 @@
             success: function(response) {
               if(response == true) {
                 $('#loan_selector').attr('style', 'display: none');
+                $('#loan_renewal').attr('style', 'display:none');
                 $('#loanapp_user_id').attr('status', 'newUser');
                 var url = '<?php echo base_url(); ?>loan_applications/newUser';
                 $.ajax({
@@ -5706,7 +5759,9 @@
                       async: false,
                       dataType: 'json',
                       success: function(data) {
-                        var user_data_sc = data[0].total_share_capital * 2;
+                        var user_data_sc = data[0].total_share_capital;
+
+                        multiply = 2;
                         $('#loan-amount').val(Math.round(user_data_sc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                       }, error: function() {
                         alert('Error cannot find user share capital');
@@ -5721,6 +5776,7 @@
                 });
               } else {
                 $('#loan_type').attr('style', 'display: none');
+                $('#loan_renewal').attr('style', 'display:none');
                 $('#loan_selector').attr('style', 'display: block');
                 $('#loanapp_user_id').attr('status', 'oldUser');
                 $.ajax({
@@ -5780,8 +5836,8 @@
                             dataType: 'json',
                             success: function(data) {
                               var sharecap = data[0].total_share_capital;
-                              sharecap = sharecap * 3;
-                              $('#loanapp_alerts').html('<p class="alert bg-info alert-dismissable fade show" role="alert"><a class="h7 text-white">Tip: The max loanable amount of '+name+' is &#8369;'+Math.round(max_amt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. Your total share capital is &#8369;'+Math.round(sharecap).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. <br>You can only loan a MAX amount of &#8369;'+Math.round(max_amt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. Thank you!</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" style="position: relative">&times;</span></button></p>');
+                              multiply = 3;
+                              $('#loanapp_alerts').html('<p class="alert bg-info alert-dismissable fade show" role="alert"><a class="h7 text-white">Tip: The max loanable amount of '+name+' is &#8369;'+Math.round(max_amt).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. Your total share capital is &#8369;'+Math.round(sharecap).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. <br>You can only loan a MAX amount of &#8369;'+Math.round(max_amt).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. Thank you!</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" style="position: relative">&times;</span></button></p>');
                                 $('#loan-amount').val(Math.round(sharecap).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));   
                                 agik(interest);
                             }, error: function(data) {
@@ -5837,11 +5893,13 @@
           loanapp_id = user_id +  loan_id;
           $.ajax({
             type: 'ajax',
-            data: {loanapp_id: loanapp_id},
+            method: 'get',            
             url: '<?php echo base_url(); ?>loan_applications/generateLoanAppId',
+            data: {loanapp_id: loanapp_id},
             async: false,
             dataType: 'json',
             success: function(result) {
+              console.log(result);
               var i;
               if (result.length == 0) {
                 loanapp_id = loanapp_id + 0 ;
@@ -5865,7 +5923,10 @@
               $('#loan-amount').val('');
             }
             var cm = '';
-            var store = max_comakers - loanapp_amt;
+
+            var val_multiply = loanapp_amt * multiply;
+
+            var store = val_multiply - loanapp_amt;
             if(store >= 0) {
               var store = '';
               var z;
@@ -5896,6 +5957,7 @@
                $('#loanapp_alerts').html(store);
             }
         }
+
         $('input[name=loan-amount]').keyup(function(){
           $(this).val(function(index, value) {
             return value
@@ -5904,13 +5966,16 @@
             ;
           });
         });
+
         $('#loan-amount').keyup(function() {
           loanapp_amt = Number($(this).val().replace(/[^0-9\.]+/g,""));
           if(loanapp_amt == 0) {
             $('#loan-amount').val('');
           }
           var cm = '';
-          var store = max_comakers - loanapp_amt;
+          var val_multiply = loanapp_amt * multiply;
+
+          var store = val_multiply - loanapp_amt;
           if((loanapp_amt != '') || (loanapp_amt != 0)){
             if(store >= 0) {
               var store = '';
@@ -5997,6 +6062,12 @@
                 searchCoMaker();
              }
               $(this).click(function() {
+                var row = '';
+                var lala = $(this).attr('cmlist');
+                if($(this).val()) {
+                  $('.'+ lala).html(row);
+                  console.log(lala);
+                }
                 data = $(this).attr('id');
                 data2 = $(this).attr('user-username');        
               });
@@ -6011,8 +6082,8 @@
           }
         }
         function searchCoMaker(query, id, cmk1, cmk2, cmk3, cmk4) {
-            var url = '<?php echo base_url(); ?>loan_applications/searchCoMaker';
-            get_username = '<?php echo $this->session->userdata('user_id'); ?>';
+          var url = '<?php echo base_url(); ?>loan_applications/searchCoMaker';
+          get_username = '<?php echo $this->session->userdata('user_id'); ?>';
  
           $.ajax({
             type: 'ajax',
@@ -6026,8 +6097,7 @@
                 var i;
                 if(data.length > 0) {  
                   for (i=0; i < data.length; i++) {
-                    row += '<a role="button" class="dropdown-item w-100 cm_user" value="' + data[i].name + '" User-uname="' + 
-        data[i].id + '">'  
+                    row += '<a role="button" class="dropdown-item w-100 cm_user" value="'+ data[i].name +'" User-uname="'+ data[i].id +'">'  
                           + '<h5>' + data[i].name + '</h5>' 
                           + '<p>' + data[i].username + '</p>'
                           +'</a>'; 
@@ -6061,12 +6131,14 @@
           calcInterest = interest/12;
           calcGrossAmt = calcInterest * calcTerm * Number(calcAmount);
           var calcTotal =  Number(calcAmount) + Number(calcGrossAmt);
-          $('input[name=calc_loan_grossamt]').val(Math.round(calcTotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-          $('input[name=calc_loan_monthlydeduc]').val(Math.round(calcTotal / calcTerm).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+          $('input[name=calc_loan_grossamt]').val(Math.round(calcTotal).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+          $('input[name=calc_loan_monthlydeduc]').val(Math.round(calcTotal / calcTerm).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
         }
         // insert loan data to db start
-          var loanInterests = '';
-         $('#loanapp_submit').click(function() {
+        var loanInterests = '';
+        var OutstandingBal = '';
+        var recentLoanId = '';
+        $('#loanapp_submit').click(function() {
           var data = loan;
           var cmCount = $('#comakerCount').val();
           var cms = '';
@@ -6080,6 +6152,41 @@
           if($('#loanapp_user_id').attr('status') == 'newUser') {
             loanType = $('#loan_type').val();
             loanInterests = $('#loan_type').attr('loan_interest');
+            if($('#loan_term').val() == null) {
+              $('#loan_term').addClass('is-invalid');
+              $('#loan_term_invalid').html("Please select your loan's term.");
+            } else {
+              count += '12';
+              $('#loan_term').removeClass('is-invalid');
+              $('#loan_term_invalid').text('');
+              if($('#loan-amount').val() == '') {
+                $('#loan-amount').addClass('is-invalid');
+                $('#loan_amount_invalid').html('Please type your desired loan amount.');
+              } else {
+                count += '3';
+                $('#loan-amount').removeClass('is-invalid');
+                $('#loan_amount_invalid').text('');
+                if ($('#user_attachment').get(0).files.length === 0) {
+                  $('#user_attachment').addClass('is-invalid');
+                  $('#user_attachment_invalid').html('No files selected! Please kindly attach your payslip.');
+                } else {
+                  count += '4';
+                  $('#user_attachment').removeClass('is-invalid');
+                  $('#user_attachment_invalid').text('');
+                  if (loanAmount > max_amount) {
+                      $('#loan-amount').addClass('is-invalid');
+                      $('#loan_amount_invalid').text('Please change the Loan Amount you Entered!');
+                    } else {
+                      count += '5';
+                      $('#loan-amount').removeClass('is-invalid');
+                      $('#loan_amount_invalid').text('');
+                    }
+                } 
+              }
+            }
+          } else if($('#loanapp_user_id').attr('status') == 'renewUser') {
+            loanType = $('#loan_renewal').val();
+            loanInterests = $('#loan_renewal').attr('loan_interest');
             if($('#loan_term').val() == null) {
               $('#loan_term').addClass('is-invalid');
               $('#loan_term_invalid').html("Please select your loan's term.");
@@ -6214,7 +6321,7 @@
           if(cmCount == cms.length) {
             var typeLoaned = $('#loan_selector_data').val();
             var total_deductions = 0; 
-            /*$.ajax({
+            $.ajax({
               type: 'ajax',
               method: 'get',
               url: '<?php echo base_url();?>loan_applications/getLoanDeductions',
@@ -6226,31 +6333,41 @@
                 var loan_deduc_amount = '';         
                 for(var i=0; i < data.length; i++) {
                   if(data[i].deduc_type == 'percentage'){
-                    var perc = '';
-                    perc = data[i].deduc_val / 100 ;
-                    calc_amount = Number(loanAmount) * perc;
-                    loan_deduc_name += '<span id="'+data[i].deduc_name+'" val="'+calc_amount+'"></span>';
-                    console.log(loan_deduc_name);
-                  } else if(data[i].deduc_type == 'amount'){
                     var amount = '';
-                    amount = data[i].deduc_val;
-                    loan_deduc_name += '<span id="'+data[i].deduc_name+'" val="'+amount+'"></span>';
+                    
+                    amount = data[i].deduc_val / 100 ;
+                    calc_amount = Number(loanAmount) * amount;
+                    
+                    loan_deduc_name += '<span>'+ data[i].deduc_name +' '+ Number(data[i].deduc_val).toFixed(2) +'%: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(calc_amount).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></span><br>';
+                  } else if(data[i].deduc_type == 'amount'){
+                    var amount = data[i].deduc_val;
+                    loan_deduc_name +='<span>'+ data[i].deduc_name + ': <span class="font-weight-bold float-right ml-auto">&#8369;'+ Math.round(amount).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</span></span><br>';
                   }
                 }
                 $('#loan_type_deductions').html(loan_deduc_name);
               }, error: function() {
                 alert('Error on finding deductions for the type of loan');
               }
-            });*/
+            });
+            $.ajax({
+              type: 'ajax',
+              method: 'get',
+              url: '<?php echo base_url(); ?>loan_applications/getOutstandingBalance',
+              data: {recentLoanId: recentLoanId},
+              async: false,
+              dataType: 'json',
+              success: function(data) {
+                OutstandingBal = data[0].balance;
+              }, error: function() {
+                alert('Error encountered while checking past Loan Outstanding Balance');
+              }
+            });
             var loanTerm = $('#loan_term').val();
             var interest = loanInterests / 12;
-            var grossAmt = interest * loanTerm * Number(loanAmount) ;
+            var grossAmt = interest * loanTerm * Number(loanAmount);
             var calcTotal =  Number(loanAmount) + Number(calcGrossAmt);
             var monthlyDeduc = calcTotal/ loanTerm;
             var balance = calcTotal - monthlyDeduc;
-            // var RetentionFee = 0;
-            var OutstandingBal = 0;
-            // var servFee = loanAmount * 0.01; 
             var loanNetAmt = loanAmount;
             var loanDebitTotal = Number(loanAmount)+ Number(grossAmt);
             var loanCreditTotal = grossAmt + total_deductions + OutstandingBal + loanNetAmt;
@@ -6260,18 +6377,19 @@
               bal = balance - bal;
               tableBody +=  '<tr>' +
                               '<th scope="row">' + i + '</th>' +
-                              '<td>&#8369;' + Math.round(grossAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                              '<td>&#8369;' + Math.round(monthlyDeduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
-                              '<td>&#8369;' + Math.round(bal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                              '<td>&#8369;' + Math.round(grossAmt).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                              '<td>&#8369;' + Math.round(monthlyDeduc).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                              '<td>&#8369;' + Math.round(bal).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
                             '</tr>';
             }
             $('#calcBody').html(tableBody);
             $('#loanType').html('Type of Loan: <span class="font-weight-bold float-right ml-auto">' + loanType + '</span>');
             $('#loanTerm').html('Term of Loan: <span class="font-weight-bold float-right ml-auto">' + loanTerm + ' months</span>');
-            $('#loanAmt').html('Amount of Loan: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(loanAmount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
-            $('#loanInt').html('Loan Interest: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(grossAmt).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
-            $('#loanGross').html('Gross Loan: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(calcTotal).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
-            $('#loanMoDed').html('Monthly Amortizations: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(monthlyDeduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
+            $('#loanAmt').html('Amount of Loan: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(loanAmount).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
+            $('#loanInt').html('Loan Interest: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(grossAmt).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
+            $('#loanGross').html('Gross Loan: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(calcTotal).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
+            $('#loanOutstandingBal').html('Outstanding Balance of '+ loanType +'<span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(OutstandingBal).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
+            $('#loanMoDed').html('Monthly Amortizations: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(monthlyDeduc).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span>');
             // $('#loanType').html('<span class="font-weight-bold">' + loanType + '</span>');
             // $('#loanTerm').html('<span class="font-weight-bold">' + loanTerm + ' months</span>');
             // $('#loanAmt').html('<span class="font-weight-bold">' + Number(loanAmount).toFixed(2) + '</span>');
@@ -6293,8 +6411,7 @@
           } else {
             $('#loanapp_alerts').html('<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Notice, please make sure all fields and attachment are filled-out before submitting.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>');
           }   
-        });   
-
+        });              
         $('#submitLoan').click(function(){
           var loanTerm = $('#loan_term').val();
           var loanAmount = Number($('#loan-amount').val().replace(/[^0-9\.]+/g,""));
@@ -6323,22 +6440,129 @@
                 $('#loanapp_alerts').html(store);
                 $('#loanAppForm')[0].reset();
                 Check();
+                getMyLoanRecords();
               } else {
-                alert('loan app data response is false');
                 Check();
+                getMyLoanRecords();
               }
             }, error: function() {
               alert('Error on submitting loan app data');
             }
           });
           $('#loanAppCalculations').modal('hide');
-        });  
+        });          
         // insert loan data to db end
+        // Loan Renewal Part start
+           $('.list-group-item[name=applyloan-tab]').on('click', function() {
+              $('#loanAppForm')[0].reset();
+              $('#user_attachment_image').text('');
+              OutstandingBal = '';
+              recentLoanId = '';
+              store = '';
+              $('#loanapp_alerts').html(store);
+              Check();
+            })
+           $('.Renewal').click(function() {
+              var loanId = '';
+              OutstandingBal = '';
+              recentLoanId = '';
+              store = '';
+              $('#loanapp_alerts').html(store);
+              loanId = $(this).attr('loanId');
+              $('#myloanrecords-tab').removeClass('active show');
+              $('#myloanrecordsTab').removeClass('active show');
+              $('#applyloan-tab').addClass('active show');
+              $('#applyLoanTab').addClass('active show');
+              $('#loanAppForm')[0].reset();
+              $('#user_attachment_image').text('');
+              
+              RenewLoan(loanId);
+           });
+           function RenewLoan(loanId) {
+              var ltid = '';
+              var mid = '';
+              var lmt = '';
+              var ln = '';
+              var lint = '';
+              var msc = '';
+              var renew_Id = '';
+              var count;
+              $('#loan_type').attr('style', 'display: none');
+              $('#loan_renewal').attr('style', 'display:block');
+              $('#loan_selector').attr('style', 'display: none');
+              $('#loanapp_user_id').attr('status', 'renewUser');
+              $('#loan-amount').attr('disabled', false);
+              $('#loan_term').attr('disabled', false);
+              $('#user_attachment').attr('disabled', false);
+              $.ajax({
+                type: 'ajax',
+                method: 'get',
+                url: '<?php echo base_url(); ?>loan_applications/renewLoan',
+                data: {lid:loanId},
+                async: false,
+                dataType: 'json',
+                success: function(data) {
+                  console.log(data);
+                  mid = data[0].member_id;
+                  ltid = data[0].loan_applied;
+                  lmt = data[0].loan_max_term;
+                  ln = data[0].loan_name;
+                  lint = data[0].loan_interest;
+                  loanInterests = data[0].loan_interest;
+                  msc = data[0].total_share_capital * 3;
+                  var userid = '<?php echo $this->session->userdata('user_id')?>';
+                  $.ajax({
+                    type: 'ajax',
+                    method: 'get',
+                    url: '<?php echo base_url();?>loan_applications/CheckRenewAvailability',                
+                    data: {user_id: userid, loantype_id: ltid},
+                    async: false,
+                    dataType: 'json',
+                    success: function(result) {
+                        recentLoanId = result[0].loanapp_id;
+                    }, error: function() {
+                      alert('Something went wrong on checking Renew Availability');
+                    }
+                  });
+                  $('#loan_renewal').attr({
+                      loan_id: data[0].loan_applied,
+                      loan_interest: data[0].loan_interest,
+                      value:  data[0].loan_name,
+                      placeholder:  data[0].loan_name
+                  });
+                  $.ajax({
+                    type: 'ajax',
+                    method: 'get',
+                    url: '<?php echo base_url();?>loan_applications/getRenewalId',
+                    data: {mid: mid, ltid: ltid},
+                    async: false,
+                    dataType: 'json',
+                    success: function(result) {
+                        count = result.length + 1 ;
+                    }, error: function() {
+                        alert('Error encountered while Renewal Id count');
+                    }
+                  });
+                  renew_Id = mid + ltid + count; 
+                  $('#loanapp_remarks').val('Renew');
+                  $('#loanapp_id_no').val(renew_Id);
+                  $('#loan_selector_data').val(ltid);
+                  var renew_amount = $('#loan-amount').val(Math.round(msc).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                  getLoanTerm(renew_amount);
+                  getLoanAmount(ltid);
+                  checkLoanAmount();
+                  passInterest(lint);
+                  agik(lint);
+                }, error: function() {
+                  alert('Error Encountered While Renewing your Loan');
+                }
+              });
+           }
+        // Loan Renewal Part End
 
-        // comakers tab start
+         // comakers tab start
           // fix upload button for co maker attachment and design
           function Comakers() {
-            $('#comakersTbl').DataTable().destroy();
             var user_id = '<?php echo $this->session->userdata('user_id'); ?>';
             
             $.ajax({
@@ -6351,58 +6575,36 @@
               success: function(data) {
                 var rows = '';
                 var i;
-
                 for(i=0; i < data.length; i++){
                   rows += '<tr class="text-secondary">' +
                             '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].name + '</span></td>' +
-                            '<td style="vertical-align: middle">' + data[i].loan_name + '</td>' +
-                            '<td style="vertical-align: middle">' + '<button href="javascript:;" class="btn btn-info btn-sm" id="cmCheckLoan'+ i +'" data="' + data[i].loanapp_id + '">View Application</button>' + '</td>' +
+                            '<td style="vertical-align: middle">' + '<small>' + data[i].loan_name + '</small>' + '</td>' +
+                            '<td style="vertical-align: middle">' + '<button href="javascript:;" class="btn btn-info btn-sm float-right" id="cmCheckLoan'+ i +'" data="' + data[i].loanapp_id + '">View Application</button>' + '</td>' +
                           '</tr>';
                 }
-
                 $('#return_cm_applications').html(rows);
-
                 if(i == 0) {
                   $('#cm_pending_badge').hide();
                 } else {
                   $('#cm_pending_badge').show();
                   $('#cm_pending_badge').text(i);
                 }
-
                 cmApplyCount(i);
               }, error: function() {
                 alert('Something went wrong on checking for co-makers');
               }
             });
-
-            var comakersDataTbl = $('#comakersTbl').DataTable({
-              "dom": 'lfrtip',
-              "pagingType": "simple_numbers",
-              "language": { search: "", searchPlaceholder: "Search.." },
-              "columnDefs": [
-                { "orderable": false, "targets": 2 }
-              ]
-            });
-
-            $('#comakersTbl_info').addClass('text-muted font-italic');
-            $('#comakersTbl_info').detach().appendTo('#comakersTblInfo');
-            $('#comakersTbl_paginate').detach().appendTo('#comakersTblPaginate');
           }
-
           function cmApplyCount(y) {
             get_username = '<?php echo $this->session->userdata('user_id'); ?>';
-
             for(var i = 0; i < y; i++) {
               $('#return_cm_applications').on('click', '#cmCheckLoan'+ i, function() {
                 $('#cmViewLoanAppModal').modal('show');
                 $('#cancel_cm_approval').hide(); 
                 $('#submit_cm_approval').text('Approve');
                 var store = '';
-
                 $('#coMakersAttachment_alerts').html(store);
-
                 var loanapp_data = $(this).attr('data');
-
                 $.ajax({
                   type: 'ajax',
                   method: 'get',
@@ -6412,7 +6614,6 @@
                   dataType: 'json',
                   success: function(result) {
                     get_username = '<?php echo $this->session->userdata('user_id'); ?>';
-
                     var cmCount = 0;
                     var cnt = '';
                     var cm = '';
@@ -6426,9 +6627,7 @@
                                       '<input type="hidden" class="form-control" id="cm_Approval" name="cm_Approval" value="">' +
                                     '</div>' +
                                   '</form>';
-
                     var cm_id_data = '';
-
                     if(result[0].comaker_1 != null) {
                       cmCount++;
                     } if (result[0].comaker_2 != null) {
@@ -6436,7 +6635,6 @@
                     } if(result[0].comaker_3 != null) {
                       cmCount++;
                     } 
-
                     for(var i=1; i <= cmCount; i++) {
                       if(i == 1) {
                         cm = result[0].comaker_1;
@@ -6445,7 +6643,6 @@
                       } if(i == 3) {
                         cm = result[0].comaker_3;
                       } 
-
                       $.ajax({
                         type: 'ajax',
                         method: 'get',
@@ -6454,10 +6651,8 @@
                         async: false, 
                         dataType: 'json',
                         success: function(data) {
-                          cnt += '<p><span class="font-weight-bold">'+ i +'. </span><span class="text-muted">'+ data[0].name +'</span></p><div cm_id="'+ data[0].id +'" id="cm_approval_form'+ i +'"></div>';
-
+                          cnt += '<p><span class="font-weight-bold">Co-Maker'+ i +': </span><span class="text-muted">'+ data[0].name +'</span></p><div cm_id="'+ data[0].id +'" id="cm_approval_form'+ i +'"></div>';
                           get_username = '<?php echo $this->session->userdata('user_id'); ?>';
-
                           if(data[0].id == get_username) {
                               cm_id_data = '#cm_approval_form'+i;
                           }
@@ -6466,6 +6661,7 @@
                         }
                       });
                     }
+                    
 
                     var cm_loandata_head = '<h2>Loan Application Details</h2>';
                      var cm_loandata_body = '<div class="row ml-1 mr-1">' + 
@@ -6498,15 +6694,15 @@
                                                 '</tr>'+
                                                 '<tr>'+
                                                   '<td>Amount Loaned: </td>' +
-                                                  '<td>&#8369;'+ Math.round(result[0].loan_amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</td>' +
+                                                  '<td>&#8369;'+ Math.round(result[0].loan_amount).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</td>' +
                                                 '</tr>'+
                                                 '<tr>'+
                                                   '<td>Interest on Loan: </td>' +
-                                                  '<td>&#8369;'+ Math.round(result[0].loan_int).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</td>' +
+                                                  '<td>&#8369;'+ Math.round(result[0].loan_int).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</td>' +
                                                 '</tr>'+
                                                 '<tr>'+
                                                   '<td>Monthly Amortization: </td>' +
-                                                  '<td>&#8369;'+ Math.round(result[0].monthly_deduc).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</td>' +
+                                                  '<td>&#8369;'+ Math.round(result[0].monthly_deduc).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</td>' +
                                                 '</tr>'+
                                                 '<thead>'+
                                                   '<tr>' +
@@ -6522,12 +6718,11 @@
                                             '</table>'+
                                           '</div>';
 
+
                     $('#cmViewLoanAppModalTitle').html(cm_loandata_head);
                     $('#cmViewLoanAppModalBody').html(cm_loandata_body);
                     $('#comaker-count').html(cnt);
-
                     $(cm_id_data).html(cm_approve);
-
                   }, error: function() {
                     alert('Error finding Loan application Data');
                   }
@@ -6535,7 +6730,6 @@
               });
             }
           }
-
           $('#cmViewLoanAppModal').on('click', '.submit_cm_approval', function() {
                 $(this).attr('id', 'submit2');
                 $('#cm_Approval').val('Approve');
@@ -6547,16 +6741,12 @@
                   $('#submit2').unbind();
                   $('#submit2').attr('id', '');
                 });
-
                 $(this).text('Are you sure?');
           });
-
-
           $('#cmViewLoanAppModal').on('click', '#submit2', function() {
             var cm_get_approval = $('#cm_Approval').val();
             var cm_id = $('#cm_id').val();
             var lapp_id = $('#loan_App_id').val(); 
-
             $.ajax({
               type: 'ajax',
               method: 'get',
@@ -6567,11 +6757,8 @@
               success: function(data) {
                 if(data == true) {
                   $('#cmViewLoanAppModal').modal('hide');
-
                   var store = '<p class="alert bg-success alert-dismissable fade show" role="alert"><a class="h7 text-white">Success, Your attachment was sent!.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>';
-
                   $('#coMakers_alerts').html(store);
-
                   Comakers();
                 } else {
                   alert('Comaker Approval failed');
@@ -6582,7 +6769,6 @@
             });
             $('#submit2').attr('id', '');
           });
-
           $(document).on('hidden.bs.modal', '#cmViewLoanAppModal', function(){
             $('#cmViewLoanAppModal').find('#submit2').attr('id', '');
           });
@@ -7026,6 +7212,8 @@
           var role = '<?php echo $this->session->userdata('roleID'); ?>';
           switch(role){
             case '1':
+            $('#dashboardTab').hide();
+            $('#dashboard-tab').hide();
             $('#websettings-tab').show();
             $('#websiteSettings').addClass('active');
             break;
@@ -7043,7 +7231,6 @@
             $('#creditDash').show();
             $('#dashboardTab').addClass('active');
             $('#loans-tab, #loans-deduction, #returnLatestDate, #add-loan, .edit-loan').show();
-            $('#members-tab, #viewuser-perm4, #returnMemberLatestDate').show();
             $('#loanapps-tab').show();
             $('#records-tab, #loanrecords-tab').show();
             break;
@@ -7057,8 +7244,9 @@
             case '5':
             $('#managerDash').show();
             $('#dashboardTab').addClass('active');
-            $('#loans-tab, #returnLatestDate').show();
+            $('#loans-tab, #loans-deduction, #loans-archive, #returnLatestDate, #add-loan, .edit-loan, .archive-loan').show();
             $('#loanapps-tab').show();
+            $('#members-tab, #viewuser-perm4').show();
             $('#records-tab, #loanrecords-tab').show();
             $('#sharecap-ledger-tab, #view-ledgers, #update-ledgers, #update-share-capitals').show();
             break;

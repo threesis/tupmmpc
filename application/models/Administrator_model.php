@@ -263,7 +263,7 @@
 
 		public function getTotalLoanPayments() {
 			$this->db->select_max('balance')->from('active_loan_apps');
-			$this->db->group_by('loanapp_id');
+			$this->db->group_by('active_loanapp_id');
 			$query = $this->db->get()->result();
 			$total = 0;
 			foreach ($query as $sum) {
@@ -344,8 +344,8 @@
 
 			if($ids){
 				foreach ($ids as $id => $code) {
-					$balance = $this->db->query("select balance as bal from active_loan_apps where loanapp_id = $loanapp[$id]")->row()->{'bal'};
-					$lastID = $this->db->query("select id as active_id from active_loan_apps where loanapp_id = $loanapp[$id]")->row()->{'active_id'};
+					$balance = $this->db->query("select balance as bal from active_loan_apps where active_loanapp_id = $loanapp[$id]")->row()->{'bal'};
+					$lastID = $this->db->query("select id as active_id from active_loan_apps where active_loanapp_id = $loanapp[$id]")->row()->{'active_id'};
 					$diff = $balance - $md[$id];
 
 						$this->db->set('or_number', $or);
@@ -416,11 +416,11 @@
 				$this->db->like('YEAR(payment_for)', $year);
 			}
 			$this->db->select('*')->select_min('balance')->from('active_loan_apps a');
-			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
+			$this->db->join('loan_applications b', 'b.loanapp_id = a.active_loanapp_id');
 			$this->db->join('members c', 'c.id = b.member_id');
 			$this->db->join('loan_types d', 'd.id = b.loan_applied');
 			$this->db->join('share_capital e', 'e.user_id = b.member_id');
-			$this->db->group_by('a.loanapp_id');
+			$this->db->group_by('a.active_loanapp_id');
 			$this->db->order_by('payment_status', 'DESC');
 			$query = $this->db->get();
 			return $query->result();
@@ -433,12 +433,12 @@
 				$this->db->like('MONTH(payment_for)', $month);
 				$this->db->like('YEAR(payment_for)', $year);
 			}
-			$this->db->select('*, a.id')->select_min('balance')->from('active_loan_apps a');
-			$this->db->join('loan_applications b', 'b.loanapp_id = a.loanapp_id');
+			$this->db->select('*, a.active_loanapp_id')->select_min('balance')->from('active_loan_apps a');
+			$this->db->join('loan_applications b', 'b.loanapp_id = a.active_loanapp_id');
 			$this->db->join('members c', 'c.id = b.member_id');
 			$this->db->join('loan_types d', 'd.id = b.loan_applied');
 			$this->db->join('share_capital e', 'e.user_id = b.member_id');
-			$this->db->group_by('a.loanapp_id');
+			$this->db->group_by('a.active_loanapp_id');
 			$this->db->order_by('payment_status', 'DESC');
 			$query = $this->db->get();
 			return $query->result();
@@ -454,9 +454,9 @@
 
 			if($ids){
 				foreach ($ids as $id => $code) {
-					$balance = $this->db->query("select balance as bal from active_loan_apps where loanapp_id = $code")->row()->{'bal'};
-					$remark = $this->db->query("select remarks as rm from active_loan_apps where loanapp_id = $code")->row()->{'rm'};
-					$lastID = $this->db->query("select id as active_id from active_loan_apps where loanapp_id = $code")->row()->{'active_id'};
+					$balance = $this->db->query("select balance as bal from active_loan_apps where active_loanapp_id = $code")->row()->{'bal'};
+					$remark = $this->db->query("select remarks as rm from active_loan_apps where active_loanapp_id = $code")->row()->{'rm'};
+					$lastID = $this->db->query("select id as active_id from active_loan_apps where active_loanapp_id = $code")->row()->{'active_id'};
 					$diff = $balance - $md[$id];
 
 						$this->db->set('or_number', $or);

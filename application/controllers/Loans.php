@@ -58,7 +58,7 @@
 		    }
 
 		    $loan = $r->loan_applied;
-		    $deducs = $this->loan_application_model->getLoanDeductions($loan);
+		    $deducs = $this->loan_application_model->getLoanDeduc($loan);
 
 	       	$data[] = $deducs->result();
 

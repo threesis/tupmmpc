@@ -71,12 +71,11 @@
 		}
 		public function generateLoanAppId()
 		{
-			$member_id = $this->input->get('member_id');
-			$loantype_id = $this->input->get('loantype_id');	
+			$id = $this->input->get('loanapp_id');	
 			// "Select count(*) as num_of_rows from (Select * from loan_applications where loanapp_id like '$id%' order by date_created ASC) loan_applications"
 			// "Select * from loan_applications where loanapp_id like '$id%' order by date_created ASC"
-			$loanapp_id = "SELECT * FROM loan_applications as num_rows WHERE loanapp_id IN ( SELECT loanapp_id FROM loan_applications WHERE member_id = $member_id and loan_applied = '$loantype_id' GROUP BY loan_applied)";
-			// $loanapp_id = "Select count(*) as num_of_rows from (Select * from loan_applications where loanapp_id like '$id%' order by date_applied ASC) loan_applications";
+			// $loanapp_id = "SELECT * FROM loan_applications as num_rows WHERE loanapp_id IN ( SELECT loanapp_id FROM loan_applications WHERE member_id = $member_id and loan_applied = $loantype_id GROUP BY loan_applied)";
+			$loanapp_id = "Select count(*) as num_of_rows from (Select * from loan_applications where loanapp_id like '$id%' order by date_applied ASC) loan_applications";
 			$query = $this->db->query($loanapp_id);
 			if($query->num_rows() > 0) {
 				return $query->result();
@@ -202,6 +201,17 @@
 				return false;
 			}
 		}
+
+		public function getLoanDeduc($loan) 
+		{
+			$this->db->where('loan_type_name', $loan);
+			$query = $this->db->select('deduc_id, deduc_name, deduc_type, deduc_val')->from('loan_type_deducs')->join('loan_types', 'loan_types.id = loan_type_deducs.loan_type_name')->join('loan_deductions', 'loan_deductions.deduc_id = loan_type_deducs.loan_deduc')->get();
+			if($query->num_rows() > 0) {
+				return $query;
+			} else {
+				return false;
+			}
+		}
 		
 		public function cmloanappData() 
 		{
@@ -257,9 +267,11 @@
 		}
 		public function renewLoan() {
 			$loan_id = $this->input->get('lid');
+
 			$this->db->where('loanapp_id', $loan_id);
 			$this->db->order_by('date_applied', 'ASC limit 1');
 			$query = $this->db->from('loan_applications a')->join('share_capital b', 'b.user_id = a.member_id')->join('loan_types c', 'c.id=a.loan_applied')->get();
+
 			if($query->num_rows() > 0) {
 				return $query->result();
 			} else {

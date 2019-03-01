@@ -38,11 +38,7 @@
               <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" required>
               <label for="inputPassword">Password</label>
             </div>
-
-            <div class="custom-control custom-checkbox mb-3">
-              <input type="checkbox" class="custom-control-input" id="remember" name="remember">
-              <label class="custom-control-label small" for="remember">Remember password</label>
-            </div>
+            
             <button type="submit" class="btn btn-lg btn-success btn-block text-uppercase mt-4">Sign in</button>
           </form>
         </div>

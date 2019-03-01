@@ -95,4 +95,9 @@
 			// Redirect to the home page
 			redirect(base_url());
 		}
+
+		public function comakerName() {
+			$result = $this->user_model->comakerName();
+			echo json_encode($result);
+		}
 	}
