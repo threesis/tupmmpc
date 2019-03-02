@@ -56,7 +56,7 @@
 		}
 
 		public function search_user() {
-			$this->db->select('*')->from('members a','left');
+			$this->db->select('*')->from('members a', 'left');
 			$this->db->join('roles b', 'b.role_id = a.position');
 			$this->db->join('share_capital c', 'c.user_id = a.id')->select_max('total_share_capital');
 			$this->db->group_by('id');
