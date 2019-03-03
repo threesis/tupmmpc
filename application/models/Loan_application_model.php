@@ -120,10 +120,12 @@
 				'user_payslip' => $post_image,
 				'status' => 'Pending',
 				'remarks' => $this->input->post('loanapp-remarks'),
-				'comaker_1' => $this->input->post('user_username1'),
-				'comaker_2' => $this->input->post('user_username2'),
-				'comaker_3' => $this->input->post('user_username3'),
-				// 'comaker_4' => $this->input->post('co-maker4')
+
+				// newly added start 
+				'comaker_1' => $this->input->post('cm_id_1'),
+				'comaker_2' => $this->input->post('cm_id_2'),
+				'comaker_3' => $this->input->post('cm_id_3')
+				// newly added end
 			);
 			$this->db->insert('loan_applications', $loanapp_data);
 			if($this->db->affected_rows() > 0){

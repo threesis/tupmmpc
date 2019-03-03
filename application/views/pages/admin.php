@@ -5704,10 +5704,8 @@
         var loanapp_id = '';
         var interest = '';
 
-        // newly added start
         var multiply = 0;
         var user_sharecap;
-        // newly added end
 
         // User Checking for past loan applications start
         function Check() {
@@ -5745,7 +5743,7 @@
                     $('#loan_type').attr({
                       loan_id: result[0].id,
                       loan_interest: result[0].loan_interest,
-                      max_amt: result[0].loan_max_amt, // newly added
+                      max_amt: result[0].loan_max_amt, 
                       value: result[0].loan_name,
                       placeholder: result[0].loan_name
                     });
@@ -5753,10 +5751,8 @@
                     loan_id_no = $('#loan_type').attr('loan_id');
                     interest = $('#loan_type').attr('loan_interest');
 
-                    // newly added start
                     var name = $('#loan_type').attr('value');
                     var max_amt = $('#loan_type').attr('max_amt');
-                    // newly added end
 
                     user_id_no = '<?php echo $this->session->userdata('user_id'); ?>';
                     $('#loan_selector_data').val(loan_id_no);
@@ -5772,7 +5768,6 @@
                       dataType: 'json',
                       success: function(data) {
 
-                        // newly added start
                         user_sharecap = data[0].total_share_capital;
 
                         multiply = 2;
@@ -5780,7 +5775,6 @@
                         $('#loanapp_alerts').html('<p class="alert bg-info alert-dismissable fade show" role="alert"><a class="h7 text-white">Tip: The max loanable amount of '+name+' is &#8369;'+Math.round(max_amt).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. Your total share capital is &#8369;'+Math.round(user_sharecap).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. <br>You can only loan a MAX amount of &#8369;'+Math.round(loanable_amt).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. Thank you!</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" style="position: relative">&times;</span></button></p>');
 
                         $('#loan-amount').val(Math.round(user_sharecap).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
-                        // newly added end
 
                       }, error: function() {
                         alert('Error cannot find user share capital');
@@ -5856,7 +5850,6 @@
                             dataType: 'json',
                             success: function(data) {
 
-                              // newly added start
                               user_sharecap = data[0].total_share_capital;
                               multiply = 3;
 
@@ -5865,7 +5858,6 @@
                               $('#loanapp_alerts').html('<p class="alert bg-info alert-dismissable fade show" role="alert"><a class="h7 text-white">Tip: The max loanable amount of '+name+' is &#8369;'+Math.round(max_amt).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. Your total share capital is &#8369;'+Math.round(user_sharecap).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. <br>You can only loan a MAX amount of &#8369;'+Math.round(loanable_amt).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'. Thank you!</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true" style="position: relative">&times;</span></button></p>');
 
                               $('#loan-amount').val(Math.round(user_sharecap).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));  
-                              // newly added end 
 
                                 agik(interest);
                             }, error: function(data) {
@@ -5952,7 +5944,6 @@
             }
             var cm = '';
 
-            // newly added start
             var val_multiply = user_sharecap * multiply;
 
             var store = max_comakers - loanapp_amt;
@@ -5973,17 +5964,26 @@
                         a = 2;
                   }
                 for(z = 1; z <= a; z++){
-                  cm += '<div class="form-group">'+ '<input type="text" name="user_username'+ z +'" id="user_username'+ z +'" value="">' +'<input type="text" autocomplete="off" user-username="user_username'+ z +'" cmlist="cmList' + z + ' " class="form-control dropdown-toggle" data-toggle="dropdown" placeholder="Input Co-Maker'+ z +' Name" name="co-maker'+ z +'" id="co-maker'+ z +'" cmk-uname=""><div class="invalid-feedback" id="co-makerinvalid'+ z +'"></div><div class="dropdown-menu cmList' + z + '"></div></div>';
+                  // newly added start
+                   cm += '<div class="form-group">'
+                        + '<input type="hidden" id="cm_id_'+ z +'" name="cm_id_'+ z +'">'
+                        + '<input type="text" class="form-control" list="cm_list'+ z +'" placeholder="Input Co-Maker'+ z +' Name" name="co-maker'+ z +'" id="co-maker'+ z +'" data-cmid="cm_id_'+ z +'">'
+                        + '<div class="invalid-feedback" id="co-makerinvalid'+ z +'"></div>'
+                        + '<datalist id="cm_list'+ z +'" class="cm_list"></datalist>'
+                      + '</div>';
+                  // newly added end
                 }
                 CMSearch(z);
                 getLoanTerm(loanapp_amt);
                 $('#loanapp-cm-application').html(cm);
                 $('#comakerCount').val(z-1);
               } else {
+                // newly added start
                  $('#loan-amount').addClass('is-invalid');
                  $('#loan_amount_invalid').text('Please change the Loan Amount you Entered!');
                  var store = '<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">The Loan Amount Entered exceeded the Maximum Amount that the User can Enter.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>';
                  $('#loanapp_alerts').html(store);
+                // newly added start
               }
             } else {
                $('#loan-amount').addClass('is-invalid');
@@ -5991,7 +5991,6 @@
                var store = '<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Invalid input! Please try again.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>';
                $('#loanapp_alerts').html(store);
             }
-            // newly added end
         }
 
 
@@ -6013,7 +6012,6 @@
           }
           var cm = '';
 
-          // newly added start
           var val_multiply = user_sharecap * multiply;
 
           var store = max_comakers - loanapp_amt;
@@ -6035,18 +6033,27 @@
                   {
                         a = 2;
                   }
-                for(z = 1; z <= a; z++){
-                  cm += '<div class="form-group">'+ '<input type="text" name="user_username'+ z +'" id="user_username'+ z +'" value="">' +'<input type="text" autocomplete="off" user-username="user_username'+ z +'" cmlist="cmList' + z + ' " class="form-control dropdown-toggle" data-toggle="dropdown" placeholder="Input Co-Maker'+ z +' Name" name="co-maker'+ z +'" id="co-maker'+ z +'" cmk-uname=""><div class="invalid-feedback" id="co-makerinvalid'+ z +'"></div><div class="dropdown-menu cmList' + z + '"></div></div>';
+                for(z = 1; z <= a; z++){                 
+                  // newly added start
+                  cm += '<div class="form-group">'
+                        + '<input type="hidden" id="cm_id_'+ z +'" name="cm_id_'+ z +'">'
+                        + '<input type="text" class="form-control" list="cm_list'+ z +'" placeholder="Input Co-Maker'+ z +' Name" name="co-maker'+ z +'" id="co-maker'+ z +'" data-cmid="cm_id_'+ z +'">'
+                        + '<div class="invalid-feedback" id="co-makerinvalid'+ z +'"></div>'
+                        + '<datalist id="cm_list'+ z +'" class="cm_list"></datalist>'
+                      + '</div>'; 
+                  // newly added end
                 }
                 CMSearch(z);
                 getLoanTerm(loanapp_amt);
                 $('#loanapp-cm-application').html(cm);
                 $('#comakerCount').val(z-1);
               } else {
+                // newly added start
                  $('#loan-amount').addClass('is-invalid');
                  $('#loan_amount_invalid').text('Please change the Loan Amount you Entered!');
                  var store = '<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">The Loan Amount Entered exceeded the Maximum Amount that the User can Enter.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>';
                  $('#loanapp_alerts').html(store);
+                // newly added end
               }
             } else {
               $('#loan-amount').addClass('is-invalid');
@@ -6058,7 +6065,6 @@
               cm = '';
              $('#loanapp-cm-application').html(cm);
           }
-          // newly added end
 
         });
         // amount and co maker dependecy end
@@ -6101,12 +6107,15 @@
           for(x = 1; x <= y; x++){            
             $('#loanapp-cm-application').on('keyup','#co-maker'+ x, function() {
               data_val = $(this).val();
-              data_id = $(this).attr('cmlist');
+
+              // newly added start
+              data_id = $(this).attr('list');
               data = $(this).attr('id');
-              data2 = $(this).attr('user-username');
-              cmk1 = $('#co-maker1').attr('cmk-uname');
-              cmk2 = $('#co-maker2').attr('cmk-uname');
-              cmk3 = $('#co-maker3').attr('cmk-uname');
+              data2 = $(this).data('cmid');
+              cmk1 = $('#cm_id_1').val();
+              cmk2 = $('#cm_id_2').val();
+              cmk3 = $('#cm_id_3').val();
+              
              if(data_val != '') 
              {               
                 searchCoMaker(data_val, data_id, cmk1, cmk2, cmk3); 
@@ -6114,27 +6123,29 @@
              {
                 searchCoMaker();
              }
-              $(this).click(function() {
+
+             $(this).click(function() {
                 var row = '';
-                var lala = $(this).attr('cmlist');
+                var lala = $(this).attr('list');
                 if($(this).val()) {
-                  $('.'+ lala).html(row);
+                  $('#'+ lala).html(row);
                   console.log(lala);
                 }
                 data = $(this).attr('id');
-                data2 = $(this).attr('user-username');        
+                data2 = $(this).data('cmid');        
               });
-              $('.cm_user').click(function() {
-                clicked_data1 = $(this).attr('value');
-                clicked_data2 = $(this).attr('User-uname');
-                $('#'+ data).val(clicked_data1);
-                $('#'+ data).attr('cmk-uname', clicked_data2);
-                $('#'+ data2).val(clicked_data2);
+
+             $(this).on('keyup', function() {
+                  data2 = $(this).data('cmid'); 
+                  var value = $(this).val();
+                  var cval = $('#'+ data_id +' [value="' + value + '"]').data('uid');
+                  $('#'+ data2).val(cval);
               });
+              // newly added end
             });
           }
         }
-        function searchCoMaker(query, id, cmk1, cmk2, cmk3, cmk4) {
+        function searchCoMaker(query, id, cmk1, cmk2, cmk3) {
           var url = '<?php echo base_url(); ?>loan_applications/searchCoMaker';
           get_username = '<?php echo $this->session->userdata('user_id'); ?>';
  
@@ -6142,24 +6153,26 @@
             type: 'ajax',
             method: 'post',
             url: url,
-            data: {key_entered: query, user: get_username, cmk1: cmk1, cmk2: cmk2, cmk3: cmk3, cmk4: cmk4},
+            data: {key_entered: query, user: get_username, cmk1: cmk1, cmk2: cmk2, cmk3: cmk3},
             async: false,
             dataType: 'json',
             success: function(data) {
                 var row = '';
                 var i;
+
+                // newly added start
                 if(data.length > 0) {  
                   for (i=0; i < data.length; i++) {
-                    row += '<a role="button" class="dropdown-item w-100 cm_user" value="'+ data[i].name +'" User-uname="'+ data[i].id +'">'  
-                          + '<h5>' + data[i].name + '</h5>' 
+                  row += '<option role="button" class="dropdown-item w-100 cm_user" value="'+ data[i].name +'" data-uid="'+ data[i].id +'">' 
                           + '<p>' + data[i].username + '</p>'
-                          +'</a>'; 
+                        +'</option>'; 
                   }
-                  $('#loanapp-cm-application').find('.' + id).html(row);
+                  $('#loanapp-cm-application').find('#'+ id).html(row);
                 } else {
-                  row = '<a class="list-group-item list-group-item-action"><h5>No Result Found</h5><p>No User Exist</p></a>';
-                  $('#loanapp-cm-application').find('.' + id).html(row);
+                  row = '<option vallue="No Result Found">No User Exist</option>';
+                  $('#loanapp-cm-application').find('#'+ id).html(row);
                 }
+                // newly added end
             }, error: function() {
                 alert('search not working properly');
             }
@@ -6203,9 +6216,7 @@
           var loanAmount = Number($('#loan-amount').val().replace(/[^0-9\.]+/g,""));
           var max_amount = $('#loan-amount').attr('max_amount');
 
-          // newly added start
           var val_multiply = user_sharecap * multiply;
-          // newly added end
           
           if($('#loanapp_user_id').attr('status') == 'newUser') {
             loanType = $('#loan_type').val();
@@ -6239,7 +6250,6 @@
                       $('#loan-amount').removeClass('is-invalid');
                       $('#loan_amount_invalid').text('');
                       
-                      // newly added start
                       if (loanAmount > val_multiply) {
                         $('#loan-amount').addClass('is-invalid');
                         $('#loan_amount_invalid').text('Please change the Loan Amount you Entered!');
@@ -6248,7 +6258,6 @@
                         $('#loan-amount').removeClass('is-invalid');
                         $('#loan_amount_invalid').text('');
                       }
-                      // newly added end
                     }
                 } 
               }
@@ -6285,7 +6294,6 @@
                       $('#loan-amount').removeClass('is-invalid');
                       $('#loan_amount_invalid').text('');
 
-                      // newly added start
                       if (loanAmount > val_multiply) {
                         $('#loan-amount').addClass('is-invalid');
                         $('#loan_amount_invalid').text('Please change the Loan Amount you Entered!');
@@ -6294,7 +6302,7 @@
                         $('#loan-amount').removeClass('is-invalid');
                         $('#loan_amount_invalid').text('');
                       }
-                      // newly added end
+
                     }
                 } 
               }
@@ -6338,7 +6346,6 @@
                       $('#loan-amount').removeClass('is-invalid');
                       $('#loan_amount_invalid').text('');
 
-                      // newly added start
                       if (loanAmount > val_multiply) {
                         $('#loan-amount').addClass('is-invalid');
                         $('#loan_amount_invalid').text('Please change the Loan Amount you Entered!');
@@ -6347,7 +6354,6 @@
                         $('#loan-amount').removeClass('is-invalid');
                         $('#loan_amount_invalid').text('');
                       }
-                      // newly added end
 
                     }
                   } 
@@ -6390,9 +6396,9 @@
              $('#user_attachment').removeClass('is-invalid');
             $('#user_attachment_invalid').text('');
           }          
-          // newly added start
+
           if(count == '123456') {
-          // newly added end 
+          
             for(var i = 1; i <= cmCount; i++) {
               if($('#co-maker'+i).val() == ''){
                 $('#co-maker'+i).addClass('is-invalid');
