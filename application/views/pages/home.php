@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" href="<?php echo base_url(); ?>assets/img/logo.png"/>
 
-    <title>TUP Manila Coop | Multi-Purpose Loan</title>
+    <title>TUP Manila Multi-Purpose Cooperative</title>
 
     <!-- Bootstrap core CSS -->
     <link href="<?php echo base_url(); ?>assets/vendor/bootstrap4/css/bootstrap.css" rel="stylesheet">
@@ -57,10 +57,10 @@
               <a class="nav-link js-scroll-trigger" href="#team">Officers</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
+              <a class="nav-link js-scroll-trigger" href="#activities">Activities</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="<?php echo base_url() ?>activities">Activities</a>
+              <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
             </li>
             <li class="nav-item">
               <a class="nav-link js-scroll-trigger" href="<?php echo base_url() ?>signin">Login</a>
@@ -86,25 +86,21 @@
       <!-- About -->
     <section id="about">
       <div class="container">
-        <div class="one" data-aos="fade-right" data-aos-easing="linear" data-aos-duration="1000">
+        <div class="one">
         <div class="row">
-          <div class="col-md-12 text-center">
+          <div class="col-md-12 text-center" data-aos="fade-down" data-aos-duration="1500">
             <p class="section-subheading mt-5">about</p>
             <h2 class="section-heading text-uppercase">TUP Manila Multi-purpose cooperative</h2>
-          </div>
-        </div>
-        <div class="row mb-3">
-          <div class="col-sm-12 col-md-12">
-            <h6 class="section-subheading">Cooperative is a private business organization that is owned and controlled by the people who use its products, supplies or services. Although cooperatives vary in type and membership size, all were formed to meet the specific objectives of members, and are structured to adapt to member's changing needs. Cooperatives are formed by individuals who coordinate among themselves (horizontal coordination) to achieve vertical integration in their business activities. Technological University of the Philippines - Manila Multi-Purpose Cooperative is a member-owned, non-profit, financial cooperative organized by consumers to encourage savings and to obtain loans at the lowest possible cost. Its members share a common bond such as having the same occupation or employer, belonging to the same institution, which is TUP- Manila. Members elect a board of directors on a one-member one-vote basis. </h6>
-          </div>
-          <hr width="15%" align="center" class="my-5">
-        </div>
-      </div>
-      <div class="two" data-aos="fade-left" data-aos-easing="linear" data-aos-duration="1000">
-        <div class="row">
-          <div class="col-sm-12 col-md-12">
-            <h4 class="section-heading text-center">The TUPMMPC shall aim to:</h4>
-            <h6 class="section-subheading goals">
+              <div class="row mb-3">
+                <div class="col-sm-12 col-md-12">
+                  <h6 class="section-subheading mb-5 px-5 text-justify">Cooperative is a private business organization that is owned and controlled by the people who use its products, supplies or services. Although cooperatives vary in type and membership size, all were formed to meet the specific objectives of members, and are structured to adapt to member's changing needs. Cooperatives are formed by individuals who coordinate among themselves (horizontal coordination) to achieve vertical integration in their business activities. Technological University of the Philippines - Manila Multi-Purpose Cooperative is a member-owned, non-profit, financial cooperative organized by consumers to encourage savings and to obtain loans at the lowest possible cost. Its members share a common bond such as having the same occupation or employer, belonging to the same institution, which is TUP- Manila. Members elect a board of directors on a one-member one-vote basis. </h6>
+                  </div>
+              </div>
+            </div>
+            <div class="col-md-12 text-center" data-aos="fade-up" data-aos-duration="1500">
+            <h4 class="section-heading text-center text-uppercase">G o a l s</h4>
+            <h6 class="section-subheading goals text-justify">
+            The TUPMMPC shall aim to:<br>
              1. Provide goods and services to its members to enable them to attain increased income, savings, investments, productivity, and purchasing power, and promote among themselves equitable distribution of net surplus through maximization of economies of scale, cost-sharing, and risk-sharing; <br>
              2.   Provide optimum social and economic benefits to its members; <br>
              3.  Improve efficiency of its operations; <br>
@@ -113,10 +109,10 @@
              6.  Promote cooperativism; and <br>
              7.  Follow established policies and procedures of relevant government agencies.s
             </h6>
-          </div>
         </div>
       </div>
       </div>
+    </div>
     </section>
 
       <!-- vision mission -->
@@ -124,16 +120,16 @@
           <div class="container-fluid p-0">
             <div id="visionBG" class="row no-gutters">
               <div class="col-lg-6 order-lg-2 text-white showcase-img-1"></div>
-              <div class="col-lg-6 order-lg-1 my-auto showcase-text" data-aos="fade-right" data-aos-duration="1500">
+              <div class="col-lg-6 order-lg-1 my-auto showcase-text" data-aos="flip-left" data-aos-duration="3000">
                 <h2>Vision</h2>
-                <p class="lead mb-0">The TUPMMPC shall be an empowered organization providing quality services to the TUP community.</p>
+                <p id="returnVision" class="lead mb-0"></p>
               </div>
             </div>
             <div id="missionBG" class="row no-gutters">
               <div class="col-lg-6 text-white showcase-img-2"></div>
-              <div class="col-lg-6 my-auto showcase-text" data-aos="fade-left" data-aos-duration="1500">
+              <div class="col-lg-6 my-auto showcase-text" data-aos="flip-right" data-aos-duration="3000">
                 <h2>Mission</h2>
-                <p class="lead mb-0">To improve the life of its members by providing innovative business practices and diversified services.</p>
+                <p id="returnMission" class="lead mb-0"></p>
               </div>
             </div>
           </div>
@@ -142,10 +138,10 @@
         <div id="service" class="section md-padding">
           <div class="container">
               <div class="section-header text-center">
-                <h2 class="title text-uppercase" data-aos="fade-down" data-aos-duration="2000"></i>Loans Offered</h2>
-                <h6 class="title text-uppercase mb-5" data-aos="fade-down" data-aos-duration="2000">by TUPMMPC</h6>
+                <h2 class="title text-uppercase"></i>Loans Offered</h2>
+                <h6 class="title text-uppercase mb-5">by TUPMMPC</h6>
               </div>
-            <div class="row" id="returnLoans" data-aos="zoom-in" data-aos-duration="1500"></div>
+            <div class="row" id="returnLoans" data-aos="zoom-in" data-aos-duration="2000"></div>
           </div>
         </div>
 
@@ -155,6 +151,7 @@
             get_loans();
             get_officers();
             getWebsiteInfos();
+            getActivities();
 
             function get_loans() { 
               $.ajax({ 
@@ -220,6 +217,8 @@
               dataType : 'json',
               success: function(data) {
                 var title = data[0].title;
+                var vision = data[0].vision;
+                var mission = data[0].mission;
                 var address = data[0].address;
                 var telephone = data[0].telephone_no;
                 var cellphone = data[0].cellphone_no;
@@ -229,6 +228,8 @@
                 var email = data[0].email;
 
                 $('#returnTitle').html(title);
+                $('#returnVision').html(vision);
+                $('#returnMission').html(mission);
                 $('#returnAddress').html(address);
                 $('#returnTelephone').html(telephone);
                 $('#returnCellphone').html(cellphone);
@@ -242,6 +243,22 @@
                 }
             });
           }
+
+          function getActivities(){
+            $.ajax({
+              type : 'ajax',
+              url : '<?php echo base_url() ?>home/getActivities',
+              async : false, 
+              dataType : 'json', 
+              success: function(data){
+
+              },
+                error: function(){
+                  $('#returnWebsiteInfos').html('<p class="alert alert-danger alert-dismissable fade show text-center" role="alert">Could not get data from the database!</p>').fadeIn('slow');
+                }
+            });
+          }
+
           });
           
         </script>
@@ -271,6 +288,56 @@
         </div>
       </div>
     </section>  -->
+
+    <!-- Activities --> 
+    <section id="activities">
+        <div id="carouselpic" class="carousel slide" data-ride="carousel">
+          <ol class="carousel-indicators">
+            <li data-target="#carouselpic" data-slide-to="0" class="active"></li>
+            <li data-target="#carouselpic" data-slide-to="1"></li>
+            <li data-target="#carouselpic" data-slide-to="2"></li>
+            <li data-target="#carouselpic" data-slide-to="3"></li>
+          </ol>
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img class="d-block w-100" src="assets/img/oh.jpg" alt="Third slide">
+              <div class="carousel-caption d-none d-md-block">
+              <h4>TUPMMPC Seminar 2018</h4>
+              <p>Bakasyunan Resort and Conference Center, Tanay Rizal - June 1, 2018</p>
+            </div>
+            </div>
+            <div class="carousel-item">
+              <img class="d-block w-100" src="assets/img/wow2.jpg" alt="First slide">
+              <div class="carousel-caption d-none d-md-block">
+              <h4>TUPMMPC Seminar 2018</h4>
+              <p>Bakasyunan Resort and Conference Center, Tanay Rizal - June 1, 2018</p>
+            </div>
+            </div>
+            <div class="carousel-item">
+              <img class="d-block w-100" src="assets/img/wow1.jpg" alt="Second slide">
+              <div class="carousel-caption d-none d-md-block">
+              <h4>TUPMMPC Seminar 2018</h4>
+              <p>Bakasyunan Resort and Conference Center, Tanay Rizal - June 1, 2018</p>
+            </div>
+            </div>
+            <div class="carousel-item">
+              <img class="d-block w-100" src="assets/img/wow.jpg" alt="Third slide">
+              <div class="carousel-caption d-none d-md-block">
+              <h4>TUPMMPC Seminar 2018</h4>
+              <p>Bakasyunan Resort and Conference Center, Tanay Rizal - June 1, 2018</p>
+            </div>
+            </div>
+          </div>
+          <a class="carousel-control-prev" href="#carouselpic" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+          </a>
+          <a class="carousel-control-next" href="#carouselpic" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+          </a>
+        </div>
+    </section>
 
     <!-- Contact -->
     <div id="contact">

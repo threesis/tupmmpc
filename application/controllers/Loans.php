@@ -44,20 +44,23 @@
 		public function getChequeDetails(){
 			$result = $this->loan_model->getChequeDetails();
 
-			$data = array();
-
 			foreach($result->result() as $r) {
-       	$data[] = array(
-            $r->loan_amount,
-            $r->loan_term,
-            $r->loan_interest,
-            $r->monthly_deduc,
-            $r->cheque_no,
-            $r->id,
-            $r->loan_name,
-            $r->remarks
-       	);
-      }
+		       	$data[] = array(
+		            $r->loan_amount,
+		            $r->loan_term,
+		            $r->loan_interest,
+		            $r->monthly_deduc,
+		            $r->cheque_no,
+		            $r->id,
+		            $r->loan_name,
+		            $r->loan_applied
+		       	);
+		    }
+
+		    $loan = $r->loan_applied;
+		    $deducs = $this->loan_application_model->getLoanDeduc($loan);
+
+	       	$data[] = $deducs->result();
 
 			echo json_encode($data);
 		}
@@ -136,7 +139,4 @@
 			$result = $this->loan_model->deleteLoan();
 			echo json_encode($result);
 		}
-
-		
-		
 	}

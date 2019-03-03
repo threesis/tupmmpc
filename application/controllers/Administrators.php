@@ -8,15 +8,18 @@
 				// Redirect to sign in page
 				redirect('signin');
 			} elseif($this->session->userdata('signed_in')) {
+				$userType = $this->session->userdata('position');
+				$userID = $this->session->userdata('user_id');
+				$userName = $this->session->userdata('username');
 				$data['user_image'] = $this->administrator_model->retrieveUserInfo();
-				$data['members'] = $this->administrator_model->getAllMembers();
-				$data['loansApplied'] = $this->administrator_model->getAllAppliedLoans();
-				$data['pendingLoans'] = $this->administrator_model->getAllPendingLoans();
-				$data['approvedLoans'] = $this->administrator_model->getAllApprovedLoans();
-				$data['ongoingLoans'] = $this->administrator_model->getAllActiveLoans();
-				$data['totalPayments'] = $this->administrator_model->getTotalLoanPayments();
-				$data['missedPayments'] = $this->administrator_model->getAllMissedPayments();
-				$data['totalShareCapital'] = $this->administrator_model->getTotalShareCapital();
+				$data['members'] = $this->administrator_model->getAllMembers($userType);
+				$data['loansApplied'] = $this->administrator_model->getAllAppliedLoans($userType, $userID);
+				$data['pendingLoans'] = $this->administrator_model->getAllPendingLoans($userType, $userID);
+				$data['approvedLoans'] = $this->administrator_model->getAllApprovedLoans($userType, $userID);
+				$data['ongoingLoans'] = $this->administrator_model->getAllActiveLoans($userType, $userID);
+				$data['totalPayments'] = $this->administrator_model->getTotalLoanPayments($userType);
+				$data['missedPayments'] = $this->administrator_model->getAllMissedPayments($userType);
+				$data['totalShareCapital'] = $this->administrator_model->getTotalShareCapital($userType);
 
 				$this->load->view('pages/admin', $data);
 			} else {
@@ -213,6 +216,11 @@
 			echo json_encode($result);
 		}
 
+		public function getCollectionMembers(){
+			$result = $this->administrator_model->getCollectionMembers();
+			echo json_encode($result);
+		}
+
 		public function viewLedger(){
 			$result = $this->administrator_model->viewLedger();
 			echo json_encode($result);
@@ -220,6 +228,11 @@
 
 		public function updateLedger(){
 			$result = $this->administrator_model->updateLedger();
+			echo json_encode($result);
+		}
+
+		public function updateUserLedger() {
+			$result = $this->administrator_model->updateUserLedger();
 			echo json_encode($result);
 		}
 

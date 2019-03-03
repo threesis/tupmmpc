@@ -68,12 +68,46 @@
 			return $query->result();
 		}
 
+		public function checkNotif(){	
+			$username = $this->input->get('username');	
+			$this->db->select('*')->from('notifications a');	
+			$this->db->join('members b', 'b.username = a.noti_for');
+			$this->db->join('approved_loan_apps c', 'c.id = a.noti_voucher');
+			$this->db->join('loan_app_deducs d', 'd.voucher_id = a.noti_voucher');	
+			$this->db->group_by('d.voucher_id');
+			$this->db->where('noti_for', $username);	
+			$query = $this->db->get();	
+			return $query->result();	
+		}	
+		
+ 		public function notified() {	
+			$username = $this->input->get('username');	
+			$this->db->set('noti_status', 0);	
+			$this->db->where('noti_for', $username);	
+			$this->db->update('notifications');	
+			if($this->db->affected_rows() > 0) {	
+				return true;	
+			} else {	
+				return false;	
+			}	
+		}
+
+		public function viewVoucher() {	
+			$voucher = $this->input->get('voucher');
+			$this->db->select('*')->from('loan_app_deducs a');
+			$this->db->join('approved_loan_apps b', 'b.id = a.voucher_id');
+			$this->db->join('loan_deductions c', 'c.deduc_id = a.loan_deduc');
+			$this->db->join('loan_applications d', 'd.loanapp_id = b.loanapp_id');
+			$this->db->join('loan_types e', 'e.id = d.loan_applied');
+			$this->db->where('voucher_id', $voucher);
+			$query = $this->db->get();
+			return $query->result();
+		}
+
 		public function comakerName() {
 			$this->db->select('*')->from('members');
 			$this->db->order_by('id', 'ASC');
 			$query = $this->db->get();
-
 			return $query->result();
 		}
-
 	}
