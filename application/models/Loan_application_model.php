@@ -136,12 +136,13 @@
 		}
 		public function searchCoMaker() 
 		{
-			$key_typed = $this->input->post('key_entered');
-			$user = $this->input->post('user');
-			$comaker1 = $this->input->post('cmk1');
-			$comaker2 = $this->input->post('cmk2');
-			$comaker3 = $this->input->post('cmk3');
-			// $comaker4 = $this->input->post('cmk4');
+			// newly added start
+			$key_typed = $this->input->get('key_entered');
+			$user = $this->input->get('user');
+			$comaker1 = $this->input->get('cmk1');
+			$comaker2 = $this->input->get('cmk2');
+			$comaker3 = $this->input->get('cmk3');
+			// newly added end
 			if($key_typed != '') {
 				$this->db->like('name', $key_typed);
 				$this->db->where('id !=', $user);
@@ -149,7 +150,6 @@
 				$this->db->where('id !=', $comaker2);
 				$this->db->where('id !=', $comaker3);
 				$this->db->where('position', '2');
-				// $this->db->where('username !=', $comaker4);
 			}
 			$this->db->order_by('name', 'ASC');
 			$query = $this->db->get('members');

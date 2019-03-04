@@ -1716,7 +1716,25 @@
                               } else {
                                 cm3 = ', ' + cmname3;
                               }
-                              tbl +=  '<tr class="text-secondary">' +
+
+                              // newly added start
+                              var renewal_amount = data[i].balance * 0.5;
+
+                              if((data[i].status != 'Active') || (data[i].balance_paid < renewal_amount)) {
+                                tbl +=  '<tr class="text-secondary">' +
+                                        '<td style="vertical-align: middle">' + '</td>' +
+                                        '<td style="vertical-align: middle">' + myDate.toLocaleDateString("en-US") + '</td>' +
+                                        '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].loan_name + '</span></td>' +
+                                        '<td style="vertical-align: middle">&#8369;' + Math.round(data[i].loan_amount).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                                        '<td style="vertical-align: middle">&#8369;' + Math.round(data[i].loan_int).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                                        '<td style="vertical-align: middle">' + data[i].loan_term + ' month/s</td>' +
+                                        '<td style="vertical-align: middle">&#8369;' + Math.round(data[i].monthly_deduc).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</td>' +
+                                        '<td style="vertical-align: middle">' + data[i].status + '</td>' +
+                                        '<td style="vertical-align: middle">' + cm1 + cm2 + cm3 + '</td>' +
+                                        '<td style="vertical-align: middle">' + data[i].remarks + '</td>' +
+                                      '</tr>'; 
+                              } else {
+                                tbl +=  '<tr class="text-secondary">' +
                                         '<td style="vertical-align: middle">' + '<button class="btn btn-sm btn-outline-info Renewal" loanId="'+ data[i].loanapp_id +'">Renew</button>' + '</td>' +
                                         '<td style="vertical-align: middle">' + myDate.toLocaleDateString("en-US") + '</td>' +
                                         '<td><img class="rounded-circle member-icon mr-3" src="<?php echo base_url(); ?>assets/img/profile_img/' + data[i].user_img + '?>"><span style="font-weight: 500">' + data[i].loan_name + '</span></td>' +
@@ -1728,6 +1746,9 @@
                                         '<td style="vertical-align: middle">' + cm1 + cm2 + cm3 + '</td>' +
                                         '<td style="vertical-align: middle">' + data[i].remarks + '</td>' +
                                       '</tr>'; 
+                              }
+                              // newly added end
+                              
                             }
                             $('#returnMyLoanRecords').html(tbl);
                           } else {
@@ -2526,7 +2547,11 @@
                           <span id="loanInt"></span><br>
                           <span id="loanGross"></span><br>
                           <span id="loanMoDed"></span><br>
+                          <!-- newly added start -->
+                          <div id="loan_type_deductions"></div>
+                          <!-- newly added end -->
                           <span id="loanOutstandingBal"></span><br>
+
 
                          <!--  <div class="table-responsive">
                             <table class="table table-bordered">
@@ -6104,6 +6129,8 @@
           var cmk2 = '';
           var cmk3 = '';
           var cmk4 = '';
+
+
           for(x = 1; x <= y; x++){            
             $('#loanapp-cm-application').on('keyup','#co-maker'+ x, function() {
               data_val = $(this).val();
@@ -6132,7 +6159,9 @@
                   console.log(lala);
                 }
                 data = $(this).attr('id');
-                data2 = $(this).data('cmid');        
+                data2 = $(this).data('cmid');
+
+                $(this).unbind();        
               });
 
              $(this).on('keyup', function() {
@@ -6151,7 +6180,9 @@
  
           $.ajax({
             type: 'ajax',
-            method: 'post',
+            // nwly added start
+            method: 'get',
+            // newly added end
             url: url,
             data: {key_entered: query, user: get_username, cmk1: cmk1, cmk2: cmk2, cmk3: cmk3},
             async: false,
@@ -6164,7 +6195,7 @@
                 if(data.length > 0) {  
                   for (i=0; i < data.length; i++) {
                   row += '<option role="button" class="dropdown-item w-100 cm_user" value="'+ data[i].name +'" data-uid="'+ data[i].id +'">' 
-                          + '<p>' + data[i].username + '</p>'
+                          + '<small>' + data[i].email + '</small>'
                         +'</option>'; 
                   }
                   $('#loanapp-cm-application').find('#'+ id).html(row);
@@ -6204,6 +6235,11 @@
         var loanInterests = '';
         var OutstandingBal = '';
         var recentLoanId = '';
+        
+        // newly added start
+        var deduct_amount = 0;
+        // newly added end
+
         $('#loanapp_submit').click(function() {
           var data = loan;
           var cmCount = $('#comakerCount').val();
@@ -6217,7 +6253,64 @@
           var max_amount = $('#loan-amount').attr('max_amount');
 
           var val_multiply = user_sharecap * multiply;
-          
+
+          // newly added start
+          deduct_amount = 0;
+          var typeLoaned = $('#loan_selector_data').val();
+          var total_deductions = 0; 
+          $.ajax({
+            type: 'ajax',
+            method: 'get',
+            url: '<?php echo base_url();?>loan_applications/getLoanDeductions',
+            data: {loan_type: typeLoaned},
+            async: false,
+            dataType: 'json',
+            success: function(data) {
+              var loan_deduc_name = '';
+              var loan_deduc_amount = '';         
+              for(var i=0; i < data.length; i++) {
+                if(data[i].deduc_type == 'percentage'){
+                  var amount = '';
+                  var calc_amount;
+                  amount = data[i].deduc_val / 100 ;
+                  calc_amount = Number(loanAmount) * amount;
+
+                  deduct_amount = Number(deduct_amount) + calc_amount;
+                  
+                  loan_deduc_name += '<span>'+ data[i].deduc_name +' '+ Number(data[i].deduc_val).toFixed(2) +'%: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(calc_amount).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></span><br>';
+                } else if(data[i].deduc_type == 'amount'){
+                  var amount = data[i].deduc_val;
+
+                  deduct_amount = Number(deduct_amount) + Number(amount);
+
+                  loan_deduc_name +='<span>'+ data[i].deduc_name + ': <span class="font-weight-bold float-right ml-auto">&#8369;'+ Math.round(amount).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</span></span><br>';
+                }
+              }
+
+              $('#loan_type_deductions').html(loan_deduc_name);
+            }, error: function() {
+              alert('Error on finding deductions for the type of loan');
+            }
+          });
+          $.ajax({
+            type: 'ajax',
+            method: 'get',
+            url: '<?php echo base_url(); ?>loan_applications/getOutstandingBalance',
+            data: {recentLoanId: recentLoanId},
+            async: false,
+            dataType: 'json',
+            success: function(data) {
+              // newly added start
+              OutstandingBal = data[0].balance - data[0].balance_paid;
+              // newly added end
+            }, error: function() {
+              alert('Error encountered while checking past Loan Outstanding Balance');
+            }
+          });
+
+          var total_loanable = loanAmount - deduct_amount - OutstandingBal;
+          // newly added end
+
           if($('#loanapp_user_id').attr('status') == 'newUser') {
             loanType = $('#loan_type').val();
             loanInterests = $('#loan_type').attr('loan_interest');
@@ -6257,6 +6350,17 @@
                         count += '6';
                         $('#loan-amount').removeClass('is-invalid');
                         $('#loan_amount_invalid').text('');
+
+                        // newly added start
+                        if (total_loanable < 0) {
+                          $('#loan-amount').addClass('is-invalid');
+                          $('#loan_amount_invalid').text('Please change the Loan Amount you Entered!');
+                        } else {
+                          count += '7';
+                          $('#loan-amount').removeClass('is-invalid');
+                          $('#loan_amount_invalid').text('');
+                        }
+                        // newly added end
                       }
                     }
                 } 
@@ -6301,8 +6405,19 @@
                         count += '6';
                         $('#loan-amount').removeClass('is-invalid');
                         $('#loan_amount_invalid').text('');
-                      }
 
+                        // newly added start
+                        if (total_loanable < 0) {
+                          $('#loan-amount').addClass('is-invalid');
+                          $('#loan_amount_invalid').text('Please change the Loan Amount you Entered!');
+                        } else {
+                          count += '7';
+                          $('#loan-amount').removeClass('is-invalid');
+                          $('#loan_amount_invalid').text('');
+                        }
+                        // newly added end
+
+                      }
                     }
                 } 
               }
@@ -6353,6 +6468,17 @@
                         count += '6';
                         $('#loan-amount').removeClass('is-invalid');
                         $('#loan_amount_invalid').text('');
+
+                        // newly added start
+                        if (total_loanable < 0) {
+                          $('#loan-amount').addClass('is-invalid');
+                          $('#loan_amount_invalid').text('Please change the Loan Amount you Entered!');
+                        } else {
+                          count += '7';
+                          $('#loan-amount').removeClass('is-invalid');
+                          $('#loan_amount_invalid').text('');
+                        }
+                        // newly added end
                       }
 
                     }
@@ -6397,8 +6523,10 @@
             $('#user_attachment_invalid').text('');
           }          
 
-          if(count == '123456') {
-          
+          // newly added start
+          if(count == '1234567') {
+          // newly added end 
+
             for(var i = 1; i <= cmCount; i++) {
               if($('#co-maker'+i).val() == ''){
                 $('#co-maker'+i).addClass('is-invalid');
@@ -6421,47 +6549,9 @@
             if(cmCount == cms.length) {
               var typeLoaned = $('#loan_selector_data').val();
               var total_deductions = 0; 
-              $.ajax({
-                type: 'ajax',
-                method: 'get',
-                url: '<?php echo base_url();?>loan_applications/getLoanDeductions',
-                data: {loan_type: typeLoaned},
-                async: false,
-                dataType: 'json',
-                success: function(data) {
-                  var loan_deduc_name = '';
-                  var loan_deduc_amount = '';         
-                  for(var i=0; i < data.length; i++) {
-                    if(data[i].deduc_type == 'percentage'){
-                      var amount = '';
-                      
-                      amount = data[i].deduc_val / 100 ;
-                      calc_amount = Number(loanAmount) * amount;
-                      
-                      loan_deduc_name += '<span>'+ data[i].deduc_name +' '+ Number(data[i].deduc_val).toFixed(2) +'%: <span class="font-weight-bold float-right ml-auto">&#8369;' + Math.round(calc_amount).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</span></span><br>';
-                    } else if(data[i].deduc_type == 'amount'){
-                      var amount = data[i].deduc_val;
-                      loan_deduc_name +='<span>'+ data[i].deduc_name + ': <span class="font-weight-bold float-right ml-auto">&#8369;'+ Math.round(amount).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</span></span><br>';
-                    }
-                  }
-                  $('#loan_type_deductions').html(loan_deduc_name);
-                }, error: function() {
-                  alert('Error on finding deductions for the type of loan');
-                }
-              });
-              $.ajax({
-                type: 'ajax',
-                method: 'get',
-                url: '<?php echo base_url(); ?>loan_applications/getOutstandingBalance',
-                data: {recentLoanId: recentLoanId},
-                async: false,
-                dataType: 'json',
-                success: function(data) {
-                  OutstandingBal = data[0].balance;
-                }, error: function() {
-                  alert('Error encountered while checking past Loan Outstanding Balance');
-                }
-              });
+              // newly addded start 
+                // nilipat ko ung dalawang ajax
+              // newly added end
               var loanTerm = $('#loan_term').val();
               var interest = loanInterests / 12;
               var grossAmt = interest * loanTerm * Number(loanAmount);
@@ -6509,7 +6599,7 @@
                 $('#loanapp_alerts').html(store);
               }
           } else {
-            $('#loanapp_alerts').html('<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Notice, please make sure all fields and attachment are filled-out before submitting.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>');
+            $('#loanapp_alerts').html('<p class="alert bg-danger alert-dismissable fade show" role="alert"><a class="h7 text-white">Notice, please make sure all fields and attachment are filled-out or correct before submitting.</a><button type="button" class="close-sm" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button></p>');
           }   
         });              
         $('#submitLoan').click(function(){
@@ -6584,7 +6674,6 @@
               var lmt = '';
               var ln = '';
               var lint = '';
-              var msc = '';
               var renew_Id = '';
               var count;
               $('#loan_type').attr('style', 'display: none');
@@ -6609,7 +6698,12 @@
                   ln = data[0].loan_name;
                   lint = data[0].loan_interest;
                   loanInterests = data[0].loan_interest;
-                  msc = data[0].total_share_capital * 3;
+                  
+                  // newly added start
+                  user_sharecap = data[0].total_share_capital;
+                  multiply = 3;
+                  // newly added end
+                  
                   var userid = '<?php echo $this->session->userdata('user_id')?>';
                   $.ajax({
                     type: 'ajax',
@@ -6647,7 +6741,9 @@
                   $('#loanapp_remarks').val('Renew');
                   $('#loanapp_id_no').val(renew_Id);
                   $('#loan_selector_data').val(ltid);
-                  var renew_amount = $('#loan-amount').val(Math.round(msc).toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                  // newly updated start
+                  var renew_amount = $('#loan-amount').val(Math.round(user_sharecap).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+                  // newly updated end
                   getLoanTerm(renew_amount);
                   getLoanAmount(ltid);
                   checkLoanAmount();
