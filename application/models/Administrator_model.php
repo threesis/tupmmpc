@@ -100,6 +100,7 @@
 				$share_cap_data = array(
 					'user_id' => $last_id,
 					'share_capital' => $this->input->post('sharecap'),
+					'sharecap_paid' => $this->input->post('sharecap'),
 					'total_share_capital' => $this->input->post('startingShareCap'),
 					'subscribe_share' => $this->input->post('subscribeShare'),
 					'or_number' => $this->input->post('orNum'),
@@ -115,7 +116,8 @@
 					$data = array(
 						'user_id' => $last_id,
 						'share_capital' => $this->input->post('sharecap'),
-						'total_share_capital' => $this->input->post('sharecap'),
+						'total_share_capital' => $this->input->post('startingShareCap') + $this->input->post('sharecap'),
+						'subscribe_share' => $this->input->post('subscribeShare'),
 						'status' => 'unpaid',
 						'updated_for' => date('Y-m-d', strtotime('+1 month'))
 					);
@@ -299,37 +301,68 @@
 				foreach ($ids as $id) {
 					$share = $this->db->query("select share_capital as share from share_capital where user_id = $id")->row()->{'share'};
 					$total = $this->db->query("select sum(share_capital+total_share_capital) as tot from share_capital where user_id = $id group by sc_id DESC LIMIT 1")->row()->{'tot'};
+					$subscribe = $this->db->query("select subscribe_share from share_capital where user_id = $id group by sc_id DESC LIMIT 1")->row()->{'subscribe_share'};
+					$date = $this->db->query("select updated_for from share_capital where user_id = $id group by sc_id DESC LIMIT 1")->row()->{'updated_for'};
 					$lastID = $this->db->query("select sc_id as id from share_capital where user_id = $id group by total_share_capital DESC LIMIT 1")->row()->{'id'};
 
-						$this->db->set('or_number', $or);
-						$this->db->set('status', 'paid');
-						$this->db->set('date_updated', date('Y-m-d'));
-						$this->db->where('sc_id', $lastID);
-						$this->db->update('share_capital');
+					$this->db->set('or_number', $or);
+					$this->db->set('status', 'paid');
+					$this->db->set('date_updated', date('Y-m-d'));
+					$this->db->where('sc_id', $lastID);
+					$this->db->update('share_capital');
 
-						$data = array(
-							'user_id' => $id,
-							'share_capital' => $share,
-							'total_share_capital' => $total,
-							'status' => 'unpaid',
-							'updated_for' => date('Y-m-d', strtotime('+1 month'))
-						);
+					$data = array(
+						'user_id' => $id,
+						'share_capital' => $share,
+						'sharecap_paid' => $share,
+						'total_share_capital' => $total,
+						'subscribe_share' => $subscribe,
+						'status' => 'unpaid',
+						'updated_for' => date('Y-m-d', strtotime('+1 month', strtotime($date)))
+					);
 
-						$this->db->insert('share_capital', $data);
-						if($this->db->affected_rows() > 0) {
-							$this->db->set('sharecap_paid', $share);
-							$this->db->where('sc_id', $lastID);
-							$this->db->update('active_loan_apps', $sc);
-							return true;
-						} else {
-							return false;
-					}
+					$this->db->insert('share_capital', $data);
 				}
 				return true;
 			} else {
 				return false;
 			}
+		}
 
+		public function singleUpdateShareCap() {
+			date_default_timezone_set('Asia/Manila');
+
+			$id = $this->input->get('id');
+			$or = $this->input->get('or');
+			$newShare = $this->input->get('sharecap');
+			$share = $this->db->query("select share_capital as share from share_capital where user_id = $id")->row()->{'share'};
+			$total = $this->db->query("select total_share_capital as tot from share_capital where user_id = $id group by sc_id DESC LIMIT 1")->row()->{'tot'};
+			$subscribe = $this->db->query("select subscribe_share from share_capital where user_id = $id group by sc_id DESC LIMIT 1")->row()->{'subscribe_share'};
+			$date = $this->db->query("select updated_for from share_capital where user_id = $id group by sc_id DESC LIMIT 1")->row()->{'updated_for'};
+			$lastID = $this->db->query("select sc_id as id from share_capital where user_id = $id group by total_share_capital DESC LIMIT 1")->row()->{'id'};
+
+			$this->db->set('or_number', $or);
+			$this->db->set('status', 'paid');
+			$this->db->set('date_updated', date('Y-m-d'));
+			$this->db->where('sc_id', $lastID);
+			$this->db->update('share_capital');
+
+			$data = array(
+				'user_id' => $id,
+				'share_capital' => $share,
+				'sharecap_paid' => $newShare,
+				'total_share_capital' => $newShare + $total,
+				'subscribe_share' => $subscribe,
+				'status' => 'unpaid',
+				'updated_for' => date('Y-m-d', strtotime('+1 month', strtotime($date)))
+			);
+
+			$this->db->insert('share_capital', $data);
+			if($this->db->affected_rows() > 0) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 
 		public function updateLedgers() {
@@ -344,26 +377,60 @@
 
 			if($ids){
 				foreach ($ids as $id => $code) {
-					$balance = $this->db->query("select balance as bal from active_loan_apps where active_loanapp_id = $loanapp[$id]")->row()->{'bal'};
-					$lastID = $this->db->query("select id as active_id from active_loan_apps where active_loanapp_id = $loanapp[$id]")->row()->{'active_id'};
+					$balance = $this->db->query("SELECT balance AS bal FROM active_loan_apps WHERE active_loanapp_id = $loanapp[$id] GROUP BY id DESC LIMIT 1")->row()->{'bal'};
+					$lastID = $this->db->query("SELECT id AS active_id FROM active_loan_apps WHERE active_loanapp_id = $loanapp[$id] GROUP BY id DESC LIMIT 1")->row()->{'active_id'};
+					$date = $this->db->query("SELECT payment_for FROM active_loan_apps WHERE active_loanapp_id = $loanapp[$id] GROUP BY id DESC LIMIT 1")->row()->{'payment_for'};
 					$diff = $balance - $md[$id];
 
 						$this->db->set('or_number', $or);
-						$this->db->set('balance_paid', $md[$id]);/*
-						$this->db->set('sharecap_paid', $sc[$id]);*/
+						$this->db->set('balance_paid', $md[$id]);
 						$this->db->set('payment_status', 'paid');
 						$this->db->set('payment_date', date('Y-m-d'));
 						$this->db->where('id', $lastID);
 						$this->db->update('active_loan_apps');
 
 						$data = array(
-							'loanapp_id' => $loanapp[$id],
+							'active_loanapp_id' => $loanapp[$id],
 							'balance' => $diff,
 							'payment_status' => 'unpaid',
-							'payment_for' => date('Y-m-d', strtotime('+1 month'))
+							'payment_for' => date('Y-m-d', strtotime('+1 month', strtotime($date)))
 						);
+
 						$this->db->insert('active_loan_apps', $data);
 				}
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		public function updateUserLedger() {
+			date_default_timezone_set('Asia/Manila');
+
+			$id = $this->input->get('id');
+			$or = $this->input->get('or');
+			$fm = $this->input->get('fm');
+
+			$balance = $this->db->query("SELECT balance AS bal FROM active_loan_apps WHERE active_loanapp_id = $id GROUP BY id DESC LIMIT 1")->row()->{'bal'};
+			$lastID = $this->db->query("SELECT id AS active_id FROM active_loan_apps WHERE active_loanapp_id = $id GROUP BY id DESC LIMIT 1")->row()->{'active_id'};
+			$date = $this->db->query("SELECT payment_for FROM active_loan_apps WHERE active_loanapp_id = $id group by id DESC LIMIT 1")->row()->{'payment_for'};
+
+			$this->db->set('or_number', $or);
+			$this->db->set('balance_paid', $fm);
+			$this->db->set('payment_status', 'paid');
+			$this->db->set('payment_date', date('Y-m-d'));
+			$this->db->where('id', $lastID);
+			$this->db->update('active_loan_apps');
+
+			if($this->db->affected_rows() > 0) {
+				$data = array(
+					'active_loanapp_id' => $id,
+					'balance' => $balance - $fm,
+					'payment_status' => 'unpaid',
+					'payment_for' => date('Y-m-d', strtotime('+1 month', strtotime($date)))
+				);
+
+				$this->db->insert('active_loan_apps', $data);
 				return true;
 			} else {
 				return false;
@@ -415,7 +482,7 @@
 				$this->db->like('MONTH(payment_for)', $month);
 				$this->db->like('YEAR(payment_for)', $year);
 			}
-			$this->db->select('*')->select_min('balance')->from('active_loan_apps a');
+			$this->db->select('*, a.or_number')->select_min('balance')->from('active_loan_apps a');
 			$this->db->join('loan_applications b', 'b.loanapp_id = a.active_loanapp_id');
 			$this->db->join('members c', 'c.id = b.member_id');
 			$this->db->join('loan_types d', 'd.id = b.loan_applied');
@@ -433,7 +500,7 @@
 				$this->db->like('MONTH(payment_for)', $month);
 				$this->db->like('YEAR(payment_for)', $year);
 			}
-			$this->db->select('*, a.active_loanapp_id')->select_min('balance')->from('active_loan_apps a');
+			$this->db->select('*, a.or_number')->select_min('balance')->from('active_loan_apps a');
 			$this->db->join('loan_applications b', 'b.loanapp_id = a.active_loanapp_id');
 			$this->db->join('members c', 'c.id = b.member_id');
 			$this->db->join('loan_types d', 'd.id = b.loan_applied');
@@ -444,39 +511,5 @@
 			return $query->result();
 		}
 
-		public function updateUserLedger() {
-			date_default_timezone_set('Asia/Manila');
-
-			$id = $this->input->get('id');
-			$or = $this->input->get('or');
-			$fm = $this->input->get('fm');
-			$am = $this->input->get('am');
-
-			if($ids){
-				foreach ($ids as $id => $code) {
-					$balance = $this->db->query("select balance as bal from active_loan_apps where active_loanapp_id = $code")->row()->{'bal'};
-					$remark = $this->db->query("select remarks as rm from active_loan_apps where active_loanapp_id = $code")->row()->{'rm'};
-					$lastID = $this->db->query("select id as active_id from active_loan_apps where active_loanapp_id = $code")->row()->{'active_id'};
-					$diff = $balance - $md[$id];
-
-						$this->db->set('or_number', $or);
-						$this->db->set('payment_status', 'paid');
-						$this->db->set('payment_date', date('Y-m-d'));
-						$this->db->where('id', $lastID);
-						$this->db->update('active_loan_apps');
-
-						$data = array(
-							'loanapp_id' => $code,
-							'balance' => $diff,
-							'remarks' => $remark,
-							'payment_status' => 'unpaid',
-							'payment_for' => date('Y-m-d', strtotime('+1 month'))
-						);
-						$this->db->insert('active_loan_apps', $data);
-				}
-				return true;
-			} else {
-				return false;
-			}
-		}
+		
 	}

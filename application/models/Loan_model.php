@@ -24,10 +24,10 @@
 			$this->db->select('*')->from('loan_applications a');			
 			$this->db->join('loan_types b', 'b.id = a.loan_applied');			
 			$this->db->join('members c', 'c.id = a.member_id', 'left');				
-			$this->db->where('status', 'Pending');
+			$this->db->where('status', 'Pending');/*
 			$this->db->where('comaker_1 !=', null);
 			$this->db->where('comaker_2 !=', null);
-			$this->db->where('comaker_3 !=', null);
+			$this->db->where('comaker_3 !=', null);*/
 			$this->db->order_by('a.take_home_pay', 'ASC');				
 			$query = $this->db->get();			
 			return $query->result();			
@@ -102,13 +102,18 @@
 			$this->db->join('members b', 'b.id = a.member_id');
 			$this->db->join('loan_types c', 'c.id = a.loan_applied', 'left');
 			$this->db->where('loanapp_id', $id);
-			$query = $this->db->get();
+			$result = $this->db->get();
 			
 			for ($i=1; $i <= 3; $i++) { 
-				$cms[] = $this->db->query("SELECT name FROM members as a JOIN loan_applications as b ON a.id = b.comaker_$i WHERE loanapp_id = $id")->row()->{'name'};
+				$query = $this->db->query("SELECT name FROM members as a JOIN loan_applications as b ON a.id = b.comaker_$i WHERE loanapp_id = $id")->row();
+				if($query) {
+					$cms[] = $query->{'name'};
+				} else {
+					$cms[] = '-';
+				}
 			}
 
-			return array('result' => $query->row(), 'comakers' => $cms);
+			return array('result' => $result->row(), 'comakers' => $cms);
 		}
 
 		public function getChequeDetails(){
@@ -145,6 +150,19 @@
 						'loan_deduc_amt' => $deducAmt[$index]
 					);	
 					$this->db->insert('loan_app_deducs', $deduc);
+				}
+
+				$query = $this->db->query("SELECT * FROM loan_app_deducs AS a JOIN loan_deductions as B ON a.loan_deduc = b.deduc_id WHERE voucher_id = $last_id")->result();
+				$row = $this->db->query("SELECT * FROM loan_app_deducs AS a JOIN loan_deductions as B ON a.loan_deduc = b.deduc_id WHERE voucher_id = $last_id")->num_rows();
+				for($i = 0; $i < $row; $i++) {
+					if($query[$i]) {
+						if($query[$i]->{'deduc_name'} == 'Retention Fee') {
+							$addShare = $this->db->query("SELECT * FROM share_capital AS a JOIN loan_applications AS b ON a.user_id = b.member_id WHERE loanapp_id = $id ORDER BY sc_id DESC LIMIT 1")->row();
+							$this->db->set('total_share_capital', $addShare->{'total_share_capital'} + $query[$i]->{'deduc_val'});
+							$this->db->where('sc_id', $addShare->{'sc_id'});
+							$this->db->update('share_capital');
+						}
+					}	
 				}
 				return true;
 			} else {				

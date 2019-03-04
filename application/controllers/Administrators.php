@@ -257,6 +257,11 @@
 			echo json_encode($result);
 		}
 
+		public function singleUpdateShareCap(){
+			$result = $this->administrator_model->singleUpdateShareCap();
+			echo json_encode($result);
+		}
+
 		public function updateLedgers(){
 			$result = $this->administrator_model->updateLedgers();
 			echo json_encode($result);
