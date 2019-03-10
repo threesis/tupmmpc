@@ -120,12 +120,9 @@
 				'user_payslip' => $post_image,
 				'status' => 'Pending',
 				'remarks' => $this->input->post('loanapp-remarks'),
-
-				// newly added start 
 				'comaker_1' => $this->input->post('cm_id_1'),
 				'comaker_2' => $this->input->post('cm_id_2'),
 				'comaker_3' => $this->input->post('cm_id_3')
-				// newly added end
 			);
 			$this->db->insert('loan_applications', $loanapp_data);
 			if($this->db->affected_rows() > 0){
@@ -136,13 +133,11 @@
 		}
 		public function searchCoMaker() 
 		{
-			// newly added start
 			$key_typed = $this->input->get('key_entered');
 			$user = $this->input->get('user');
 			$comaker1 = $this->input->get('cmk1');
 			$comaker2 = $this->input->get('cmk2');
 			$comaker3 = $this->input->get('cmk3');
-			// newly added end
 			if($key_typed != '') {
 				$this->db->like('name', $key_typed);
 				$this->db->where('id !=', $user);

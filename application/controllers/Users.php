@@ -89,6 +89,11 @@
 			echo json_encode($result);
 		}
 
+		public function getUserLedger(){
+			$result = $this->user_model->getUserLedger();
+			echo json_encode($result);
+		}
+
 		public function signout() {
 			// Unset user data
 			$this->session->sess_destroy();

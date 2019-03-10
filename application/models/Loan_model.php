@@ -24,7 +24,10 @@
 			$this->db->select('*')->from('loan_applications a');			
 			$this->db->join('loan_types b', 'b.id = a.loan_applied');			
 			$this->db->join('members c', 'c.id = a.member_id', 'left');				
-			$this->db->where('status', 'Pending');			
+			$this->db->where('status', 'Pending');/*
+			$this->db->where('comaker_1 !=', null);
+			$this->db->where('comaker_2 !=', null);
+			$this->db->where('comaker_3 !=', null);*/
 			$this->db->order_by('a.take_home_pay', 'ASC');				
 			$query = $this->db->get();			
 			return $query->result();			
@@ -77,7 +80,13 @@
 
 		public function getLoanRecord(){
 			$loanID = $this->input->get('loanID');
+			$month = $this->input->get('mo');
+			$year = $this->input->get('yr');
 			$this->db->select('*');
+			if(($month || $year) != ''){
+				$this->db->like('MONTH(date_applied)', $month);
+				$this->db->like('YEAR(date_applied)', $year);
+			}
 			$this->db->where('loan_applied', $loanID);
 			$this->db->where('status', 'Active');
 			$this->db->from('loan_applications a');
@@ -93,12 +102,18 @@
 			$this->db->join('members b', 'b.id = a.member_id');
 			$this->db->join('loan_types c', 'c.id = a.loan_applied', 'left');
 			$this->db->where('loanapp_id', $id);
-			$query = $this->db->get();
-			if($query->num_rows() > 0) {
-				return $query->row();
-			} else {
-				return false;
+			$result = $this->db->get();
+			
+			for ($i=1; $i <= 3; $i++) { 
+				$query = $this->db->query("SELECT name FROM members as a JOIN loan_applications as b ON a.id = b.comaker_$i WHERE loanapp_id = $id")->row();
+				if($query) {
+					$cms[] = $query->{'name'};
+				} else {
+					$cms[] = '-';
+				}
 			}
+
+			return array('result' => $result->row(), 'comakers' => $cms);
 		}
 
 		public function getChequeDetails(){
@@ -115,33 +130,19 @@
 			$id = $this->input->post('loanapp_id');	
 			$last_id = $this->input->post('voucher');
 			$deducs = json_decode($this->input->post('deduc'));
-			$deducAmt = json_decode($this->input->post('deducAmt'));	
-			$noti = "Your Loan Application ".$this->input->post('loanapp_id')." has been approved!";				
+			$deducAmt = json_decode($this->input->post('deducAmt'));					
 
 			$data = array(			
 				'disbursement_no' => $this->input->post('dvNo'),	
 				'debit' => $this->input->post('debit'),				
 				'credit' => $this->input->post('credit'),			
 				'deferred_int' => $this->input->post('dii'),			
-				'net_amount' => $this->input->post('netAmt'),			
-				'status' => 'Active',	
-				'date_accepted' => date('Y-m-d H:i:s')			
+				'net_amount' => $this->input->post('netAmt'),
 			);	
 
 			$this->db->where('loanapp_id', $id);				
 			$this->db->update('approved_loan_apps', $data);
-			if($this->db->affected_rows() > 0) {				
-				$this->db->set('status', 'Active');			
-				$this->db->where('loanapp_id', $id);		
-				$this->db->update('loan_applications');	
-
-				$data = array(				
-				'loanapp_id' => $id,			
-				'balance' => $this->input->post('loanAmt'),	
-				'payment_status' => 'unpaid',				
-				'payment_for' => date('Y-m-d', strtotime('+1 month'))					
-				);		
-
+			if($this->db->affected_rows() > 0) {
 				foreach($deducs as $index => $d) {
 					$deduc = array(
 						'voucher_id' => $last_id,
@@ -149,27 +150,21 @@
 						'loan_deduc_amt' => $deducAmt[$index]
 					);	
 					$this->db->insert('loan_app_deducs', $deduc);
-				}		
+				}
 
- 				$this->db->insert('active_loan_apps', $data);			
-				if($this->db->affected_rows() > 0){
-					$noti = array(					
-						'noti_for' => $this->input->post('uname'),	
-						'noti_voucher' => $last_id,			
-						'noti_desc' => $noti,				
-						'noti_status' => 1,				
-						'noti_date' =>  date('Y-m-d')		
-					);
-								
-					$this->db->insert('notifications', $noti);	
-					if($this->db->affected_rows() > 0) {
-						return true;
-					} else {
-						return false;
-					}				
-				} else {				
-					return false;				
-				}	
+				$query = $this->db->query("SELECT * FROM loan_app_deducs AS a JOIN loan_deductions as B ON a.loan_deduc = b.deduc_id WHERE voucher_id = $last_id")->result();
+				$row = $this->db->query("SELECT * FROM loan_app_deducs AS a JOIN loan_deductions as B ON a.loan_deduc = b.deduc_id WHERE voucher_id = $last_id")->num_rows();
+				for($i = 0; $i < $row; $i++) {
+					if($query[$i]) {
+						if($query[$i]->{'deduc_name'} == 'Retention Fee') {
+							$addShare = $this->db->query("SELECT * FROM share_capital AS a JOIN loan_applications AS b ON a.user_id = b.member_id WHERE loanapp_id = $id ORDER BY sc_id DESC LIMIT 1")->row();
+							$this->db->set('total_share_capital', $addShare->{'total_share_capital'} + $query[$i]->{'deduc_val'});
+							$this->db->where('sc_id', $addShare->{'sc_id'});
+							$this->db->update('share_capital');
+						}
+					}	
+				}
+				return true;
 			} else {				
 				return false;				
 			}				
@@ -425,12 +420,49 @@
 
 			$id = $this->input->get('id');
 			$cheque_no = $this->input->get('cheque_no');
+			$noti = "Your Loan Application ".$this->input->post('loanapp_id')." has been approved!";
+
 			$this->db->set('cheque_no', $cheque_no);
-			$this->db->set('date_approved', date('Y-m-d H:i:s'));
+			$this->db->set('status', 'Active');
+			$this->db->set('date_accepted', date('Y-m-d'));
 			$this->db->where('loanapp_id', $id);
 			$this->db->update('approved_loan_apps');
-			if($this->db->affected_rows() > 0) {
-				return true;
+			if($this->db->affected_rows() > 0) {				
+				$this->db->set('status', 'Active');			
+				$this->db->where('loanapp_id', $id);		
+				$this->db->update('loan_applications');	
+
+				$loanAmt = $this->db->query("SELECT loan_amount FROM loan_applications WHERE loanapp_id = $id")->row()->{'loan_amount'};
+
+				$data = array(				
+				'active_loanapp_id' => $id,			
+				'balance' => $loanAmt,
+				'payment_status' => 'unpaid',				
+				'payment_for' => date('Y-m-d', strtotime('+1 month'))					
+				);
+
+ 				$this->db->insert('active_loan_apps', $data);			
+				if($this->db->affected_rows() > 0){
+					$uName = $this->db->query("SELECT username FROM loan_applications as a JOIN members as b ON a.member_id = b.id WHERE loanapp_id = $id")->row()->{'username'};
+					$voucher = $this->db->query("SELECT id FROM approved_loan_apps WHERE loanapp_id = $id")->row()->{'id'};
+
+					$noti = array(					
+						'noti_for' => $uName,	
+						'noti_voucher' => $voucher,	
+						'noti_desc' => $noti,				
+						'noti_status' => 1,				
+						'noti_date' =>  date('Y-m-d')		
+					);
+								
+					$this->db->insert('notifications', $noti);	
+					if($this->db->affected_rows() > 0) {
+						return true;
+					} else {
+						return false;
+					}				
+				} else {				
+					return false;				
+				}
 			} else { 
 				return false;
 			}
